@@ -35,6 +35,8 @@ export interface SessionData {
   tag?: string;
   /** whose log is shown instead, after "Switch to" */
   actingAs?: Id;
+  /** when it signed in (ms) — the server, not only the cookie, ends a sign-in after security.sessionDays */
+  at?: number;
 }
 
 interface Row { id: Id; name: string; password_hash: string; settings_json: string; created_at: string; last_used_at: string | null }
@@ -58,7 +60,9 @@ export class Users {
     const s = session(req);
     if (this.loginOn()) {
       const u = this.byId(s.userId);
-      return u && s.tag === tagOf(u.password_hash) ? u : null;
+      const days = Math.max(1, this.config.get().security.sessionDays || 30);
+      if (!s.at || Date.now() - s.at > days * 86_400_000) return null;
+      return u && u.password_hash && s.tag === tagOf(u.password_hash) ? u : null;
     }
     return this.byId(s.userId) ?? this.all()[0] ?? this.first();
   }
@@ -107,7 +111,7 @@ export class Users {
   }
 
   private signInAs(req: Request, u: Row): void {
-    req.session = { userId: u.id, tag: tagOf(u.password_hash) };
+    req.session = { userId: u.id, tag: tagOf(u.password_hash), at: Date.now() };
     this.db.prepare("UPDATE users SET last_used_at = ? WHERE id = ?").run(now(), u.id);
   }
 
@@ -115,7 +119,9 @@ export class Users {
   async setup(req: Request, name: unknown, password: unknown): Promise<AuthState> {
     if (!this.loginOn() || this.anyPassword()) throw new UserError("Junk Tracker is already set up. Sign in, or add people in Settings → Users.", 409);
     const u = this.all()[0] ?? this.first();
-    this.signInAs(req, await this.nameAndPassword(u, name, password));
+    this.signInAs(req, await this.nameAndPassword(u, name, password, () => {
+      if (this.anyPassword()) throw new UserError("Junk Tracker is already set up. Sign in, or add people in Settings → Users.", 409);
+    }));
     return this.state(req);
   }
 
@@ -127,8 +133,11 @@ export class Users {
     if (this.loginOn()) throw new UserError("Users and sign-in are already on.", 409);
     const me = this.me(req);
     if (!me) throw new UserError("Open the app first.", 409);
-    const u = await this.nameAndPassword(me, name, password);
-    req.session = { userId: u.id, tag: tagOf(u.password_hash) };
+    const u = await this.nameAndPassword(me, name, password, () => {
+      // two "turn on" requests at once: only the first one names you and sets the password
+      if (this.loginOn() || this.anyPassword()) throw new UserError("Users and sign-in are already on.", 409);
+    });
+    req.session = { userId: u.id, tag: tagOf(u.password_hash), at: Date.now() };
   }
 
   /** Turn sign-in off: only with one person left (no log is lost); their password goes. */
@@ -137,12 +146,14 @@ export class Users {
     this.db.prepare("UPDATE users SET password_hash = ''").run();
   }
 
-  private async nameAndPassword(u: Row, name: unknown, password: unknown): Promise<Row> {
+  /** `recheck` runs after the (slow) hashing, right before the write, so a request that raced past the first checks is refused. */
+  private async nameAndPassword(u: Row, name: unknown, password: unknown, recheck: () => void = () => {}): Promise<Row> {
     const n = Users.checkName(name);
     const p = Users.checkPassword(password);
-    const clash = this.byName(n);
-    if (clash && clash.id !== u.id) throw new UserError(`There is already someone called “${n}”. Pick a different name.`, 409);
+    this.nameFree(n, u.id);
     const hash = await bcrypt.hash(p, 10);
+    recheck();
+    this.nameFree(n, u.id);
     this.db.prepare("UPDATE users SET name = ?, password_hash = ?, last_used_at = ? WHERE id = ?").run(n, hash, now(), u.id);
     return { ...u, name: n, password_hash: hash };
   }
@@ -152,8 +163,7 @@ export class Users {
     const u = this.byId(id);
     if (!u) throw new UserError("That person no longer exists.", 404);
     const n = Users.checkName(name);
-    const clash = this.byName(n);
-    if (clash && clash.id !== id) throw new UserError(`There is already someone called “${n}”. Pick a different name.`, 409);
+    this.nameFree(n, id);
     this.db.prepare("UPDATE users SET name = ? WHERE id = ?").run(n, id);
     return { id, name: n, createdAt: u.created_at, lastUsedAt: u.last_used_at, isYou: false };
   }
@@ -169,11 +179,21 @@ export class Users {
     return this.state(req);
   }
 
+  /** Names are unique in any mix of capitals; `except` is the person being renamed. */
+  private nameFree(n: string, except?: Id): void {
+    const clash = this.byName(n);
+    if (clash && clash.id !== except) throw new UserError(`There is already someone called “${n}”. Pick a different name.`, 409);
+  }
+
   private async insert(name: unknown, password: unknown): Promise<Row> {
     const n = Users.checkName(name);
     const p = Users.checkPassword(password);
-    if (this.byName(n)) throw new UserError(`There is already someone called “${n}”. Pick a different name.`, 409);
-    const row: Row = { id: newId(), name: n, password_hash: await bcrypt.hash(p, 10), settings_json: "{}", created_at: now(), last_used_at: null };
+    this.nameFree(n);
+    const hash = await bcrypt.hash(p, 10);
+    // checked again after the hashing: two adds of the same name at once, or sign-in turned off meanwhile
+    this.nameFree(n);
+    if (!this.loginOn()) throw new UserError("Turn on users and sign-in first (Settings → Users and sign-in).", 409);
+    const row: Row = { id: newId(), name: n, password_hash: hash, settings_json: "{}", created_at: now(), last_used_at: null };
     this.db.prepare("INSERT INTO users (id, name, password_hash, settings_json, created_at, last_used_at) VALUES (@id, @name, @password_hash, @settings_json, @created_at, @last_used_at)").run(row);
     return row;
   }
@@ -192,15 +212,18 @@ export class Users {
 
   /** Set anyone's password. Your own: this browser stays signed in with the new one. */
   async setPassword(req: Request, id: Id, password: unknown): Promise<void> {
+    // with sign-in off nobody has a password (turning it on sets yours)
+    if (!this.loginOn()) throw new UserError("Turn on users and sign-in first (Settings → Users and sign-in).", 409);
     const u = this.byId(id);
     if (!u) throw new UserError("That person no longer exists.", 404);
     const hash = await bcrypt.hash(Users.checkPassword(password), 10);
+    if (!this.byId(id)) throw new UserError("That person no longer exists.", 404);
     // who this browser is must be worked out BEFORE the change: afterwards its fingerprint no longer matches
     const mine = this.me(req)?.id === id;
     this.db.prepare("UPDATE users SET password_hash = ? WHERE id = ?").run(hash, id);
     if (mine) {
       const s = session(req);
-      req.session = { ...s, userId: id, tag: tagOf(hash) };
+      req.session = { ...s, userId: id, tag: tagOf(hash), at: s.at ?? Date.now() };
     }
   }
 

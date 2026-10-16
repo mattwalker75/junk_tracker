@@ -1,7 +1,7 @@
 /** Small shared pieces. Colours only from theme tokens. */
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { forwardRef, useId, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
+import { forwardRef, useId, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
 import { SIZE_LABEL, type Size } from "../../../shared/types";
 
 export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
@@ -152,13 +152,15 @@ export function Confirm({ open, onOpenChange, title, body, confirmLabel, word, d
 }
 function ConfirmBody({ body, confirmLabel, word, danger, onConfirm, onCancel }: { body: ReactNode; confirmLabel: string; word?: string; danger?: boolean; onConfirm: () => void | Promise<void>; onCancel: () => void }) {
   const id = useId();
+  const [wrong, setWrong] = useState(false);
   return (
-    <form className="space-y-4 pb-2" onSubmit={async (e) => { e.preventDefault(); const typed = new FormData(e.currentTarget).get("word"); if (word && typed !== word) return; await onConfirm(); }}>
+    <form className="space-y-4 pb-2" onSubmit={async (e) => { e.preventDefault(); const typed = String(new FormData(e.currentTarget).get("word") ?? "").trim().toUpperCase(); if (word && typed !== word) { setWrong(true); return; } await onConfirm(); }}>
       <div className="text-[15px] leading-relaxed text-ink-2">{body}</div>
       {word ? (
         <div>
           <Label htmlFor={id}>Type {word} to confirm</Label>
-          <Input id={id} name="word" autoComplete="off" autoCapitalize="characters" />
+          <Input id={id} name="word" autoComplete="off" autoCapitalize="characters" onChange={() => setWrong(false)} />
+          {wrong ? <p role="alert" className="mt-1.5 text-sm text-danger">Type {word} in the box to confirm.</p> : null}
         </div>
       ) : null}
       <div className="grid grid-cols-2 gap-2.5">

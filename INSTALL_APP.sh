@@ -3,7 +3,7 @@
 # INSTALL_APP.sh — set up Junk Tracker on this computer.
 #
 # What it needs:
-#   REQUIRED  Node.js 22 or newer (npm comes with it) — installed with Homebrew if missing.
+#   REQUIRED  Node.js 22.12 or newer (npm comes with it) — installed with Homebrew if missing.
 #   REQUIRED  The app's packages (npm install), including better-sqlite3, which keeps the
 #             database. Nothing else: the database is one SQLite file the app creates itself.
 #   OPTIONAL  Homebrew — the easiest way to install Node.js on a Mac (https://brew.sh).
@@ -43,17 +43,21 @@ while [[ $# -gt 0 ]]; do
 done
 confirm() { [[ $YES -eq 1 ]] && return 0; read -r -p "$1 [y/N] " a; [[ "$a" == y || "$a" == Y ]]; }
 have() { command -v "$1" >/dev/null 2>&1; }
-node_major() { node -p 'process.versions.node.split(".")[0]' 2>/dev/null || echo 0; }
+# 22.12 or newer: the page builder (Vite) needs at least that
+node_new_enough() { node -e 'const [a,b]=process.versions.node.split(".").map(Number); process.exit(a>22||(a===22&&b>=12)?0:1)' 2>/dev/null; }
 
 echo "Junk Tracker — install"; echo
 # ---- Node.js
-if have node && [[ "$(node_major)" -ge 22 ]]; then ok "Node.js $(node -v)"
+if have node && node_new_enough; then ok "Node.js $(node -v)"
 else
-  if have node; then warn "Node.js $(node -v) is too old — 22 or newer is needed"; else warn "Node.js is not installed"; fi
+  if have node; then warn "Node.js $(node -v) is too old — 22.12 or newer is needed"; else warn "Node.js is not installed"; fi
   if [[ $CHECK_ONLY -eq 1 ]]; then :
-  elif ! have brew; then err "Install Node.js 22 or newer. The easy way on a Mac is Homebrew (https://brew.sh), then: brew install node"; exit 1
-  elif confirm "Install Node.js with Homebrew (brew install node)?"; then brew install node && ok "Node.js $(node -v)" || { err "Node.js did not install."; exit 1; }
-  else err "Node.js 22+ is needed."; exit 1; fi
+  elif ! have brew; then err "Install Node.js 22.12 or newer. The easy way on a Mac is Homebrew (https://brew.sh), then: brew install node"; exit 1
+  elif confirm "Install Node.js with Homebrew (brew install node)?"; then brew install node || { err "Node.js did not install."; exit 1; }
+    hash -r
+    # another, older Node (nvm, say) can come first on PATH — check the one that will actually run
+    if node_new_enough; then ok "Node.js $(node -v)"; else err "Node.js $(node -v 2>/dev/null) is still the one found first on your PATH. Make the new one ($(brew --prefix)/bin/node) come first, then run this again."; exit 1; fi
+  else err "Node.js 22.12 or newer is needed."; exit 1; fi
 fi
 
 if [[ $CHECK_ONLY -eq 1 ]]; then
@@ -81,5 +85,9 @@ if [[ $TESTS -eq 1 ]]; then
 fi
 
 echo
+# a running copy keeps its old code until restarted
+if curl -fsS --max-time 2 "http://localhost:$(node -e "try{console.log(require('./config.json').server.port||8420)}catch{console.log(8420)}")/api/health" 2>/dev/null | grep -q '"app":"junk-tracker"'; then
+  warn "Junk Tracker is running with the old version. Restart it to use the new one:  ./TRACKER.sh --restart"; exit 0
+fi
 echo "Next:  ./TRACKER.sh --start      (opens http://localhost:$(node -e "try{console.log(require('./config.json').server.port||8420)}catch{console.log(8420)}"))"
 exit 0

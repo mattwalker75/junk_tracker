@@ -1,6 +1,6 @@
 /** Network access: this computer only, or other devices too; other names (Tailscale); the port. */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button, Card, Field, Input, Toggle } from "../components/ui";
 import { api } from "../lib/api";
@@ -11,7 +11,9 @@ export function NetworkSettings() {
   const c = q.data?.config;
   const [hosts, setHosts] = useState("");
   const [port, setPort] = useState("");
-  useEffect(() => { if (c) { setHosts(c.server.extraHosts.join(", ")); setPort(String(c.server.port)); } }, [c]);
+  // filled in once: saving one box refetches the settings, which must not wipe what is typed in the other
+  const seeded = useRef(false);
+  useEffect(() => { if (c && !seeded.current) { seeded.current = true; setHosts(c.server.extraHosts.join(", ")); setPort(String(c.server.port)); } }, [c]);
   if (!c || !q.data) return null;
   const save = async (patch: unknown, msg: string) => {
     try { await api.saveSettings(patch); await qc.invalidateQueries({ queryKey: ["settings"] }); toast.success(msg); }

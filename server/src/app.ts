@@ -92,8 +92,13 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
     maxAge: Math.max(1, config.get().security.sessionDays) * 86_400_000 }));
   app.use(sameOriginWrites);
 
-  const limiter = opts.rateLimit === false ? (_r: Request, _s: Response, n: NextFunction) => n()
-    : rateLimit({ windowMs: 5 * 60_000, limit: 10, standardHeaders: true, legacyHeaders: false, message: { error: "Too many attempts. Wait five minutes and try again." } });
+  // one limiter per kind of request, so setting a few passwords never locks anyone out of signing in;
+  // signing in only counts the attempts that fail
+  const limit = (o: { skipSuccessfulRequests?: boolean } = {}) => opts.rateLimit === false ? (_r: Request, _s: Response, n: NextFunction) => n()
+    : rateLimit({ windowMs: 5 * 60_000, limit: 10, standardHeaders: true, legacyHeaders: false, message: { error: "Too many attempts. Wait five minutes and try again." }, ...o });
+  const loginLimiter = limit({ skipSuccessfulRequests: true });
+  const setupLimiter = limit();
+  const passwordLimiter = limit();
 
   // ---------------------------------------------------------------- open routes
   // "app" lets the scripts tell Junk Tracker from another program answering on the same port
@@ -101,8 +106,8 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.get("/api/auth/me", h((req) => users.state(req)));
   // the look is needed before signing in, so the sign-in screen wears the same theme
   app.get("/api/appearance", h(() => { const a = config.get().appearance; return { theme: a.theme, customThemes: a.customThemes }; }));
-  app.post("/api/auth/setup", limiter, h((req) => users.setup(req, req.body?.name, req.body?.password)));
-  app.post("/api/auth/login", limiter, h((req) => {
+  app.post("/api/auth/setup", setupLimiter, h((req) => users.setup(req, req.body?.name, req.body?.password)));
+  app.post("/api/auth/login", loginLimiter, h((req) => {
     if (!config.get().security.loginEnabled) throw new UserError("Signing in is turned off — just open the app.", 409);
     return users.login(req, req.body?.name, req.body?.password);
   }));
@@ -130,10 +135,10 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   // ---------------------------------------------------------------- users (every person may do all of this)
   app.get("/api/users", h((req) => users.list(req)));
   app.post("/api/users", h((req) => users.add(req.body?.name, req.body?.password)));
-  app.put("/api/users/:id/password", limiter, h(async (req) => { await users.setPassword(req, param(req, "id"), req.body?.password); }));
+  app.put("/api/users/:id/password", passwordLimiter, h(async (req) => { await users.setPassword(req, param(req, "id"), req.body?.password); }));
   app.put("/api/users/:id/name", h((req) => users.rename(param(req, "id"), req.body?.name)));
   // users and sign-in on: you get a name and password and this browser signs in; off: back to one log
-  app.post("/api/auth/enable", limiter, h(async (req) => {
+  app.post("/api/auth/enable", setupLimiter, h(async (req) => {
     await users.enable(req, req.body?.name, req.body?.password);
     config.update({ security: { loginEnabled: true } });
     return users.state(req);
@@ -179,7 +184,11 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     if (err instanceof UserError) { res.status(err.status).json({ error: err.message }); return; }
+    // body-parser's own refusals (bad JSON, too large, wrong charset) are the asker's fault, not a server error
+    const status = Number((err as { status?: number })?.status);
     if ((err as { type?: string })?.type === "entity.parse.failed") { res.status(400).json({ error: "That request was not valid." }); return; }
+    if (status >= 400 && status < 500) { res.status(status).json({ error: status === 413 ? "That is too much to send at once." : "That request was not valid." }); return; }
+    if ((err as { code?: string })?.code === "SQLITE_CONSTRAINT_UNIQUE") { res.status(409).json({ error: "That name is already taken. Pick a different name." }); return; }
     console.error("[error]", err);
     res.status(500).json({ error: "Something went wrong on the server. The log has the details (./TRACKER.sh --logs)." });
   });

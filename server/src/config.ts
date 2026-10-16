@@ -84,19 +84,22 @@ export class Config {
     if (fs.existsSync(this.file)) {
       try { raw = JSON.parse(fs.readFileSync(this.file, "utf8")); }
       catch (e) { throw new Error(`config.json is not valid JSON (${(e as Error).message}). Fix it or delete it to start from the defaults.`); }
+      if (!isObj(raw)) throw new Error("config.json must hold settings in { … }. Fix it or delete it to start from the defaults.");
     }
     this.data = deepMerge(structuredClone(DEFAULTS), raw);
   }
 
-  save(): void {
-    writeAtomic(this.file, JSON.stringify(this.data, null, 2) + "\n", 0o600);
+  save(data: AppConfig = this.data): void {
+    writeAtomic(this.file, JSON.stringify(data, null, 2) + "\n", 0o600);
     try { fs.chmodSync(this.file, 0o600); } catch {}
   }
 
   /** Merge a checked partial change in and save. Returns which changed keys need a restart. */
   update(patch: unknown): { restartRequired: string[] } {
-    this.data = deepMerge(this.data, patch);
-    this.save();
+    // written first: if config.json cannot be saved, nothing changes (not even in memory)
+    const next = deepMerge(this.data, patch);
+    this.save(next);
+    this.data = next;
     for (const k of RESTART_REQUIRED) {
       if (JSON.stringify(getPath(this.data, k)) !== JSON.stringify(getPath(this.startedWith, k))) this.pending.add(k);
       else this.pending.delete(k);

@@ -9,13 +9,14 @@ import { toast } from "sonner";
 import { SIZE_LABEL, type Overview, type WeighIn } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
+import { useToday } from "../lib/useToday";
 import { addDays, ago, dayNum, shortDay, today as todayOf, WEEKDAY_SHORT, WEEKDAY_TINY, weekday } from "../lib/dates";
 import { byDay, countBetween, daysClean, inUnit, periodLabel, startOfWeek, trend, worstSize } from "../lib/stats";
 import { Button, Card, cx, SIZE_FILL, SizeLegend } from "./ui";
 
 export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean }) {
   const qc = useQueryClient();
-  const today = todayOf();
+  const today = useToday();
   const q = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today) });
   const act = useActions();
   const initials = who.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
@@ -138,14 +139,16 @@ function WeightCard({ t, unit, days, today }: { t: ReturnType<typeof trend>; uni
   }
   const change = t.change === null ? null : inUnit(Math.abs(t.change), unit);
   const down = (t.change ?? 0) < 0;
+  // a change too small to show in the person's unit (0.1 lb is 0.0 kg) is no change
+  const none = change === 0;
   return (
     <Card className="p-4">
       <div className="flex items-baseline justify-between"><h2 className="text-[15px] font-bold">Weight</h2><span className="text-xs text-mute">trend over {periodLabel(days)}</span></div>
       <button onClick={() => act.weigh()} className="mt-1.5 flex w-full items-end justify-between gap-3 text-left">
         <div>
           <div className="tabular text-[30px] font-extrabold tracking-tight">{inUnit(t.latest.pounds, unit)} <span className="text-[15px] font-semibold text-mute">{unit}</span></div>
-          <div className={cx("text-[13px] font-bold", t.change === null ? "text-mute" : t.change === 0 ? "text-mute" : down ? "text-good" : "text-bad")}>
-            {t.change === null ? "not enough weigh-ins for a trend yet" : t.change === 0 ? `no change in ${periodLabel(days)}` : `${down ? "↓" : "↑"} ${change} ${unit} in ${periodLabel(days)}`}
+          <div className={cx("text-[13px] font-bold", t.change === null ? "text-mute" : none ? "text-mute" : down ? "text-good" : "text-bad")}>
+            {t.change === null ? "not enough weigh-ins for a trend yet" : none ? `no change in ${periodLabel(days)}` : `${down ? "↓" : "↑"} ${change} ${unit} in ${periodLabel(days)}`}
           </div>
           <div className="text-xs text-mute">{t.avg7 !== null ? `7-day avg ${inUnit(t.avg7, unit)} · ` : ""}weighed {ago(t.latest.day, today)}</div>
         </div>

@@ -22,13 +22,15 @@ export function AppearanceSettings() {
   const a = q.data?.config.appearance;
   if (!a) return null;
 
-  const save = async (theme: string, customThemes = a.customThemes) => {
+  /** true when saved; on a failure the page goes back to the look that is really saved */
+  const save = async (theme: string, customThemes = a.customThemes): Promise<boolean> => {
     try {
       await api.saveSettings({ appearance: { theme, customThemes } });
       applyTheme(theme, customThemes); rememberTheme(theme, customThemes);
       await qc.invalidateQueries({ queryKey: ["settings"] });
       await qc.invalidateQueries({ queryKey: ["appearance"] });
-    } catch (e) { toast.error((e as Error).message); }
+      return true;
+    } catch (e) { toast.error((e as Error).message); applyTheme(a.theme, a.customThemes); return false; }
   };
 
   const Swatch = ({ colors }: { colors: string[] }) => (
@@ -62,7 +64,7 @@ export function AppearanceSettings() {
         onSave={async (t) => {
           const list = t.id && a.customThemes.some((x) => x.id === t.id) ? a.customThemes.map((x) => (x.id === t.id ? t : x)) : [...a.customThemes, { ...t, id: `t${Date.now().toString(36)}` }];
           const id = t.id || list.at(-1)!.id;
-          await save(id, list);
+          if (!(await save(id, list))) { applyTheme("", [], t); return; } // keep the editor (and its preview) open to try again
           setEditing(null);
           toast.success(`Theme “${t.name}” saved and in use.`);
         }} />

@@ -4,7 +4,7 @@ Read this before changing anything. `Docs/DEVELOPMENT.md` has the detail.
 
 ## What it is
 A phone-first web app that tracks junk food ("splurges") and weight, and nothing else. Runs on
-Matt's Mac (or Mac mini over Tailscale), used in a phone browser. Server: Node 22+ / Express 5 /
+Matt's Mac (or Mac mini over Tailscale), used in a phone browser. Server: Node 22.12+ / Express 5 /
 TypeScript / better-sqlite3. Page: React 19 + Vite + Tailwind v4 + Radix Dialog + TanStack Query.
 The person using it is not a developer — every message the page shows is a plain sentence.
 
@@ -50,6 +50,7 @@ The person using it is not a developer — every message the page shows is a pla
 ## Working rules
 - Commit locally per feature with a dated CHANGELOG entry; `git add` explicit paths.
   **Never push — Matt pushes.**
-- Never touch Matt's real `config.json` or `data/`. Try things with a scratch config:
+- Never touch Matt's real `config.json` or `data/` — and **never delete `data/`** in the repo (Oct 16 2026:
+  a scratch-test cleanup `rm -rf data` deleted the database Matt had just started using). Try things with a scratch config:
   `JT_CONFIG=/some/scratch/config.json ./TRACKER.sh …` (and `JT_NO_OPEN=1` to skip the browser).
 - `npm test` (vitest) and `npm run typecheck` must pass before a commit.

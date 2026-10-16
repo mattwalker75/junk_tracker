@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Junk Tracker — track only your junk food (splurges) and your weight.",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12"
   },
   "scripts": {
     "build": "npm run build:web && npm run build:server",

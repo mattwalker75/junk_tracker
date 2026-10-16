@@ -9,13 +9,14 @@ import type { ReactNode } from "react";
 import { SIZE_LABEL, type Day, type Splurge } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
+import { useToday } from "../lib/useToday";
 import { addDays, ago, clock, longDay, today as todayOf } from "../lib/dates";
 import { inUnit, worstSize } from "../lib/stats";
 import { Button, cx, Sheet, SIZE_DOT, SizeBadge } from "./ui";
 
 export function DaySheet({ day, onClose }: { day: Day | null; onClose: () => void }) {
   const act = useActions();
-  const today = todayOf();
+  const today = useToday();
   const d = day ?? today;
   const splurges = useQuery({ queryKey: ["day", "splurges", d], queryFn: () => api.splurges(d, d), enabled: !!day });
   const weigh = useQuery({ queryKey: ["day", "weigh", d], queryFn: () => api.weighIns(d, d), enabled: !!day });

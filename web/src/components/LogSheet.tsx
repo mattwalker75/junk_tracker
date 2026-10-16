@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { DEFAULT_EXAMPLES, SIZE_LABEL, SIZES, type Day, type Size, type Splurge } from "../../../shared/types";
 import { LOG_KEYS } from "../lib/actions";
 import { api } from "../lib/api";
+import { useToday } from "../lib/useToday";
 import { today as todayOf } from "../lib/dates";
 import { DayPicker } from "./DayPicker";
 import { Button, cx, ErrorLine, Field, Input, Label, Sheet, SIZE_DOT, TextArea } from "./ui";
@@ -17,7 +18,7 @@ const SELECTED: Record<Size, string> = { snack: "border-snack-ink/0 ring-2 ring-
 
 export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onOpenChange: (o: boolean) => void; day?: Day; edit?: Splurge }) {
   const qc = useQueryClient();
-  const today = todayOf();
+  const today = useToday();
   const overview = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today), enabled: open });
   const settings = overview.data?.settings;
   const [what, setWhat] = useState("");

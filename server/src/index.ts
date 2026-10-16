@@ -10,7 +10,7 @@ import { networkUrls } from "./security.js";
 const config = new Config();
 const { app, db } = createApp(config);
 const c = config.get();
-const port = Number(process.env.PORT) || c.server.port;
+const port = c.server.port; // only config.json sets it, so TRACKER.sh and the page builder always agree
 const host = c.server.allowNetwork ? "0.0.0.0" : "127.0.0.1";
 
 const server = app.listen(port, host, () => {

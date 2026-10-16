@@ -1,6 +1,6 @@
 /** The person's own settings: their splurge-size examples, and how weight is shown. Saved as they change. */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { DEFAULT_EXAMPLES, SIZE_LABEL, SIZES, type Size, type UserSettings } from "../../../shared/types";
 import { Card, cx, Input, Segmented, SIZE_DOT } from "../components/ui";
@@ -10,7 +10,9 @@ export function YouSettings() {
   const qc = useQueryClient();
   const q = useQuery({ queryKey: ["me-settings"], queryFn: api.mySettings });
   const [examples, setExamples] = useState<Record<Size, string>>({ snack: "", meal: "", feast: "" });
-  useEffect(() => { if (q.data) setExamples(q.data.examples); }, [q.data]);
+  // filled in once from the server: refilling after each save would wipe a box being typed in
+  const seeded = useRef(false);
+  useEffect(() => { if (q.data && !seeded.current) { seeded.current = true; setExamples(q.data.examples); } }, [q.data]);
 
   const save = async (patch: Parameters<typeof api.saveMySettings>[0], quiet = false) => {
     try {

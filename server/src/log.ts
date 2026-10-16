@@ -101,6 +101,11 @@ export class Log {
     const splurges = this.splurgesBetween(owner, shift(today, -40), today);
     // the trend period, the one before it (for the reading at its start) and the 7-day average
     const weighIns = this.weighInsBetween(owner, shift(today, -(settings.trendDays * 2 + 7)), today);
+    // the latest weigh-in even when it is older than that, so Home never says "no weigh-ins yet" to someone who has some
+    if (!weighIns.length) {
+      const old = this.db.prepare("SELECT day, pounds FROM weigh_ins WHERE user_id = ? AND day <= ? ORDER BY day DESC LIMIT 1").get(owner, today) as WeighIn | undefined;
+      if (old) weighIns.push(old);
+    }
     const recent = (this.db.prepare(`SELECT what, size, place, calories FROM splurges WHERE user_id = ?
       GROUP BY lower(what) ORDER BY MAX(day || ' ' || time || ' ' || created_at) DESC LIMIT 6`).all(owner) as { what: string; size: Splurge["size"]; place: string; calories: number | null }[])
       .map((r) => ({ what: r.what, size: r.size, where: r.place, calories: r.calories }));

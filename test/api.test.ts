@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { PW, scratch, type Scratch } from "./helpers.js";
 
 let s: Scratch;
@@ -186,5 +186,66 @@ describe("settings and guards", () => {
     expect((await b.call("GET", "/api/health", undefined, { host: "mini.tail1234.ts.net" })).status).toBe(200);
     expect((await b.call("POST", "/api/splurges", meal(), { origin: "http://evil.example.com" })).status).toBe(403);
     expect((await b.call("POST", "/api/splurges", meal(), { "sec-fetch-site": "cross-site" })).status).toBe(403);
+  });
+});
+
+describe("review fixes (Oct 16 2026)", () => {
+  it("a body that is too big is refused with 413, not a server error", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    expect((await b.call("POST", "/api/splurges", { what: "x".repeat(300_000), size: "snack", day: "2026-10-14" })).status).toBe(413);
+  });
+
+  it("with sign-in off nobody can be given a password", async () => {
+    s = await scratch();
+    const b = s.browser();
+    const me = (await b.call("GET", "/api/auth/me")).body.me.id;
+    expect((await b.call("PUT", `/api/users/${me}/password`, { password: PW })).status).toBe(409);
+  });
+
+  it("adding the same name twice at once gives one user and a plain refusal, never a server error", async () => {
+    s = await scratch();
+    const b = await withUsers();
+    const r = await Promise.all(["Zed", "zed", "ZED", "Zed"].map((name) => b.call("POST", "/api/users", { name, password: PW })));
+    expect(r.map((x) => x.status).sort()).toEqual([200, 409, 409, 409]);
+  });
+
+  it("two 'turn on' requests at once: only the first sets the password", async () => {
+    s = await scratch();
+    const a = s.browser(), c = s.browser();
+    await a.call("GET", "/api/auth/me"); await c.call("GET", "/api/auth/me");
+    const r = await Promise.all([a.call("POST", "/api/auth/enable", { name: "Matt", password: PW }), c.call("POST", "/api/auth/enable", { name: "Other", password: "other-password" })]);
+    // the other is refused: 409 if it got past the sign-in check before sign-in came on, else 401 (sign in first)
+    const [ok, refused] = [...r].sort((x, y) => x.status - y.status);
+    expect(ok.status).toBe(200);
+    expect([401, 409]).toContain(refused.status);
+    const users = s.handle.db.prepare("SELECT name FROM users").all() as { name: string }[];
+    expect(users).toEqual([{ name: ok.body.me.name }]);
+  });
+
+  it("the server ends a sign-in after security.sessionDays, even if the cookie is kept", async () => {
+    s = await scratch();
+    const b = await withUsers();
+    s.handle.config.update({ security: { sessionDays: 1 } });
+    const real = Date.now();
+    const spy = vi.spyOn(Date, "now").mockReturnValue(real + 2 * 86_400_000);
+    try { expect((await b.call("GET", "/api/auth/me")).body).toEqual({ status: "signin" }); }
+    finally { spy.mockRestore(); }
+  });
+
+  it("Home still knows the last weigh-in when it is older than the trend window", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    await b.call("PUT", "/api/weigh-ins/2026-08-01", { weight: 190, unit: "lb" });
+    expect((await b.call("GET", "/api/overview?today=2026-10-15")).body.weighIns).toEqual([{ day: "2026-08-01", pounds: 190 }]);
+  });
+
+  it("a config.json that is not an object is refused with a clear message", async () => {
+    const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
+    const { Config } = await import("../server/src/config.js");
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-cfg-"));
+    fs.writeFileSync(path.join(dir, "config.json"), "null");
+    try { expect(() => new Config(path.join(dir, "config.json"))).toThrow(/must hold settings/); }
+    finally { fs.rmSync(dir, { recursive: true, force: true }); }
   });
 });

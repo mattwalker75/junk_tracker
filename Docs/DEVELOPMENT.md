@@ -13,7 +13,7 @@ test/         api.test.ts (the server, end to end) · stats.test.ts (home-screen
 
 ## Commands
 ```bash
-npm test                 # vitest: 21 tests
+npm test                 # vitest: 28 tests
 npm run typecheck        # server + page
 ./TRACKER.sh --dev       # live-reloading page on :5173, API proxied to the server port
 ./TRACKER.sh --fg        # run the built app in the foreground

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import type { Day } from "../../../shared/types";
 import { LOG_KEYS } from "../lib/actions";
 import { api } from "../lib/api";
+import { useToday } from "../lib/useToday";
 import { longDay, today as todayOf } from "../lib/dates";
 import { inUnit } from "../lib/stats";
 import { DayPicker } from "./DayPicker";
@@ -12,7 +13,7 @@ import { Button, ErrorLine, Field, Input, Sheet } from "./ui";
 
 export function WeighSheet({ open, onOpenChange, day }: { open: boolean; onOpenChange: (o: boolean) => void; day?: Day }) {
   const qc = useQueryClient();
-  const today = todayOf();
+  const today = useToday();
   const [d, setD] = useState<Day>(day ?? today);
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -23,8 +24,9 @@ export function WeighSheet({ open, onOpenChange, day }: { open: boolean; onOpenC
   const have = existing.data?.[0];
 
   useEffect(() => { if (open) { setD(day ?? today); setError(null); setValue(""); } }, [open, day, today]);
-  // the box starts with that day's reading when there is one
-  useEffect(() => { if (open && have) setValue(String(inUnit(have.pounds, unit))); }, [open, have, unit]);
+  // the box shows the picked day's reading, or is empty when that day has none (never another day's)
+  const loadedFor = existing.data ? d : null;
+  useEffect(() => { if (open && loadedFor) setValue(have ? String(inUnit(have.pounds, unit)) : ""); }, [open, loadedFor, have, unit]);
 
   const refresh = () => { for (const k of LOG_KEYS) void qc.invalidateQueries({ queryKey: [...k] }); };
   const save = async (e: FormEvent) => {
@@ -33,7 +35,9 @@ export function WeighSheet({ open, onOpenChange, day }: { open: boolean; onOpenC
     const n = Number(value.replace(",", "."));
     if (!value.trim() || !Number.isFinite(n) || n <= 0) return setError("Type your weight.");
     setBusy(true);
-    try { await api.weighIn(d, n, unit); refresh(); toast.success(`Weighed in: ${n} ${unit}`); onOpenChange(false); }
+    // saving the shown reading unchanged keeps it exactly (kilograms are shown rounded)
+    const same = have && value === String(inUnit(have.pounds, unit));
+    try { await (same ? api.weighIn(d, have.pounds, "lb") : api.weighIn(d, n, unit)); refresh(); toast.success(`Weighed in: ${n} ${unit}`); onOpenChange(false); }
     catch (e2) { setError((e2 as Error).message); }
     finally { setBusy(false); }
   };

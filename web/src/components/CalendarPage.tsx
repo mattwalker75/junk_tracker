@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SIZE_LABEL } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
+import { useToday } from "../lib/useToday";
 import { addDays, addMonths, dayNum, monthEnd, monthLabel, monthOf, monthStart, shortDay, today as todayOf, WEEKDAY_TINY, weekday } from "../lib/dates";
 import { go } from "../lib/route";
 import { byDay, inUnit, worstSize } from "../lib/stats";
@@ -11,7 +12,7 @@ import { Card, cx, SIZE_DOT, SIZE_FILL, SizeLegend } from "./ui";
 
 export function CalendarPage({ month }: { month: string | null }) {
   const act = useActions();
-  const today = todayOf();
+  const today = useToday();
   const ym = month && month <= monthOf(today) ? month : monthOf(today);
   const from = monthStart(ym), to = monthEnd(ym);
   const overview = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today) });

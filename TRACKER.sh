@@ -32,14 +32,21 @@
 # Set JT_NO_OPEN=1 to start without opening the browser.
 #
 set -uo pipefail
+# a relative JT_CONFIG means "from where I typed it", so make it absolute before moving into the app folder
+if [[ -n "${JT_CONFIG:-}" && "$JT_CONFIG" != /* ]]; then JT_CONFIG="$PWD/$JT_CONFIG"; fi
+# the server listens on the port in config.json only; a stray PORT in the shell must not move it
+unset PORT
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; cd "$HERE"
-mkdir -p "$HERE/data"; PIDFILE="$HERE/data/tracker.pid"; LOG="$HERE/data/tracker.log"
+mkdir -p "$HERE/data"
 if [[ -t 1 ]]; then C_RESET=$'\033[0m'; C_RED=$'\033[0;31m'; C_GRN=$'\033[0;32m'; C_YEL=$'\033[0;33m'; C_BLU=$'\033[0;34m'; else C_RESET=''; C_RED=''; C_GRN=''; C_YEL=''; C_BLU=''; fi
 info() { echo "${C_BLU}==>${C_RESET} $*"; }; ok() { echo "${C_GRN}OK ${C_RESET} $*"; }; warn() { echo "${C_YEL}!! ${C_RESET} $*"; }; err() { echo "${C_RED}ERROR${C_RESET} $*" >&2; }
 usage() { awk 'NR>=3 { if (/^#/) { sub(/^# ?/, ""); print } else { exit } }' "${BASH_SOURCE[0]}"; }
 
 # The config file this copy uses, handed to the server explicitly so a copy of this folder never runs on another copy's data.
 CONFIG="${JT_CONFIG:-$HERE/config.json}"; export JT_CONFIG="$CONFIG"
+# The pid file and log live beside THIS config's data, so a copy run on another config (a scratch one, say)
+# can never stop — or be mistaken for — the one on the real config.json.
+RUNDIR="$(dirname "$CONFIG")/data"; mkdir -p "$RUNDIR"; PIDFILE="$RUNDIR/tracker.pid"; LOG="$RUNDIR/tracker.log"
 cfg() { node -e "try{const c=JSON.parse(require('fs').readFileSync(process.argv[1],'utf8'));const v=process.argv[2].split('.').reduce((a,k)=>a&&a[k],c);console.log(v===undefined?process.argv[3]:v)}catch{console.log(process.argv[3])}" "$CONFIG" "$1" "$2" 2>/dev/null || echo "$2"; }
 port() { cfg server.port 8420; }
 url() { echo "http://localhost:$(port)"; }
@@ -61,19 +68,20 @@ found_pid() {
   [[ "$pid" =~ ^[0-9]+$ ]] && ps -p "$pid" -o command= 2>/dev/null | grep -qF "$ENTRY" && echo "$pid"
 }
 moved_note() { echo "it is not answering at $(url). If the port was changed in Settings, restart to apply it: ./TRACKER.sh --restart"; }
-node_ok() { command -v node >/dev/null 2>&1 && [[ "$(node -p 'process.versions.node.split(".")[0]')" -ge 22 ]]; }
+# 22.12 or newer: the page builder (Vite) needs at least that
+node_ok() { command -v node >/dev/null 2>&1 && node -e 'const [a,b]=process.versions.node.split(".").map(Number); process.exit(a>22||(a===22&&b>=12)?0:1)'; }
 
 # Build when there is no build yet, or when any source file is newer than the last build.
 needs_build() {
   [[ -f "$ENTRY" && -f dist/web/index.html && -f dist/.built ]] || return 0
-  [[ -n "$(find web/src web/index.html web/public server/src shared package.json -newer dist/.built -print -quit 2>/dev/null)" ]]
+  [[ -n "$(find web/src web/index.html web/public server/src shared package.json package-lock.json vite.config.ts tsconfig.server.json web/tsconfig.json -newer dist/.built -print -quit 2>/dev/null)" ]]
 }
 build() {
   info "Building Junk Tracker…"
   if npm run build >"$HERE/data/build.log" 2>&1; then touch dist/.built; ok "Built."; else err "The build failed — see data/build.log"; tail -n 25 "$HERE/data/build.log"; return 1; fi
 }
 prereqs() {
-  node_ok || { err "Node.js 22 or newer is needed. Run ./INSTALL_APP.sh"; return 1; }
+  node_ok || { err "Node.js 22.12 or newer is needed. Run ./INSTALL_APP.sh"; return 1; }
   [[ -d node_modules/express && -d node_modules/better-sqlite3 ]] || { err "The app's packages are not installed. Run ./INSTALL_APP.sh"; return 1; }
   [[ -f "$CONFIG" ]] || { info "No config.json yet — creating it from config.example.json"; cp config.example.json "$CONFIG" && chmod 600 "$CONFIG"; }
   if needs_build; then build || return 1; fi
@@ -81,7 +89,7 @@ prereqs() {
 
 cmd_check() {
   local rc=0
-  if node_ok; then ok "Node.js $(node -v)"; else err "Node.js 22+ is required — run ./INSTALL_APP.sh"; rc=1; fi
+  if node_ok; then ok "Node.js $(node -v)"; else err "Node.js 22.12 or newer is required — run ./INSTALL_APP.sh"; rc=1; fi
   if [[ -d node_modules/express && -d node_modules/better-sqlite3 ]]; then ok "Packages installed"; else err "Packages not installed — run ./INSTALL_APP.sh"; rc=1; fi
   if [[ -f dist/web/index.html && -f "$ENTRY" ]]; then needs_build && warn "Built, but the code changed since — the next start rebuilds it" || ok "Built"; else warn "Not built yet — the next start builds it"; fi
   if [[ -f "$CONFIG" ]]; then ok "config.json present (port $(port), network access $(cfg server.allowNetwork false), sign-in $(cfg security.loginEnabled false))"; else warn "config.json will be created from config.example.json on first start"; fi
@@ -92,7 +100,12 @@ cmd_check() {
   return $rc
 }
 cmd_start() {
-  if running; then ok "Already running (pid $(cat "$PIDFILE")) — $(url)"; return 0; fi
+  if running; then
+    ok "Already running (pid $(cat "$PIDFILE")) — $(url)"
+    # a build made after it started (./INSTALL_APP.sh, or a start that rebuilt) only takes effect after a restart
+    if needs_build || [[ dist/.built -nt "$PIDFILE" ]]; then warn "The app was updated since it started — run ./TRACKER.sh --restart to use the new version."; fi
+    return 0
+  fi
   prereqs || return 1
   if answering; then ok "Junk Tracker is already running at $(url) (not started by this script)."; return 0; fi
   nohup node "$ENTRY" >> "$LOG" 2>&1 & echo $! > "$PIDFILE"
@@ -100,7 +113,8 @@ cmd_start() {
   if answering; then
     ok "Junk Tracker is running — $(url)   (log: data/tracker.log)"
     [[ "$(cfg server.allowNetwork false)" == "true" ]] && info "Other devices: Settings → Network access lists the addresses."
-    [[ -z "${JT_NO_OPEN:-}" ]] && command -v open >/dev/null 2>&1 && open "$(url)"
+    if [[ -z "${JT_NO_OPEN:-}" ]] && command -v open >/dev/null 2>&1; then open "$(url)"; fi
+    return 0
   else
     err "It did not start — the end of data/tracker.log:"; tail -n 20 "$LOG"
     kill "$(cat "$PIDFILE")" 2>/dev/null; rm -f "$PIDFILE"; return 1

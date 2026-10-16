@@ -15,7 +15,8 @@ export function DayPicker({ value, onChange, today, weekStart }: { value: Day; o
   const [open, setOpen] = useState(other);
   const [ym, setYm] = useState(monthOf(value));
   // a sheet opened on an older day (or an edit) shows the calendar on that day's month
-  useEffect(() => { setYm(monthOf(value)); if (value !== today && value !== yesterday) setOpen(true); }, [value, today, yesterday]);
+  // and a sheet reset to Today (it can open still holding last time's older day) closes it again
+  useEffect(() => { setYm(monthOf(value)); setOpen(value !== today && value !== yesterday); }, [value, today, yesterday]);
 
   const chip = (on: boolean) => cx("min-h-12 flex-1 rounded-2xl border px-3 text-[15px] font-bold",
     on ? "border-transparent bg-accent text-accent-ink" : "border-line-2 bg-surface text-ink hover:bg-surface-2");

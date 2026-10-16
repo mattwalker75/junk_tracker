@@ -4,6 +4,32 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [0.1.0] — 2026-10-16
 
+### Fixed
+- 2026-10-16: **Code review fixes** (no look changes).
+  - *Scripts:* `./TRACKER.sh --start` no longer exits with an error after a good start when the
+    browser is not opened; the pid file and log now sit beside the config's own data, so a copy run
+    on a different config can never stop the real one; a relative `JT_CONFIG` is read from where you
+    typed it; a stray `PORT` in the shell no longer moves the server; Node.js 22.12 or newer is
+    checked (the page builder needs it), also after Homebrew installs it; more files trigger a
+    rebuild (lock file, build settings); `--start` and `INSTALL_APP.sh` say to restart when the
+    running copy is older than the build.
+  - *Server:* too-large requests get a plain refusal instead of a server error; adding the same name
+    twice at once, or turning on sign-in twice at once, can no longer slip past the checks; a
+    password can only be set with sign-in on; sign-in, setup and password changes have separate
+    attempt limits, and only failed sign-ins count; a config.json that cannot be saved changes
+    nothing; sign-ins end on the server after *Stay signed in for*, not only in the browser;
+    Home shows your last weigh-in even when it is older than the trend window; a config.json that
+    is not `{ … }` gives a clear message.
+  - *Page:* "today" moves on at midnight when the page stays open; Weigh in no longer shows another
+    day's weight in the box; the day picker no longer opens on *Other day* for a new splurge after
+    editing an old one; a theme that fails to save keeps the editor open and the page in the saved
+    look; *Last used* uses your own time zone; removing the person you switched to clears their log
+    from the screen; the user count updates after adding someone; a weight change too small to show
+    in kg reads "no change"; typing the confirm word in lower case works (and a wrong word says so);
+    saving one setting no longer wipes what you were typing in another; re-saving a kg weigh-in
+    unchanged keeps it exact.
+  - 28 tests.
+
 ### Changed
 - 2026-10-16: **Log a splurge asks for the day only, not the time** (Matt: the day is enough).
   The day is **Today**, **Yesterday** or **Other day**, which opens a big month calendar in the

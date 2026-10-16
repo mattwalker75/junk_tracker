@@ -36,8 +36,9 @@ To change or delete one, tap its day on Home or in the Calendar, then tap the sp
 
 ## Weigh in
 Type your weight (pounds or kilograms, as set in Settings) and **Save weigh-in**. One weigh-in a
-day: if the day already has one, the sheet says so and saving replaces it. Change the **Day** to
-fill in a day you missed. **Remove this day's weigh-in** deletes it. Weigh-ins are optional;
+day: if the day already has one, the sheet says so and saving replaces it. The **Day** works like a
+splurge's: **Today** unless you tap **Yesterday**, or **Other day** for the big calendar — to fill
+in a day you missed. **Remove this day's weigh-in** deletes it. Weigh-ins are optional;
 the weight card just waits for the first one.
 
 ## Calendar

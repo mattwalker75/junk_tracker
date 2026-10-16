@@ -1,5 +1,5 @@
 /**
- * Which day a splurge was (Matt: the day is enough, no time). Today and Yesterday are one tap;
+ * Which day a splurge or a weigh-in was (Matt: the day is enough, no time; the same picker for both). Today and Yesterday are one tap;
  * "Other day" opens a big month calendar right in the sheet — finger-sized days, no future days —
  * instead of the phone's small date wheel.
  */

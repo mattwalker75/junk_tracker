@@ -9,6 +9,8 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
   The day is **Today**, **Yesterday** or **Other day**, which opens a big month calendar in the
   sheet with finger-sized days, in place of the phone's small date picker. Splurges logged
   earlier keep their time.
+- 2026-10-16: **Weigh in picks the day the same way** — **Today** (the default), **Yesterday**
+  or **Other day** with the big calendar — in place of the phone's date box.
 - 2026-10-16: **Sign out is on the home screen**, beside your initial, and only when users and
   sign-in are on. It is no longer in Settings.
 - 2026-10-16: **It starts with no sign-in, just you** (like the trading desk and People Manager).

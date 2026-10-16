@@ -1,4 +1,4 @@
-/** Weigh in: one reading a day (a second one that day replaces it), in the person's unit. */
+/** Weigh in: one reading a day (a second one that day replaces it), in the person's unit. The day is picked like a splurge's: Today (the default), Yesterday or Other day. */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
@@ -7,6 +7,7 @@ import { LOG_KEYS } from "../lib/actions";
 import { api } from "../lib/api";
 import { longDay, today as todayOf } from "../lib/dates";
 import { inUnit } from "../lib/stats";
+import { DayPicker } from "./DayPicker";
 import { Button, ErrorLine, Field, Input, Sheet } from "./ui";
 
 export function WeighSheet({ open, onOpenChange, day }: { open: boolean; onOpenChange: (o: boolean) => void; day?: Day }) {
@@ -46,12 +47,10 @@ export function WeighSheet({ open, onOpenChange, day }: { open: boolean; onOpenC
   return (
     <Sheet open={open} onOpenChange={onOpenChange} title="Weigh in" subtitle={longDay(d, today)}>
       <form onSubmit={save} className="space-y-4 pb-2">
-        <div className="grid grid-cols-[1fr_1.1fr] gap-2.5">
-          <Field label={`Weight (${unit})`} required>
-            {(id) => <Input id={id} value={value} onChange={(e) => setValue(e.target.value)} inputMode="decimal" placeholder={unit === "lb" ? "187.4" : "85.0"} autoFocus className="tabular text-lg font-bold" />}
-          </Field>
-          <Field label="Day">{(id) => <Input id={id} type="date" value={d} max={today} onChange={(e) => e.target.value && setD(e.target.value)} />}</Field>
-        </div>
+        <Field label={`Weight (${unit})`} required>
+          {(id) => <Input id={id} value={value} onChange={(e) => setValue(e.target.value)} inputMode="decimal" placeholder={unit === "lb" ? "187.4" : "85.0"} autoFocus className="tabular text-lg font-bold" />}
+        </Field>
+        <DayPicker value={d} onChange={setD} today={today} weekStart={overview.data?.settings.weekStart ?? 0} />
         {have ? <p className="text-sm text-mute">{longDay(d, today)} already has {inUnit(have.pounds, unit)} {unit}; saving replaces it — one weigh-in a day.</p> : null}
         <ErrorLine text={error} />
         <Button type="submit" variant="strong" size="xl" className="w-full" disabled={busy}>Save weigh-in</Button>

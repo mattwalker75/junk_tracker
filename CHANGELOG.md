@@ -11,6 +11,11 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
   earlier keep their time.
 - 2026-10-16: **Weigh in picks the day the same way** — **Today** (the default), **Yesterday**
   or **Other day** with the big calendar — in place of the phone's date box.
+- 2026-10-16: **A day you open looks tidier** — same content, better laid out: a one-line
+  summary at the top (how many splurges, the biggest size, calories logged) or a check mark for a
+  clean day; *Splurges* and *Weight* headings; each splurge as a card with its size and time,
+  an Edit button, where and calories as small labelled tags, and notes in their own box; the
+  weigh-in shows the weight on the right, or says to tap to add one.
 - 2026-10-16: **Sign out is on the home screen**, beside your initial, and only when users and
   sign-in are on. It is no longer in Settings.
 - 2026-10-16: **It starts with no sign-in, just you** (like the trading desk and People Manager).

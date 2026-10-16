@@ -3,8 +3,9 @@
  * coloured by the biggest splurge of each day (tap a day to open it; Calendar for older days), the
  * weight card with the trend over the person's chosen period, and the two big buttons.
  */
-import { useQuery } from "@tanstack/react-query";
-import { CalendarDays } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { CalendarDays, LogOut } from "lucide-react";
+import { toast } from "sonner";
 import { SIZE_LABEL, type Overview, type WeighIn } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
@@ -12,11 +13,16 @@ import { addDays, ago, dayNum, shortDay, today as todayOf, WEEKDAY_SHORT, WEEKDA
 import { byDay, countBetween, daysClean, inUnit, periodLabel, startOfWeek, trend, worstSize } from "../lib/stats";
 import { Button, Card, cx, SIZE_FILL, SizeLegend } from "./ui";
 
-export function Home({ who }: { who: string }) {
+export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean }) {
+  const qc = useQueryClient();
   const today = todayOf();
   const q = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today) });
   const act = useActions();
   const initials = who.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  // sign out lives on the home screen, and only when signing in is on (with it off there is nothing to sign out of)
+  const signOut = async () => {
+    try { await api.logout(); qc.resetQueries(); } catch (e) { toast.error((e as Error).message); }
+  };
 
   return (
     <main className="flex min-h-dvh flex-col pb-safe">
@@ -25,8 +31,14 @@ export function Home({ who }: { who: string }) {
           <img src="/icon.svg" alt="" className="size-8 rounded-lg" />
           <span className="text-[17px] font-extrabold tracking-tight">Junk Tracker</span>
         </a>
+        <div className="flex items-center gap-1.5">
+        {loginEnabled ? (
+          <button onClick={() => void signOut()} aria-label="Sign out" title="Sign out"
+            className="grid size-10 place-items-center rounded-full text-mute hover:bg-surface-2"><LogOut className="size-5" /></button>
+        ) : null}
         <a href="#/settings" aria-label={`Settings — ${who}`} title="Settings and people"
           className="grid size-10 place-items-center rounded-full bg-surface-2 text-sm font-bold text-ink-2 hover:brightness-95">{initials || "?"}</a>
+        </div>
       </header>
 
       {q.isError ? <p className="mx-4 rounded-xl bg-danger-soft p-3 text-sm text-danger">{q.error.message}</p> : null}

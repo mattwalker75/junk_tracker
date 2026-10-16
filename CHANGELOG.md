@@ -5,6 +5,12 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 ## [0.1.0] — 2026-10-16
 
 ### Changed
+- 2026-10-16: **Log a splurge asks for the day only, not the time** (Matt: the day is enough).
+  The day is **Today**, **Yesterday** or **Other day**, which opens a big month calendar in the
+  sheet with finger-sized days, in place of the phone's small date picker. Splurges logged
+  earlier keep their time.
+- 2026-10-16: **Sign out is on the home screen**, beside your initial, and only when users and
+  sign-in are on. It is no longer in Settings.
 - 2026-10-16: **It starts with no sign-in, just you** (like the trading desk and People Manager).
   The first open goes straight to your log — no name or password to set up. Put your name on it
   with the pencil in Settings. Settings → **Users and sign-in** is one switch: turning it on asks

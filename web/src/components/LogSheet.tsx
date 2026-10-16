@@ -1,6 +1,6 @@
 /**
  * Log a splurge (approved by Matt as mocked up): "Again?" buttons for recent things, What and How big
- * (required), then Where, Calories, When and Notes. Under each size: the person's own examples from
+ * (required), then Where, Calories, the Day (no time — Matt: the day is enough) and Notes. Under each size: the person's own examples from
  * Settings, or the default ones. The same sheet edits a splurge (with Delete).
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -9,7 +9,8 @@ import { toast } from "sonner";
 import { DEFAULT_EXAMPLES, SIZE_LABEL, SIZES, type Day, type Size, type Splurge } from "../../../shared/types";
 import { LOG_KEYS } from "../lib/actions";
 import { api } from "../lib/api";
-import { nowTime, today as todayOf } from "../lib/dates";
+import { today as todayOf } from "../lib/dates";
+import { DayPicker } from "./DayPicker";
 import { Button, cx, ErrorLine, Field, Input, Label, Sheet, SIZE_DOT, TextArea } from "./ui";
 
 const SELECTED: Record<Size, string> = { snack: "border-snack-ink/0 ring-2 ring-snack", meal: "ring-2 ring-meal", feast: "ring-2 ring-feast" };
@@ -23,7 +24,7 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
   const [size, setSize] = useState<Size | null>(null);
   const [where, setWhere] = useState("");
   const [calories, setCalories] = useState("");
-  const [when, setWhen] = useState({ day: today, time: nowTime() });
+  const [when, setWhen] = useState({ day: today, time: "" });
   const [notes, setNotes] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -38,7 +39,7 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
       setWhen({ day: edit.day, time: edit.time }); setNotes(edit.notes);
     } else {
       setWhat(""); setSize(null); setWhere(""); setCalories(""); setNotes("");
-      setWhen({ day: day ?? today, time: day && day !== today ? "" : nowTime() });
+      setWhen({ day: day ?? today, time: "" });
     }
   }, [open, edit, day, today]);
 
@@ -122,10 +123,8 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
           <Field label="Calories">{(id) => <Input id={id} value={calories} onChange={(e) => setCalories(e.target.value)} placeholder="optional" inputMode="numeric" />}</Field>
         </div>
 
-        <div className="grid grid-cols-[1.4fr_1fr] gap-2.5">
-          <Field label="Day">{(id) => <Input id={id} type="date" value={when.day} max={today} onChange={(e) => e.target.value && setWhen({ ...when, day: e.target.value })} />}</Field>
-          <Field label="Time">{(id) => <Input id={id} type="time" value={when.time} onChange={(e) => setWhen({ ...when, time: e.target.value })} />}</Field>
-        </div>
+        {/* an older splurge keeps the time it was logged with; new ones have none */}
+        <DayPicker value={when.day} onChange={(d) => setWhen({ ...when, day: d })} today={today} weekStart={settings?.weekStart ?? 0} />
 
         <Field label="Notes">{(id) => <TextArea id={id} rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="optional — who you were with, how it felt, anything" maxLength={2000} />}</Field>
 

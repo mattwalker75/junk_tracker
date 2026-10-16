@@ -57,7 +57,7 @@ export function App() {
     <ActionsContext.Provider value={actions}>
       <div key={owner} className="mx-auto min-h-dvh w-full max-w-xl">
         {st.acting ? <SwitchedStrip acting={st.acting.name} me={st.me.name} /> : null}
-        {route.page === "home" ? <Home who={st.acting?.name ?? st.me.name} /> : null}
+        {route.page === "home" ? <Home who={st.acting?.name ?? st.me.name} loginEnabled={st.loginEnabled} /> : null}
         {route.page === "calendar" ? <CalendarPage month={route.month} /> : null}
         {route.page === "settings" ? <SettingsPage section={route.section} state={st} /> : null}
         <LogSheet open={!!logOpen} onOpenChange={closeLog} day={logOpen?.day} edit={logOpen?.edit} />

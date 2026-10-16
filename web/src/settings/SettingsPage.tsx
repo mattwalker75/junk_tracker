@@ -3,7 +3,7 @@
  * Users table (only with users and sign-in on) — then Appearance, Users and sign-in, Network and About, which are the same for everyone.
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight, LogOut, Pencil } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pencil } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { toast } from "sonner";
 import type { AuthState } from "../../../shared/types";
@@ -51,9 +51,6 @@ function Main({ state }: { state: Ok }) {
   const shown = state.acting ?? state.me;
   const initials = shown.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
   const [renaming, setRenaming] = useState(false);
-  const signOut = async () => {
-    try { await api.logout(); qc.resetQueries(); } catch (e) { toast.error((e as Error).message); }
-  };
   const themeName = c ? (["light", "dark", "system"].includes(c.appearance.theme) ? { light: "Light", dark: "Dark", system: "System" }[c.appearance.theme] : c.appearance.customThemes.find((t) => t.id === c.appearance.theme)?.name ?? "Custom") : "";
   return (
     <>
@@ -61,10 +58,9 @@ function Main({ state }: { state: Ok }) {
         <span className="grid size-11 shrink-0 place-items-center rounded-full bg-accent font-extrabold text-accent-ink">{initials}</span>
         <div className="min-w-0 flex-1">
           <div className="truncate text-base font-extrabold">{shown.name}</div>
-          <div className="text-[13px] text-mute">{state.acting ? `Switched to from ${state.me.name} · these settings are ${shown.name}'s` : state.loginEnabled ? "Signed in · the settings below are yours" : "The settings below are yours"}</div>
+          <div className="text-[13px] text-mute">{state.acting ? `Switched to from ${state.me.name} · these settings are ${shown.name}'s` : state.loginEnabled ? "Signed in · your settings below" : "The settings below are yours"}</div>
         </div>
         <button onClick={() => setRenaming(true)} className="grid size-10 place-items-center rounded-xl text-mute hover:bg-surface-2" aria-label={`Change the name ${shown.name}`} title="Change the name"><Pencil className="size-4.5" /></button>
-        {state.loginEnabled ? <button onClick={signOut} className="grid size-10 place-items-center rounded-xl text-mute hover:bg-surface-2" aria-label="Sign out" title="Sign out"><LogOut className="size-5" /></button> : null}
       </Card>
       <RenameSheet open={renaming} onClose={() => setRenaming(false)} id={shown.id} name={shown.name} />
       <YouSettings />

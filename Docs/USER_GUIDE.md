@@ -26,9 +26,11 @@ Want other people on it, or a password? Settings → **Users and sign-in** (belo
    it fills in the size too).
 2. **How big a splurge?** — **Snack**, **Meal** or **Feast**. Under each is an example: yours
    from Settings, or a candy bar / burger & fries / a whole pizza. Pick the closest.
-3. Optional: **Where**, **Calories**, **Day** and **Time** (now, unless you change them) and
-   **Notes**.
-4. **Save splurge**.
+3. Optional: **Where** and **Calories**.
+4. **Day** — **Today** unless you tap **Yesterday**, or **Other day** for a big calendar of the
+   month (arrows for earlier months; days after today can't be picked). There is no time to fill in.
+5. Optional: **Notes**.
+6. **Save splurge**.
 
 To change or delete one, tap its day on Home or in the Calendar, then tap the splurge.
 
@@ -44,7 +46,8 @@ splurge count, clean days and weight change, and the list of that month's splurg
 between months. Tap a day to open it.
 
 ## Settings
-Tap your initial at the top right of Home.
+Tap your initial at the top right of Home. With users and sign-in on, the arrow icon beside it
+signs you out.
 
 **Your splurge sizes** — what a Snack, a Meal and a Feast mean *to you* (for example
 "candy bar, 2 cookies"). They show under the size buttons when you log. Leave one empty for the

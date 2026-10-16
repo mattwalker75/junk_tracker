@@ -1,0 +1,6 @@
+{
+  "server": { "port": 8420, "allowNetwork": false, "extraHosts": [] },
+  "security": { "loginEnabled": false, "sessionDays": 30 },
+  "database": { "path": "./data/junk.db" },
+  "appearance": { "theme": "system", "customThemes": [] }
+}

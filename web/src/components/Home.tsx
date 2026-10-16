@@ -34,7 +34,7 @@ export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean
         <div className="flex items-center gap-1.5">
         {loginEnabled ? (
           <button onClick={() => void signOut()} aria-label="Sign out" title="Sign out"
-            className="grid size-10 place-items-center rounded-full text-mute hover:bg-surface-2"><LogOut className="size-5" /></button>
+            className="grid size-10 place-items-center rounded-full bg-surface-2 text-ink-2 hover:brightness-95"><LogOut className="size-[18px]" /></button>
         ) : null}
         <a href="#/settings" aria-label={`Settings — ${who}`} title="Settings and people"
           className="grid size-10 place-items-center rounded-full bg-surface-2 text-sm font-bold text-ink-2 hover:brightness-95">{initials || "?"}</a>

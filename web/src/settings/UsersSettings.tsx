@@ -22,7 +22,7 @@ export function UsersSettings() {
   return (
     <Card className="p-4">
       <h2 className="text-[15px] font-extrabold">Users</h2>
-      <p className="mt-0.5 text-[13px] text-mute">Each person has their own log and settings. Anyone can switch to anyone — to see their log or fill it in for them.</p>
+      <p className="mt-0.5 text-[13px] text-mute">Each person has their own log and settings and signs in with their own password. Anyone can switch to anyone — to see their log or fill it in for them.</p>
       {/* a list rather than a table: on a phone the name gets its own line and the buttons sit under it */}
       <ul className="mt-2">
         {(q.data ?? []).map((u) => (

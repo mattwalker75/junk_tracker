@@ -51,11 +51,11 @@ export interface UserInfo {
 }
 
 export type AuthState =
-  /** nobody exists yet: the page asks for the first person */
+  /** the login is on but nobody has a password yet (config.json edited by hand): the page asks for one */
   | { status: "setup" }
   /** the login is on and this browser is not signed in */
   | { status: "signin" }
-  | { status: "ok"; loginEnabled: boolean; me: { id: Id; name: string }; acting: { id: Id; name: string } | null };
+  | { status: "ok"; loginEnabled: boolean; /** how many users there are */ users: number; me: { id: Id; name: string }; acting: { id: Id; name: string } | null };
 
 export interface Overview {
   /** the most recent splurge ever, for "days clean" */

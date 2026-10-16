@@ -40,6 +40,8 @@ export const api = {
   setup: (name: string, password: string) => call<AuthState>("POST", "/api/auth/setup", { name, password }),
   login: (name: string, password: string) => call<AuthState>("POST", "/api/auth/login", { name, password }),
   logout: () => call<{ ok: true }>("POST", "/api/auth/logout"),
+  enableUsers: (name: string, password: string) => call<AuthState>("POST", "/api/auth/enable", { name, password }),
+  disableUsers: () => call<AuthState>("POST", "/api/auth/disable", { confirm: "TURN OFF" }),
 
   overview: (today: Day) => call<Overview>("GET", `/api/overview?today=${today}`),
   splurges: (from: Day, to: Day) => call<Splurge[]>("GET", `/api/splurges?from=${from}&to=${to}`),
@@ -54,6 +56,7 @@ export const api = {
 
   users: () => call<UserInfo[]>("GET", "/api/users"),
   addUser: (name: string, password: string) => call<UserInfo>("POST", "/api/users", { name, password }),
+  rename: (id: Id, name: string) => call<UserInfo>("PUT", `/api/users/${id}/name`, { name }),
   setPassword: (id: Id, password: string) => call<{ ok: true }>("PUT", `/api/users/${id}/password`, { password }),
   switchTo: (id: Id) => call<AuthState>("POST", `/api/users/${id}/switch`),
   switchBack: () => call<AuthState>("POST", "/api/users/switch-back"),

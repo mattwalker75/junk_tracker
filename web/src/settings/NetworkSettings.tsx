@@ -27,7 +27,7 @@ export function NetworkSettings() {
           </div>
           <Toggle label="Allow other devices on my network" checked={c.server.allowNetwork} onChange={(v) => void save({ server: { allowNetwork: v } }, "Saved. Restart Junk Tracker to apply it.")} />
         </div>
-        {c.server.allowNetwork && !c.security.loginEnabled ? <p className="rounded-xl bg-warn-soft px-3 py-2 text-sm text-warn">Nobody is asked to sign in. Consider Settings → Sign-in.</p> : null}
+        {c.server.allowNetwork && !c.security.loginEnabled ? <p className="rounded-xl bg-warn-soft px-3 py-2 text-sm text-warn">Nobody is asked to sign in. Consider Settings → Users and sign-in.</p> : null}
         {q.data.networkUrls.length ? (
           <div className="border-t border-line pt-3">
             <div className="text-xs font-bold text-mute">Open it from another device at</div>

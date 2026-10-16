@@ -1,9 +1,11 @@
 # Junk Tracker — user guide
 
 ## The first time
-Open the app (`./TRACKER.sh` opens http://localhost:8420). It asks for your **name** and a
-**password** (at least 8 characters). You are the first user. The password is only asked for
-when sign-in is on (Settings → Sign-in), but it is set now so it is ready.
+Open the app (`./TRACKER.sh` opens http://localhost:8420). There is nothing to set up: it opens
+straight onto your log, with no account and no password. You are called "Me" until you tap the
+pencil at the top of Settings and type your name.
+
+Want other people on it, or a password? Settings → **Users and sign-in** (below).
 
 ## Home
 - **Days clean** — whole days since your last splurge. `0` means you had one today. Under it:
@@ -53,7 +55,13 @@ changes); the trend over 1 week, 2 weeks or a month; weeks start on Sunday or Mo
 
 These two are **yours** — each person has their own.
 
-**Users** — everyone with a log.
+**Users and sign-in** — off to start with: no sign-in, one log. Turn on *Several users, each
+signing in* and it asks for your name and a password; you become the first user and your log
+stays as it is. From then on everyone signs in, and the **Users** list appears in Settings.
+*Stay signed in for* 1 day to 90 days (after a restart). To turn it off, remove everyone but
+yourself first (so no log is lost), then type TURN OFF; your password is removed.
+
+**Users** (only with users and sign-in on) — everyone with a log.
 - **Add a user**: a name and a password (twice).
 - **Password**: set a new password for anyone. If sign-in is on, that person is signed out
   everywhere and uses the new one. Changing your own keeps you signed in here.
@@ -66,10 +74,6 @@ Anyone can do all of this — users keep logs apart; they are not private from e
 
 **Appearance** — Light, Dark, System (follows the phone), or **New theme…** to make your own
 with a live preview. The same for everyone.
-
-**Sign-in** — off: whoever opens the app is in the first person's log (fine on a computer only
-you use). On: everyone signs in with their name and password. *Stay signed in for* 1 day to 90
-days (after a restart).
 
 **Network access** — *Allow other devices on my network* lets phones open it (after
 `./TRACKER.sh --restart`); the addresses to use are listed. *Other names for this computer* is

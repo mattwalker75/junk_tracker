@@ -31,12 +31,17 @@ The person using it is not a developer — every message the page shows is a pla
    in lb or kg; trend period 1 week / 2 weeks / month.
 3. **Days are the phone's local dates** (`YYYY-MM-DD`), sent by the page — the server never works
    out "today" in its own time zone (`/api/overview?today=`).
-4. **Several users = separation, not privacy** (like People Manager): every person can add users,
-   set anyone's password, Switch to anyone (a strip says whose log is on screen) and remove
-   others. Matt rejected a fixed "2 people" setting — it is a Users table.
-5. **Login off** = the browser is the first user (or whoever it switched to). **Login on** =
-   name + password; changing a person's password signs them out everywhere (session carries a
-   tag of the hash); your own change keeps you signed in.
+4. **It starts with no login and one person** (Matt, Oct 16 2026 — like ai_trading_desk and
+   people_manager): first open makes "Me" (no password) and goes straight to Home; no setup
+   screen. **Users and sign-in** is ONE switch (`/api/auth/enable` asks for your name + password,
+   `/api/auth/disable` needs TURN OFF and only one user left, then clears the password);
+   `security.loginEnabled` cannot be set through `PUT /api/settings`. Adding users needs it on.
+   The setup screen only appears if config.json turns the login on with no passwords.
+5. **Several users = separation, not privacy**: every person can add users, set anyone's
+   password, rename, Switch to anyone (a strip says whose log is on screen) and remove others.
+   Matt rejected a fixed "2 people" setting — it is a Users table, shown only with sign-in on.
+   A new password signs that person out everywhere (session carries a tag of the hash); your
+   own change keeps you signed in.
 6. **Host guard + same-origin writes** stay on: unknown Host → 421, cross-site writes → 403.
    Tailscale names go in `server.extraHosts`.
 7. **Settings marked "after a restart"** (port, network access, sign-in length, database path)

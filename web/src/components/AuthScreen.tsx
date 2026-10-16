@@ -1,4 +1,4 @@
-/** First start (create the first person) and signing in (login on). */
+/** Signing in (users and sign-in on), and — only if config.json turned the login on by hand — choosing the first name and password. */
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 import { api } from "../lib/api";
@@ -36,9 +36,9 @@ export function AuthScreen({ mode }: { mode: "setup" | "signin" }) {
         </div>
       </div>
       <form onSubmit={submit} className="space-y-4 rounded-3xl border border-line bg-surface p-5 shadow-soft">
-        {setup ? <p className="text-[15px] leading-relaxed text-ink-2">Who's first? You can add more people later, each with their own log, in Settings → Users.</p> : null}
+        {setup ? <p className="text-[15px] leading-relaxed text-ink-2">Signing in is on, but nobody has a password yet. Choose your name and password — you can add more people afterwards in Settings → Users.</p> : null}
         <Field label="Name" required>{(id) => <Input id={id} value={name} onChange={(e) => setName(e.target.value)} autoComplete="username" autoCapitalize="words" autoFocus required />}</Field>
-        <Field label="Password" required hint={setup ? "At least 8 characters. Used when signing in is turned on (Settings → Sign-in)." : undefined}>
+        <Field label="Password" required hint={setup ? "At least 8 characters." : undefined}>
           {(id) => <Input id={id} type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={setup ? "new-password" : "current-password"} required />}
         </Field>
         {setup ? <Field label="Password again" required>{(id) => <Input id={id} type="password" value={again} onChange={(e) => setAgain(e.target.value)} autoComplete="new-password" required />}</Field> : null}

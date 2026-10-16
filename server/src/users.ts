@@ -1,15 +1,17 @@
 /**
  * People, passwords and who a request is acting for.
  *
- * Everyone who uses Junk Tracker is a user in the database with a name and a password (bcrypt).
- * The accounts are for keeping each person's log apart, more than for privacy, so every user may
- * add users, set anyone's password and "switch to" anyone to look at or fill in their log
- * (a strip at the top says so; switching back is one tap).
+ * Like People Manager and the trading desk, Junk Tracker starts as ONE person with no sign-in:
  *
- *  - Login OFF (the default): nobody signs in. A browser is the first person created until it
- *    switches to someone else.
- *  - Login ON: a browser signs in with a name and password. The session carries a fingerprint
- *    of the password, so setting a new password signs that person out everywhere else.
+ *  - Login OFF (the default): nobody signs in and there is one log. The first time the app is
+ *    opened that person is made for you ("Me", no password; rename them in Settings).
+ *  - Login ON (Settings → Users and sign-in, which asks for your name and a password): several
+ *    users, each with their own log, each signing in with a name and password (bcrypt). The
+ *    session carries a fingerprint of the password, so a new password signs that person out
+ *    everywhere else. The accounts keep logs apart more than they keep them private: every user
+ *    may add users, set anyone's password and "switch to" anyone to look at or fill in their log.
+ *  - Turning it OFF again is refused while there is more than one user (remove the others
+ *    first, so no one's log is lost); it then removes the password.
  *
  * Sessions are signed cookies; the signing key is kept in data/session.key so a restart (after an
  * update, say) does not sign the phone out.
@@ -23,6 +25,8 @@ import type { Config } from "./config.js";
 import { newId, now, UserError } from "./util.js";
 
 export const MIN_PASSWORD = 8;
+/** the one person made on first start, with the login off */
+export const FIRST_NAME = "Me";
 
 export interface SessionData {
   /** the signed-in person (login on), or the one this browser is (login off) */
@@ -56,13 +60,22 @@ export class Users {
       const u = this.byId(s.userId);
       return u && s.tag === tagOf(u.password_hash) ? u : null;
     }
-    return this.byId(s.userId) ?? this.all()[0] ?? null;
+    return this.byId(s.userId) ?? this.all()[0] ?? this.first();
   }
+
+  /** First start with the login off: make the one person, so the app opens straight onto their log. */
+  private first(): Row {
+    const row: Row = { id: newId(), name: FIRST_NAME, password_hash: "", settings_json: "{}", created_at: now(), last_used_at: null };
+    this.db.prepare("INSERT INTO users (id, name, password_hash, settings_json, created_at, last_used_at) VALUES (@id, @name, @password_hash, @settings_json, @created_at, @last_used_at)").run(row);
+    return row;
+  }
+  /** Does anyone have a password? (Signing in needs one; with none, the page asks for the first.) */
+  private anyPassword(): boolean { return !!this.db.prepare("SELECT 1 FROM users WHERE password_hash != '' LIMIT 1").get(); }
 
   /** Whose log a request works on: the person switched to, else the person themselves. */
   owner(req: Request): Id {
     const me = this.me(req);
-    if (!me) throw new UserError(this.count() ? "Sign in first." : "Create the first person first.", 401);
+    if (!me) throw new UserError("Sign in first.", 401);
     const acting = session(req).actingAs;
     return acting && acting !== me.id && this.byId(acting) ? acting : me.id;
   }
@@ -70,12 +83,13 @@ export class Users {
   allowed(req: Request): boolean { return !!this.me(req); }
 
   state(req: Request): AuthState {
-    if (!this.count()) return { status: "setup" };
+    // the login is on but nobody can sign in (config.json edited by hand): ask for a name and password
+    if (this.loginOn() && !this.anyPassword()) return { status: "setup" };
     const me = this.me(req);
     if (!me) return { status: "signin" };
     const actingId = session(req).actingAs;
     const acting = actingId && actingId !== me.id ? this.byId(actingId) : undefined;
-    return { status: "ok", loginEnabled: this.loginOn(), me: { id: me.id, name: me.name }, acting: acting ? { id: acting.id, name: acting.name } : null };
+    return { status: "ok", loginEnabled: this.loginOn(), users: this.count(), me: { id: me.id, name: me.name }, acting: acting ? { id: acting.id, name: acting.name } : null };
   }
 
   // ---------------------------------------------------------------- names and passwords
@@ -97,20 +111,60 @@ export class Users {
     this.db.prepare("UPDATE users SET last_used_at = ? WHERE id = ?").run(now(), u.id);
   }
 
-  /** First start: create the first person and make this browser them. */
+  /** The login is on and nobody has a password: the first person gets a name and password, and this browser is them. */
   async setup(req: Request, name: unknown, password: unknown): Promise<AuthState> {
-    if (this.count()) throw new UserError("Someone already exists. Sign in, or add people in Settings → Users.", 409);
-    const u = await this.insert(name, password);
-    this.signInAs(req, u);
+    if (!this.loginOn() || this.anyPassword()) throw new UserError("Junk Tracker is already set up. Sign in, or add people in Settings → Users.", 409);
+    const u = this.all()[0] ?? this.first();
+    this.signInAs(req, await this.nameAndPassword(u, name, password));
     return this.state(req);
+  }
+
+  /**
+   * Turn on several users and sign-in: the person on screen gets a name and password and this
+   * browser is signed in as them. (The caller then saves security.loginEnabled = true.)
+   */
+  async enable(req: Request, name: unknown, password: unknown): Promise<void> {
+    if (this.loginOn()) throw new UserError("Users and sign-in are already on.", 409);
+    const me = this.me(req);
+    if (!me) throw new UserError("Open the app first.", 409);
+    const u = await this.nameAndPassword(me, name, password);
+    req.session = { userId: u.id, tag: tagOf(u.password_hash) };
+  }
+
+  /** Turn sign-in off: only with one person left (no log is lost); their password goes. */
+  disable(): void {
+    if (this.count() > 1) throw new UserError(`There are ${this.count()} users. Remove everyone but yourself in Settings → Users first — with sign-in off there is only one log.`, 409);
+    this.db.prepare("UPDATE users SET password_hash = ''").run();
+  }
+
+  private async nameAndPassword(u: Row, name: unknown, password: unknown): Promise<Row> {
+    const n = Users.checkName(name);
+    const p = Users.checkPassword(password);
+    const clash = this.byName(n);
+    if (clash && clash.id !== u.id) throw new UserError(`There is already someone called “${n}”. Pick a different name.`, 409);
+    const hash = await bcrypt.hash(p, 10);
+    this.db.prepare("UPDATE users SET name = ?, password_hash = ?, last_used_at = ? WHERE id = ?").run(n, hash, now(), u.id);
+    return { ...u, name: n, password_hash: hash };
+  }
+
+  /** A new name for someone (any user may rename anyone, like setting their password). */
+  rename(id: Id, name: unknown): UserInfo {
+    const u = this.byId(id);
+    if (!u) throw new UserError("That person no longer exists.", 404);
+    const n = Users.checkName(name);
+    const clash = this.byName(n);
+    if (clash && clash.id !== id) throw new UserError(`There is already someone called “${n}”. Pick a different name.`, 409);
+    this.db.prepare("UPDATE users SET name = ? WHERE id = ?").run(n, id);
+    return { id, name: n, createdAt: u.created_at, lastUsedAt: u.last_used_at, isYou: false };
   }
 
   async login(req: Request, name: unknown, password: unknown): Promise<AuthState> {
     const u = this.byName(String(name ?? ""));
     // an unknown name costs the same time as a wrong password, so timing does not reveal which names exist
     if (!u) this.decoy ??= await bcrypt.hash("nobody-signs-in-with-this", 10);
-    const ok = await bcrypt.compare(String(password ?? ""), u?.password_hash ?? this.decoy!);
-    if (!u || !ok) throw new UserError("That name and password do not match.", 401);
+    // someone without a password (made while sign-in was off) cannot sign in with any password
+    const ok = await bcrypt.compare(String(password ?? ""), u?.password_hash || this.decoy || (this.decoy = await bcrypt.hash("nobody-signs-in-with-this", 10)));
+    if (!u || !u.password_hash || !ok) throw new UserError("That name and password do not match.", 401);
     this.signInAs(req, u);
     return this.state(req);
   }
@@ -131,6 +185,7 @@ export class Users {
   }
 
   async add(name: unknown, password: unknown): Promise<UserInfo> {
+    if (!this.loginOn()) throw new UserError("Turn on users and sign-in first (Settings → Users and sign-in).", 409);
     const u = await this.insert(name, password);
     return { id: u.id, name: u.name, createdAt: u.created_at, lastUsedAt: null, isYou: false };
   }

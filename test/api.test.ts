@@ -4,32 +4,52 @@ import { PW, scratch, type Scratch } from "./helpers.js";
 let s: Scratch;
 afterEach(async () => { await s?.close(); });
 
+/** A browser on a fresh app. With the login off it is straight in, as the one person ("Me"). */
 async function firstPerson(name = "Matt") {
   const b = s.browser();
-  const r = await b.call("POST", "/api/auth/setup", { name, password: PW });
-  expect(r.status).toBe(200);
+  const me = (await b.call("GET", "/api/auth/me")).body.me;
+  if (name !== "Me") expect((await b.call("PUT", `/api/users/${me.id}/name`, { name })).status).toBe(200);
+  return b;
+}
+
+/** A browser on a fresh app with users and sign-in turned on, signed in as Matt. */
+async function withUsers() {
+  const b = s.browser();
+  expect((await b.call("POST", "/api/auth/enable", { name: "Matt", password: PW })).status).toBe(200);
   return b;
 }
 
 const meal = (over: Record<string, unknown> = {}) => ({ what: "Cheeseburger & fries", size: "meal", where: "Five Guys", calories: 1320, day: "2026-10-11", time: "12:30", notes: "", ...over });
 
 describe("first start and the login", () => {
-  it("asks for the first person, then lets this browser in", async () => {
+  it("starts with no sign-in: one person, made on first open, with no password", async () => {
     s = await scratch();
     const b = s.browser();
-    expect((await b.call("GET", "/api/auth/me")).body).toEqual({ status: "setup" });
-    expect((await b.call("GET", "/api/overview?today=2026-10-15")).status).toBe(401);
-    expect((await b.call("POST", "/api/auth/setup", { name: "Matt", password: "short" })).body.error).toMatch(/at least 8/);
-    const r = await b.call("POST", "/api/auth/setup", { name: "  Matt ", password: PW });
-    expect(r.body).toMatchObject({ status: "ok", loginEnabled: false, me: { name: "Matt" }, acting: null });
-    expect((await b.call("POST", "/api/auth/setup", { name: "Again", password: PW })).status).toBe(409);
-    // with the login off any browser is the first person
-    expect((await s.browser().call("GET", "/api/auth/me")).body).toMatchObject({ status: "ok", me: { name: "Matt" } });
+    expect((await b.call("GET", "/api/auth/me")).body).toMatchObject({ status: "ok", loginEnabled: false, users: 1, me: { name: "Me" }, acting: null });
+    expect((await b.call("GET", "/api/overview?today=2026-10-15")).status).toBe(200);
+    // every browser is that one person, and no one can sign in as them
+    expect((await s.browser().call("GET", "/api/auth/me")).body.me.name).toBe("Me");
+    expect((await b.call("GET", "/api/users")).body).toHaveLength(1);
+    expect((await b.call("POST", "/api/users", { name: "Sarah", password: PW })).body.error).toMatch(/Turn on users and sign-in first/);
+    expect((await b.call("PUT", "/api/settings", { security: { loginEnabled: true } })).status).toBe(400); // only through /enable
+  });
+
+  it("turning on users and sign-in names you, sets your password and keeps your log", async () => {
+    s = await scratch();
+    const b = s.browser();
+    await b.call("POST", "/api/splurges", { what: "Donut", size: "snack", day: "2026-10-14" });
+    expect((await b.call("POST", "/api/auth/enable", { name: "Matt", password: "short" })).body.error).toMatch(/at least 8/);
+    const on = await b.call("POST", "/api/auth/enable", { name: "Matt", password: PW });
+    expect(on.body).toMatchObject({ status: "ok", loginEnabled: true, me: { name: "Matt" } });
+    expect(JSON.parse((await import("node:fs")).readFileSync(s.handle.config.file, "utf8")).security.loginEnabled).toBe(true);
+    expect((await b.call("GET", "/api/overview?today=2026-10-15")).body.last.what).toBe("Donut");
+    expect((await s.browser().call("GET", "/api/auth/me")).body).toEqual({ status: "signin" });
+    expect((await b.call("POST", "/api/auth/enable", { name: "Matt", password: PW })).status).toBe(409);
   });
 
   it("with the login on, a browser signs in, and a new password signs the old session out", async () => {
-    s = await scratch({ security: { loginEnabled: true } });
-    const first = await firstPerson();
+    s = await scratch();
+    const first = await withUsers();
     const other = s.browser();
     expect((await other.call("GET", "/api/auth/me")).body).toEqual({ status: "signin" });
     expect((await other.call("GET", "/api/overview?today=2026-10-15")).status).toBe(401);
@@ -39,6 +59,27 @@ describe("first start and the login", () => {
     expect((await first.call("PUT", `/api/users/${me}/password`, { password: "another-password" })).status).toBe(200);
     expect((await first.call("GET", "/api/auth/me")).body.status).toBe("ok"); // the browser that changed it stays in
     expect((await other.call("GET", "/api/auth/me")).body.status).toBe("signin");
+  });
+
+  it("turning it off needs TURN OFF and only one user, then removes the password", async () => {
+    s = await scratch();
+    const b = await withUsers();
+    const sarah = (await b.call("POST", "/api/users", { name: "Sarah", password: PW })).body;
+    expect((await b.call("POST", "/api/auth/disable", {})).body.error).toMatch(/TURN OFF/);
+    expect((await b.call("POST", "/api/auth/disable", { confirm: "TURN OFF" })).body.error).toMatch(/There are 2 users/);
+    await b.call("DELETE", `/api/users/${sarah.id}`, { confirm: "DELETE" });
+    expect((await b.call("POST", "/api/auth/disable", { confirm: "TURN OFF" })).body).toMatchObject({ status: "ok", loginEnabled: false, me: { name: "Matt" } });
+    expect((await s.browser().call("GET", "/api/auth/me")).body.me.name).toBe("Matt");
+    expect((await s.browser().call("POST", "/api/auth/login", { name: "Matt", password: PW })).status).toBe(409);
+  });
+
+  it("asks for a name and password when the login is on but nobody has one (config.json edited by hand)", async () => {
+    s = await scratch({ security: { loginEnabled: true } });
+    const b = s.browser();
+    expect((await b.call("GET", "/api/auth/me")).body).toEqual({ status: "setup" });
+    expect((await b.call("GET", "/api/overview?today=2026-10-15")).status).toBe(401);
+    expect((await b.call("POST", "/api/auth/setup", { name: "Matt", password: PW })).body).toMatchObject({ status: "ok", me: { name: "Matt" } });
+    expect((await b.call("POST", "/api/auth/setup", { name: "Again", password: PW })).status).toBe(409);
   });
 });
 
@@ -92,7 +133,7 @@ describe("weigh-ins", () => {
 describe("people", () => {
   it("each person's log is their own; Switch to shows another's until switching back", async () => {
     s = await scratch();
-    const b = await firstPerson();
+    const b = await withUsers();
     const sarah = (await b.call("POST", "/api/users", { name: "Sarah", password: PW })).body;
     expect((await b.call("POST", "/api/users", { name: "sarah", password: PW })).status).toBe(409);
     await b.call("POST", "/api/splurges", meal());
@@ -113,7 +154,7 @@ describe("people", () => {
 
   it("removing someone needs DELETE, never yourself, and takes their log with them", async () => {
     s = await scratch();
-    const b = await firstPerson();
+    const b = await withUsers();
     const me = (await b.call("GET", "/api/auth/me")).body.me.id;
     const sarah = (await b.call("POST", "/api/users", { name: "Sarah", password: PW })).body;
     await b.call("POST", `/api/users/${sarah.id}/switch`);

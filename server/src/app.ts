@@ -50,7 +50,8 @@ const settingsSchema = z.object({
     allowNetwork: z.boolean(),
     extraHosts: z.array(hostName).max(20),
   }).partial(),
-  security: z.object({ loginEnabled: z.boolean(), sessionDays: z.number().int().min(1).max(365) }).partial(),
+  // signing in is turned on and off with /api/auth/enable and /disable (they set or remove the password), never here
+  security: z.object({ sessionDays: z.number().int().min(1).max(365) }).partial().strict(),
   appearance: z.object({ theme: z.string().max(40), customThemes: z.array(themeSchema).max(30) }).partial(),
 }).partial().strict();
 
@@ -110,7 +111,8 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   // ---------------------------------------------------------------- everything else needs a person (signed in, with the login on)
   app.use("/api", (req, res, next) => {
     if (users.allowed(req)) return next();
-    res.status(401).json({ error: users.count() ? "Sign in first." : "Create the first person first.", auth: users.state(req) });
+    const auth = users.state(req);
+    res.status(401).json({ error: auth.status === "setup" ? "Choose a name and password first." : "Sign in first.", auth });
   });
 
   // ---------------------------------------------------------------- the log of the person on screen
@@ -129,6 +131,20 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.get("/api/users", h((req) => users.list(req)));
   app.post("/api/users", h((req) => users.add(req.body?.name, req.body?.password)));
   app.put("/api/users/:id/password", limiter, h(async (req) => { await users.setPassword(req, param(req, "id"), req.body?.password); }));
+  app.put("/api/users/:id/name", h((req) => users.rename(param(req, "id"), req.body?.name)));
+  // users and sign-in on: you get a name and password and this browser signs in; off: back to one log
+  app.post("/api/auth/enable", limiter, h(async (req) => {
+    await users.enable(req, req.body?.name, req.body?.password);
+    config.update({ security: { loginEnabled: true } });
+    return users.state(req);
+  }));
+  app.post("/api/auth/disable", h((req) => {
+    if (req.body?.confirm !== "TURN OFF") throw new UserError("Type TURN OFF to confirm.");
+    if (!config.get().security.loginEnabled) return users.state(req);
+    users.disable();
+    config.update({ security: { loginEnabled: false } });
+    return users.state(req);
+  }));
   app.post("/api/users/switch-back", h((req) => { users.switchBack(req); return users.state(req); }));
   app.post("/api/users/:id/switch", h((req) => { users.switchTo(req, param(req, "id")); return users.state(req); }));
   app.delete("/api/users/:id", h((req) => {

@@ -10,11 +10,12 @@ your weight trend. It runs on your own computer and keeps everything in one SQLi
   like, where, calories, when and notes. Things you had before are one tap away.
 - **Weigh in**: at most one weigh-in a day, in pounds or kilograms. Weigh-ins are optional.
 - **Calendar**: any month, coloured by the biggest splurge of each day, with that month's totals.
-- **Several people**, each with their own log and settings. Anyone can *switch to* anyone (to
-  check in or to fill it in for them). This keeps logs apart; it is not privacy.
+- **Just you, no sign-in** to start with. Turn on *Users and sign-in* in Settings to add other
+  people, each with their own log and settings, each signing in with a password. Anyone can
+  *switch to* anyone (to check in or to fill it in for them) — it keeps logs apart; it is not privacy.
 - **Settings**: your own examples of a Snack, Meal and Feast; pounds or kilograms; the trend
-  period (1 week, 2 weeks or a month); the users; light, dark or a theme you make; sign-in on or
-  off; other devices on your network on or off.
+  period (1 week, 2 weeks or a month); users and sign-in on or off; light, dark or a theme you
+  make; other devices on your network on or off.
 
 ## Get started
 
@@ -23,7 +24,8 @@ your weight trend. It runs on your own computer and keeps everything in one SQLi
 ./TRACKER.sh            # starts it and opens http://localhost:8420
 ```
 
-The first time it opens, it asks for your name and a password. That person is the first user.
+It opens straight onto your log — no account, no password. Tap the pencil in Settings to put
+your name on it.
 
 `./TRACKER.sh --help` lists everything: `--stop`, `--restart`, `--status`, `--logs`, `--check`, …
 
@@ -32,7 +34,7 @@ The first time it opens, it asks for your name and a password. That person is th
 Settings → **Network access** → *Allow other devices on my network*, then `./TRACKER.sh --restart`.
 The page lists the addresses to open on the phone. If you reach the computer through Tailscale,
 add its name (for example `my-mac.tailnet-name.ts.net`) under *Other names for this computer*.
-Turn on Settings → **Sign-in** at the same time so nobody else on the network walks in.
+Turn on Settings → **Users and sign-in** at the same time so nobody else on the network walks in.
 
 On the phone, *Add to Home Screen* makes it open like an app.
 

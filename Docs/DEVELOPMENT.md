@@ -13,7 +13,7 @@ test/         api.test.ts (the server, end to end) · stats.test.ts (home-screen
 
 ## Commands
 ```bash
-npm test                 # vitest: 18 tests
+npm test                 # vitest: 21 tests
 npm run typecheck        # server + page
 ./TRACKER.sh --dev       # live-reloading page on :5173, API proxied to the server port
 ./TRACKER.sh --fg        # run the built app in the foreground
@@ -32,7 +32,7 @@ Created from `config.example.json` on first start. Settings edits the same file.
 | `server.port` | 8420 | after a restart |
 | `server.allowNetwork` | false | false = 127.0.0.1 only; true = every interface. After a restart |
 | `server.extraHosts` | [] | extra Host names allowed (Tailscale). At once |
-| `security.loginEnabled` | false | ask everyone to sign in. At once |
+| `security.loginEnabled` | false | users and sign-in. Changed only by `/api/auth/enable` / `disable`. At once |
 | `security.sessionDays` | 30 | how long a sign-in lasts. After a restart |
 | `database.path` | ./data/junk.db | after a restart |
 | `appearance.theme` | system | light, dark, system or a custom theme's id |
@@ -59,19 +59,23 @@ All JSON. Writes must come from the app's own page (same origin) and a known Hos
 |---|---|
 | `GET /api/health` | `{ok, app: "junk-tracker", version}` — the scripts use `app` |
 | `GET /api/auth/me` | `{status: setup \| signin \| ok, …}` |
-| `POST /api/auth/setup` · `login` · `logout` | first person / sign in / out (rate-limited) |
+| `POST /api/auth/login` · `logout` | sign in / out (rate-limited) |
+| `POST /api/auth/enable` `{name, password}` | turn on users and sign-in: names you, sets your password, signs this browser in |
+| `POST /api/auth/disable` `{confirm: "TURN OFF"}` | turn it off — refused while there is more than one user; clears the password |
+| `POST /api/auth/setup` | only when the login is on and nobody has a password (config.json edited by hand) |
 | `GET /api/overview?today=YYYY-MM-DD` | everything Home needs |
 | `GET/POST /api/splurges`, `PUT/DELETE /api/splurges/:id` | `?from=&to=` on GET |
 | `GET /api/weigh-ins`, `PUT/DELETE /api/weigh-ins/:day` | PUT `{weight, unit}` replaces the day's |
 | `GET/PUT /api/me/settings` | the person on screen's settings |
-| `GET/POST /api/users`, `PUT /api/users/:id/password`, `POST /api/users/:id/switch`, `POST /api/users/switch-back`, `DELETE /api/users/:id` `{confirm: "DELETE"}` | |
+| `GET/POST /api/users` (POST needs sign-in on), `PUT /api/users/:id/name`, `PUT /api/users/:id/password`, `POST /api/users/:id/switch`, `POST /api/users/switch-back`, `DELETE /api/users/:id` `{confirm: "DELETE"}` | |
 | `GET/PUT /api/settings` | config.json (checked; unknown keys refused); reply lists what needs a restart |
 
 Errors are `{error: "a plain sentence"}`; 401 = sign in, 421 = unknown Host, 403 = another site.
 
 ## Sign-in and users
-Login off: the session remembers who the browser switched to; otherwise it is the first user.
-Login on: the session holds `{userId, tag}` where `tag` comes from the password hash, so a new
+Login off (the default): one person, made on first open as "Me" with an empty `password_hash`
+(nobody can sign in as them); every browser is that person. Login on:
+the session holds `{userId, tag}` where `tag` comes from the password hash, so a new
 password signs that person out everywhere. *Switch to* sets `actingAs`; everything under
 `/api/overview`, `/api/splurges`, `/api/weigh-ins` and `/api/me` uses that person.
 

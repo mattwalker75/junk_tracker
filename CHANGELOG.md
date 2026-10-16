@@ -4,6 +4,13 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [0.1.0] — 2026-10-16
 
+### Changed
+- 2026-10-16: **It starts with no sign-in, just you** (like the trading desk and People Manager).
+  The first open goes straight to your log — no name or password to set up. Put your name on it
+  with the pencil in Settings. Settings → **Users and sign-in** is one switch: turning it on asks
+  for your name and a password and brings the Users list (add people, each with their own log);
+  turning it off needs everyone else removed first and the word TURN OFF, and removes your password.
+
 ### Added
 - 2026-10-16: **The first version.**
   - **Home**: *Days clean*, splurges *this week* and in the *last 30 days* (with how many were
@@ -23,4 +30,4 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
     names (Tailscale) and the port.
   - **INSTALL_APP.sh** (Node.js, packages, build, config.json, tests) and **TRACKER.sh**
     (start, stop, restart, status, logs, check, test, dev).
-  - 18 tests (the API, and the home-screen numbers).
+  - 21 tests (the API, and the home-screen numbers).

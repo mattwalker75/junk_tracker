@@ -10,7 +10,7 @@ import { SIZE_LABEL, type Day, type Splurge } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
-import { addDays, ago, clock, longDay, today as todayOf } from "../lib/dates";
+import { addDays, ago, clock, longDay } from "../lib/dates";
 import { inUnit, worstSize } from "../lib/stats";
 import { Button, cx, Sheet, SIZE_DOT, SizeBadge } from "./ui";
 

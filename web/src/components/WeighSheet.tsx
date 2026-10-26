@@ -6,7 +6,7 @@ import type { Day } from "../../../shared/types";
 import { LOG_KEYS } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
-import { longDay, today as todayOf } from "../lib/dates";
+import { longDay } from "../lib/dates";
 import { inUnit } from "../lib/stats";
 import { DayPicker } from "./DayPicker";
 import { Button, ErrorLine, Field, Input, Sheet } from "./ui";

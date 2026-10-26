@@ -25,6 +25,9 @@ export interface Splurge {
 }
 export type SplurgeInput = Pick<Splurge, "what" | "size" | "where" | "calories" | "day" | "time" | "notes">;
 
+/** kilograms in a pound */
+export const KG = 0.45359237;
+
 export interface WeighIn {
   day: Day;
   /** always stored in pounds; the page shows the person's unit */

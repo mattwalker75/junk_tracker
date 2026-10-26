@@ -10,7 +10,6 @@ import { DEFAULT_EXAMPLES, SIZE_LABEL, SIZES, type Day, type Size, type Splurge 
 import { LOG_KEYS } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
-import { today as todayOf } from "../lib/dates";
 import { DayPicker } from "./DayPicker";
 import { Button, cx, ErrorLine, Field, Input, Label, Sheet, SIZE_DOT, TextArea } from "./ui";
 

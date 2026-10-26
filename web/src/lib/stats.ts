@@ -2,7 +2,7 @@
  * The numbers on the home screen, worked out from the log. Pure functions (tested in
  * test/stats.test.ts).
  */
-import type { Day, Size, Splurge, WeighIn } from "../../../shared/types";
+import { KG, type Day, type Size, type Splurge, type WeighIn } from "../../../shared/types";
 import { addDays, daysBetween, weekday } from "./dates";
 
 const RANK: Record<Size, number> = { snack: 1, meal: 2, feast: 3 };
@@ -65,7 +65,6 @@ export function trend(weighIns: WeighIn[], today: Day, days: number): Trend {
   return { latest, change, avg7, points: before && points[0]?.day !== before.day ? [before, ...points] : points };
 }
 
-export const KG = 0.45359237;
 /** pounds shown in the person's unit, one decimal */
 export function inUnit(pounds: number, unit: "lb" | "kg"): number {
   return Math.round((unit === "kg" ? pounds * KG : pounds) * 10) / 10;

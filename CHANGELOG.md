@@ -2,6 +2,14 @@
 
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
+## [Unreleased]
+
+### Changed
+- 2026-10-26: **Tidy-up** (nothing looks or works differently): unused imports removed; the
+  pounds-to-kilograms number is kept in one place (`shared/types.ts`) for the server and the page;
+  Home and Settings work out your initials with the same code. The user guide now says to tap
+  **Edit** on a splurge to change it.
+
 ## [0.1.0] — 2026-10-16
 
 ### Fixed

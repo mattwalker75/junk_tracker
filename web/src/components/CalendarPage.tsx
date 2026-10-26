@@ -5,7 +5,7 @@ import { SIZE_LABEL } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
-import { addDays, addMonths, dayNum, monthEnd, monthLabel, monthOf, monthStart, shortDay, today as todayOf, WEEKDAY_TINY, weekday } from "../lib/dates";
+import { addDays, addMonths, dayNum, monthEnd, monthLabel, monthOf, monthStart, shortDay, WEEKDAY_TINY, weekday } from "../lib/dates";
 import { go } from "../lib/route";
 import { byDay, inUnit, worstSize } from "../lib/stats";
 import { Card, cx, SIZE_DOT, SIZE_FILL, SizeLegend } from "./ui";

@@ -6,6 +6,9 @@ import { SIZE_LABEL, type Size } from "../../../shared/types";
 
 export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
 
+/** "Matt Walker" → "MW": the round bubble on Home and in Settings */
+export const initials = (name: string) => name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+
 type Variant = "accent" | "strong" | "outline" | "soft" | "ghost" | "danger";
 const VARIANT: Record<Variant, string> = {
   accent: "bg-accent text-accent-ink hover:brightness-105",

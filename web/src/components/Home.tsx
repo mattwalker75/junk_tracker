@@ -10,16 +10,16 @@ import { SIZE_LABEL, type Overview, type WeighIn } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
-import { addDays, ago, dayNum, shortDay, today as todayOf, WEEKDAY_SHORT, WEEKDAY_TINY, weekday } from "../lib/dates";
+import { addDays, ago, dayNum, shortDay, WEEKDAY_SHORT, WEEKDAY_TINY, weekday } from "../lib/dates";
 import { byDay, countBetween, daysClean, inUnit, periodLabel, startOfWeek, trend, worstSize } from "../lib/stats";
-import { Button, Card, cx, SIZE_FILL, SizeLegend } from "./ui";
+import { Button, Card, cx, initials, SIZE_FILL, SizeLegend } from "./ui";
 
 export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean }) {
   const qc = useQueryClient();
   const today = useToday();
   const q = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today) });
   const act = useActions();
-  const initials = who.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  const letters = initials(who);
   // sign out lives on the home screen, and only when signing in is on (with it off there is nothing to sign out of)
   const signOut = async () => {
     try { await api.logout(); qc.resetQueries(); } catch (e) { toast.error((e as Error).message); }
@@ -38,7 +38,7 @@ export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean
             className="grid size-10 place-items-center rounded-full bg-surface-2 text-ink-2 hover:brightness-95"><LogOut className="size-[18px]" /></button>
         ) : null}
         <a href="#/settings" aria-label={`Settings — ${who}`} title="Settings and people"
-          className="grid size-10 place-items-center rounded-full bg-surface-2 text-sm font-bold text-ink-2 hover:brightness-95">{initials || "?"}</a>
+          className="grid size-10 place-items-center rounded-full bg-surface-2 text-sm font-bold text-ink-2 hover:brightness-95">{letters || "?"}</a>
         </div>
       </header>
 

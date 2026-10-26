@@ -32,7 +32,7 @@ Want other people on it, or a password? Settings → **Users and sign-in** (belo
 5. Optional: **Notes**.
 6. **Save splurge**.
 
-To change or delete one, tap its day on Home or in the Calendar, then tap the splurge.
+To change or delete one, tap its day on Home or in the Calendar, then tap **Edit** on the splurge.
 
 ## Weigh in
 Type your weight (pounds or kilograms, as set in Settings) and **Save weigh-in**. One weigh-in a

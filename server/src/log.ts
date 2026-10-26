@@ -8,7 +8,7 @@
  */
 import type Database from "better-sqlite3";
 import { z } from "zod";
-import { SIZES, type Day, type Id, type Overview, type Splurge, type SplurgeInput, type WeighIn } from "../../shared/types.js";
+import { KG, SIZES, type Day, type Id, type Overview, type Splurge, type SplurgeInput, type WeighIn } from "../../shared/types.js";
 import type { Users } from "./users.js";
 import { newId, now, realDay, UserError } from "./util.js";
 
@@ -26,8 +26,6 @@ const splurgeSchema = z.object({
   time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "The time looks wrong.").or(z.literal("")).default(""),
   notes: z.string().max(2000, "Keep the notes under 2,000 characters.").default(""),
 });
-
-export const KG = 0.45359237;
 
 function parse<T>(schema: z.ZodType<T>, body: unknown): T {
   const r = schema.safeParse(body);

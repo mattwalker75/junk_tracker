@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight, Pencil } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { toast } from "sonner";
 import type { AuthState } from "../../../shared/types";
-import { Button, Card, ErrorLine, Field, Input, Sheet } from "../components/ui";
+import { Button, Card, ErrorLine, Field, initials, Input, Sheet } from "../components/ui";
 import { api } from "../lib/api";
 import { AppearanceSettings } from "./AppearanceSettings";
 import { NetworkSettings } from "./NetworkSettings";
@@ -49,13 +49,13 @@ function Main({ state }: { state: Ok }) {
   const app = useQuery({ queryKey: ["settings"], queryFn: api.settings });
   const c = app.data?.config;
   const shown = state.acting ?? state.me;
-  const initials = shown.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  const letters = initials(shown.name);
   const [renaming, setRenaming] = useState(false);
   const themeName = c ? (["light", "dark", "system"].includes(c.appearance.theme) ? { light: "Light", dark: "Dark", system: "System" }[c.appearance.theme] : c.appearance.customThemes.find((t) => t.id === c.appearance.theme)?.name ?? "Custom") : "";
   return (
     <>
       <Card className="flex items-center gap-3 px-4 py-3">
-        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-accent font-extrabold text-accent-ink">{initials}</span>
+        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-accent font-extrabold text-accent-ink">{letters}</span>
         <div className="min-w-0 flex-1">
           <div className="truncate text-base font-extrabold">{shown.name}</div>
           <div className="text-[13px] text-mute">{state.acting ? `Switched to from ${state.me.name} · these settings are ${shown.name}'s` : state.loginEnabled ? "Signed in · your settings below" : "The settings below are yours"}</div>

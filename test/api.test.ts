@@ -249,3 +249,105 @@ describe("review fixes (Oct 16 2026)", () => {
     finally { fs.rmSync(dir, { recursive: true, force: true }); }
   });
 });
+
+describe("goals (Oct 26 2026)", () => {
+  const texts = (l: { text: string }[]) => l.map((g) => g.text);
+
+  it("the first open goal is the goal now; 'now' goes on top, 'later' at the end", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    expect((await b.call("POST", "/api/goals", { text: "  " })).body.error).toBe("Say what your goal is.");
+    expect((await b.call("POST", "/api/goals", { text: "x", days: 10 })).body.error).toMatch(/Pick how long/);
+    await b.call("POST", "/api/goals", { text: "No fast food in November", days: 30 });
+    await b.call("POST", "/api/goals", { text: "Get under 185 lb", place: "later" });
+    await b.call("POST", "/api/goals", { text: "Eat extra clean for the next 2 weeks", days: 14, place: "now" });
+    const l = (await b.call("GET", "/api/goals?today=2026-10-21")).body;
+    expect(texts(l.open)).toEqual(["Eat extra clean for the next 2 weeks", "No fast food in November", "Get under 185 lb"]);
+    // only the goal now has a day 1 (the day it was first seen at the top); the others wait
+    expect(l.open.map((g: { startedOn: string | null }) => g.startedOn)).toEqual(["2026-10-21", null, null]);
+    expect((await b.call("GET", "/api/goals?today=2026-10-26")).body.open[0].startedOn).toBe("2026-10-21");
+    const o = (await b.call("GET", "/api/overview?today=2026-10-26")).body;
+    expect(o).toMatchObject({ goal: { text: "Eat extra clean for the next 2 weeks", days: 14 }, goals: 3, goalSplurges: 0 });
+  });
+
+  it("checking off moves the next one up with a fresh day 1; undo puts it back as it was", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    const a = (await b.call("POST", "/api/goals", { text: "First", days: 7 })).body;
+    await b.call("POST", "/api/goals", { text: "Second" });
+    await b.call("GET", "/api/goals?today=2026-10-01");
+    expect((await b.call("POST", `/api/goals/${a.id}/done`, { today: "2026-10-08" })).body.doneOn).toBe("2026-10-08");
+    expect((await b.call("POST", `/api/goals/${a.id}/done`, { today: "2026-10-08" })).status).toBe(409);
+    let l = (await b.call("GET", "/api/goals?today=2026-10-08")).body;
+    expect(l.open.map((g: { text: string; startedOn: string }) => [g.text, g.startedOn])).toEqual([["Second", "2026-10-08"]]);
+    expect(texts(l.done)).toEqual(["First"]);
+    await b.call("POST", `/api/goals/${a.id}/reopen`);
+    l = (await b.call("GET", "/api/goals?today=2026-10-08")).body;
+    expect(l.open.map((g: { text: string; startedOn: string | null }) => [g.text, g.startedOn])).toEqual([["First", "2026-10-01"], ["Second", null]]);
+    expect(l.done).toEqual([]);
+  });
+
+  it("moves up and down, edits, removes; a goal moved off the top starts over", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    const a = (await b.call("POST", "/api/goals", { text: "A" })).body;
+    const c = (await b.call("POST", "/api/goals", { text: "C" })).body;
+    await b.call("GET", "/api/goals?today=2026-10-01");
+    await b.call("POST", `/api/goals/${c.id}/move`, { dir: "up" });
+    expect((await b.call("POST", `/api/goals/${c.id}/move`, { dir: "sideways" })).status).toBe(400);
+    await b.call("POST", `/api/goals/${c.id}/move`, { dir: "up" }); // already at the top: nothing happens
+    let l = (await b.call("GET", "/api/goals?today=2026-10-05")).body;
+    expect(l.open.map((g: { text: string; startedOn: string | null }) => [g.text, g.startedOn])).toEqual([["C", "2026-10-05"], ["A", null]]);
+    expect((await b.call("PUT", `/api/goals/${a.id}`, { text: "A, better", days: 14 })).body).toMatchObject({ text: "A, better", days: 14 });
+    expect((await b.call("DELETE", `/api/goals/${c.id}`)).status).toBe(200);
+    expect((await b.call("DELETE", `/api/goals/${c.id}`)).status).toBe(404);
+    l = (await b.call("GET", "/api/goals?today=2026-10-06")).body;
+    expect(l.open.map((g: { text: string; startedOn: string | null }) => [g.text, g.startedOn])).toEqual([["A, better", "2026-10-06"]]);
+  });
+
+  it("counts the splurges since day 1, up to the last day once the time is up", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    await b.call("POST", "/api/goals", { text: "Clean week", days: 7 });
+    await b.call("GET", "/api/goals?today=2026-10-01");
+    for (const day of ["2026-09-30", "2026-10-02", "2026-10-07", "2026-10-08"]) await b.call("POST", "/api/splurges", { what: "Donut", size: "snack", day });
+    expect((await b.call("GET", "/api/overview?today=2026-10-04")).body.goalSplurges).toBe(1);
+    expect((await b.call("GET", "/api/overview?today=2026-10-12")).body.goalSplurges).toBe(2); // Oct 1–7 only
+  });
+
+  it("each person has their own goals, even after Switch to", async () => {
+    s = await scratch();
+    const b = await withUsers();
+    const sarah = (await b.call("POST", "/api/users", { name: "Sarah", password: PW })).body;
+    const mine = (await b.call("POST", "/api/goals", { text: "Mine" })).body;
+    await b.call("POST", `/api/users/${sarah.id}/switch`);
+    expect((await b.call("GET", "/api/goals?today=2026-10-01")).body.open).toEqual([]);
+    expect((await b.call("POST", `/api/goals/${mine.id}/done`, { today: "2026-10-01" })).status).toBe(404);
+    await b.call("POST", "/api/goals", { text: "Hers" });
+    await b.call("POST", "/api/users/switch-back");
+    expect(texts((await b.call("GET", "/api/goals?today=2026-10-01")).body.open)).toEqual(["Mine"]);
+  });
+
+  it("upgrading a database with data in it keeps a copy of it first", async () => {
+    const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
+    const Database = (await import("better-sqlite3")).default;
+    const { openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-up-"));
+    const file = path.join(dir, "junk.db");
+    try {
+      // a version 1 file, as the first release left it, with one person in it
+      const old = new Database(file);
+      old.exec("CREATE TABLE users (id TEXT PRIMARY KEY, name TEXT NOT NULL UNIQUE COLLATE NOCASE, password_hash TEXT NOT NULL, settings_json TEXT NOT NULL DEFAULT '{}', created_at TEXT NOT NULL, last_used_at TEXT); CREATE TABLE splurges (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, what TEXT NOT NULL, size TEXT NOT NULL, place TEXT NOT NULL DEFAULT '', calories INTEGER, day TEXT NOT NULL, time TEXT NOT NULL DEFAULT '', notes TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL, updated_at TEXT NOT NULL); CREATE TABLE weigh_ins (user_id TEXT NOT NULL, day TEXT NOT NULL, pounds REAL NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY (user_id, day)); PRAGMA user_version = 1;");
+      old.prepare("INSERT INTO users VALUES ('u1', 'Matt', '', '{}', 'now', NULL)").run();
+      old.close();
+      const db = openDatabase(file);
+      expect(db.pragma("user_version", { simple: true })).toBe(SCHEMA_VERSION);
+      expect((db.prepare("SELECT name FROM users").get() as { name: string }).name).toBe("Matt");
+      db.close();
+      const copy = new Database(`${file}.before-v${SCHEMA_VERSION}`, { readonly: true });
+      expect(copy.pragma("user_version", { simple: true })).toBe(1);
+      expect((copy.prepare("SELECT name FROM users").get() as { name: string }).name).toBe("Matt");
+      copy.close();
+    } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+  });
+});

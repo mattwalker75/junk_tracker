@@ -13,10 +13,11 @@ import type Database from "better-sqlite3";
 import { z } from "zod";
 import { Config, ROOT } from "./config.js";
 import { openDatabase } from "./db.js";
+import { Goals } from "./goals.js";
 import { Log } from "./log.js";
 import { hostGuard, networkUrls, sameOriginWrites } from "./security.js";
 import { Users } from "./users.js";
-import { UserError, writeAtomic } from "./util.js";
+import { parse, UserError, writeAtomic } from "./util.js";
 
 export const VERSION: string = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8")).version;
 
@@ -62,18 +63,13 @@ const userSettingsSchema = z.object({
   examples: z.object({ snack: z.string().max(120), meal: z.string().max(120), feast: z.string().max(120) }).partial(),
 }).partial().strict();
 
-function check<T>(schema: z.ZodType<T>, body: unknown): T {
-  const r = schema.safeParse(body);
-  if (!r.success) throw new UserError(r.error.issues[0]?.message || "Something in that is not right.");
-  return r.data;
-}
-
-export interface AppHandle { app: express.Express; db: Database.Database; users: Users; log: Log; config: Config }
+export interface AppHandle { app: express.Express; db: Database.Database; users: Users; log: Log; goals: Goals; config: Config }
 
 export function createApp(config = new Config(), opts: { rateLimit?: boolean; webDir?: string } = {}): AppHandle {
   const db = openDatabase(config.resolve(config.get().database.path));
   const users = new Users(db, config);
-  const log = new Log(db, users);
+  const goals = new Goals(db);
+  const log = new Log(db, users, goals);
   const owner = (req: Request) => users.owner(req);
   const app = express();
   app.disable("x-powered-by");
@@ -129,8 +125,16 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.get("/api/weigh-ins", h((req) => log.weighInsBetween(owner(req), String(req.query.from || ""), String(req.query.to || ""))));
   app.put("/api/weigh-ins/:day", h((req) => log.setWeighIn(owner(req), param(req, "day"), req.body)));
   app.delete("/api/weigh-ins/:day", h((req) => { log.deleteWeighIn(owner(req), param(req, "day")); }));
+  // goals: the open list in order (the first is the goal now) and the ones checked off
+  app.get("/api/goals", h((req) => goals.list(owner(req), req.query.today)));
+  app.post("/api/goals", h((req) => goals.add(owner(req), req.body)));
+  app.put("/api/goals/:id", h((req) => goals.edit(owner(req), param(req, "id"), req.body)));
+  app.post("/api/goals/:id/move", h((req) => { goals.move(owner(req), param(req, "id"), req.body?.dir); }));
+  app.post("/api/goals/:id/done", h((req) => goals.done(owner(req), param(req, "id"), req.body?.today)));
+  app.post("/api/goals/:id/reopen", h((req) => goals.reopen(owner(req), param(req, "id"))));
+  app.delete("/api/goals/:id", h((req) => { goals.remove(owner(req), param(req, "id")); }));
   app.get("/api/me/settings", h((req) => users.settings(owner(req))));
-  app.put("/api/me/settings", h((req) => users.saveSettings(owner(req), check(userSettingsSchema, req.body))));
+  app.put("/api/me/settings", h((req) => users.saveSettings(owner(req), parse(userSettingsSchema, req.body))));
 
   // ---------------------------------------------------------------- users (every person may do all of this)
   app.get("/api/users", h((req) => users.list(req)));
@@ -164,7 +168,7 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
       databaseFile: config.resolve(c.database.path), networkUrls: c.server.allowNetwork ? networkUrls(c.server.port) : [] };
   }));
   app.put("/api/settings", h((req) => {
-    const patch = check(settingsSchema, req.body);
+    const patch = parse(settingsSchema, req.body);
     if (patch.server?.extraHosts) patch.server.extraHosts = [...new Set(patch.server.extraHosts)];
     const r = config.update(patch);
     const c = config.get();
@@ -193,5 +197,5 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
     res.status(500).json({ error: "Something went wrong on the server. The log has the details (./TRACKER.sh --logs)." });
   });
 
-  return { app, db, users, log, config };
+  return { app, db, users, log, goals, config };
 }

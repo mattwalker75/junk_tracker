@@ -1,29 +1,25 @@
 /**
- * Home (mockup E/F, Matt's pick): Days clean with This week and 30 days beside it, the last 14 days
+ * Home (mockup E/F, Matt's pick): the goal now as a sticky note on top (mockup G3, Oct 26 2026),
+ * Days clean with This week and 30 days beside it, the last 14 days
  * coloured by the biggest splurge of each day (tap a day to open it; Calendar for older days), the
  * weight card with the trend over the person's chosen period, and the two big buttons.
  */
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, LogOut } from "lucide-react";
-import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { CalendarDays } from "lucide-react";
 import { SIZE_LABEL, type Overview, type WeighIn } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
 import { addDays, ago, dayNum, shortDay, WEEKDAY_SHORT, WEEKDAY_TINY, weekday } from "../lib/dates";
 import { byDay, countBetween, daysClean, inUnit, periodLabel, startOfWeek, trend, worstSize } from "../lib/stats";
-import { Button, Card, cx, initials, SIZE_FILL, SizeLegend } from "./ui";
+import { GoalNote } from "./GoalNote";
+import { Button, Card, cx, SIZE_FILL, SizeLegend } from "./ui";
+import { UserMenu } from "./UserMenu";
 
 export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean }) {
-  const qc = useQueryClient();
   const today = useToday();
   const q = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today) });
   const act = useActions();
-  const letters = initials(who);
-  // sign out lives on the home screen, and only when signing in is on (with it off there is nothing to sign out of)
-  const signOut = async () => {
-    try { await api.logout(); qc.resetQueries(); } catch (e) { toast.error((e as Error).message); }
-  };
 
   return (
     <main className="flex min-h-dvh flex-col pb-safe">
@@ -32,14 +28,8 @@ export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean
           <img src="/icon.svg" alt="" className="size-8 rounded-lg" />
           <span className="text-[17px] font-extrabold tracking-tight">Junk Tracker</span>
         </a>
-        <div className="flex items-center gap-1.5">
-        {loginEnabled ? (
-          <button onClick={() => void signOut()} aria-label="Sign out" title="Sign out"
-            className="grid size-10 place-items-center rounded-full bg-surface-2 text-ink-2 hover:brightness-95"><LogOut className="size-[18px]" /></button>
-        ) : null}
-        <a href="#/settings" aria-label={`Settings — ${who}`} title="Settings and people"
-          className="grid size-10 place-items-center rounded-full bg-surface-2 text-sm font-bold text-ink-2 hover:brightness-95">{letters || "?"}</a>
-        </div>
+        {/* Goals, Settings and (with sign-in on) Sign out */}
+        <UserMenu who={who} loginEnabled={loginEnabled} goals={q.data?.goals} />
       </header>
 
       {q.isError ? <p className="mx-4 rounded-xl bg-danger-soft p-3 text-sm text-danger">{q.error.message}</p> : null}
@@ -66,6 +56,7 @@ function Body({ o, today }: { o: Overview; today: string }) {
 
   return (
     <div className="space-y-2.5 px-4">
+      <GoalNote o={o} today={today} />
       <div className="grid grid-cols-[1.35fr_1fr] gap-2.5">
         <Card className="p-4">
           <div className="text-xs font-bold tracking-[0.08em] text-mute uppercase">Days clean</div>

@@ -4,6 +4,9 @@ A small app for your phone that tracks two things and nothing else: **junk food*
 and **weight**. Log a splurge in a few taps, see how many days you have stayed clean, and watch
 your weight trend. It runs on your own computer and keeps everything in one SQLite file.
 
+- **Goals**: keep a list of things to aim for ("Eat extra clean for the next 2 weeks"). The one at
+  the top sits on Home as a sticky note, every time you open the app; check it off and the next
+  one moves up.
 - **Home**: *Days clean* in big type, splurges *this week* and in the *last 30 days*, the last
   14 days as coloured squares (tap one to see that day), and your weight with its trend.
 - **+ Splurge**: what you had and how big — **Snack**, **Meal** or **Feast** — plus, if you
@@ -28,6 +31,14 @@ It opens straight onto your log — no account, no password. Tap the pencil in S
 your name on it.
 
 `./TRACKER.sh --help` lists everything: `--stop`, `--restart`, `--status`, `--logs`, `--check`, …
+
+## Update it
+
+```bash
+./TRACKER.sh --stop
+git pull
+./TRACKER.sh --start     # installs and builds what changed; your data stays as it is
+```
 
 ## Use it from your phone
 

@@ -9,8 +9,9 @@
 import type Database from "better-sqlite3";
 import { z } from "zod";
 import { KG, SIZES, type Day, type Id, type Overview, type Splurge, type SplurgeInput, type WeighIn } from "../../shared/types.js";
+import type { Goals } from "./goals.js";
 import type { Users } from "./users.js";
-import { newId, now, realDay, UserError } from "./util.js";
+import { newId, now, parse, realDay, UserError } from "./util.js";
 
 interface SplurgeRow { id: Id; user_id: Id; what: string; size: Splurge["size"]; place: string; calories: number | null; day: Day; time: string; notes: string; created_at: string; updated_at: string }
 
@@ -27,19 +28,13 @@ const splurgeSchema = z.object({
   notes: z.string().max(2000, "Keep the notes under 2,000 characters.").default(""),
 });
 
-function parse<T>(schema: z.ZodType<T>, body: unknown): T {
-  const r = schema.safeParse(body);
-  if (!r.success) throw new UserError(r.error.issues[0]?.message || "Something in that is not right.");
-  return r.data;
-}
-
 const shift = (d: Day, days: number): Day => {
   const [y, m, dd] = d.split("-").map(Number);
   return new Date(Date.UTC(y, m - 1, dd + days)).toISOString().slice(0, 10);
 };
 
 export class Log {
-  constructor(private readonly db: Database.Database, private readonly users: Users) {}
+  constructor(private readonly db: Database.Database, private readonly users: Users, private readonly goals: Goals) {}
 
   // ---------------------------------------------------------------- splurges
   addSplurge(owner: Id, body: unknown): Splurge {
@@ -107,6 +102,14 @@ export class Log {
     const recent = (this.db.prepare(`SELECT what, size, place, calories FROM splurges WHERE user_id = ?
       GROUP BY lower(what) ORDER BY MAX(day || ' ' || time || ' ' || created_at) DESC LIMIT 6`).all(owner) as { what: string; size: Splurge["size"]; place: string; calories: number | null }[])
       .map((r) => ({ what: r.what, size: r.size, where: r.place, calories: r.calories }));
-    return { last: last ? toSplurge(last) : null, splurges, weighIns, recent, settings };
+    // the goal now, and how many splurges since its day 1 (up to its last day, once its time is up)
+    const goals = this.goals.list(owner, today).open;
+    const goal = goals[0] ?? null;
+    let goalSplurges = 0;
+    if (goal?.startedOn) {
+      const end = goal.days && shift(goal.startedOn, goal.days - 1) < today ? shift(goal.startedOn, goal.days - 1) : today;
+      goalSplurges = (this.db.prepare("SELECT COUNT(*) AS n FROM splurges WHERE user_id = ? AND day BETWEEN ? AND ?").get(owner, goal.startedOn, end) as { n: number }).n;
+    }
+    return { last: last ? toSplurge(last) : null, splurges, weighIns, recent, settings, goal, goalSplurges, goals: goals.length };
   }
 }

@@ -1,5 +1,5 @@
 /** Every call to the server. Errors come back as plain sentences (the server writes them). */
-import type { AuthState, CustomTheme, Day, Id, Overview, Splurge, SplurgeInput, UserInfo, UserSettings, WeighIn } from "../../../shared/types";
+import type { AuthState, CustomTheme, Day, Goal, GoalInput, GoalList, Id, Overview, Splurge, SplurgeInput, UserInfo, UserSettings, WeighIn } from "../../../shared/types";
 
 export class ApiError extends Error {
   constructor(message: string, readonly status: number) { super(message); }
@@ -51,6 +51,13 @@ export const api = {
   weighIns: (from: Day, to: Day) => call<WeighIn[]>("GET", `/api/weigh-ins?from=${from}&to=${to}`),
   weighIn: (day: Day, weight: number, unit: "lb" | "kg") => call<WeighIn>("PUT", `/api/weigh-ins/${day}`, { weight, unit }),
   deleteWeighIn: (day: Day) => call<{ ok: true }>("DELETE", `/api/weigh-ins/${day}`),
+  goals: (today: Day) => call<GoalList>("GET", `/api/goals?today=${today}`),
+  addGoal: (g: GoalInput & { place: "now" | "later" }) => call<Goal>("POST", "/api/goals", g),
+  saveGoal: (id: Id, g: GoalInput) => call<Goal>("PUT", `/api/goals/${id}`, g),
+  moveGoal: (id: Id, dir: "up" | "down") => call<{ ok: true }>("POST", `/api/goals/${id}/move`, { dir }),
+  goalDone: (id: Id, today: Day) => call<Goal>("POST", `/api/goals/${id}/done`, { today }),
+  reopenGoal: (id: Id) => call<Goal>("POST", `/api/goals/${id}/reopen`),
+  deleteGoal: (id: Id) => call<{ ok: true }>("DELETE", `/api/goals/${id}`),
   mySettings: () => call<UserSettings>("GET", "/api/me/settings"),
   saveMySettings: (patch: Partial<Omit<UserSettings, "examples">> & { examples?: Partial<UserSettings["examples"]> }) => call<UserSettings>("PUT", "/api/me/settings", patch),
 

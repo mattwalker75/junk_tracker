@@ -4,7 +4,23 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+### Added
+- 2026-10-26: **Goals.** Keep a list of things to aim for, like "Eat extra clean for the next
+  2 weeks". The goal at the top of the list sits at the very top of Home on a yellow sticky note
+  in handwriting, so it is the first thing you see every time you open the app; under it, which
+  day of the goal you are on and how it is going (clean so far, or how many splurges). **Done**
+  checks it off and the next goal takes its place, with **Undo** for a moment. A goal can run
+  1 week, 2 weeks, a month or with no end; its days start when it reaches the top. When its time
+  is up the note asks *did you do it?* — **Yes, done**, or **Keep going**. The Goals page (Now,
+  Up next with arrows to reorder, Add a goal with ideas, Done) is under your initials. Each
+  person has their own goals.
+- 2026-10-26: **Updating is stop → git pull → start.** `./TRACKER.sh --start` now installs the
+  app's packages by itself when an update changed them, and the app saves a copy of the database
+  (`data/junk.db.before-v2`) before upgrading it for goals. Nothing already logged changes.
+
 ### Changed
+- 2026-10-26: **Your initials open a menu** — **Goals**, **Settings** and, with users and sign-in
+  on, **Sign out**. The separate sign-out button on Home is gone.
 - 2026-10-26: **Tidy-up** (nothing looks or works differently): unused imports removed; the
   pounds-to-kilograms number is kept in one place (`shared/types.ts`) for the server and the page;
   Home and Settings work out your initials with the same code. The user guide now says to tap

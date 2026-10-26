@@ -8,6 +8,12 @@ pencil at the top of Settings and type your name.
 Want other people on it, or a password? Settings → **Users and sign-in** (below).
 
 ## Home
+- **My goal** — when you have a goal, it sits at the very top on a yellow sticky note, so you see
+  it every time you open the app. Under it: which day of the goal you are on and how it is going.
+  Tap **Done** when you have done it — the next goal on your list takes its place (and **Undo** is
+  there for a moment if you tapped it by mistake). When a goal's time is up, the note asks
+  *did you do it?*: **Yes, done**, or **Keep going** to leave it up with no end date. Tap the
+  words to open your goals.
 - **Days clean** — whole days since your last splurge. `0` means you had one today. Under it:
   the day and, if you said, where.
 - **This week** — splurges since the start of the week (Sunday or Monday, your choice in Settings).
@@ -41,14 +47,26 @@ splurge's: **Today** unless you tap **Yesterday**, or **Other day** for the big 
 in a day you missed. **Remove this day's weigh-in** deletes it. Weigh-ins are optional;
 the weight card just waits for the first one.
 
+## Goals
+Tap your initials (top right of Home), then **Goals**.
+- **Now** — the goal on your Home screen, with **I did it — check it off**.
+- **Up next** — the goals waiting, in order. The arrows move one up or down; moving one to the top
+  makes it the goal now. A goal's days start when it reaches the top, so goals waiting don't run
+  down (and one moved off the top starts over when it comes back).
+- **Add a goal** — type it, or tap one of the ideas; choose how long (no end, 1 week, 2 weeks or
+  1 month) and whether it is the goal now or goes at the end of the list.
+- **Done** — the goals you checked off, with the day.
+
+Tap any open goal to change its words or length, or to delete it. Each person has their own goals.
+
 ## Calendar
 Any month: days coloured like Home, a small line under days with a weigh-in, then the month's
 splurge count, clean days and weight change, and the list of that month's splurges. Arrows move
 between months. Tap a day to open it.
 
 ## Settings
-Tap your initial at the top right of Home. With users and sign-in on, the arrow icon beside it
-signs you out.
+Tap your initials at the top right of Home, then **Settings**. The same menu has **Goals**, and
+— with users and sign-in on — **Sign out**.
 
 **Your splurge sizes** — what a Snack, a Meal and a Feast mean *to you* (for example
 "candy bar, 2 cookies"). They show under the size buttons when you log. Leave one empty for the
@@ -95,8 +113,12 @@ changes the address (after a restart).
 | `./TRACKER.sh --status` | is it running, and where? |
 | `./TRACKER.sh --logs` | watch the server log (Ctrl-C to leave) |
 | `./TRACKER.sh --check` | is everything it needs in place? |
-| `./INSTALL_APP.sh -k` | after pulling new code: packages and build, no tests |
+| `./TRACKER.sh --stop`, `git pull`, `./TRACKER.sh --start` | update to new code — the start installs and builds what it needs |
+| `./INSTALL_APP.sh -k` | the same by hand: packages and build, no tests |
 
 ## Backing up
 Everything is in one file, `data/junk.db` (Settings → About shows where). Stop the app and copy
 that file, or copy it while running together with `junk.db-wal` if it is there.
+
+When an update changes how the database is laid out, the app first saves a copy of it as it was,
+for example `data/junk.db.before-v2`. Keep it until you are happy with the update.

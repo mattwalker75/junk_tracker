@@ -2,7 +2,7 @@
  * The numbers on the home screen, worked out from the log. Pure functions (tested in
  * test/stats.test.ts).
  */
-import { KG, type Day, type Size, type Splurge, type WeighIn } from "../../../shared/types";
+import { KG, type Day, type Goal, type Size, type Splurge, type WeighIn } from "../../../shared/types";
 import { addDays, daysBetween, weekday } from "./dates";
 
 const RANK: Record<Size, number> = { snack: 1, meal: 2, feast: 3 };
@@ -70,3 +70,28 @@ export function inUnit(pounds: number, unit: "lb" | "kg"): number {
   return Math.round((unit === "kg" ? pounds * KG : pounds) * 10) / 10;
 }
 export const periodLabel = (days: number) => (days === 7 ? "1 week" : days === 14 ? "2 weeks" : days === 30 ? "1 month" : `${days} days`);
+
+/** "2 weeks", "a week", "a month" — for "Your 2 weeks are up" */
+export const goalSpan = (days: 7 | 14 | 30) => (days === 7 ? "week" : days === 14 ? "2 weeks" : "month");
+
+/**
+ * Where a goal is: day `day` (day 1 = the day it reached the top) of `of` days (null = no end),
+ * and whether its time is up. Null while it has no day 1 yet.
+ */
+export function goalProgress(goal: Pick<Goal, "days" | "startedOn">, today: Day): { day: number; of: number | null; over: boolean } | null {
+  if (!goal.startedOn) return null;
+  const day = Math.max(1, daysBetween(goal.startedOn, today) + 1);
+  return { day, of: goal.days, over: goal.days !== null && day > goal.days };
+}
+
+/** "Your 2 weeks are up", "Your week is up" */
+export const timeUp = (days: 7 | 14 | 30) => `Your ${goalSpan(days)} ${days === 14 ? "are" : "is"} up`;
+
+/** The line under a goal: "Day 6 of 14 · clean so far", "Day 3 · 1 splurge since you started". */
+export function goalLine(goal: Pick<Goal, "days" | "startedOn">, today: Day, splurges: number): string {
+  const p = goalProgress(goal, today);
+  if (!p) return "";
+  const since = splurges === 0 ? "clean so far" : `${splurges} ${splurges === 1 ? "splurge" : "splurges"} since you started`;
+  if (p.over && goal.days) return `${timeUp(goal.days)} · ${splurges === 0 ? "clean all the way" : since}`;
+  return `Day ${p.day}${p.of ? ` of ${p.of}` : ""} · ${since}`;
+}

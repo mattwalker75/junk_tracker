@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Splurge } from "../shared/types";
 import { addDays, daysBetween } from "../web/src/lib/dates";
-import { countBetween, daysClean, inUnit, startOfWeek, trend, worstSize } from "../web/src/lib/stats";
+import { countBetween, daysClean, goalLine, goalProgress, inUnit, startOfWeek, trend, worstSize } from "../web/src/lib/stats";
 
 const s = (day: string, size: Splurge["size"]): Splurge =>
   ({ id: day + size, what: "x", size, where: null, calories: null, day, time: null, notes: null, createdAt: "", updatedAt: "" });
@@ -52,5 +52,25 @@ describe("stats", () => {
   it("shows kilograms to one decimal", () => {
     expect(inUnit(187.5, "kg")).toBe(85);
     expect(inUnit(187.46, "lb")).toBe(187.5);
+  });
+});
+
+describe("goals", () => {
+  it("counts a goal's days from the day it reached the top, and knows when its time is up", () => {
+    expect(goalProgress({ days: 14, startedOn: null }, "2026-10-26")).toBeNull();
+    expect(goalProgress({ days: 14, startedOn: "2026-10-21" }, "2026-10-21")).toEqual({ day: 1, of: 14, over: false });
+    expect(goalProgress({ days: 14, startedOn: "2026-10-21" }, "2026-10-26")).toEqual({ day: 6, of: 14, over: false });
+    expect(goalProgress({ days: 14, startedOn: "2026-10-21" }, "2026-11-03")).toEqual({ day: 14, of: 14, over: false });
+    expect(goalProgress({ days: 14, startedOn: "2026-10-21" }, "2026-11-04")).toEqual({ day: 15, of: 14, over: true });
+    expect(goalProgress({ days: null, startedOn: "2026-10-21" }, "2027-01-01").over).toBe(false);
+  });
+});
+
+describe("the goal line", () => {
+  it("says the day, and how it is going", () => {
+    expect(goalLine({ days: 14, startedOn: "2026-10-21" }, "2026-10-26", 0)).toBe("Day 6 of 14 · clean so far");
+    expect(goalLine({ days: null, startedOn: "2026-10-21" }, "2026-10-23", 1)).toBe("Day 3 · 1 splurge since you started");
+    expect(goalLine({ days: 14, startedOn: "2026-10-01" }, "2026-10-26", 2)).toBe("Your 2 weeks are up · 2 splurges since you started");
+    expect(goalLine({ days: 7, startedOn: "2026-10-01" }, "2026-10-26", 0)).toBe("Your week is up · clean all the way");
   });
 });

@@ -80,8 +80,16 @@ build() {
   info "Building Junk Tracker…"
   if npm run build >"$HERE/data/build.log" 2>&1; then touch dist/.built; ok "Built."; else err "The build failed — see data/build.log"; tail -n 25 "$HERE/data/build.log"; return 1; fi
 }
+# After a git pull that changed the package list, install the packages again (npm keeps its own copy
+# of the list it installed in node_modules/.package-lock.json), so stop → pull → start is all an update needs.
+needs_install() { [[ -d node_modules && ( ! -f node_modules/.package-lock.json || package-lock.json -nt node_modules/.package-lock.json ) ]]; }
+install_packages() {
+  info "The app's packages changed — installing them (a minute or so)…"
+  if npm ci --no-audit --no-fund >"$HERE/data/install.log" 2>&1; then ok "Packages installed."; else err "The packages did not install — see data/install.log, or run ./INSTALL_APP.sh"; return 1; fi
+}
 prereqs() {
   node_ok || { err "Node.js 22.12 or newer is needed. Run ./INSTALL_APP.sh"; return 1; }
+  if needs_install; then install_packages || return 1; fi
   [[ -d node_modules/express && -d node_modules/better-sqlite3 ]] || { err "The app's packages are not installed. Run ./INSTALL_APP.sh"; return 1; }
   [[ -f "$CONFIG" ]] || { info "No config.json yet — creating it from config.example.json"; cp config.example.json "$CONFIG" && chmod 600 "$CONFIG"; }
   if needs_build; then build || return 1; fi

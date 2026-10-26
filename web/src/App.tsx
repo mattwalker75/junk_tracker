@@ -1,10 +1,11 @@
-/** Which screen: create the first person, sign in, or the app (home, calendar, settings) with its sheets. */
+/** Which screen: create the first person, sign in, or the app (home, calendar, goals, settings) with its sheets. */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Day, Splurge } from "../../shared/types";
 import { AuthScreen } from "./components/AuthScreen";
 import { CalendarPage } from "./components/CalendarPage";
 import { DaySheet } from "./components/DaySheet";
+import { GoalsPage } from "./components/GoalsPage";
 import { Home } from "./components/Home";
 import { LogSheet } from "./components/LogSheet";
 import { SwitchedStrip } from "./components/SwitchedStrip";
@@ -59,6 +60,7 @@ export function App() {
         {st.acting ? <SwitchedStrip acting={st.acting.name} me={st.me.name} /> : null}
         {route.page === "home" ? <Home who={st.acting?.name ?? st.me.name} loginEnabled={st.loginEnabled} /> : null}
         {route.page === "calendar" ? <CalendarPage month={route.month} /> : null}
+        {route.page === "goals" ? <GoalsPage /> : null}
         {route.page === "settings" ? <SettingsPage section={route.section} state={st} /> : null}
         <LogSheet open={!!logOpen} onOpenChange={closeLog} day={logOpen?.day} edit={logOpen?.edit} />
         <DaySheet day={dayOpen} onClose={() => setDayOpen(null)} />

@@ -1,6 +1,15 @@
 @import "tailwindcss";
 @import "@fontsource-variable/figtree";
 
+/* the handwriting on the goal note (Caveat, SIL Open Font License — fonts/Caveat-OFL.txt), bundled so it works offline */
+@font-face {
+  font-family: "Caveat";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/caveat-latin-700-normal.woff2") format("woff2");
+}
+
 /*
  * Theme tokens. Components use only these (through the Tailwind names below), so Light, Dark and
  * your own themes restyle the whole app. A custom theme sets the same variables inline on <html>
@@ -34,6 +43,9 @@
   --danger-soft: #fdecea;
   --warn: #8a5a00;
   --warn-soft: #fff6df;
+  --note: #ffe680;
+  --note-ink: #2b2100;
+  --note-mute: #5a4a00;
   --shadow: 20 24 32;
   color-scheme: light;
 }
@@ -65,6 +77,9 @@
   --danger-soft: #3d2224;
   --warn: #f2c877;
   --warn-soft: #3b3220;
+  --note: #f0d65a;
+  --note-ink: #241b00;
+  --note-mute: #4d3f00;
   --shadow: 0 0 0;
   color-scheme: dark;
 }
@@ -97,6 +112,10 @@
   --color-danger-soft: var(--danger-soft);
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
+  --color-note: var(--note);
+  --color-note-ink: var(--note-ink);
+  --color-note-mute: var(--note-mute);
+  --font-hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
   --font-sans: "Figtree Variable", "Helvetica Neue", Helvetica, sans-serif;
 }
 
@@ -125,6 +144,8 @@
 
 .shadow-sheet { box-shadow: 0 -12px 40px rgb(var(--shadow) / 0.18); }
 .shadow-soft { box-shadow: 0 1px 2px rgb(var(--shadow) / 0.05); }
+.shadow-note { box-shadow: 0 10px 22px rgb(60 45 0 / 0.18), 0 1px 2px rgb(60 45 0 / 0.2); }
+.shadow-menu { box-shadow: 0 12px 32px rgb(var(--shadow) / 0.18); }
 .tabular { font-variant-numeric: tabular-nums; }
 .pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 

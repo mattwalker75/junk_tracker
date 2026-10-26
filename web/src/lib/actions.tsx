@@ -15,3 +15,5 @@ export const useActions = () => useContext(ActionsContext);
 
 /** Everything that reads the log, so one change refreshes every screen. */
 export const LOG_KEYS = [["overview"], ["month"], ["day"]] as const;
+/** Everything that shows goals: the list, and the note and menu on Home. */
+export const GOAL_KEYS = [["goals"], ["overview"]] as const;

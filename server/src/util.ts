@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import type { z } from "zod";
 
 const ALPHABET = "abcdefghijkmnopqrstuvwxyz23456789";
 
@@ -17,6 +18,13 @@ export const now = (): string => new Date().toISOString();
 /** An error whose message is shown to the person as-is (HTTP 400 unless given). */
 export class UserError extends Error {
   constructor(message: string, readonly status = 400) { super(message); }
+}
+
+/** Check a request body against a schema; the first problem becomes the UserError the person sees. */
+export function parse<T>(schema: z.ZodType<T>, body: unknown): T {
+  const r = schema.safeParse(body);
+  if (!r.success) throw new UserError(r.error.issues[0]?.message || "Something in that is not right.");
+  return r.data;
 }
 
 /** A real calendar day "YYYY-MM-DD" ("2026-02-30" is not one). */

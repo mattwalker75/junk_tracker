@@ -60,6 +60,31 @@ export type AuthState =
   | { status: "signin" }
   | { status: "ok"; loginEnabled: boolean; /** how many users there are */ users: number; me: { id: Id; name: string }; acting: { id: Id; name: string } | null };
 
+/** How long a goal runs once it is at the top: a week, two weeks, a month — or null, until it is checked off. */
+export type GoalDays = 7 | 14 | 30 | null;
+
+/**
+ * Something to aim for ("Eat extra clean for the next 2 weeks"). Each person keeps a list; the open
+ * goal at the top is the one on Home, and checking it off moves the next one up.
+ */
+export interface Goal {
+  id: Id;
+  text: string;
+  days: GoalDays;
+  /** the day it reached the top of the list — its day 1 — or null while it waits further down */
+  startedOn: Day | null;
+  /** the day it was checked off, or null while it is open */
+  doneOn: Day | null;
+  createdAt: string;
+}
+export interface GoalInput { text: string; days: GoalDays }
+export interface GoalList {
+  /** in order: the first is the goal now */
+  open: Goal[];
+  /** newest first */
+  done: Goal[];
+}
+
 export interface Overview {
   /** the most recent splurge ever, for "days clean" */
   last: Splurge | null;
@@ -70,6 +95,12 @@ export interface Overview {
   /** recent different things, for the "Again?" buttons */
   recent: Pick<Splurge, "what" | "size" | "where" | "calories">[];
   settings: UserSettings;
+  /** the goal now (the top of the list), for the note on Home */
+  goal: Goal | null;
+  /** splurges from the goal's day 1 to today (or to its last day, when its time is up) */
+  goalSplurges: number;
+  /** how many open goals there are, for the menu */
+  goals: number;
 }
 
 export interface CustomTheme { id: string; name: string; dark: boolean; tokens: Record<string, string> }

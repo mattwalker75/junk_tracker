@@ -7,8 +7,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import type { Goal, GoalDays } from "../../../shared/types";
-import { GOAL_KEYS } from "../lib/actions";
+import { GOAL_KEYS, refresh } from "../lib/actions";
 import { api } from "../lib/api";
+import { useToday } from "../lib/useToday";
 import { Button, cx, ErrorLine, Field, Sheet, TextArea } from "./ui";
 
 const IDEAS: { text: string; days: GoalDays }[] = [
@@ -23,6 +24,7 @@ const PLACES: ["now" | "later", string, string][] = [["now", "Now", "It goes on 
 
 export function GoalSheet({ open, onOpenChange, edit, hasGoals }: { open: boolean; onOpenChange: (o: boolean) => void; edit?: Goal; hasGoals: boolean }) {
   const qc = useQueryClient();
+  const today = useToday();
   const [text, setText] = useState("");
   const [days, setDays] = useState<GoalDays>(14);
   const [place, setPlace] = useState<"now" | "later">("now");
@@ -37,7 +39,6 @@ export function GoalSheet({ open, onOpenChange, edit, hasGoals }: { open: boolea
     setText(edit?.text ?? ""); setDays(edit ? edit.days : 14);
   }, [open, edit]);
 
-  const refresh = () => { for (const k of GOAL_KEYS) void qc.invalidateQueries({ queryKey: [...k] }); };
   const save = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -47,10 +48,10 @@ export function GoalSheet({ open, onOpenChange, edit, hasGoals }: { open: boolea
       if (edit) { await api.saveGoal(edit.id, { text: text.trim(), days }); toast.success("Saved."); }
       else {
         // with no goals yet the new one is the goal now, wherever it was asked to go
-        await api.addGoal({ text: text.trim(), days, place: hasGoals ? place : "now" });
+        await api.addGoal({ text: text.trim(), days, place: hasGoals ? place : "now" }, today);
         toast.success(!hasGoals || place === "now" ? "Your goal is on the Home screen." : "Added to the end of your list.");
       }
-      refresh();
+      void refresh(qc, GOAL_KEYS);
       onOpenChange(false);
     } catch (e2) { setError((e2 as Error).message); }
     finally { setBusy(false); }
@@ -58,7 +59,7 @@ export function GoalSheet({ open, onOpenChange, edit, hasGoals }: { open: boolea
   const remove = async () => {
     if (!edit) return;
     setBusy(true);
-    try { await api.deleteGoal(edit.id); refresh(); toast.success("Goal removed."); onOpenChange(false); }
+    try { await api.deleteGoal(edit.id, today); void refresh(qc, GOAL_KEYS); toast.success("Goal removed."); onOpenChange(false); }
     catch (e2) { setError((e2 as Error).message); }
     finally { setBusy(false); }
   };

@@ -252,78 +252,99 @@ describe("review fixes (Oct 16 2026)", () => {
 
 describe("goals (Oct 26 2026)", () => {
   const texts = (l: { text: string }[]) => l.map((g) => g.text);
+  const days1 = (l: { text: string; startedOn: string | null }[]) => l.map((g) => [g.text, g.startedOn]);
 
   it("the first open goal is the goal now; 'now' goes on top, 'later' at the end", async () => {
     s = await scratch();
     const b = await firstPerson();
-    expect((await b.call("POST", "/api/goals", { text: "  " })).body.error).toBe("Say what your goal is.");
-    expect((await b.call("POST", "/api/goals", { text: "x", days: 10 })).body.error).toMatch(/Pick how long/);
-    await b.call("POST", "/api/goals", { text: "No fast food in November", days: 30 });
-    await b.call("POST", "/api/goals", { text: "Get under 185 lb", place: "later" });
-    await b.call("POST", "/api/goals", { text: "Eat extra clean for the next 2 weeks", days: 14, place: "now" });
-    const l = (await b.call("GET", "/api/goals?today=2026-10-21")).body;
-    expect(texts(l.open)).toEqual(["Eat extra clean for the next 2 weeks", "No fast food in November", "Get under 185 lb"]);
-    // only the goal now has a day 1 (the day it was first seen at the top); the others wait
-    expect(l.open.map((g: { startedOn: string | null }) => g.startedOn)).toEqual(["2026-10-21", null, null]);
-    expect((await b.call("GET", "/api/goals?today=2026-10-26")).body.open[0].startedOn).toBe("2026-10-21");
+    expect((await b.call("POST", "/api/goals", { text: "  ", today: "2026-10-21" })).body.error).toBe("Say what your goal is.");
+    expect((await b.call("POST", "/api/goals", { text: "x", days: 10, today: "2026-10-21" })).body.error).toMatch(/Pick how long/);
+    expect((await b.call("POST", "/api/goals", { text: "x" })).body.error).toBe("Which day is it?");
+    await b.call("POST", "/api/goals", { text: "No fast food in November", days: 30, today: "2026-10-20" });
+    await b.call("POST", "/api/goals", { text: "Get under 185 lb", place: "later", today: "2026-10-20" });
+    await b.call("POST", "/api/goals", { text: "Eat extra clean for the next 2 weeks", days: 14, place: "now", today: "2026-10-21" });
+    const l = (await b.call("GET", "/api/goals?today=2026-10-26")).body;
+    // only the goal now has a day 1 (the day it reached the top); the one it pushed down starts over
+    expect(days1(l.open)).toEqual([["Eat extra clean for the next 2 weeks", "2026-10-21"], ["No fast food in November", null], ["Get under 185 lb", null]]);
+    expect(l).toMatchObject({ done: [], doneCount: 0, goalSplurges: 0 });
     const o = (await b.call("GET", "/api/overview?today=2026-10-26")).body;
-    expect(o).toMatchObject({ goal: { text: "Eat extra clean for the next 2 weeks", days: 14 }, goals: 3, goalSplurges: 0 });
+    expect(o).toMatchObject({ goal: { text: "Eat extra clean for the next 2 weeks", days: 14, startedOn: "2026-10-21" }, goals: 3, goalSplurges: 0 });
+  });
+
+  it("reading never writes: a GET with any day leaves day 1 alone", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    await b.call("POST", "/api/goals", { text: "First", today: "2026-10-21" });
+    await b.call("GET", "/api/overview?today=2099-01-01");
+    await b.call("GET", "/api/goals?today=2099-01-01");
+    expect((await b.call("GET", "/api/goals?today=2026-10-26")).body.open[0].startedOn).toBe("2026-10-21");
   });
 
   it("checking off moves the next one up with a fresh day 1; undo puts it back as it was", async () => {
     s = await scratch();
     const b = await firstPerson();
-    const a = (await b.call("POST", "/api/goals", { text: "First", days: 7 })).body;
-    await b.call("POST", "/api/goals", { text: "Second" });
-    await b.call("GET", "/api/goals?today=2026-10-01");
+    const a = (await b.call("POST", "/api/goals", { text: "First", days: 7, today: "2026-10-01" })).body;
+    await b.call("POST", "/api/goals", { text: "Second", today: "2026-10-01" });
     expect((await b.call("POST", `/api/goals/${a.id}/done`, { today: "2026-10-08" })).body.doneOn).toBe("2026-10-08");
     expect((await b.call("POST", `/api/goals/${a.id}/done`, { today: "2026-10-08" })).status).toBe(409);
     let l = (await b.call("GET", "/api/goals?today=2026-10-08")).body;
-    expect(l.open.map((g: { text: string; startedOn: string }) => [g.text, g.startedOn])).toEqual([["Second", "2026-10-08"]]);
-    expect(texts(l.done)).toEqual(["First"]);
-    await b.call("POST", `/api/goals/${a.id}/reopen`);
+    expect(days1(l.open)).toEqual([["Second", "2026-10-08"]]);
+    expect([texts(l.done), l.doneCount]).toEqual([["First"], 1]);
+    await b.call("POST", `/api/goals/${a.id}/reopen`, { today: "2026-10-08" });
     l = (await b.call("GET", "/api/goals?today=2026-10-08")).body;
-    expect(l.open.map((g: { text: string; startedOn: string | null }) => [g.text, g.startedOn])).toEqual([["First", "2026-10-01"], ["Second", null]]);
+    expect(days1(l.open)).toEqual([["First", "2026-10-01"], ["Second", null]]);
     expect(l.done).toEqual([]);
   });
 
   it("moves up and down, edits, removes; a goal moved off the top starts over", async () => {
     s = await scratch();
     const b = await firstPerson();
-    const a = (await b.call("POST", "/api/goals", { text: "A" })).body;
-    const c = (await b.call("POST", "/api/goals", { text: "C" })).body;
-    await b.call("GET", "/api/goals?today=2026-10-01");
-    await b.call("POST", `/api/goals/${c.id}/move`, { dir: "up" });
-    expect((await b.call("POST", `/api/goals/${c.id}/move`, { dir: "sideways" })).status).toBe(400);
-    await b.call("POST", `/api/goals/${c.id}/move`, { dir: "up" }); // already at the top: nothing happens
+    const a = (await b.call("POST", "/api/goals", { text: "A", today: "2026-10-01" })).body;
+    const c = (await b.call("POST", "/api/goals", { text: "C", today: "2026-10-01" })).body;
+    await b.call("POST", "/api/goals", { text: "D", today: "2026-10-01" });
+    expect((await b.call("POST", `/api/goals/${c.id}/move`, { dir: "sideways", today: "2026-10-05" })).status).toBe(400);
+    await b.call("POST", `/api/goals/${c.id}/move`, { dir: "up", today: "2026-10-05" });
+    await b.call("POST", `/api/goals/${c.id}/move`, { dir: "up", today: "2026-10-05" }); // already at the top: nothing happens
     let l = (await b.call("GET", "/api/goals?today=2026-10-05")).body;
-    expect(l.open.map((g: { text: string; startedOn: string | null }) => [g.text, g.startedOn])).toEqual([["C", "2026-10-05"], ["A", null]]);
+    expect(days1(l.open)).toEqual([["C", "2026-10-05"], ["A", null], ["D", null]]);
+    await b.call("POST", `/api/goals/${a.id}/move`, { dir: "down", today: "2026-10-05" });
+    expect(texts((await b.call("GET", "/api/goals?today=2026-10-05")).body.open)).toEqual(["C", "D", "A"]);
     expect((await b.call("PUT", `/api/goals/${a.id}`, { text: "A, better", days: 14 })).body).toMatchObject({ text: "A, better", days: 14 });
-    expect((await b.call("DELETE", `/api/goals/${c.id}`)).status).toBe(200);
-    expect((await b.call("DELETE", `/api/goals/${c.id}`)).status).toBe(404);
+    expect((await b.call("DELETE", `/api/goals/${c.id}`, { today: "2026-10-06" })).status).toBe(200);
+    expect((await b.call("DELETE", `/api/goals/${c.id}`, { today: "2026-10-06" })).status).toBe(404);
     l = (await b.call("GET", "/api/goals?today=2026-10-06")).body;
-    expect(l.open.map((g: { text: string; startedOn: string | null }) => [g.text, g.startedOn])).toEqual([["A, better", "2026-10-06"]]);
+    expect(days1(l.open)).toEqual([["D", "2026-10-06"], ["A, better", null]]);
   });
 
   it("counts the splurges since day 1, up to the last day once the time is up", async () => {
     s = await scratch();
     const b = await firstPerson();
-    await b.call("POST", "/api/goals", { text: "Clean week", days: 7 });
-    await b.call("GET", "/api/goals?today=2026-10-01");
+    await b.call("POST", "/api/goals", { text: "Clean week", days: 7, today: "2026-10-01" });
     for (const day of ["2026-09-30", "2026-10-02", "2026-10-07", "2026-10-08"]) await b.call("POST", "/api/splurges", { what: "Donut", size: "snack", day });
     expect((await b.call("GET", "/api/overview?today=2026-10-04")).body.goalSplurges).toBe(1);
     expect((await b.call("GET", "/api/overview?today=2026-10-12")).body.goalSplurges).toBe(2); // Oct 1–7 only
+    expect((await b.call("GET", "/api/goals?today=2026-10-12")).body.goalSplurges).toBe(2); // the Goals page says the same
+  });
+
+  it("never more than 50 open goals, undo included", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    const first = (await b.call("POST", "/api/goals", { text: "Goal 0", today: "2026-10-01" })).body;
+    await b.call("POST", `/api/goals/${first.id}/done`, { today: "2026-10-01" });
+    for (let i = 1; i <= 50; i++) await b.call("POST", "/api/goals", { text: `Goal ${i}`, today: "2026-10-01" });
+    expect((await b.call("POST", "/api/goals", { text: "One more", today: "2026-10-01" })).status).toBe(409);
+    expect((await b.call("POST", `/api/goals/${first.id}/reopen`, { today: "2026-10-01" })).status).toBe(409);
   });
 
   it("each person has their own goals, even after Switch to", async () => {
     s = await scratch();
     const b = await withUsers();
     const sarah = (await b.call("POST", "/api/users", { name: "Sarah", password: PW })).body;
-    const mine = (await b.call("POST", "/api/goals", { text: "Mine" })).body;
+    const mine = (await b.call("POST", "/api/goals", { text: "Mine", today: "2026-10-01" })).body;
     await b.call("POST", `/api/users/${sarah.id}/switch`);
     expect((await b.call("GET", "/api/goals?today=2026-10-01")).body.open).toEqual([]);
     expect((await b.call("POST", `/api/goals/${mine.id}/done`, { today: "2026-10-01" })).status).toBe(404);
-    await b.call("POST", "/api/goals", { text: "Hers" });
+    await b.call("POST", "/api/goals", { text: "Hers", today: "2026-10-01" });
     await b.call("POST", "/api/users/switch-back");
     expect(texts((await b.call("GET", "/api/goals?today=2026-10-01")).body.open)).toEqual(["Mine"]);
   });

@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import type { Day } from "../../../shared/types";
-import { LOG_KEYS } from "../lib/actions";
+import { LOG_KEYS, refresh as refetch } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
 import { longDay } from "../lib/dates";
@@ -28,7 +28,7 @@ export function WeighSheet({ open, onOpenChange, day }: { open: boolean; onOpenC
   const loadedFor = existing.data ? d : null;
   useEffect(() => { if (open && loadedFor) setValue(have ? String(inUnit(have.pounds, unit)) : ""); }, [open, loadedFor, have, unit]);
 
-  const refresh = () => { for (const k of LOG_KEYS) void qc.invalidateQueries({ queryKey: [...k] }); };
+  const refresh = () => void refetch(qc, LOG_KEYS);
   const save = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);

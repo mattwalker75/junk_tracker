@@ -102,14 +102,7 @@ export class Log {
     const recent = (this.db.prepare(`SELECT what, size, place, calories FROM splurges WHERE user_id = ?
       GROUP BY lower(what) ORDER BY MAX(day || ' ' || time || ' ' || created_at) DESC LIMIT 6`).all(owner) as { what: string; size: Splurge["size"]; place: string; calories: number | null }[])
       .map((r) => ({ what: r.what, size: r.size, where: r.place, calories: r.calories }));
-    // the goal now, and how many splurges since its day 1 (up to its last day, once its time is up)
-    const goals = this.goals.list(owner, today).open;
-    const goal = goals[0] ?? null;
-    let goalSplurges = 0;
-    if (goal?.startedOn) {
-      const end = goal.days && shift(goal.startedOn, goal.days - 1) < today ? shift(goal.startedOn, goal.days - 1) : today;
-      goalSplurges = (this.db.prepare("SELECT COUNT(*) AS n FROM splurges WHERE user_id = ? AND day BETWEEN ? AND ?").get(owner, goal.startedOn, end) as { n: number }).n;
-    }
-    return { last: last ? toSplurge(last) : null, splurges, weighIns, recent, settings, goal, goalSplurges, goals: goals.length };
+    // the goal now, the splurges since its day 1, and how many goals are open (for the menu)
+    return { last: last ? toSplurge(last) : null, splurges, weighIns, recent, settings, ...this.goals.current(owner, today) };
   }
 }

@@ -125,14 +125,15 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.get("/api/weigh-ins", h((req) => log.weighInsBetween(owner(req), String(req.query.from || ""), String(req.query.to || ""))));
   app.put("/api/weigh-ins/:day", h((req) => log.setWeighIn(owner(req), param(req, "day"), req.body)));
   app.delete("/api/weigh-ins/:day", h((req) => { log.deleteWeighIn(owner(req), param(req, "day")); }));
-  // goals: the open list in order (the first is the goal now) and the ones checked off
+  // goals: the open list in order (the first is the goal now) and the ones checked off. Every change
+  // carries the phone's `today` (a goal's day 1 is set by a change, never by a read)
   app.get("/api/goals", h((req) => goals.list(owner(req), req.query.today)));
   app.post("/api/goals", h((req) => goals.add(owner(req), req.body)));
   app.put("/api/goals/:id", h((req) => goals.edit(owner(req), param(req, "id"), req.body)));
-  app.post("/api/goals/:id/move", h((req) => { goals.move(owner(req), param(req, "id"), req.body?.dir); }));
+  app.post("/api/goals/:id/move", h((req) => { goals.move(owner(req), param(req, "id"), req.body); }));
   app.post("/api/goals/:id/done", h((req) => goals.done(owner(req), param(req, "id"), req.body?.today)));
-  app.post("/api/goals/:id/reopen", h((req) => goals.reopen(owner(req), param(req, "id"))));
-  app.delete("/api/goals/:id", h((req) => { goals.remove(owner(req), param(req, "id")); }));
+  app.post("/api/goals/:id/reopen", h((req) => goals.reopen(owner(req), param(req, "id"), req.body?.today)));
+  app.delete("/api/goals/:id", h((req) => { goals.remove(owner(req), param(req, "id"), req.body?.today); }));
   app.get("/api/me/settings", h((req) => users.settings(owner(req))));
   app.put("/api/me/settings", h((req) => users.saveSettings(owner(req), parse(userSettingsSchema, req.body))));
 

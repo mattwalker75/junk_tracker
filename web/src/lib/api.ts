@@ -52,12 +52,13 @@ export const api = {
   weighIn: (day: Day, weight: number, unit: "lb" | "kg") => call<WeighIn>("PUT", `/api/weigh-ins/${day}`, { weight, unit }),
   deleteWeighIn: (day: Day) => call<{ ok: true }>("DELETE", `/api/weigh-ins/${day}`),
   goals: (today: Day) => call<GoalList>("GET", `/api/goals?today=${today}`),
-  addGoal: (g: GoalInput & { place: "now" | "later" }) => call<Goal>("POST", "/api/goals", g),
+  // every change to the list sends the phone's day: the goal that ends up on top starts its days then
+  addGoal: (g: GoalInput & { place: "now" | "later" }, today: Day) => call<Goal>("POST", "/api/goals", { ...g, today }),
   saveGoal: (id: Id, g: GoalInput) => call<Goal>("PUT", `/api/goals/${id}`, g),
-  moveGoal: (id: Id, dir: "up" | "down") => call<{ ok: true }>("POST", `/api/goals/${id}/move`, { dir }),
+  moveGoal: (id: Id, dir: "up" | "down", today: Day) => call<{ ok: true }>("POST", `/api/goals/${id}/move`, { dir, today }),
   goalDone: (id: Id, today: Day) => call<Goal>("POST", `/api/goals/${id}/done`, { today }),
-  reopenGoal: (id: Id) => call<Goal>("POST", `/api/goals/${id}/reopen`),
-  deleteGoal: (id: Id) => call<{ ok: true }>("DELETE", `/api/goals/${id}`),
+  reopenGoal: (id: Id, today: Day) => call<Goal>("POST", `/api/goals/${id}/reopen`, { today }),
+  deleteGoal: (id: Id, today: Day) => call<{ ok: true }>("DELETE", `/api/goals/${id}`, { today }),
   mySettings: () => call<UserSettings>("GET", "/api/me/settings"),
   saveMySettings: (patch: Partial<Omit<UserSettings, "examples">> & { examples?: Partial<UserSettings["examples"]> }) => call<UserSettings>("PUT", "/api/me/settings", patch),
 

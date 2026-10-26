@@ -95,7 +95,7 @@ yourself first (so no log is lost), then type TURN OFF; your password is removed
 Anyone can do all of this — users keep logs apart; they are not private from each other.
 
 **Appearance** — Light, Dark, System (follows the phone), or **New theme…** to make your own
-with a live preview. The same for everyone.
+with a live preview (including the goal note's paper and writing). The same for everyone.
 
 **Network access** — *Allow other devices on my network* lets phones open it (after
 `./TRACKER.sh --restart`); the addresses to use are listed. *Other names for this computer* is

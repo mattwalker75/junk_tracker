@@ -81,8 +81,12 @@ export interface GoalInput { text: string; days: GoalDays }
 export interface GoalList {
   /** in order: the first is the goal now */
   open: Goal[];
-  /** newest first */
+  /** newest first (the latest 100) */
   done: Goal[];
+  /** how many have been checked off in all */
+  doneCount: number;
+  /** splurges since the goal now's day 1 (as on Home) */
+  goalSplurges: number;
 }
 
 export interface Overview {

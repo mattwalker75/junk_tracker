@@ -18,6 +18,21 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
   app's packages by itself when an update changed them, and the app saves a copy of the database
   (`data/junk.db.before-v2`) before upgrading it for goals. Nothing already logged changes.
 
+### Fixed
+- 2026-10-26: **Code review of goals** (before the first push of it).
+  - A goal's day 1 is now set only when the list changes (adding, moving, checking off, undo,
+    removing — each sends the phone's day), never just by opening a page, so another website
+    can no longer change it through the phone's browser.
+  - The Goals page works out the line under the goal now itself, so it is right straight away
+    after a move and when Home has not been opened yet.
+  - *Done · N* counts every checked-off goal, not just the latest 100 shown.
+  - Undo can no longer take the list past 50 open goals.
+  - Moving a goal always moves it exactly one place.
+  - A theme of your own can set all three goal-note colours, including its small text.
+  - Checking off or moving a goal refreshes the page's two lists at once instead of one after
+    the other.
+  - 38 tests.
+
 ### Changed
 - 2026-10-26: **Your initials open a menu** — **Goals**, **Settings** and, with users and sign-in
   on, **Sign out**. The separate sign-out button on Home is gone.

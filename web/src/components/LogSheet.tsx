@@ -7,7 +7,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { DEFAULT_EXAMPLES, SIZE_LABEL, SIZES, type Day, type Size, type Splurge } from "../../../shared/types";
-import { LOG_KEYS } from "../lib/actions";
+import { LOG_KEYS, refresh } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
 import { DayPicker } from "./DayPicker";
@@ -58,7 +58,7 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
     setBusy(true);
     try {
       if (edit) await api.saveSplurge(edit.id, input); else await api.addSplurge(input);
-      for (const k of LOG_KEYS) void qc.invalidateQueries({ queryKey: [...k] });
+      void refresh(qc, LOG_KEYS);
       toast.success(edit ? "Saved." : `Logged: ${input.what}`);
       onOpenChange(false);
     } catch (e2) { setError((e2 as Error).message); }
@@ -70,7 +70,7 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
     setBusy(true);
     try {
       await api.deleteSplurge(edit.id);
-      for (const k of LOG_KEYS) void qc.invalidateQueries({ queryKey: [...k] });
+      void refresh(qc, LOG_KEYS);
       toast.success("Deleted.");
       onOpenChange(false);
     } catch (e2) { setError((e2 as Error).message); }

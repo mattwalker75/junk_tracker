@@ -9,7 +9,7 @@ import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { Day, Goal, Overview } from "../../../shared/types";
-import { GOAL_KEYS } from "../lib/actions";
+import { GOAL_KEYS, refresh } from "../lib/actions";
 import { api } from "../lib/api";
 import { goalLine, goalProgress, timeUp } from "../lib/stats";
 
@@ -17,7 +17,6 @@ export function GoalNote({ o, today }: { o: Overview; today: Day }) {
   const qc = useQueryClient();
   const [checked, setChecked] = useState<Goal | null>(null);
   const [busy, setBusy] = useState(false);
-  const refresh = () => { for (const k of GOAL_KEYS) void qc.invalidateQueries({ queryKey: [...k] }); };
   // "Checked off" stays a little while, long enough to undo
   useEffect(() => { if (!checked) return; const t = window.setTimeout(() => setChecked(null), 12_000); return () => window.clearTimeout(t); }, [checked]);
 
@@ -25,10 +24,10 @@ export function GoalNote({ o, today }: { o: Overview; today: Day }) {
   const p = g ? goalProgress(g, today) : null;
   const run = async (fn: () => Promise<void>) => {
     setBusy(true);
-    try { await fn(); refresh(); } catch (e) { toast.error((e as Error).message); } finally { setBusy(false); }
+    try { await fn(); void refresh(qc, GOAL_KEYS); } catch (e) { toast.error((e as Error).message); } finally { setBusy(false); }
   };
   const done = () => run(async () => { if (g) { await api.goalDone(g.id, today); setChecked(g); } });
-  const undo = () => run(async () => { if (checked) { await api.reopenGoal(checked.id); setChecked(null); } });
+  const undo = () => run(async () => { if (checked) { await api.reopenGoal(checked.id, today); setChecked(null); } });
   const keepGoing = () => run(async () => { if (g) { await api.saveGoal(g.id, { text: g.text, days: null }); toast.success("It stays up until you check it off."); } });
 
   if (!g && !checked) return null;

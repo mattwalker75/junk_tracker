@@ -8,7 +8,7 @@ import { Check, ChevronDown, ChevronLeft, ChevronUp, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { Goal } from "../../../shared/types";
-import { GOAL_KEYS } from "../lib/actions";
+import { GOAL_KEYS, refresh } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
 import { shortDay } from "../lib/dates";
@@ -20,8 +20,6 @@ export function GoalsPage() {
   const qc = useQueryClient();
   const today = useToday();
   const q = useQuery({ queryKey: ["goals", today], queryFn: () => api.goals(today) });
-  // the splurges since the goal now started come with the overview (Home has it already)
-  const overview = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today) });
   const [sheet, setSheet] = useState<{ edit?: Goal } | null>(null);
   const [checked, setChecked] = useState<Goal | null>(null);
   const [busy, setBusy] = useState(false);
@@ -32,13 +30,13 @@ export function GoalsPage() {
   // `after` runs once the list is fresh, so "Up next" names the goal that really is next
   const run = async (fn: () => Promise<unknown>, after?: () => void) => {
     setBusy(true);
-    try { await fn(); for (const k of GOAL_KEYS) await qc.invalidateQueries({ queryKey: [...k] }); after?.(); }
+    try { await fn(); await refresh(qc, GOAL_KEYS); after?.(); }
     catch (e) { toast.error((e as Error).message); }
     finally { setBusy(false); }
   };
   const checkOff = (g: Goal) => run(() => api.goalDone(g.id, today), () => setChecked(g));
-  const undo = (g: Goal) => run(() => api.reopenGoal(g.id), () => setChecked(null));
-  const move = (g: Goal, dir: "up" | "down") => run(() => api.moveGoal(g.id, dir), () => setChecked(null));
+  const undo = (g: Goal) => run(() => api.reopenGoal(g.id, today), () => setChecked(null));
+  const move = (g: Goal, dir: "up" | "down") => run(() => api.moveGoal(g.id, dir, today), () => setChecked(null));
   const arrow = "grid size-10 shrink-0 place-items-center rounded-xl border border-line text-ink-2 hover:bg-surface-2 disabled:opacity-35";
 
   return (
@@ -67,7 +65,7 @@ export function GoalsPage() {
             <div className="text-xs font-extrabold tracking-[0.1em] text-accent-text uppercase">Now · on your Home screen</div>
             <button onClick={() => setSheet({ edit: now })} className="mt-1 block w-full text-left" aria-label={`Change the goal: ${now.text}`}>
               <span className="block text-[23px] leading-tight font-black tracking-tight [overflow-wrap:anywhere]">{now.text}</span>
-              <span className="mt-1 block text-[13px] font-semibold text-ink-2">{goalLine(now, today, overview.data?.goalSplurges ?? 0) || (now.days ? periodLabel(now.days) : "No end date")}</span>
+              <span className="mt-1 block text-[13px] font-semibold text-ink-2">{goalLine(now, today, q.data?.goalSplurges ?? 0) || (now.days ? periodLabel(now.days) : "No end date")}</span>
             </button>
             <button onClick={() => void checkOff(now)} disabled={busy}
               className="mt-3 flex h-[52px] w-full items-center justify-center gap-2 rounded-2xl bg-accent text-base font-extrabold text-accent-ink hover:brightness-105 disabled:opacity-60">
@@ -106,7 +104,7 @@ export function GoalsPage() {
 
         {done.length ? (
           <>
-            <h2 className="px-1 pt-1.5 text-xs font-bold tracking-[0.08em] text-mute uppercase">Done · {done.length}</h2>
+            <h2 className="px-1 pt-1.5 text-xs font-bold tracking-[0.08em] text-mute uppercase">Done · {q.data?.doneCount ?? done.length}</h2>
             <Card className="px-3.5">
               {done.map((g, k) => (
                 <div key={g.id} className={cx("flex items-center gap-2.5 py-2.5", k > 0 && "border-t border-line")}>

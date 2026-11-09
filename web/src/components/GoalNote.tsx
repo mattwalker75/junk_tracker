@@ -9,6 +9,7 @@ import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { Day, Goal, Overview } from "../../../shared/types";
+import { goalFontPx } from "../../../shared/types";
 import { GOAL_KEYS, refresh } from "../lib/actions";
 import { api } from "../lib/api";
 import { goalLine, goalProgress, timeUp } from "../lib/stats";
@@ -48,7 +49,8 @@ export function GoalNote({ o, today }: { o: Overview; today: Day }) {
           <section aria-label="Your goal" className="-rotate-[1.2deg] rounded-[4px_4px_14px_4px] bg-note px-[18px] pt-[18px] pb-3.5 text-note-ink shadow-note">
             <a href="#/goals" className="block" aria-label={`My goal: ${g.text}. Open your goals.`}>
               <div className="text-xs font-extrabold tracking-[0.1em] text-note-mute uppercase">My goal</div>
-              <div className="mt-0.5 font-hand text-[36px] leading-[1.02] font-bold [overflow-wrap:anywhere]">{g.text}</div>
+              {/* the longer the goal, the smaller the writing (goalFontPx), so it always fits the note */}
+              <div className="mt-0.5 font-hand leading-[1.05] font-bold [overflow-wrap:anywhere]" style={{ fontSize: goalFontPx(g.text) }}>{g.text}</div>
             </a>
             {p?.over && g.days ? (
               <div className="mt-2.5">

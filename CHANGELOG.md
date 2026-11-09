@@ -5,6 +5,9 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 ## [Unreleased]
 
 ### Added
+- 2026-11-09: **Longer goals.** A goal can now say up to 300 characters (it was 120), with a
+  counter under the box. The sticky note writes a short goal big and a longer one smaller — 36,
+  31, 26, 22 or 19 px by length — so it always fits and still reads at arm's length.
 - 2026-10-26: **Goals.** Keep a list of things to aim for, like "Eat extra clean for the next
   2 weeks". The goal at the top of the list sits at the very top of Home on a yellow sticky note
   in handwriting, so it is the first thing you see every time you open the app; under it, which

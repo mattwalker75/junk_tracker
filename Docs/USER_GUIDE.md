@@ -53,8 +53,10 @@ Tap your initials (top right of Home), then **Goals**.
 - **Up next** — the goals waiting, in order. The arrows move one up or down; moving one to the top
   makes it the goal now. A goal's days start when it reaches the top, so goals waiting don't run
   down (and one moved off the top starts over when it comes back).
-- **Add a goal** — type it, or tap one of the ideas; choose how long (no end, 1 week, 2 weeks or
-  1 month) and whether it is the goal now or goes at the end of the list.
+- **Add a goal** — type it (up to 300 characters — a counter under the box shows how many), or tap
+  one of the ideas; choose how long (no end, 1 week, 2 weeks or 1 month) and whether it is the goal
+  now or goes at the end of the list. The sticky note writes a short goal big and a longer one
+  smaller, so it always fits.
 - **Done** — the goals you checked off, with the day.
 
 Tap any open goal to change its words or length, or to delete it. Each person has their own goals.

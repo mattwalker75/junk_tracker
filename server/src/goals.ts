@@ -12,13 +12,14 @@
 import type Database from "better-sqlite3";
 import { z } from "zod";
 import type { Day, Goal, GoalList, Id } from "../../shared/types.js";
+import { GOAL_MAX } from "../../shared/types.js";
 import { newId, now, parse, realDay, UserError } from "./util.js";
 
 interface GoalRow { id: Id; user_id: Id; text: string; days: Goal["days"]; position: number; started_on: Day | null; done_on: Day | null; created_at: string; updated_at: string }
 
 const toGoal = (r: GoalRow): Goal => ({ id: r.id, text: r.text, days: r.days, startedOn: r.started_on, doneOn: r.done_on, createdAt: r.created_at });
 
-const text = z.string({ error: "Say what your goal is." }).trim().min(1, "Say what your goal is.").max(120, "Keep the goal under 120 characters.");
+const text = z.string({ error: "Say what your goal is." }).trim().min(1, "Say what your goal is.").max(GOAL_MAX, `Keep the goal under ${GOAL_MAX} characters.`);
 const days = z.union([z.literal(7), z.literal(14), z.literal(30), z.null()], { error: "Pick how long: no end, 1 week, 2 weeks or 1 month." }).default(null);
 const addSchema = z.object({ text, days, place: z.enum(["now", "later"], { error: "Say where in the list it goes." }).default("later") });
 const editSchema = z.object({ text, days });

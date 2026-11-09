@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Splurge } from "../shared/types";
+import { goalFontPx } from "../shared/types";
 import { addDays, daysBetween } from "../web/src/lib/dates";
 import { countBetween, daysClean, goalLine, goalProgress, inUnit, startOfWeek, trend, worstSize } from "../web/src/lib/stats";
 
@@ -72,5 +73,18 @@ describe("the goal line", () => {
     expect(goalLine({ days: null, startedOn: "2026-10-21" }, "2026-10-23", 1)).toBe("Day 3 · 1 splurge since you started");
     expect(goalLine({ days: 14, startedOn: "2026-10-01" }, "2026-10-26", 2)).toBe("Your 2 weeks are up · 2 splurges since you started");
     expect(goalLine({ days: 7, startedOn: "2026-10-01" }, "2026-10-26", 0)).toBe("Your week is up · clean all the way");
+  });
+});
+
+describe("the sticky note's writing size (Nov 9 2026)", () => {
+  it("is big while the goal is short and steps down as it grows, never below 19px", () => {
+    expect(goalFontPx("Eat extra clean for the next 2 weeks")).toBe(36);
+    expect(goalFontPx("x".repeat(40))).toBe(36);
+    expect(goalFontPx("x".repeat(41))).toBe(31);
+    expect(goalFontPx("x".repeat(80))).toBe(31);
+    expect(goalFontPx("x".repeat(140))).toBe(26);
+    expect(goalFontPx("x".repeat(220))).toBe(22);
+    expect(goalFontPx("x".repeat(300))).toBe(19);
+    expect(goalFontPx("   short   ")).toBe(36); // spaces at the ends don't count
   });
 });

@@ -54,6 +54,8 @@ The person using it is not a developer — every message the page shows is a pla
 7. **Goals:** a list per person; the first open one is the goal now. A goal's days (no end, 1
    week, 2 weeks, 1 month) count from the day it reaches the top (`started_on`, the phone's day);
    one moved off the top starts over — so only one goal is ever really active (Matt, Oct 26 2026).
+   A goal says up to `GOAL_MAX` (300) characters; the note's handwriting size comes from
+   `goalFontPx` (36 → 31 → 26 → 22 → 19 px by length; Matt, Nov 9 2026), both in `shared/types.ts`.
    Day 1 is set by the changes (they carry `today`), never by a GET: reads must not write. When its time is up the note asks "did you do it?" — Yes,
    done, or Keep going (no end date). Nothing is ever checked off for the person.
 8. **Updating is stop → git pull → start** (Matt, Oct 26 2026: his real data is on another

@@ -7,6 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import type { Goal, GoalDays } from "../../../shared/types";
+import { GOAL_MAX } from "../../../shared/types";
 import { GOAL_KEYS, refresh } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
@@ -67,8 +68,8 @@ export function GoalSheet({ open, onOpenChange, edit, hasGoals }: { open: boolea
   return (
     <Sheet open={open} onOpenChange={onOpenChange} title={edit ? "Change the goal" : "Add a goal"}>
       <form onSubmit={save} className="space-y-4 pb-2">
-        <Field label="Your goal" required>
-          {(id) => <TextArea id={id} rows={2} value={text} onChange={(e) => setText(e.target.value)} maxLength={120} placeholder="Something you can do, in your own words" className="resize-none text-lg font-bold" />}
+        <Field label="Your goal" required hint={<span className="flex justify-between gap-3"><span>The longer it is, the smaller the note writes it.</span><span className="shrink-0 font-bold tabular-nums">{text.length} / {GOAL_MAX}</span></span>}>
+          {(id) => <TextArea id={id} rows={3} value={text} onChange={(e) => setText(e.target.value)} maxLength={GOAL_MAX} placeholder="Something you can do, in your own words" className="resize-none text-lg font-bold" />}
         </Field>
 
         {!edit ? (

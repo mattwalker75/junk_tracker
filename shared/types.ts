@@ -78,6 +78,21 @@ export interface Goal {
   createdAt: string;
 }
 export interface GoalInput { text: string; days: GoalDays }
+
+/** The most a goal may say (Matt, Nov 9 2026: was 120). */
+export const GOAL_MAX = 300;
+/**
+ * The size the sticky note writes a goal at: big while it is short, smaller as it grows, never below
+ * 19px so it still reads at arm's length (Matt picked these steps from the mockups, Nov 9 2026).
+ */
+export function goalFontPx(text: string): number {
+  const n = text.trim().length;
+  if (n <= 40) return 36;
+  if (n <= 80) return 31;
+  if (n <= 140) return 26;
+  if (n <= 220) return 22;
+  return 19;
+}
 export interface GoalList {
   /** in order: the first is the goal now */
   open: Goal[];

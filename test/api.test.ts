@@ -326,6 +326,17 @@ describe("goals (Oct 26 2026)", () => {
     expect((await b.call("GET", "/api/goals?today=2026-10-12")).body.goalSplurges).toBe(2); // the Goals page says the same
   });
 
+  it("a goal can say up to 300 characters (Nov 9 2026: was 120)", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    const long = "Two weeks with no drive-through. ".repeat(10).slice(0, 300);
+    expect(long.length).toBe(300);
+    const ok = await b.call("POST", "/api/goals", { text: long, today: "2026-11-09" });
+    expect(ok.status).toBe(200);
+    expect(ok.body.text).toBe(long.trim());
+    expect((await b.call("POST", "/api/goals", { text: long + "x", today: "2026-11-09" })).body.error).toBe("Keep the goal under 300 characters.");
+  });
+
   it("never more than 50 open goals, undo included", async () => {
     s = await scratch();
     const b = await firstPerson();

@@ -1,8 +1,8 @@
-/** The person's own settings: their splurge-size examples, and how weight is shown. Saved as they change. */
+/** The person's own settings: their splurge-size examples, their six activity quick picks, and how weight is shown. Saved as they change. */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { DEFAULT_EXAMPLES, SIZE_LABEL, SIZES, type Size, type UserSettings } from "../../../shared/types";
+import { DEFAULT_EXAMPLES, DEFAULT_QUICK_PICKS, QUICK_PICK_MAX, SIZE_LABEL, SIZES, type Size, type UserSettings } from "../../../shared/types";
 import { Card, cx, Input, Segmented, SIZE_DOT } from "../components/ui";
 import { api } from "../lib/api";
 
@@ -10,9 +10,10 @@ export function YouSettings() {
   const qc = useQueryClient();
   const q = useQuery({ queryKey: ["me-settings"], queryFn: api.mySettings });
   const [examples, setExamples] = useState<Record<Size, string>>({ snack: "", meal: "", feast: "" });
+  const [picks, setPicks] = useState<string[]>(["", "", "", "", "", ""]);
   // filled in once from the server: refilling after each save would wipe a box being typed in
   const seeded = useRef(false);
-  useEffect(() => { if (q.data && !seeded.current) { seeded.current = true; setExamples(q.data.examples); } }, [q.data]);
+  useEffect(() => { if (q.data && !seeded.current) { seeded.current = true; setExamples(q.data.examples); setPicks(q.data.quickPicks); } }, [q.data]);
 
   const save = async (patch: Parameters<typeof api.saveMySettings>[0], quiet = false) => {
     try {
@@ -38,6 +39,19 @@ export function YouSettings() {
                 onBlur={() => { if (s && examples[size] !== s.examples[size]) void save({ examples: { [size]: examples[size] } }); }}
                 className="h-11" />
             </label>
+          ))}
+        </div>
+      </Card>
+
+      <Card className="p-4">
+        <h2 className="text-[15px] font-extrabold">Your quick picks</h2>
+        <p className="mt-0.5 text-[13px] leading-snug text-mute">The six buttons under <i>Or pick one</i> when you log an activity. Write the things you do most. Leave one empty for the usual one.</p>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          {DEFAULT_QUICK_PICKS.map((d, i) => (
+            <Input key={i} value={picks[i] ?? ""} placeholder={d} maxLength={QUICK_PICK_MAX} aria-label={`Quick pick ${i + 1} (empty = ${d})`}
+              onChange={(e) => setPicks(picks.map((p, j) => (j === i ? e.target.value : p)))}
+              onBlur={() => { if (s && (picks[i] ?? "").trim() !== (s.quickPicks[i] ?? "")) void save({ quickPicks: picks }); }}
+              className="h-11" />
           ))}
         </div>
       </Card>

@@ -91,6 +91,7 @@ describe("splurges", () => {
     expect((await b.call("POST", "/api/splurges", meal({ size: "huge" }))).body.error).toBe("Pick Snack, Meal or Feast.");
     expect((await b.call("POST", "/api/splurges", meal({ day: "2026-02-30" }))).body.error).toBe("That is not a real date.");
     expect((await b.call("POST", "/api/splurges", meal({ calories: -5 }))).body.error).toMatch(/negative/);
+    expect((await b.call("POST", "/api/splurges", meal({ calories: 12.5 }))).body.error).toBe("Calories are a whole number."); // was "Invalid input"
     const minimal = await b.call("POST", "/api/splurges", { what: "Snickers", size: "snack", day: "2026-10-07" });
     expect(minimal.body).toMatchObject({ what: "Snickers", size: "snack", where: "", calories: null, time: "", notes: "" });
     const full = (await b.call("POST", "/api/splurges", meal())).body;
@@ -112,7 +113,154 @@ describe("splurges", () => {
     expect(o.last.what).toBe("Cheeseburger & fries"); // not the one dated after today
     expect(o.splurges.map((x: { day: string }) => x.day)).toEqual(["2026-10-11", "2026-10-03"]); // the 40-day window
     expect(o.recent.map((x: { what: string }) => x.what)).toEqual(["Future cake", "Cheeseburger & fries", "Pizza"]); // one "pizza", newest first
-    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" } });
+    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""] });
+  });
+});
+
+const walk = (over: Record<string, unknown> = {}) => ({ what: "Walk", minutes: 45, calories: 210, day: "2026-11-09", time: "06:10", notes: "", ...over });
+
+describe("activities (Nov 9 2026)", () => {
+  it("need only a name; how long and calories are optional whole numbers, all checked", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    expect((await b.call("POST", "/api/activities", walk({ what: "  " }))).body.error).toBe("Say what you did.");
+    expect((await b.call("POST", "/api/activities", walk({ what: undefined }))).body.error).toBe("Say what you did.");
+    expect((await b.call("POST", "/api/activities", walk({ minutes: 4.5 }))).body.error).toBe("How long is a whole number of minutes.");
+    expect((await b.call("POST", "/api/activities", walk({ minutes: 0 }))).body.error).toMatch(/at least 1 minute/);
+    expect((await b.call("POST", "/api/activities", walk({ minutes: 2000 }))).body.error).toMatch(/1,440 minutes/);
+    expect((await b.call("POST", "/api/activities", walk({ minutes: "45" }))).body.error).toBe("How long is a whole number of minutes.");
+    expect((await b.call("POST", "/api/activities", walk({ calories: 12.5 }))).body.error).toBe("Calories burned are a whole number.");
+    expect((await b.call("POST", "/api/activities", walk({ calories: -1 }))).body.error).toMatch(/negative/);
+    expect((await b.call("POST", "/api/activities", walk({ day: "2026-02-30" }))).body.error).toBe("That is not a real date.");
+    expect((await b.call("POST", "/api/activities", walk({ time: "25:00" }))).body.error).toBe("The time looks wrong.");
+    expect((await b.call("POST", "/api/activities", walk({ what: "x".repeat(121) }))).body.error).toMatch(/under 120/);
+    const minimal = await b.call("POST", "/api/activities", { what: "Yoga", day: "2026-11-08" });
+    expect(minimal.status).toBe(200);
+    expect(minimal.body).toMatchObject({ what: "Yoga", minutes: null, calories: null, time: "", notes: "" });
+    const full = (await b.call("POST", "/api/activities", walk({ notes: "  around the lake  " }))).body;
+    expect(full).toMatchObject({ what: "Walk", minutes: 45, calories: 210, day: "2026-11-09", time: "06:10", notes: "around the lake" });
+    const edited = await b.call("PUT", `/api/activities/${full.id}`, walk({ what: "Long walk", minutes: 70, calories: null }));
+    expect(edited.body).toMatchObject({ what: "Long walk", minutes: 70, calories: null });
+    expect((await b.call("PUT", `/api/activities/${full.id}`, walk({ minutes: -3 }))).status).toBe(400);
+    expect((await b.call("GET", "/api/activities?from=2026-11-01&to=2026-11-30")).body.map((x: { what: string }) => x.what)).toEqual(["Long walk", "Yoga"]);
+    expect((await b.call("GET", "/api/activities?from=nope&to=2026-11-30")).status).toBe(400);
+    expect((await b.call("DELETE", `/api/activities/${full.id}`)).status).toBe(200);
+    expect((await b.call("DELETE", `/api/activities/${full.id}`)).status).toBe(404);
+    expect((await b.call("PUT", `/api/activities/${full.id}`, walk())).body.error).toBe("That activity no longer exists.");
+    // activities never count as splurges
+    expect((await b.call("GET", "/api/overview?today=2026-11-09")).body.last).toBeNull();
+  });
+
+  it("the overview has this window's activities, the last one, and the recent different ones", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    await b.call("POST", "/api/activities", walk({ day: "2026-11-03", minutes: 30 }));
+    await b.call("POST", "/api/activities", walk({ what: "walk", day: "2026-11-07", minutes: 45, calories: null }));
+    await b.call("POST", "/api/activities", { what: "Swim", minutes: 40, day: "2026-11-08", time: "18:00" });
+    await b.call("POST", "/api/activities", { what: "Old hike", day: "2026-08-01" });
+    await b.call("POST", "/api/activities", { what: "Tomorrow's run", day: "2026-11-10" });
+    const o = (await b.call("GET", "/api/overview?today=2026-11-09")).body;
+    expect(o.activities.map((a: { what: string }) => a.what)).toEqual(["Swim", "walk", "Walk"]); // the 40-day window, newest first, not tomorrow
+    expect(o.lastActivity.what).toBe("Swim"); // not the one dated after today
+    // one "walk" (the latest one's minutes), newest first
+    expect(o.recentActivities).toEqual([
+      { what: "Tomorrow's run", minutes: null, calories: null },
+      { what: "Swim", minutes: 40, calories: null },
+      { what: "walk", minutes: 45, calories: null },
+      { what: "Old hike", minutes: null, calories: null },
+    ]);
+  });
+
+  it("any number of activities a day (Matt, Nov 9 2026): all listed, the day counted once, every minute and calorie added", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    await b.call("POST", "/api/activities", walk({ time: "06:10" }));
+    await b.call("POST", "/api/activities", { what: "Gym", minutes: 60, calories: 400, day: "2026-11-09", time: "18:00" });
+    await b.call("POST", "/api/activities", { what: "Walk", minutes: 20, day: "2026-11-09", time: "12:00" }); // the same thing twice is fine too
+    await b.call("POST", "/api/activities", { what: "Swim", minutes: 30, calories: 300, day: "2026-11-08" });
+    // the day sheet's list: all three, latest time first (the sheet sorts them by time)
+    const day = (await b.call("GET", "/api/activities?from=2026-11-09&to=2026-11-09")).body;
+    expect(day.map((a: { what: string; time: string }) => `${a.what} ${a.time}`)).toEqual(["Gym 18:00", "Walk 12:00", "Walk 06:10"]);
+    const o = (await b.call("GET", "/api/overview?today=2026-11-09")).body;
+    expect(o.activities).toHaveLength(4);
+    expect(o.lastActivity.what).toBe("Gym");
+    const { activeWeek, activeDays } = await import("../web/src/lib/stats.js");
+    const w = activeWeek(o.activities, "2026-11-09", 0);
+    expect([w.days, w.count, w.minutes, w.calories]).toEqual([2, 4, 45 + 60 + 20 + 30, 210 + 400 + 300]);
+    // one mark per active day on the strip and the calendar
+    expect([...activeDays(o.activities)].sort()).toEqual(["2026-11-08", "2026-11-09"]);
+  });
+
+  it("each person's activities are their own, even after Switch to; removing someone takes theirs", async () => {
+    s = await scratch();
+    const b = await withUsers();
+    const sarah = (await b.call("POST", "/api/users", { name: "Sarah", password: PW })).body;
+    const mine = (await b.call("POST", "/api/activities", walk())).body;
+    await b.call("POST", `/api/users/${sarah.id}/switch`);
+    const o = (await b.call("GET", "/api/overview?today=2026-11-09")).body;
+    expect([o.activities, o.lastActivity, o.recentActivities]).toEqual([[], null, []]);
+    expect((await b.call("PUT", `/api/activities/${mine.id}`, walk({ what: "Hacked" }))).status).toBe(404);
+    expect((await b.call("DELETE", `/api/activities/${mine.id}`)).status).toBe(404);
+    await b.call("POST", "/api/activities", { what: "Pilates", day: "2026-11-09" });
+    await b.call("PUT", "/api/me/settings", { quickPicks: ["Pilates"] });
+    await b.call("POST", "/api/users/switch-back");
+    const back = (await b.call("GET", "/api/overview?today=2026-11-09")).body;
+    expect(back.activities.map((a: { what: string }) => a.what)).toEqual(["Walk"]);
+    expect(back.settings.quickPicks[0]).toBe("");
+    await b.call("DELETE", `/api/users/${sarah.id}`, { confirm: "DELETE" });
+    expect((s.handle.db.prepare("SELECT COUNT(*) AS n FROM activities").get() as { n: number }).n).toBe(1);
+  });
+
+  it("the six quick picks are each person's own, always six, trimmed and checked", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    const set = await b.call("PUT", "/api/me/settings", { quickPicks: ["  Hike ", "", "Peloton"] });
+    expect(set.body.quickPicks).toEqual(["Hike", "", "Peloton", "", "", ""]);
+    // the page sends all six; an empty box goes back to the default
+    expect((await b.call("PUT", "/api/me/settings", { quickPicks: ["Hike", "Tennis", "", "", "", "Dance"] })).body.quickPicks).toEqual(["Hike", "Tennis", "", "", "", "Dance"]);
+    expect((await b.call("PUT", "/api/me/settings", { quickPicks: ["x".repeat(41)] })).body.error).toMatch(/under 40 characters/);
+    expect((await b.call("PUT", "/api/me/settings", { quickPicks: ["a", "b", "c", "d", "e", "f", "g"] })).body.error).toBe("There are six quick picks.");
+    expect((await b.call("PUT", "/api/me/settings", { quickPicks: "Walk" })).status).toBe(400);
+    // the other settings are left alone
+    await b.call("PUT", "/api/me/settings", { units: "kg" });
+    expect((await b.call("GET", "/api/me/settings")).body).toMatchObject({ units: "kg", quickPicks: ["Hike", "Tennis", "", "", "", "Dance"] });
+    const { quickPickNames } = await import("../shared/types.js");
+    expect(quickPickNames(["Hike", "Tennis", "", " ", "", "Dance"])).toEqual(["Hike", "Tennis", "Bike", "Gym", "Swim", "Dance"]);
+    expect(quickPickNames(undefined)).toEqual(["Walk", "Run", "Bike", "Gym", "Swim", "Yoga"]);
+  });
+
+  it("upgrading a version 2 database adds activity and keeps everything in it", async () => {
+    const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
+    const Database = (await import("better-sqlite3")).default;
+    const { MIGRATIONS, openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
+    expect(SCHEMA_VERSION).toBe(3);
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-up3-"));
+    const file = path.join(dir, "junk.db");
+    try {
+      // a version 2 file, as the goals release left it, with a person, a splurge, a weigh-in and a goal
+      const old = new Database(file);
+      old.exec(MIGRATIONS[0]); old.exec(MIGRATIONS[1]); old.pragma("user_version = 2");
+      old.prepare("INSERT INTO users VALUES ('u1', 'Matt', '', '{\"units\":\"kg\",\"examples\":{\"snack\":\"two cookies\"}}', 'now', NULL)").run();
+      old.prepare("INSERT INTO splurges VALUES ('s1', 'u1', 'Pizza', 'feast', 'Dominos', 2400, '2026-11-01', '19:30', 'with friends', 'x', 'x')").run();
+      old.prepare("INSERT INTO weigh_ins VALUES ('u1', '2026-11-02', 188.4, 'x', 'x')").run();
+      old.prepare("INSERT INTO goals VALUES ('g1', 'u1', 'Eat clean', 14, 1, '2026-11-01', NULL, 'x', 'x')").run();
+      old.close();
+      const db = openDatabase(file);
+      expect(db.pragma("user_version", { simple: true })).toBe(3);
+      expect(db.prepare("SELECT what, size, place, calories, day, time, notes FROM splurges").all()).toEqual([{ what: "Pizza", size: "feast", place: "Dominos", calories: 2400, day: "2026-11-01", time: "19:30", notes: "with friends" }]);
+      expect(db.prepare("SELECT day, pounds FROM weigh_ins").all()).toEqual([{ day: "2026-11-02", pounds: 188.4 }]);
+      expect(db.prepare("SELECT text, started_on FROM goals").all()).toEqual([{ text: "Eat clean", started_on: "2026-11-01" }]);
+      expect(db.prepare("SELECT COUNT(*) AS n FROM activities").get()).toEqual({ n: 0 });
+      db.close();
+      const copy = new Database(`${file}.before-v3`, { readonly: true });
+      expect(copy.pragma("user_version", { simple: true })).toBe(2);
+      expect((copy.prepare("SELECT COUNT(*) AS n FROM splurges").get() as { n: number }).n).toBe(1);
+      copy.close();
+    } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+    // and through the app: the old settings still read, with six empty quick picks added
+    s = await scratch();
+    const b = await firstPerson();
+    expect((await b.call("GET", "/api/me/settings")).body.quickPicks).toEqual(["", "", "", "", "", ""]);
   });
 });
 

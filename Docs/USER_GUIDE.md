@@ -19,13 +19,19 @@ Want other people on it, or a password? Settings → **Users and sign-in** (belo
 - **This week** — splurges since the start of the week (Sunday or Monday, your choice in Settings).
 - **30 days** — splurges in the last 30 days, and how many were feasts.
 - **The last splurge** — its size, what it was and how long ago. Tap it to open that day.
+- **Active this week** — how many of this week's 7 days you were active (the week starts on
+  Sunday or Monday, your choice in Settings), the minutes and calories burned this week (the
+  calories only from activities where you filled them in), your last activity (tap it to open
+  that day), and a dot for each day of the week — green when you were active.
 - **Last 14 days** — one square a day, coloured by the biggest splurge that day:
-  pale = Snack, orange = Meal, red = Feast, grey = clean. Today has an outline. Tap any day to
-  see what you had and your weigh-in, to change or delete them, or to add something to that day.
+  pale = Snack, orange = Meal, red = Feast, grey = clean. A short green bar under the date means
+  you were active that day (on the orange and red squares the bar is white, or dark in a dark
+  theme, so it still shows). Today has an outline. Tap any day to see what you had, what you did
+  and your weigh-in, to change or delete them, or to add something to that day.
   **Calendar** goes further back.
 - **Weight** — your latest weigh-in, how much it went up or down over your trend period
   (green when down), the average of the last 7 days, and a small line of the period.
-- **+ Splurge** and **Weigh in** — the two big buttons at the bottom.
+- **+ Splurge**, **+ Activity** and **Weigh in** — the three big buttons at the bottom.
 
 ## Log a splurge
 1. **What did you have?** — or tap one under *Again?* (the last few different things you had;
@@ -39,6 +45,26 @@ Want other people on it, or a password? Settings → **Users and sign-in** (belo
 6. **Save splurge**.
 
 To change or delete one, tap its day on Home or in the Calendar, then tap **Edit** on the splurge.
+
+## Log activity
+1. **What did you do?** — type it, tap one under *Again?* (your last few different activities,
+   with how long they were; it fills in the minutes and calories too), or tap one of the six
+   under **Or pick one** (Walk, Run, Bike, Gym, Swim, Yoga — or your own, from Settings).
+2. Optional: **How long (minutes)** and **Calories burned**, whole numbers.
+3. **Day** — the same as a splurge's: **Today**, **Yesterday** or **Other day**. **Time** starts
+   at the time you opened the sheet; change it or clear it.
+4. Optional: **Notes**.
+5. **Save activity**.
+
+Log as many activities a day as you like. To change or delete one, tap its day, then **Edit** or
+**Delete** on the activity (Delete asks once more).
+
+## A day
+Tap a day on Home or in the Calendar. At the top: the day, how long ago, and how long you were
+active. Then the **Splurges** (with the day's calories beside the heading, when you filled any
+in), the **Activity** (with the calories burned beside the heading, when you filled any in), the
+**Weigh-in**, and **+ Splurge** / **+ Activity** to add one to that day. The arrows go to the day
+before or after.
 
 ## Weigh in
 Type your weight (pounds or kilograms, as set in Settings) and **Save weigh-in**. One weigh-in a
@@ -62,7 +88,8 @@ Tap your initials (top right of Home), then **Goals**.
 Tap any open goal to change its words or length, or to delete it. Each person has their own goals.
 
 ## Calendar
-Any month: days coloured like Home, a small line under days with a weigh-in, then the month's
+Any month: days coloured like Home, the green bar under active days, a small dot in the corner of
+days with a weigh-in, then the month's
 splurge count, clean days and weight change, and the list of that month's splurges. Arrows move
 between months. Tap a day to open it.
 
@@ -74,10 +101,14 @@ Tap your initials at the top right of Home, then **Settings**. The same menu has
 "candy bar, 2 cookies"). They show under the size buttons when you log. Leave one empty for the
 usual example.
 
+**Your quick picks** — the six buttons under *Or pick one* when you log an activity. Write the
+things you do most (Hike, Peloton, Tennis…). Leave a box empty for the usual one (Walk, Run,
+Bike, Gym, Swim, Yoga).
+
 **Weight and weeks** — pounds or kilograms (weigh-ins are kept exactly; only the display
 changes); the trend over 1 week, 2 weeks or a month; weeks start on Sunday or Monday.
 
-These two are **yours** — each person has their own.
+These are **yours** — each person has their own.
 
 **Users and sign-in** — off to start with: no sign-in, one log. Turn on *Several users, each
 signing in* and it asks for your name and a password; you become the first user and your log
@@ -91,7 +122,7 @@ yourself first (so no log is lost), then type TURN OFF; your password is removed
   everywhere and uses the new one. Changing your own keeps you signed in here.
 - **Switch to**: shows that person's log (and their settings) so you can look or fill it in for
   them. A strip at the top says whose log you are in, with a button to go back to yours.
-- **Remove**: deletes the person with all their splurges and weigh-ins (type DELETE to confirm).
+- **Remove**: deletes the person with all their splurges, activities, weigh-ins and goals (type DELETE to confirm).
   You cannot remove yourself or the last person.
 
 Anyone can do all of this — users keep logs apart; they are not private from each other.
@@ -123,4 +154,4 @@ Everything is in one file, `data/junk.db` (Settings → About shows where). Stop
 that file, or copy it while running together with `junk.db-wal` if it is there.
 
 When an update changes how the database is laid out, the app first saves a copy of it as it was,
-for example `data/junk.db.before-v2`. Keep it until you are happy with the update.
+for example `data/junk.db.before-v3` (the update that added activity). Keep it until you are happy with the update.

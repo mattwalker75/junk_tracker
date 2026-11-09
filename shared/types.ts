@@ -25,6 +25,33 @@ export interface Splurge {
 }
 export type SplurgeInput = Pick<Splurge, "what" | "size" | "where" | "calories" | "day" | "time" | "notes">;
 
+/**
+ * Something active the person did (Matt, Nov 9 2026: a walk, a run, the gym). Only the name is
+ * needed; how long and the calories burned are optional whole numbers.
+ */
+export interface Activity {
+  id: Id;
+  what: string;
+  /** how long, in minutes */
+  minutes: number | null;
+  /** calories burned */
+  calories: number | null;
+  /** the day it was done, and the time ("HH:MM", or "" when not said) */
+  day: Day;
+  time: string;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
+}
+export type ActivityInput = Pick<Activity, "what" | "minutes" | "calories" | "day" | "time" | "notes">;
+/** the six quick-pick buttons on Log activity when a person has not written their own */
+export const DEFAULT_QUICK_PICKS = ["Walk", "Run", "Bike", "Gym", "Swim", "Yoga"] as const;
+export const QUICK_PICK_MAX = 40;
+/** The six names on the quick-pick buttons: the person's own, or the default where a box is empty. */
+export function quickPickNames(own: readonly string[] | undefined): string[] {
+  return DEFAULT_QUICK_PICKS.map((d, i) => own?.[i]?.trim() || d);
+}
+
 /** kilograms in a pound */
 export const KG = 0.45359237;
 
@@ -42,8 +69,10 @@ export interface UserSettings {
   weekStart: 0 | 1;
   /** the person's own yardstick for each size; "" = the default example */
   examples: Record<Size, string>;
+  /** the six quick picks on Log activity, in order; "" = the default (Walk, Run, Bike, Gym, Swim, Yoga) */
+  quickPicks: string[];
 }
-export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" } };
+export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""] };
 
 export interface UserInfo {
   id: Id;
@@ -113,6 +142,12 @@ export interface Overview {
   weighIns: WeighIn[];
   /** recent different things, for the "Again?" buttons */
   recent: Pick<Splurge, "what" | "size" | "where" | "calories">[];
+  /** activities from `from` to `today`, newest first (this week and the 14-day strip) */
+  activities: Activity[];
+  /** the most recent activity on or before today, for "Last: Walk, 45 min · today" */
+  lastActivity: Activity | null;
+  /** recent different activities, for the "Again?" buttons on Log activity */
+  recentActivities: Pick<Activity, "what" | "minutes" | "calories">[];
   settings: UserSettings;
   /** the goal now (the top of the list), for the note on Home */
   goal: Goal | null;

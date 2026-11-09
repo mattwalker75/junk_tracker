@@ -11,6 +11,7 @@ import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
 import type Database from "better-sqlite3";
 import { z } from "zod";
+import { QUICK_PICK_MAX } from "../../shared/types.js";
 import { Config, ROOT } from "./config.js";
 import { openDatabase } from "./db.js";
 import { Goals } from "./goals.js";
@@ -61,6 +62,8 @@ const userSettingsSchema = z.object({
   trendDays: z.union([z.literal(7), z.literal(14), z.literal(30)]),
   weekStart: z.union([z.literal(0), z.literal(1)]),
   examples: z.object({ snack: z.string().max(120), meal: z.string().max(120), feast: z.string().max(120) }).partial(),
+  // the six quick picks on Log activity, in order ("" = the default one)
+  quickPicks: z.array(z.string().max(QUICK_PICK_MAX, `Keep each quick pick under ${QUICK_PICK_MAX} characters.`), { error: "The quick picks are six names." }).max(6, "There are six quick picks."),
 }).partial().strict();
 
 export interface AppHandle { app: express.Express; db: Database.Database; users: Users; log: Log; goals: Goals; config: Config }
@@ -122,6 +125,10 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.post("/api/splurges", h((req) => log.addSplurge(owner(req), req.body)));
   app.put("/api/splurges/:id", h((req) => log.updateSplurge(owner(req), param(req, "id"), req.body)));
   app.delete("/api/splurges/:id", h((req) => { log.deleteSplurge(owner(req), param(req, "id")); }));
+  app.get("/api/activities", h((req) => log.activitiesBetween(owner(req), String(req.query.from || ""), String(req.query.to || ""))));
+  app.post("/api/activities", h((req) => log.addActivity(owner(req), req.body)));
+  app.put("/api/activities/:id", h((req) => log.updateActivity(owner(req), param(req, "id"), req.body)));
+  app.delete("/api/activities/:id", h((req) => { log.deleteActivity(owner(req), param(req, "id")); }));
   app.get("/api/weigh-ins", h((req) => log.weighInsBetween(owner(req), String(req.query.from || ""), String(req.query.to || ""))));
   app.put("/api/weigh-ins/:day", h((req) => log.setWeighIn(owner(req), param(req, "day"), req.body)));
   app.delete("/api/weigh-ins/:day", h((req) => { log.deleteWeighIn(owner(req), param(req, "day")); }));
@@ -158,7 +165,7 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.post("/api/users/switch-back", h((req) => { users.switchBack(req); return users.state(req); }));
   app.post("/api/users/:id/switch", h((req) => { users.switchTo(req, param(req, "id")); return users.state(req); }));
   app.delete("/api/users/:id", h((req) => {
-    if (req.body?.confirm !== "DELETE") throw new UserError("Type DELETE to confirm — their splurges and weigh-ins go with them.");
+    if (req.body?.confirm !== "DELETE") throw new UserError("Type DELETE to confirm — their splurges, activities and weigh-ins go with them.");
     users.remove(req, param(req, "id"));
   }));
 

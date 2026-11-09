@@ -3,20 +3,20 @@
 Read this before changing anything. `Docs/DEVELOPMENT.md` has the detail.
 
 ## What it is
-A phone-first web app that tracks junk food ("splurges") and weight, and nothing else. Runs on
+A phone-first web app that tracks junk food ("splurges"), weight and activity, and nothing else. Runs on
 Matt's Mac (or Mac mini over Tailscale), used in a phone browser. Server: Node 22.12+ / Express 5 /
 TypeScript / better-sqlite3. Page: React 19 + Vite + Tailwind v4 + Radix Dialog + TanStack Query.
 The person using it is not a developer — every message the page shows is a plain sentence.
 
 ## Map
-- `server/src/log.ts` — splurges and weigh-ins (all checks, the overview); `goals.ts` — each
+- `server/src/log.ts` — splurges, activities and weigh-ins (all checks, the overview); `goals.ts` — each
   person's goal list (the top open goal is on Home); `users.ts` — people,
   passwords, sessions, Switch to, per-person settings; `app.ts` — routes and guards;
   `config.ts` — config.json; `security.ts` — Host guard, same-origin writes; `db.ts` — tables
   and migrations (`PRAGMA user_version`).
 - `shared/types.ts` — the data model used by both sides.
 - `web/src/components/Home.tsx` (home), `GoalNote.tsx` (the sticky note on Home), `UserMenu.tsx`
-  (the initials menu), `GoalsPage.tsx`, `GoalSheet.tsx`, `LogSheet.tsx`, `WeighSheet.tsx`,
+  (the initials menu), `GoalsPage.tsx`, `GoalSheet.tsx`, `LogSheet.tsx`, `ActivitySheet.tsx` (Log activity), `WeighSheet.tsx`,
   `DaySheet.tsx`, `CalendarPage.tsx`; `web/src/settings/` — Settings pages; `web/src/lib/stats.ts` — the numbers
   on the home screen (pure, tested).
 
@@ -24,7 +24,8 @@ The person using it is not a developer — every message the page shows is a pla
 1. **Matt's chosen design** (mockups artifact JaQKDBbcdYyzDybDBx2eXS, round 2 "E/F"): home =
    big *Days clean* tile + *This week* + *30 days*, the *Last 14 days* strip coloured by size with
    a Calendar button, the weight card (current, change over the trend period, 7-day average,
-   sparkline), two big buttons at the bottom (**+ Splurge**, **Weigh in**). The *Log a splurge*
+   sparkline), the big buttons at the bottom (**+ Splurge**, **Weigh in** — and since rule 10,
+   **+ Activity** between them). The *Log a splurge*
    sheet was approved as mocked. Keep it. Phone first: check every change at 390px wide.
    **Goals** (round 3, Oct 26 2026): Matt picked **G3, the sticky note** — the goal now, in
    handwriting (Caveat, bundled), at the very top of Home, always there when a goal is set, with
@@ -64,6 +65,19 @@ The person using it is not a developer — every message the page shows is a pla
    step that needs anything else.
 9. **Settings marked "after a restart"** (port, network access, sign-in length, database path)
    are listed in `RESTART_REQUIRED` in `config.ts`; the page says to run `./TRACKER.sh --restart`.
+10. **Activity** (round 4, Matt, Nov 9 2026; mockups ActHomeCard = H1, LogActivity, DayActivity):
+    an activity needs only *what*; minutes and calories burned are optional whole numbers; the
+    Day picker is the splurge one, plus a time that starts at now; **any number a day** (only
+    weigh-ins are one a day). Six quick picks (default Walk, Run, Bike, Gym, Swim, Yoga) are
+    per person in Settings → You (`quickPicks`, six strings, `""` = default). Home keeps
+    everything and adds the **Active this week** card above the 14 days (days active of 7 from the
+    person's week start — a day counts once; minutes and calories add up every activity, calories
+    only from those that say; last activity; seven dots); active days get a green notch under the
+    date on the strip and in the Calendar (the day's text colour on Meal/Feast); THREE buttons at
+    the bottom (**+ Splurge · + Activity · Weigh in**). The day sheet lists activities (Edit,
+    Delete) after the splurges, with **+ Splurge / + Activity**; the Splurges / Activity headings
+    show the day's calories eaten / burned when any entry has them. Colours: the `active*` tokens.
+    Not yet: goals that count activity (Matt: later).
 
 ## Working rules
 - Commit locally per feature with a dated CHANGELOG entry; `git add` explicit paths.

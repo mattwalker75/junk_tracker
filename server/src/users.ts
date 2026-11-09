@@ -20,7 +20,7 @@ import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
 import type Database from "better-sqlite3";
 import type { Request } from "express";
-import { DEFAULT_USER_SETTINGS, SIZES, type AuthState, type Id, type UserInfo, type UserSettings } from "../../shared/types.js";
+import { DEFAULT_QUICK_PICKS, DEFAULT_USER_SETTINGS, QUICK_PICK_MAX, SIZES, type AuthState, type Id, type UserInfo, type UserSettings } from "../../shared/types.js";
 import type { Config } from "./config.js";
 import { newId, now, UserError } from "./util.js";
 
@@ -262,13 +262,18 @@ export class Users {
       ...DEFAULT_USER_SETTINGS,
       ...saved,
       examples: { ...DEFAULT_USER_SETTINGS.examples, ...(saved.examples || {}) },
+      // always six, whatever an older (or hand-edited) settings_json holds
+      quickPicks: DEFAULT_QUICK_PICKS.map((_, i) => (Array.isArray(saved.quickPicks) ? String(saved.quickPicks[i] ?? "") : "")),
     };
   }
 
   saveSettings(id: Id, patch: Partial<Omit<UserSettings, "examples">> & { examples?: Partial<UserSettings["examples"]> }): UserSettings {
     const cur = this.settings(id);
-    const next: UserSettings = { ...cur, ...patch, examples: { ...cur.examples, ...(patch.examples || {}) } as UserSettings["examples"] };
+    // quick picks are sent in order; a shorter list changes only the first ones
+    const picks = cur.quickPicks.map((p, i) => (patch.quickPicks && i < patch.quickPicks.length ? patch.quickPicks[i] : p));
+    const next: UserSettings = { ...cur, ...patch, examples: { ...cur.examples, ...(patch.examples || {}) } as UserSettings["examples"], quickPicks: picks };
     for (const s of SIZES) next.examples[s] = String(next.examples[s] ?? "").trim().slice(0, 120);
+    next.quickPicks = next.quickPicks.map((p) => String(p ?? "").trim().slice(0, QUICK_PICK_MAX));
     this.db.prepare("UPDATE users SET settings_json = ? WHERE id = ?").run(JSON.stringify(next), id);
     return next;
   }

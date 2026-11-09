@@ -9,9 +9,10 @@ export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Bool
 /** "Matt Walker" → "MW": the round bubble on Home and in Settings */
 export const initials = (name: string) => name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 
-type Variant = "accent" | "strong" | "outline" | "soft" | "ghost" | "danger";
+type Variant = "accent" | "active" | "strong" | "outline" | "soft" | "ghost" | "danger";
 const VARIANT: Record<Variant, string> = {
   accent: "bg-accent text-accent-ink hover:brightness-105",
+  active: "bg-active text-active-ink hover:brightness-105",
   strong: "bg-strong text-strong-ink hover:brightness-110",
   outline: "border border-line-2 bg-surface text-ink hover:bg-surface-2",
   soft: "bg-accent-soft text-accent-text hover:brightness-97",
@@ -100,14 +101,20 @@ export function SizeBadge({ size }: { size: Size }) {
   return <span className={cx("inline-flex h-6 items-center rounded-full px-2.5 text-xs font-bold", SIZE_FILL[size])}>{SIZE_LABEL[size]}</span>;
 }
 
-export function SizeLegend() {
+export function SizeLegend({ active }: { active?: boolean }) {
   return (
     <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-mute">
       {(["snack", "meal", "feast"] as Size[]).map((s) => (
         <span key={s} className="inline-flex items-center gap-1.5"><span className={cx("size-2.5 rounded-[3px]", SIZE_DOT[s])} />{SIZE_LABEL[s]}</span>
       ))}
+      {active ? <span className="inline-flex items-center gap-1.5"><span className="notch h-1 w-3.5 rounded-full" />Active</span> : null}
     </div>
   );
+}
+
+/** The mark under the date of a day with an activity, coloured to show on that day's colour (index.css). */
+export function ActiveNotch({ size, on }: { size: Size | null; on: boolean }) {
+  return <span aria-hidden className={cx("h-1 w-3.5 rounded-full", on && (size === "meal" || size === "feast" ? "notch-ink" : size === "snack" ? "notch notch-snack" : "notch"))} />;
 }
 
 /**

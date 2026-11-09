@@ -13,7 +13,9 @@
 /*
  * Theme tokens. Components use only these (through the Tailwind names below), so Light, Dark and
  * your own themes restyle the whole app. A custom theme sets the same variables inline on <html>
- * (lib/theme.ts). The three splurge sizes have their own colours and text-on-colour.
+ * (lib/theme.ts). The three splurge sizes have their own colours and text-on-colour; activity is
+ * green (`active`: + Activity, the marks under active days; `active-soft` and `active-text` for its
+ * chips and words).
  */
 :root {
   --bg: #f6f7f9;
@@ -46,6 +48,10 @@
   --note: #ffe680;
   --note-ink: #2b2100;
   --note-mute: #5a4a00;
+  --active: #1a6b43;
+  --active-ink: #ffffff;
+  --active-soft: #e3f4ea;
+  --active-text: #145a37;
   --shadow: 20 24 32;
   color-scheme: light;
 }
@@ -80,6 +86,10 @@
   --note: #f0d65a;
   --note-ink: #241b00;
   --note-mute: #4d3f00;
+  --active: #3aa86b;
+  --active-ink: #04170c;
+  --active-soft: #1a3326;
+  --active-text: #7fdca6;
   --shadow: 0 0 0;
   color-scheme: dark;
 }
@@ -115,6 +125,10 @@
   --color-note: var(--note);
   --color-note-ink: var(--note-ink);
   --color-note-mute: var(--note-mute);
+  --color-active: var(--active);
+  --color-active-ink: var(--active-ink);
+  --color-active-soft: var(--active-soft);
+  --color-active-text: var(--active-text);
   --font-hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
   --font-sans: "Figtree Variable", "Helvetica Neue", Helvetica, sans-serif;
 }
@@ -146,6 +160,14 @@
 .shadow-soft { box-shadow: 0 1px 2px rgb(var(--shadow) / 0.05); }
 .shadow-note { box-shadow: 0 10px 22px rgb(60 45 0 / 0.18), 0 1px 2px rgb(60 45 0 / 0.2); }
 .shadow-menu { box-shadow: 0 12px 32px rgb(var(--shadow) / 0.18); }
+/*
+ * The mark under an active day (Home's 14 days, the Calendar). Green on a clean day and on a Snack;
+ * on the darker Meal and Feast colours — and on the pale Snack in a dark theme, where the green is
+ * light too — it takes the day's own text colour, which is made to stand out on that colour.
+ */
+.notch { background: var(--active); }
+.notch-ink { background: currentColor; }
+:root[data-theme="dark"] .notch-snack { background: currentColor; }
 .tabular { font-variant-numeric: tabular-nums; }
 .pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 

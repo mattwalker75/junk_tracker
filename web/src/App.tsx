@@ -1,7 +1,8 @@
 /** Which screen: create the first person, sign in, or the app (home, calendar, goals, settings) with its sheets. */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { Day, Splurge } from "../../shared/types";
+import type { Activity, Day, Splurge } from "../../shared/types";
+import { ActivitySheet } from "./components/ActivitySheet";
 import { AuthScreen } from "./components/AuthScreen";
 import { CalendarPage } from "./components/CalendarPage";
 import { DaySheet } from "./components/DaySheet";
@@ -38,14 +39,17 @@ export function App() {
   }, [qc]);
 
   const [logOpen, setLogOpen] = useState<{ day?: Day; edit?: Splurge } | null>(null);
+  const [activityOpen, setActivityOpen] = useState<{ day?: Day; edit?: Activity } | null>(null);
   const [dayOpen, setDayOpen] = useState<Day | null>(null);
   const [weighOpen, setWeighOpen] = useState<Day | null | undefined>(undefined);
   const actions = useMemo<Actions>(() => ({
     log: (opts) => setLogOpen(opts ?? {}),
+    activity: (opts) => setActivityOpen(opts ?? {}),
     day: (d) => setDayOpen(d),
     weigh: (d) => setWeighOpen(d ?? null),
   }), []);
   const closeLog = useCallback((o: boolean) => { if (!o) setLogOpen(null); }, []);
+  const closeActivity = useCallback((o: boolean) => { if (!o) setActivityOpen(null); }, []);
 
   if (me.isPending) return <div className="min-h-dvh" />;
   if (me.isError) return <div className="grid min-h-dvh place-items-center p-6 text-center text-mute">{me.error.message}</div>;
@@ -63,6 +67,7 @@ export function App() {
         {route.page === "goals" ? <GoalsPage /> : null}
         {route.page === "settings" ? <SettingsPage section={route.section} state={st} /> : null}
         <LogSheet open={!!logOpen} onOpenChange={closeLog} day={logOpen?.day} edit={logOpen?.edit} />
+        <ActivitySheet open={!!activityOpen} onOpenChange={closeActivity} day={activityOpen?.day} edit={activityOpen?.edit} />
         <DaySheet day={dayOpen} onClose={() => setDayOpen(null)} />
         <WeighSheet open={weighOpen !== undefined} day={weighOpen ?? undefined} onOpenChange={(o) => { if (!o) setWeighOpen(undefined); }} />
       </div>

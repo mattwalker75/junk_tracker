@@ -43,7 +43,7 @@ export function UsersSettings() {
       <AddUser />
       <PasswordSheet user={pw} onClose={() => setPw(null)} />
       <Confirm open={!!removing} onOpenChange={(o) => { if (!o) setRemoving(null); }} title={`Remove ${removing?.name}?`} word="DELETE" danger confirmLabel="Remove"
-        body={<>{removing?.name}'s splurges, weigh-ins and settings are deleted with them. This cannot be undone.</>}
+        body={<>{removing?.name}'s splurges, activities, weigh-ins, goals and settings are deleted with them. This cannot be undone.</>}
         onConfirm={async () => {
           if (!removing) return;
           try {

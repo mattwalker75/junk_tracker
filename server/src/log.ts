@@ -1,5 +1,5 @@
 /**
- * The rules over a person's log: splurges and weigh-ins. Every call names the owner, and every
+ * The rules over a person's log: splurges, activities and weigh-ins. Every call names the owner, and every
  * query filters by it — one person never reads or changes another's rows (except after "Switch
  * to", which changes the owner a request works on, in users.ts).
  *
@@ -8,7 +8,7 @@
  */
 import type Database from "better-sqlite3";
 import { z } from "zod";
-import { KG, SIZES, type Day, type Id, type Overview, type Splurge, type SplurgeInput, type WeighIn } from "../../shared/types.js";
+import { KG, SIZES, type Activity, type ActivityInput, type Day, type Id, type Overview, type Splurge, type SplurgeInput, type WeighIn } from "../../shared/types.js";
 import type { Goals } from "./goals.js";
 import type { Users } from "./users.js";
 import { newId, now, parse, realDay, UserError } from "./util.js";
@@ -17,15 +17,28 @@ interface SplurgeRow { id: Id; user_id: Id; what: string; size: Splurge["size"];
 
 const toSplurge = (r: SplurgeRow): Splurge => ({ id: r.id, what: r.what, size: r.size, where: r.place, calories: r.calories, day: r.day, time: r.time, notes: r.notes, createdAt: r.created_at, updatedAt: r.updated_at });
 
+interface ActivityRow { id: Id; user_id: Id; what: string; minutes: number | null; calories: number | null; day: Day; time: string; notes: string; created_at: string; updated_at: string }
+
+const toActivity = (r: ActivityRow): Activity => ({ id: r.id, what: r.what, minutes: r.minutes, calories: r.calories, day: r.day, time: r.time, notes: r.notes, createdAt: r.created_at, updatedAt: r.updated_at });
+
 const day = z.string().refine(realDay, "That is not a real date.");
 const splurgeSchema = z.object({
   what: z.string().trim().min(1, "Say what you had.").max(120, "Keep what you had under 120 characters."),
   size: z.enum(SIZES as [string, ...string[]], { error: "Pick Snack, Meal or Feast." }),
   where: z.string().trim().max(80, "Keep the place under 80 characters.").default(""),
-  calories: z.union([z.number().int("Calories are a whole number.").min(0, "Calories cannot be negative.").max(50000, "That is a lot of calories — check the number."), z.null()]).default(null),
+  // .nullable() rather than a union with null, so a wrong number gets its own sentence, not "Invalid input"
+  calories: z.number({ error: "Calories are a whole number." }).int("Calories are a whole number.").min(0, "Calories cannot be negative.").max(50000, "That is a lot of calories — check the number.").nullable().default(null),
   day,
   time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "The time looks wrong.").or(z.literal("")).default(""),
   notes: z.string().max(2000, "Keep the notes under 2,000 characters.").default(""),
+});
+const activitySchema = z.object({
+  what: z.string({ error: "Say what you did." }).trim().min(1, "Say what you did.").max(120, "Keep what you did under 120 characters."),
+  minutes: z.number({ error: "How long is a whole number of minutes." }).int("How long is a whole number of minutes.").min(1, "How long is at least 1 minute — or leave it empty.").max(1440, "A day has 1,440 minutes — check how long.").nullable().default(null),
+  calories: z.number({ error: "Calories burned are a whole number." }).int("Calories burned are a whole number.").min(0, "Calories burned cannot be negative.").max(20000, "That is a lot of calories — check the number.").nullable().default(null),
+  day,
+  time: splurgeSchema.shape.time,
+  notes: splurgeSchema.shape.notes,
 });
 
 const shift = (d: Day, days: number): Day => {
@@ -61,6 +74,33 @@ export class Log {
   splurgesBetween(owner: Id, from: Day, to: Day): Splurge[] {
     if (!realDay(from) || !realDay(to)) throw new UserError("Which days?");
     return (this.db.prepare("SELECT * FROM splurges WHERE user_id = ? AND day BETWEEN ? AND ? ORDER BY day DESC, time DESC, created_at DESC").all(owner, from, to) as SplurgeRow[]).map(toSplurge);
+  }
+
+  // ---------------------------------------------------------------- activities (a walk, a run, the gym)
+  addActivity(owner: Id, body: unknown): Activity {
+    const v = parse(activitySchema, body) as ActivityInput;
+    const t = now();
+    const row: ActivityRow = { id: newId(), user_id: owner, what: v.what, minutes: v.minutes, calories: v.calories, day: v.day, time: v.time, notes: v.notes.trim(), created_at: t, updated_at: t };
+    this.db.prepare(`INSERT INTO activities (id, user_id, what, minutes, calories, day, time, notes, created_at, updated_at)
+      VALUES (@id, @user_id, @what, @minutes, @calories, @day, @time, @notes, @created_at, @updated_at)`).run(row);
+    return toActivity(row);
+  }
+
+  updateActivity(owner: Id, id: Id, body: unknown): Activity {
+    const v = parse(activitySchema, body) as ActivityInput;
+    const r = this.db.prepare(`UPDATE activities SET what = ?, minutes = ?, calories = ?, day = ?, time = ?, notes = ?, updated_at = ?
+      WHERE id = ? AND user_id = ?`).run(v.what, v.minutes, v.calories, v.day, v.time, v.notes.trim(), now(), id, owner);
+    if (!r.changes) throw new UserError("That activity no longer exists.", 404);
+    return toActivity(this.db.prepare("SELECT * FROM activities WHERE id = ?").get(id) as ActivityRow);
+  }
+
+  deleteActivity(owner: Id, id: Id): void {
+    if (!this.db.prepare("DELETE FROM activities WHERE id = ? AND user_id = ?").run(id, owner).changes) throw new UserError("That activity no longer exists.", 404);
+  }
+
+  activitiesBetween(owner: Id, from: Day, to: Day): Activity[] {
+    if (!realDay(from) || !realDay(to)) throw new UserError("Which days?");
+    return (this.db.prepare("SELECT * FROM activities WHERE user_id = ? AND day BETWEEN ? AND ? ORDER BY day DESC, time DESC, created_at DESC").all(owner, from, to) as ActivityRow[]).map(toActivity);
   }
 
   // ---------------------------------------------------------------- weigh-ins (one a day; a second one replaces it)
@@ -102,7 +142,14 @@ export class Log {
     const recent = (this.db.prepare(`SELECT what, size, place, calories FROM splurges WHERE user_id = ?
       GROUP BY lower(what) ORDER BY MAX(day || ' ' || time || ' ' || created_at) DESC LIMIT 6`).all(owner) as { what: string; size: Splurge["size"]; place: string; calories: number | null }[])
       .map((r) => ({ what: r.what, size: r.size, where: r.place, calories: r.calories }));
+    // activity: this week and the 14-day strip, the latest one, and the recent different ones for "Again?"
+    const activities = this.activitiesBetween(owner, shift(today, -40), today);
+    const lastActivity = this.db.prepare("SELECT * FROM activities WHERE user_id = ? AND day <= ? ORDER BY day DESC, time DESC, created_at DESC LIMIT 1").get(owner, today) as ActivityRow | undefined;
+    // the minutes and calories come from the latest of each (SQLite takes the bare columns from the MAX row)
+    const recentActivities = (this.db.prepare(`SELECT what, minutes, calories, MAX(day || ' ' || time || ' ' || created_at) AS latest FROM activities WHERE user_id = ?
+      GROUP BY lower(what) ORDER BY latest DESC LIMIT 6`).all(owner) as { what: string; minutes: number | null; calories: number | null }[])
+      .map((r) => ({ what: r.what, minutes: r.minutes, calories: r.calories }));
     // the goal now, the splurges since its day 1, and how many goals are open (for the menu)
-    return { last: last ? toSplurge(last) : null, splurges, weighIns, recent, settings, ...this.goals.current(owner, today) };
+    return { last: last ? toSplurge(last) : null, splurges, weighIns, recent, activities, lastActivity: lastActivity ? toActivity(lastActivity) : null, recentActivities, settings, ...this.goals.current(owner, today) };
   }
 }

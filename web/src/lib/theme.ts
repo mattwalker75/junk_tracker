@@ -10,6 +10,8 @@ export const THEME_TOKENS: [string, string][] = [
   ["line", "Lines"], ["accent", "Accent (+ Splurge, links)"], ["accent-ink", "Text on accent"], ["strong", "Weigh in button"],
   ["strong-ink", "Text on Weigh in"], ["snack", "Snack"], ["meal", "Meal"], ["feast", "Feast"],
   ["note", "Goal note"], ["note-ink", "Text on the goal note"], ["note-mute", "Small text on the goal note"],
+  ["active", "Activity (+ Activity, active days)"], ["active-ink", "Text on + Activity"], ["active-soft", "Activity chips and cards"],
+  ["active-text", "Activity words"],
 ];
 
 const media = typeof window !== "undefined" ? window.matchMedia("(prefers-color-scheme: dark)") : null;

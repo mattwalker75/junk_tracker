@@ -1,5 +1,5 @@
 /**
- * The SQLite database: every person, their splurges, their weigh-ins and their own settings.
+ * The SQLite database: every person, their splurges, activities, weigh-ins, goals and their own settings.
  *
  * The app creates the file and its tables on first start and upgrades them itself: SQLite's
  * `user_version` says which step a file is at, and each step in MIGRATIONS runs once, in a
@@ -10,7 +10,8 @@ import fs from "node:fs";
 import path from "node:path";
 import Database from "better-sqlite3";
 
-const MIGRATIONS: string[] = [
+/** exported for the upgrade tests, which build an older file step by step */
+export const MIGRATIONS: readonly string[] = [
   // 1 — the first version
   `
   CREATE TABLE users (
@@ -58,6 +59,22 @@ const MIGRATIONS: string[] = [
     updated_at TEXT NOT NULL
   );
   CREATE INDEX goals_user ON goals (user_id, done_on, position);
+  `,
+  // 3 — activity (Nov 9 2026): walks, runs, the gym; only the name is needed
+  `
+  CREATE TABLE activities (
+    id         TEXT PRIMARY KEY,
+    user_id    TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    what       TEXT NOT NULL,
+    minutes    INTEGER,
+    calories   INTEGER,
+    day        TEXT NOT NULL,
+    time       TEXT NOT NULL DEFAULT '',
+    notes      TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  );
+  CREATE INDEX activities_user_day ON activities (user_id, day DESC, time DESC);
   `,
 ];
 

@@ -1,0 +1,145 @@
+/**
+ * Log activity (Matt's mockup, round 4, Nov 9 2026): "Again?" buttons for recent different
+ * activities, What did you do? (the only thing needed), six quick picks that fill it in (the
+ * person's own from Settings → You, or Walk / Run / Bike / Gym / Swim / Yoga), How long and
+ * Calories burned (optional whole numbers), the Day (the same picker as a splurge) with a time that
+ * starts at now, and Notes. The same sheet edits an activity (with Delete).
+ */
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState, type FormEvent } from "react";
+import { toast } from "sonner";
+import { quickPickNames, type Activity, type Day } from "../../../shared/types";
+import { LOG_KEYS, refresh } from "../lib/actions";
+import { api } from "../lib/api";
+import { nowTime } from "../lib/dates";
+import { minutesLabel } from "../lib/stats";
+import { useToday } from "../lib/useToday";
+import { DayPicker } from "./DayPicker";
+import { Button, cx, ErrorLine, Field, Input, Sheet, TextArea, Label } from "./ui";
+
+/** "45" → 45, "" → null, "4.5" or "-3" → NaN (refused) */
+const whole = (v: string) => (v.trim() === "" ? null : /^\d+$/.test(v.replace(/[, ]/g, "")) ? Number(v.replace(/[, ]/g, "")) : NaN);
+
+export function ActivitySheet({ open, onOpenChange, day, edit }: { open: boolean; onOpenChange: (o: boolean) => void; day?: Day; edit?: Activity }) {
+  const qc = useQueryClient();
+  const today = useToday();
+  const overview = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today), enabled: open });
+  const settings = overview.data?.settings;
+  const picks = quickPickNames(settings?.quickPicks);
+  const [what, setWhat] = useState("");
+  const [minutes, setMinutes] = useState("");
+  const [calories, setCalories] = useState("");
+  const [when, setWhen] = useState({ day: today, time: "" });
+  const [notes, setNotes] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  // every open starts fresh: a new activity now (or on the day it was opened from), or the one being edited
+  useEffect(() => {
+    if (!open) return;
+    setError(null); setConfirmDelete(false);
+    if (edit) {
+      setWhat(edit.what); setMinutes(edit.minutes === null ? "" : String(edit.minutes)); setCalories(edit.calories === null ? "" : String(edit.calories));
+      setWhen({ day: edit.day, time: edit.time }); setNotes(edit.notes);
+    } else {
+      setWhat(""); setMinutes(""); setCalories(""); setNotes("");
+      setWhen({ day: day ?? today, time: nowTime() });
+    }
+  }, [open, edit, day, today]);
+
+  const again = (r: { what: string; minutes: number | null; calories: number | null }) => {
+    setWhat(r.what); setMinutes(r.minutes === null ? "" : String(r.minutes)); setCalories(r.calories === null ? "" : String(r.calories));
+  };
+
+  const save = async (e: FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (!what.trim()) return setError("Say what you did.");
+    const mins = whole(minutes), cal = whole(calories);
+    if (Number.isNaN(mins) || mins === 0) return setError("How long is a whole number of minutes, or leave it empty.");
+    if (Number.isNaN(cal)) return setError("Calories burned are a whole number, or leave it empty.");
+    const input = { what: what.trim(), minutes: mins, calories: cal, day: when.day, time: when.time, notes };
+    setBusy(true);
+    try {
+      if (edit) await api.saveActivity(edit.id, input); else await api.addActivity(input);
+      void refresh(qc, LOG_KEYS);
+      toast.success(edit ? "Saved." : `Logged: ${input.what}`);
+      onOpenChange(false);
+    } catch (e2) { setError((e2 as Error).message); }
+    finally { setBusy(false); }
+  };
+
+  const remove = async () => {
+    if (!edit) return;
+    setBusy(true);
+    try {
+      await api.deleteActivity(edit.id);
+      void refresh(qc, LOG_KEYS);
+      toast.success("Deleted.");
+      onOpenChange(false);
+    } catch (e2) { setError((e2 as Error).message); }
+    finally { setBusy(false); }
+  };
+
+  const recent = !edit ? overview.data?.recentActivities ?? [] : [];
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange} title={edit ? "Edit activity" : "Log activity"}>
+      <form onSubmit={save} className="space-y-4 pb-2">
+        {recent.length ? (
+          <div>
+            <Label>Again?</Label>
+            <div className="flex flex-wrap gap-2">
+              {recent.map((r) => (
+                <button type="button" key={r.what} onClick={() => again(r)}
+                  className="inline-flex min-h-10 items-center rounded-full bg-active-soft px-3.5 text-sm font-bold text-active-text hover:brightness-95 [overflow-wrap:anywhere]">
+                  {r.what}{r.minutes ? ` · ${minutesLabel(r.minutes)}` : ""}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        <Field label="What did you do?" required>
+          {(id) => <Input id={id} value={what} onChange={(e) => setWhat(e.target.value)} placeholder="Walk around the lake" maxLength={120} autoCapitalize="sentences" />}
+        </Field>
+
+        <fieldset>
+          <legend className="mb-1.5 text-[13px] font-bold text-mute">Or pick one</legend>
+          <div className="grid grid-cols-3 gap-2">
+            {picks.map((p, i) => {
+              const on = what.trim().toLowerCase() === p.toLowerCase();
+              return (
+                <button type="button" key={i} aria-pressed={on} onClick={() => setWhat(p)}
+                  className={cx("min-h-11 rounded-xl px-2 text-[15px] leading-tight [overflow-wrap:anywhere]",
+                    on ? "border-2 border-active bg-active-soft font-extrabold text-active-text" : "border border-line-2 bg-surface font-bold text-ink hover:bg-surface-2")}>
+                  {p}
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
+
+        <div className="grid grid-cols-2 gap-2.5">
+          <Field label="How long (minutes)">{(id) => <Input id={id} value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="optional" inputMode="numeric" />}</Field>
+          <Field label="Calories burned">{(id) => <Input id={id} value={calories} onChange={(e) => setCalories(e.target.value)} placeholder="optional" inputMode="numeric" />}</Field>
+        </div>
+
+        <DayPicker value={when.day} onChange={(d) => setWhen({ ...when, day: d })} today={today} weekStart={settings?.weekStart ?? 0} />
+        <Field label="Time">
+          {(id) => <div className="w-44"><Input id={id} type="time" value={when.time} onChange={(e) => setWhen({ ...when, time: e.target.value })} /></div>}
+        </Field>
+
+        <Field label="Notes">{(id) => <TextArea id={id} rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="optional — the route, who you went with, how it felt" maxLength={2000} />}</Field>
+
+        <ErrorLine text={error} />
+        <Button type="submit" variant="active" size="xl" className="w-full" disabled={busy}>{edit ? "Save" : "Save activity"}</Button>
+        {edit ? (
+          confirmDelete
+            ? <div className="grid grid-cols-2 gap-2.5"><Button size="lg" onClick={() => setConfirmDelete(false)}>Keep it</Button><Button size="lg" variant="danger" onClick={remove} disabled={busy}>Delete it</Button></div>
+            : <Button size="lg" variant="danger" className="w-full" onClick={() => setConfirmDelete(true)}>Delete this activity</Button>
+        ) : null}
+      </form>
+    </Sheet>
+  );
+}

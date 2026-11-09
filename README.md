@@ -1,22 +1,26 @@
 # Junk Tracker
 
-A small app for your phone that tracks two things and nothing else: **junk food** ("splurges")
-and **weight**. Log a splurge in a few taps, see how many days you have stayed clean, and watch
-your weight trend. It runs on your own computer and keeps everything in one SQLite file.
+A small app for your phone that tracks **junk food** ("splurges"), **weight** and, on the good
+side, **activity**. Log a splurge in a few taps, see how many days you have stayed clean, how
+active you were this week, and watch your weight trend. It runs on your own computer and keeps everything in one SQLite file.
 
 - **Goals**: keep a list of things to aim for ("Eat extra clean for the next 2 weeks"). The one at
   the top sits on Home as a sticky note, every time you open the app; check it off and the next
   one moves up.
 - **Home**: *Days clean* in big type, splurges *this week* and in the *last 30 days*, the last
-  14 days as coloured squares (tap one to see that day), and your weight with its trend.
+  14 days as coloured squares (tap one to see that day), *Active this week*, and your weight with
+  its trend.
 - **+ Splurge**: what you had and how big — **Snack**, **Meal** or **Feast** — plus, if you
   like, where, calories, when and notes. Things you had before are one tap away.
+- **+ Activity**: what you did (or one tap on a quick pick — Walk, Run, Bike, Gym, Swim, Yoga, or
+  your own six), and if you like how long and the calories burned. Active days get a green mark.
 - **Weigh in**: at most one weigh-in a day, in pounds or kilograms. Weigh-ins are optional.
-- **Calendar**: any month, coloured by the biggest splurge of each day, with that month's totals.
+- **Calendar**: any month, coloured by the biggest splurge of each day, active days marked, with
+  that month's totals.
 - **Just you, no sign-in** to start with. Turn on *Users and sign-in* in Settings to add other
   people, each with their own log and settings, each signing in with a password. Anyone can
   *switch to* anyone (to check in or to fill it in for them) — it keeps logs apart; it is not privacy.
-- **Settings**: your own examples of a Snack, Meal and Feast; pounds or kilograms; the trend
+- **Settings**: your own examples of a Snack, Meal and Feast; your six activity quick picks; pounds or kilograms; the trend
   period (1 week, 2 weeks or a month); users and sign-in on or off; light, dark or a theme you
   make; other devices on your network on or off.
 

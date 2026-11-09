@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { Splurge } from "../shared/types";
+import type { Activity, Splurge } from "../shared/types";
 import { goalFontPx } from "../shared/types";
 import { addDays, daysBetween } from "../web/src/lib/dates";
-import { countBetween, daysClean, goalLine, goalProgress, inUnit, startOfWeek, trend, worstSize } from "../web/src/lib/stats";
+import { activeWeek, activityLabel, caloriesTotal, countBetween, daysClean, minutesLabel, goalLine, goalProgress, inUnit, startOfWeek, trend, worstSize } from "../web/src/lib/stats";
 
 const s = (day: string, size: Splurge["size"]): Splurge =>
   ({ id: day + size, what: "x", size, where: null, calories: null, day, time: null, notes: null, createdAt: "", updatedAt: "" });
@@ -86,5 +86,64 @@ describe("the sticky note's writing size (Nov 9 2026)", () => {
     expect(goalFontPx("x".repeat(220))).toBe(22);
     expect(goalFontPx("x".repeat(300))).toBe(19);
     expect(goalFontPx("   short   ")).toBe(36); // spaces at the ends don't count
+  });
+});
+
+const act = (day: string, minutes: number | null, calories: number | null = null): Activity =>
+  ({ id: day + minutes, what: "Walk", minutes, calories, day, time: "", notes: "", createdAt: "", updatedAt: "" });
+
+describe("activity", () => {
+  it("writes minutes the way people say them", () => {
+    expect(minutesLabel(45)).toBe("45 min");
+    expect(minutesLabel(60)).toBe("1 h");
+    expect(minutesLabel(140)).toBe("2 h 20 min");
+    expect(activityLabel({ what: "Walk", minutes: 45 })).toBe("Walk, 45 min");
+    expect(activityLabel({ what: "Yoga", minutes: null })).toBe("Yoga");
+  });
+
+  it("Active this week: days active of 7, minutes, calories only from the ones that say", () => {
+    // Monday Nov 9 2026; a week from Sunday is Nov 8 – 14
+    const list = [act("2026-11-09", 45, 210), act("2026-11-09", 30), act("2026-11-08", 65, 700), act("2026-11-07", 90, 500), act("2026-11-10", 20)];
+    const w = activeWeek(list, "2026-11-09", 0);
+    expect(w.from).toBe("2026-11-08");
+    expect(w.days).toBe(2); // Saturday is last week; Tuesday is after today
+    expect(w.count).toBe(3);
+    expect(w.minutes).toBe(140);
+    expect(w.calories).toBe(910);
+    expect(w.week.map((x) => x.active)).toEqual([true, true, false, false, false, false, false]);
+    expect(w.week[6].day).toBe("2026-11-14");
+  });
+
+  it("follows the person's week start", () => {
+    const list = [act("2026-11-08", 30), act("2026-11-09", 30)];
+    const w = activeWeek(list, "2026-11-09", 1); // the week from Monday Nov 9
+    expect(w.from).toBe("2026-11-09");
+    expect(w.days).toBe(1);
+    expect(w.week.map((x) => x.active)).toEqual([true, false, false, false, false, false, false]);
+  });
+
+  it("an empty week, and one where nothing says its calories", () => {
+    expect(activeWeek([], "2026-11-09", 0)).toMatchObject({ days: 0, count: 0, minutes: 0, calories: null });
+    expect(activeWeek([act("2026-11-09", null)], "2026-11-09", 0)).toMatchObject({ days: 1, minutes: 0, calories: null });
+    expect(activeWeek([act("2026-11-09", null, 0)], "2026-11-09", 0).calories).toBe(0);
+  });
+});
+
+describe("the day sheet's calorie totals (Matt, Nov 9 2026)", () => {
+  const sp = (calories: number | null) => ({ ...s("2026-11-09", "meal"), calories });
+  it("none with calories: no total, just the heading", () => {
+    expect(caloriesTotal([])).toBeNull();
+    expect(caloriesTotal([sp(null), sp(null)])).toBeNull();
+    expect(caloriesTotal([act("2026-11-09", 30), act("2026-11-09", 20)])).toBeNull();
+  });
+  it("some with calories: the total of those", () => {
+    expect(caloriesTotal([sp(1320), sp(null), sp(1130)])).toBe(2450);
+    expect(caloriesTotal([act("2026-11-09", 45, 210), act("2026-11-09", 30), act("2026-11-09", 50, 210)])).toBe(420);
+  });
+  it("all with calories, several on the day; 0 is a total too", () => {
+    expect(caloriesTotal([sp(400), sp(2050)])).toBe(2450);
+    expect(caloriesTotal([act("2026-11-09", 45, 210), act("2026-11-09", 50, 400), act("2026-11-09", 20, 90)])).toBe(700);
+    expect(caloriesTotal([sp(0)])).toBe(0);
+    expect((2450).toLocaleString("en-US")).toBe("2,450");
   });
 });

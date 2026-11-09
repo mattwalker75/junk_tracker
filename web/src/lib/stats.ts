@@ -2,7 +2,7 @@
  * The numbers on the home screen, worked out from the log. Pure functions (tested in
  * test/stats.test.ts).
  */
-import { KG, type Day, type Goal, type Size, type Splurge, type WeighIn } from "../../../shared/types";
+import { KG, type Activity, type Day, type Goal, type Size, type Splurge, type WeighIn } from "../../../shared/types";
 import { addDays, daysBetween, weekday } from "./dates";
 
 const RANK: Record<Size, number> = { snack: 1, meal: 2, feast: 3 };
@@ -95,3 +95,56 @@ export function goalLine(goal: Pick<Goal, "days" | "startedOn">, today: Day, spl
   if (p.over && goal.days) return `${timeUp(goal.days)} · ${splurges === 0 ? "clean all the way" : since}`;
   return `Day ${p.day}${p.of ? ` of ${p.of}` : ""} · ${since}`;
 }
+
+/**
+ * The calories of a list (a day's splurges, or the burned of its activities): the sum of the ones
+ * that say, or null when none of them do — so a total is only shown when there is one.
+ */
+export function caloriesTotal(list: { calories: number | null }[]): number | null {
+  const withCal = list.filter((x) => x.calories !== null);
+  return withCal.length ? withCal.reduce((n, x) => n + (x.calories ?? 0), 0) : null;
+}
+
+// ---------------------------------------------------------------- activity
+
+/** Days that have at least one activity. */
+export function activeDays(list: Pick<Activity, "day">[]): Set<Day> {
+  return new Set(list.map((a) => a.day));
+}
+
+/** "45 min", "1 h", "2 h 20 min" */
+export function minutesLabel(n: number): string {
+  const h = Math.floor(n / 60), m = n % 60;
+  return h ? (m ? `${h} h ${m} min` : `${h} h`) : `${m} min`;
+}
+
+export interface ActiveWeek {
+  /** the first day of the week (the person's week start) */
+  from: Day;
+  /** the seven days of the week, and whether each had an activity (days after today never do) */
+  week: { day: Day; active: boolean }[];
+  /** how many of those days were active */
+  days: number;
+  /** how many activities this week */
+  count: number;
+  /** minutes this week (the activities that say how long) */
+  minutes: number;
+  /** calories burned this week (the activities that say), or null when none say */
+  calories: number | null;
+}
+
+/** "Active this week": the days active of 7 since the week started, the minutes and the calories burned. */
+export function activeWeek(list: Activity[], today: Day, weekStart: 0 | 1): ActiveWeek {
+  const from = startOfWeek(today, weekStart);
+  const mine = list.filter((a) => a.day >= from && a.day <= today);
+  const on = activeDays(mine);
+  const week = Array.from({ length: 7 }, (_, i) => { const day = addDays(from, i); return { day, active: on.has(day) }; });
+  return {
+    from, week, days: on.size, count: mine.length,
+    minutes: mine.reduce((n, a) => n + (a.minutes ?? 0), 0),
+    calories: caloriesTotal(mine),
+  };
+}
+
+/** "Walk, 45 min" — the name, and how long when it says */
+export const activityLabel = (a: Pick<Activity, "what" | "minutes">) => (a.minutes ? `${a.what}, ${minutesLabel(a.minutes)}` : a.what);

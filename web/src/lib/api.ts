@@ -1,5 +1,5 @@
 /** Every call to the server. Errors come back as plain sentences (the server writes them). */
-import type { AuthState, CustomTheme, Day, Goal, GoalInput, GoalList, Id, Overview, Splurge, SplurgeInput, UserInfo, UserSettings, WeighIn } from "../../../shared/types";
+import type { Activity, ActivityInput, AuthState, CustomTheme, Day, Goal, GoalInput, GoalList, Id, Overview, Splurge, SplurgeInput, UserInfo, UserSettings, WeighIn } from "../../../shared/types";
 
 export class ApiError extends Error {
   constructor(message: string, readonly status: number) { super(message); }
@@ -48,6 +48,10 @@ export const api = {
   addSplurge: (s: SplurgeInput) => call<Splurge>("POST", "/api/splurges", s),
   saveSplurge: (id: Id, s: SplurgeInput) => call<Splurge>("PUT", `/api/splurges/${id}`, s),
   deleteSplurge: (id: Id) => call<{ ok: true }>("DELETE", `/api/splurges/${id}`),
+  activities: (from: Day, to: Day) => call<Activity[]>("GET", `/api/activities?from=${from}&to=${to}`),
+  addActivity: (a: ActivityInput) => call<Activity>("POST", "/api/activities", a),
+  saveActivity: (id: Id, a: ActivityInput) => call<Activity>("PUT", `/api/activities/${id}`, a),
+  deleteActivity: (id: Id) => call<{ ok: true }>("DELETE", `/api/activities/${id}`),
   weighIns: (from: Day, to: Day) => call<WeighIn[]>("GET", `/api/weigh-ins?from=${from}&to=${to}`),
   weighIn: (day: Day, weight: number, unit: "lb" | "kg") => call<WeighIn>("PUT", `/api/weigh-ins/${day}`, { weight, unit }),
   deleteWeighIn: (day: Day) => call<{ ok: true }>("DELETE", `/api/weigh-ins/${day}`),

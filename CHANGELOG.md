@@ -5,6 +5,18 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 ## [Unreleased]
 
 ### Added
+- 2026-11-09: **Activity.** Log a walk, a run, the gym — anything active. **+ Activity** sits
+  between **+ Splurge** and **Weigh in** at the bottom of Home. *Log activity* asks only *What did
+  you do?*; *Again?* brings back recent ones (with their minutes) and *Or pick one* has six quick
+  picks (Walk, Run, Bike, Gym, Swim, Yoga — write your own six in Settings → You). How long and
+  calories burned are optional; the Day works like a splurge's, with a time that starts at now.
+  Log as many a day as you like. Home has a new **Active this week** card: days active of 7
+  (from your week start), the minutes and calories burned this week, the last activity, and a dot
+  a day. Active days get a green mark under the date on Home's 14 days and in the Calendar. A day
+  shows its activities (Edit, Delete) and has **+ Splurge** / **+ Activity** buttons; the
+  Splurges and Activity headings show the day's calories (eaten / burned) when any were filled in.
+  Each person has their own. The database is upgraded (a copy is kept as
+  `data/junk.db.before-v3`); nothing already logged changes.
 - 2026-11-09: **Longer goals.** A goal can now say up to 300 characters (it was 120), with a
   counter under the box. The sticky note writes a short goal big and a longer one smaller — 36,
   31, 26, 22 or 19 px by length — so it always fits and still reads at arm's length.
@@ -22,6 +34,8 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
   (`data/junk.db.before-v2`) before upgrading it for goals. Nothing already logged changes.
 
 ### Fixed
+- 2026-11-09: A splurge with calories that are not a whole number (12.5) is refused with
+  "Calories are a whole number." instead of "Invalid input".
 - 2026-10-26: **Code review of goals** (before the first push of it).
   - A goal's day 1 is now set only when the list changes (adding, moving, checking off, undo,
     removing — each sends the phone's day), never just by opening a page, so another website
@@ -37,6 +51,9 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
   - 38 tests.
 
 ### Changed
+- 2026-11-09: In the Calendar a weigh-in is now a small dot in the corner of the day (the mark
+  under the date is activity, as on Home). The day sheet's summary no longer repeats the
+  calories — they are beside the *Splurges* heading.
 - 2026-10-26: **Your initials open a menu** — **Goals**, **Settings** and, with users and sign-in
   on, **Sign out**. The separate sign-out button on Home is gone.
 - 2026-10-26: **Tidy-up** (nothing looks or works differently): unused imports removed; the

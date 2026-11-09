@@ -1,4 +1,7 @@
-/** The full calendar: a month at a time, days coloured by their biggest splurge, weigh-in days marked, the month's totals and list. */
+/**
+ * The full calendar: a month at a time, days coloured by their biggest splurge, a green mark under
+ * active days (as on Home) and a dot on weigh-in days, the month's totals and list.
+ */
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SIZE_LABEL } from "../../../shared/types";
@@ -7,8 +10,8 @@ import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
 import { addDays, addMonths, dayNum, monthEnd, monthLabel, monthOf, monthStart, shortDay, WEEKDAY_TINY, weekday } from "../lib/dates";
 import { go } from "../lib/route";
-import { byDay, inUnit, worstSize } from "../lib/stats";
-import { Card, cx, SIZE_DOT, SIZE_FILL, SizeLegend } from "./ui";
+import { activeDays, byDay, inUnit, worstSize } from "../lib/stats";
+import { ActiveNotch, Card, cx, SIZE_DOT, SIZE_FILL, SizeLegend } from "./ui";
 
 export function CalendarPage({ month }: { month: string | null }) {
   const act = useActions();
@@ -17,11 +20,13 @@ export function CalendarPage({ month }: { month: string | null }) {
   const from = monthStart(ym), to = monthEnd(ym);
   const overview = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today) });
   const splurges = useQuery({ queryKey: ["month", "splurges", ym], queryFn: () => api.splurges(from, to) });
+  const activities = useQuery({ queryKey: ["month", "activities", ym], queryFn: () => api.activities(from, to) });
   const weighs = useQuery({ queryKey: ["month", "weigh", ym], queryFn: () => api.weighIns(from, to) });
   const weekStart = overview.data?.settings.weekStart ?? 0;
   const unit = overview.data?.settings.units ?? "lb";
   const days = byDay(splurges.data ?? []);
   const weighDays = new Set((weighs.data ?? []).map((w) => w.day));
+  const active = activeDays(activities.data ?? []);
 
   const lead = (weekday(from) - weekStart + 7) % 7;
   const cells: (string | null)[] = [...Array.from({ length: lead }, () => null), ...Array.from({ length: dayNum(to) }, (_, i) => addDays(from, i))];
@@ -54,19 +59,22 @@ export function CalendarPage({ month }: { month: string | null }) {
               if (!d) return <span key={`x${i}`} />;
               const future = d > today;
               const size = worstSize(days.get(d) || []);
+              const on = active.has(d);
               return (
                 <button key={d} disabled={future} onClick={() => act.day(d)}
-                  aria-label={`${shortDay(d, today)}${size ? `: ${SIZE_LABEL[size]}` : ""}${weighDays.has(d) ? ", weighed in" : ""}`}
-                  className={cx("tabular flex h-12 flex-col items-center justify-center gap-1 rounded-[11px] text-sm",
+                  aria-label={`${shortDay(d, today)}${size ? `: ${SIZE_LABEL[size]}` : ""}${on ? ", active" : ""}${weighDays.has(d) ? ", weighed in" : ""}`}
+                  className={cx("tabular relative flex h-12 flex-col items-center justify-center gap-1 rounded-[11px] text-sm",
                     future ? "text-faint/60" : size ? cx(SIZE_FILL[size], "font-extrabold") : "bg-surface-2 text-ink-2",
                     d === today && "outline-2 -outline-offset-2 outline-ink font-extrabold")}>
-                  <span>{dayNum(d)}</span>
-                  <span className={cx("h-[3px] w-3 rounded-full", weighDays.has(d) ? (size ? "bg-current opacity-80" : "bg-accent") : "")} />
+                  {/* a weigh-in is a dot in the corner; the mark under the date is activity, as on Home */}
+                  {weighDays.has(d) ? <span aria-hidden className={cx("absolute top-1.5 right-1.5 size-[5px] rounded-full", size ? "bg-current opacity-80" : "bg-accent")} /> : null}
+                  <span className="leading-none">{dayNum(d)}</span>
+                  <ActiveNotch size={size} on={on} />
                 </button>
               );
             })}
           </div>
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1"><SizeLegend /><span className="inline-flex items-center gap-1.5 text-xs text-mute"><span className="h-[3px] w-3 rounded-full bg-accent" />Weigh-in</span></div>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1"><SizeLegend active /><span className="inline-flex items-center gap-1.5 text-xs text-mute"><span className="size-[5px] rounded-full bg-accent" />Weigh-in</span></div>
         </Card>
 
         <div className="grid grid-cols-3 gap-2">

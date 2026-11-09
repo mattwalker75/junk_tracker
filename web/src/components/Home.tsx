@@ -2,18 +2,20 @@
  * Home (mockup E/F, Matt's pick): the goal now as a sticky note on top (mockup G3, Oct 26 2026),
  * Days clean with This week and 30 days beside it, the last 14 days
  * coloured by the biggest splurge of each day (tap a day to open it; Calendar for older days), the
- * weight card with the trend over the person's chosen period, and the two big buttons.
+ * weight card with the trend over the person's chosen period, and the big buttons. Activity (mockup
+ * H1, Nov 9 2026): an "Active this week" card above the 14 days, a green mark under each active
+ * day, and + Activity between + Splurge and Weigh in.
  */
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays } from "lucide-react";
-import { SIZE_LABEL, type Overview, type WeighIn } from "../../../shared/types";
+import { SIZE_LABEL, type Activity, type Overview, type WeighIn } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
-import { addDays, ago, dayNum, shortDay, WEEKDAY_SHORT, WEEKDAY_TINY, weekday } from "../lib/dates";
-import { byDay, countBetween, daysClean, inUnit, periodLabel, startOfWeek, trend, worstSize } from "../lib/stats";
+import { addDays, ago, dayNum, shortDay, WEEKDAY_LONG, WEEKDAY_SHORT, WEEKDAY_TINY, weekday } from "../lib/dates";
+import { activeDays, activeWeek, activityLabel, byDay, countBetween, daysClean, inUnit, minutesLabel, periodLabel, startOfWeek, trend, worstSize } from "../lib/stats";
 import { GoalNote } from "./GoalNote";
-import { Button, Card, cx, SIZE_FILL, SizeLegend } from "./ui";
+import { ActiveNotch, Button, Card, cx, SIZE_FILL, SizeLegend } from "./ui";
 import { UserMenu } from "./UserMenu";
 
 export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean }) {
@@ -36,9 +38,10 @@ export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean
       {q.data ? <Body o={q.data} today={today} /> : <Skeleton />}
 
       <div className="flex-1" />
-      <div className="sticky bottom-0 grid grid-cols-2 gap-2.5 bg-gradient-to-t from-bg via-bg to-transparent px-4 pt-4 pb-4">
-        <Button variant="accent" size="xl" onClick={() => act.log()}>+ Splurge</Button>
-        <Button variant="strong" size="xl" onClick={() => act.weigh()}>Weigh in</Button>
+      <div className="sticky bottom-0 grid grid-cols-3 gap-2 bg-gradient-to-t from-bg via-bg to-transparent px-4 pt-4 pb-4">
+        <Button variant="accent" size="xl" className="px-1 text-base whitespace-nowrap" onClick={() => act.log()}>+ Splurge</Button>
+        <Button variant="active" size="xl" className="px-1 text-base whitespace-nowrap" onClick={() => act.activity()}>+ Activity</Button>
+        <Button variant="strong" size="xl" className="px-1 text-base whitespace-nowrap" onClick={() => act.weigh()}>Weigh in</Button>
       </div>
     </main>
   );
@@ -50,6 +53,7 @@ function Body({ o, today }: { o: Overview; today: string }) {
   const week = countBetween(o.splurges, startOfWeek(today, o.settings.weekStart), today);
   const month = countBetween(o.splurges, addDays(today, -29), today);
   const days = byDay(o.splurges);
+  const active = activeDays(o.activities);
   const strip = Array.from({ length: 14 }, (_, i) => addDays(today, i - 13));
   const t = trend(o.weighIns, today, o.settings.trendDays);
   const unit = o.settings.units;
@@ -87,6 +91,8 @@ function Body({ o, today }: { o: Overview; today: string }) {
         </button>
       ) : null}
 
+      <ActiveCard o={o} today={today} />
+
       <Card className="px-3.5 pt-3.5 pb-3">
         <div className="flex items-center justify-between">
           <h2 className="text-[15px] font-bold">Last 14 days</h2>
@@ -99,22 +105,72 @@ function Body({ o, today }: { o: Overview; today: string }) {
           {strip.map((d) => {
             const list = days.get(d) || [];
             const size = worstSize(list);
+            const on = active.has(d);
             return (
               <button key={d} onClick={() => act.day(d)}
-                aria-label={`${shortDay(d, today)}: ${list.length ? list.map((s) => `${SIZE_LABEL[s.size]}, ${s.what}`).join("; ") : "no splurge"}`}
-                className={cx("tabular grid h-10 place-items-center rounded-[10px] text-sm",
+                aria-label={`${shortDay(d, today)}: ${list.length ? list.map((s) => `${SIZE_LABEL[s.size]}, ${s.what}`).join("; ") : "no splurge"}${on ? "; active" : ""}`}
+                className={cx("tabular flex h-11 flex-col items-center justify-center gap-[3px] rounded-[10px] text-sm",
                   size ? cx(SIZE_FILL[size], "font-bold") : "bg-surface-2 text-mute",
                   d === today && "outline-2 -outline-offset-2 outline-ink font-extrabold")}>
-                {dayNum(d)}
+                <span className="leading-none">{dayNum(d)}</span>
+                <ActiveNotch size={size} on={on} />
               </button>
             );
           })}
         </div>
-        <div className="mt-2.5 flex items-center justify-between gap-2"><SizeLegend /><span className="text-xs text-faint">tap a day</span></div>
+        <div className="mt-2.5 flex items-center justify-between gap-2"><SizeLegend active /><span className="shrink-0 text-xs text-faint">tap a day</span></div>
       </Card>
 
       <WeightCard t={t} unit={unit} days={o.settings.trendDays} today={today} />
     </div>
+  );
+}
+
+/** "Active this week" (mockup H1): days active of 7 since the week started, minutes and calories burned, the last activity, a dot a day. */
+function ActiveCard({ o, today }: { o: Overview; today: string }) {
+  const act = useActions();
+  const w = activeWeek(o.activities, today, o.settings.weekStart);
+  const totals = [w.minutes ? minutesLabel(w.minutes) : "", w.calories !== null ? `${w.calories.toLocaleString()} cal burned` : ""].filter(Boolean).join(" · ")
+    || `${w.count} ${w.count === 1 ? "activity" : "activities"}`;
+  const activeNames = w.week.filter((x) => x.active).map((x) => WEEKDAY_LONG[weekday(x.day)]);
+  return (
+    <Card className="p-4">
+      <div className="flex items-baseline justify-between">
+        <h2 className="text-[15px] font-bold">Active this week</h2>
+        <span className="text-xs text-mute">since {WEEKDAY_LONG[o.settings.weekStart]}</span>
+      </div>
+      {w.days ? (
+        <div className="mt-1.5 flex items-end justify-between gap-3">
+          <div className="min-w-0">
+            <div className="tabular text-[30px] leading-tight font-extrabold tracking-tight text-active-text">{w.days} <span className="text-[15px] font-semibold text-mute">of 7 days</span></div>
+            <div className="tabular text-[13px] font-semibold text-ink-2">{totals}</div>
+            {o.lastActivity ? <LastActivity a={o.lastActivity} today={today} onOpen={() => act.day(o.lastActivity!.day)} /> : null}
+          </div>
+          <div role="img" aria-label={`Active on ${activeNames.join(", ")}`} className="grid shrink-0 grid-cols-[repeat(7,18px)] gap-[5px] text-center">
+            {w.week.map((x) => (
+              <span key={x.day} className="flex flex-col items-center gap-1">
+                <span className={cx("size-[18px] rounded-full", x.active ? "bg-active" : "border border-line-2 bg-surface-2", x.day > today && "opacity-50")} />
+                <span className={cx("text-[10px] font-bold", x.day === today ? "text-ink" : "text-mute")}>{WEEKDAY_TINY[weekday(x.day)][0]}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : (
+        // nothing yet this week: a plain sentence (and the last one, when there is an older one)
+        <div className="mt-1">
+          <p className="text-sm leading-snug text-mute">Nothing active yet this week. Tap <b className="font-bold text-ink-2">+ Activity</b> after a walk, a workout — anything that gets you moving.</p>
+          {o.lastActivity ? <LastActivity a={o.lastActivity} today={today} onOpen={() => act.day(o.lastActivity!.day)} /> : null}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function LastActivity({ a, today, onOpen }: { a: Activity; today: string; onOpen: () => void }) {
+  return (
+    <button onClick={onOpen} className="mt-0.5 block max-w-full truncate text-left text-xs text-mute hover:underline">
+      Last: {activityLabel(a)} · {ago(a.day, today)}
+    </button>
   );
 }
 

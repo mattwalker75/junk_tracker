@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { Activity, Splurge } from "../shared/types";
 import { goalFontPx } from "../shared/types";
 import { addDays, daysBetween } from "../web/src/lib/dates";
-import { activeWeek, activityLabel, caloriesTotal, countBetween, daysClean, minutesLabel, goalLine, goalProgress, inUnit, startOfWeek, trend, worstSize } from "../web/src/lib/stats";
+import { activeWeek, activityLabel, caloriesTotal, countBetween, daysClean, durationInput, minutesLabel, parseDuration, goalLine, goalProgress, inUnit, startOfWeek, trend, worstSize } from "../web/src/lib/stats";
 
 const s = (day: string, size: Splurge["size"]): Splurge =>
   ({ id: day + size, what: "x", size, where: null, calories: null, day, time: null, notes: null, createdAt: "", updatedAt: "" });
@@ -99,6 +99,23 @@ describe("activity", () => {
     expect(minutesLabel(140)).toBe("2 h 20 min");
     expect(activityLabel({ what: "Walk", minutes: 45 })).toBe("Walk, 45 min");
     expect(activityLabel({ what: "Yoga", minutes: null })).toBe("Yoga");
+  });
+
+  it("How long takes minutes or hours:minutes (Nov 9 2026)", () => {
+    expect(parseDuration("90")).toBe(90);
+    expect(parseDuration(" 45 ")).toBe(45);
+    expect(parseDuration("1:30")).toBe(90);
+    expect(parseDuration("0:45")).toBe(45);
+    expect(parseDuration(":45")).toBe(45);
+    expect(parseDuration("2:05")).toBe(125);
+    expect(parseDuration("1:5")).toBe(65);
+    expect(parseDuration("")).toBeNull();
+    for (const bad of ["1:60", "1:", "1.5", "-3", "1:30:00", "abc", "1h"]) expect(parseDuration(bad)).toBeNaN();
+    expect(durationInput(null)).toBe("");
+    expect(durationInput(45)).toBe("45");
+    expect(durationInput(90)).toBe("1:30");
+    expect(durationInput(125)).toBe("2:05");
+    for (const n of [1, 59, 60, 61, 1440]) expect(parseDuration(durationInput(n))).toBe(n);
   });
 
   it("Active this week: days active of 7, minutes, calories only from the ones that say", () => {

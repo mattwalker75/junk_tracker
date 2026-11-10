@@ -2,7 +2,7 @@
  * Log activity (Matt's mockup, round 4, Nov 9 2026): "Again?" buttons for recent different
  * activities, What did you do? (the only thing needed), six quick picks that fill it in (the
  * person's own from Settings → You, or Walk / Run / Bike / Gym / Swim / Yoga), How long and
- * Calories burned (optional whole numbers), the Day (the same picker as a splurge) with a time that
+ * Calories burned (optional; How long takes minutes "90" or hours:minutes "1:30"), the Day (the same picker as a splurge) with a time that
  * starts at now, and Notes. The same sheet edits an activity (with Delete).
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -12,13 +12,20 @@ import { quickPickNames, type Activity, type Day } from "../../../shared/types";
 import { LOG_KEYS, refresh } from "../lib/actions";
 import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
-import { minutesLabel } from "../lib/stats";
+import { durationInput, minutesLabel, parseDuration } from "../lib/stats";
 import { useToday } from "../lib/useToday";
 import { DayPicker } from "./DayPicker";
 import { Button, cx, ErrorLine, Field, Input, Sheet, TextArea, Label } from "./ui";
 
 /** "45" → 45, "" → null, "4.5" or "-3" → NaN (refused) */
 const whole = (v: string) => (v.trim() === "" ? null : /^\d+$/.test(v.replace(/[, ]/g, "")) ? Number(v.replace(/[, ]/g, "")) : NaN);
+
+/** Under How long: what the box will save ("= 1 h 30 min"), or how to write it. */
+function durationHint(v: string): string {
+  const n = parseDuration(v);
+  if (n === null) return "optional · minutes, or h:mm";
+  return Number.isNaN(n) || n === 0 ? "minutes (90) or h:mm (1:30)" : `= ${minutesLabel(n)}`;
+}
 
 export function ActivitySheet({ open, onOpenChange, day, edit }: { open: boolean; onOpenChange: (o: boolean) => void; day?: Day; edit?: Activity }) {
   const qc = useQueryClient();
@@ -40,7 +47,7 @@ export function ActivitySheet({ open, onOpenChange, day, edit }: { open: boolean
     if (!open) return;
     setError(null); setConfirmDelete(false);
     if (edit) {
-      setWhat(edit.what); setMinutes(edit.minutes === null ? "" : String(edit.minutes)); setCalories(edit.calories === null ? "" : String(edit.calories));
+      setWhat(edit.what); setMinutes(durationInput(edit.minutes)); setCalories(edit.calories === null ? "" : String(edit.calories));
       setWhen({ day: edit.day, time: edit.time }); setNotes(edit.notes);
     } else {
       setWhat(""); setMinutes(""); setCalories(""); setNotes("");
@@ -49,15 +56,15 @@ export function ActivitySheet({ open, onOpenChange, day, edit }: { open: boolean
   }, [open, edit, day, today]);
 
   const again = (r: { what: string; minutes: number | null; calories: number | null }) => {
-    setWhat(r.what); setMinutes(r.minutes === null ? "" : String(r.minutes)); setCalories(r.calories === null ? "" : String(r.calories));
+    setWhat(r.what); setMinutes(durationInput(r.minutes)); setCalories(r.calories === null ? "" : String(r.calories));
   };
 
   const save = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
     if (!what.trim()) return setError("Say what you did.");
-    const mins = whole(minutes), cal = whole(calories);
-    if (Number.isNaN(mins) || mins === 0) return setError("How long is a whole number of minutes, or leave it empty.");
+    const mins = parseDuration(minutes), cal = whole(calories);
+    if (Number.isNaN(mins) || mins === 0) return setError("How long is minutes (90) or hours and minutes (1:30), or leave it empty.");
     if (Number.isNaN(cal)) return setError("Calories burned are a whole number, or leave it empty.");
     const input = { what: what.trim(), minutes: mins, calories: cal, day: when.day, time: when.time, notes };
     setBusy(true);
@@ -121,7 +128,7 @@ export function ActivitySheet({ open, onOpenChange, day, edit }: { open: boolean
         </fieldset>
 
         <div className="grid grid-cols-2 gap-2.5">
-          <Field label="How long (minutes)">{(id) => <Input id={id} value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="optional" inputMode="numeric" />}</Field>
+          <Field label="How long" hint={durationHint(minutes)}>{(id) => <Input id={id} value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="90 or 1:30" />}</Field>
           <Field label="Calories burned">{(id) => <Input id={id} value={calories} onChange={(e) => setCalories(e.target.value)} placeholder="optional" inputMode="numeric" />}</Field>
         </div>
 

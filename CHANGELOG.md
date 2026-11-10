@@ -5,6 +5,9 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 ## [Unreleased]
 
 ### Added
+- 2026-11-09: **How long takes hours too.** Type minutes (`90`) or hours and minutes with a
+  colon (`1:30`); the line under the box shows what it will save (*= 1 h 30 min*). An hour or
+  more shows as h:mm when you edit it or tap *Again?*. Still saved as minutes.
 - 2026-11-09: **Activity.** Log a walk, a run, the gym — anything active. **+ Activity** sits
   between **+ Splurge** and **Weigh in** at the bottom of Home. *Log activity* asks only *What did
   you do?*; *Again?* brings back recent ones (with their minutes) and *Or pick one* has six quick

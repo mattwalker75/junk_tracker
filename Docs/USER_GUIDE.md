@@ -50,7 +50,8 @@ To change or delete one, tap its day on Home or in the Calendar, then tap **Edit
 1. **What did you do?** — type it, tap one under *Again?* (your last few different activities,
    with how long they were; it fills in the minutes and calories too), or tap one of the six
    under **Or pick one** (Walk, Run, Bike, Gym, Swim, Yoga — or your own, from Settings).
-2. Optional: **How long (minutes)** and **Calories burned**, whole numbers.
+2. Optional: **How long** — minutes (`90`) or hours and minutes with a colon (`1:30`); the line
+   under the box shows what it will save — and **Calories burned**, a whole number.
 3. **Day** — the same as a splurge's: **Today**, **Yesterday** or **Other day**. **Time** starts
    at the time you opened the sheet; change it or clear it.
 4. Optional: **Notes**.

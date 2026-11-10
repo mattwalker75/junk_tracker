@@ -118,6 +118,26 @@ export function minutesLabel(n: number): string {
   return h ? (m ? `${h} h ${m} min` : `${h} h`) : `${m} min`;
 }
 
+/**
+ * What the person typed in How long (Matt, Nov 9 2026): a plain number is minutes ("90"), a colon
+ * means hours and minutes ("1:30", "0:45", "2:05"). "" → null; anything else, or minutes after the
+ * colon of 60 or more, → NaN (refused).
+ */
+export function parseDuration(v: string): number | null {
+  const t = v.replace(/\s/g, "");
+  if (t === "") return null;
+  if (/^\d+$/.test(t)) return Number(t);
+  const m = /^(\d*):(\d{1,2})$/.exec(t);
+  if (!m || Number(m[2]) >= 60) return NaN;
+  return Number(m[1] || 0) * 60 + Number(m[2]);
+}
+
+/** How a saved length shows in the box: under an hour as minutes ("45"), otherwise h:mm ("1:30"). */
+export function durationInput(n: number | null): string {
+  if (n === null) return "";
+  return n < 60 ? String(n) : `${Math.floor(n / 60)}:${String(n % 60).padStart(2, "0")}`;
+}
+
 export interface ActiveWeek {
   /** the first day of the week (the person's week start) */
   from: Day;

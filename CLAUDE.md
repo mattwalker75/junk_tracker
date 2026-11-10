@@ -66,7 +66,8 @@ The person using it is not a developer — every message the page shows is a pla
 9. **Settings marked "after a restart"** (port, network access, sign-in length, database path)
    are listed in `RESTART_REQUIRED` in `config.ts`; the page says to run `./TRACKER.sh --restart`.
 10. **Activity** (round 4, Matt, Nov 9 2026; mockups ActHomeCard = H1, LogActivity, DayActivity):
-    an activity needs only *what*; minutes and calories burned are optional whole numbers; the
+    an activity needs only *what*; how long and calories burned are optional (How long is typed
+    as minutes `90` or h:mm `1:30` — `parseDuration` in `web/src/lib/stats.ts` — and saved as minutes); the
     Day picker is the splurge one, plus a time that starts at now; **any number a day** (only
     weigh-ins are one a day). Six quick picks (default Walk, Run, Bike, Gym, Swim, Yoga) are
     per person in Settings → You (`quickPicks`, six strings, `""` = default). Home keeps

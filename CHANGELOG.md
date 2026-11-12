@@ -5,6 +5,15 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 ## [Unreleased]
 
 ### Added
+- 2026-11-11: **Planned treat on a splurge.** *Log a splurge* has a **Planned treat** switch after
+  Notes, for a treat you planned, like a birthday dinner. It is still a splurge everywhere in the
+  tracker; the day shows a small *planned* tag on it. In game mode it heals the monster half.
+  Splurges already logged are not planned. The database is upgraded (a copy is kept as
+  `data/junk.db.before-v4`).
+- 2026-11-11: **The game's engine (not on screen yet).** Craving Crusher's rules now work behind
+  the scenes: all 60 monsters and their abilities, fights worked out from your log, deadlines,
+  hearts, power-ups, Normal and Hardcore runs, and points. There is nothing to see or tap yet; the
+  game screens come next.
 - 2026-11-11: **A splurge can have a time.** *Log a splurge* has an optional **Time** under the Day:
   empty to start, **Now** fills in the time right now, **Clear** takes it off. Splurges with a time
   show it on the day, as before; nothing already logged changes.

@@ -14,7 +14,8 @@ The person using it is not a developer — every message the page shows is a pla
   passwords, sessions, Switch to, per-person settings; `app.ts` — routes and guards;
   `config.ts` — config.json; `security.ts` — Host guard, same-origin writes; `db.ts` — tables
   and migrations (`PRAGMA user_version`).
-- `shared/types.ts` — the data model used by both sides.
+- `shared/types.ts` — the data model used by both sides. `shared/game/` — Craving Crusher's pure engine
+  (levels, abilities, fights, points; tested in `test/game.test.ts`); `server/src/game.ts` stores runs.
 - `web/src/components/Home.tsx` (home), `GoalNote.tsx` (the sticky note on Home), `UserMenu.tsx`
   (the initials menu), `GoalsPage.tsx`, `GoalSheet.tsx`, `LogSheet.tsx`, `ActivitySheet.tsx` (Log activity), `WeighSheet.tsx`,
   `DaySheet.tsx`, `CalendarPage.tsx`; `web/src/settings/` — Settings pages; `web/src/lib/stats.ts` — the numbers

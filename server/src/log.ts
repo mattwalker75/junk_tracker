@@ -13,9 +13,9 @@ import type { Goals } from "./goals.js";
 import type { Users } from "./users.js";
 import { newId, now, parse, realDay, UserError } from "./util.js";
 
-interface SplurgeRow { id: Id; user_id: Id; what: string; size: Splurge["size"]; place: string; calories: number | null; day: Day; time: string; notes: string; created_at: string; updated_at: string }
+interface SplurgeRow { id: Id; user_id: Id; what: string; size: Splurge["size"]; place: string; calories: number | null; day: Day; time: string; notes: string; planned: number; created_at: string; updated_at: string }
 
-const toSplurge = (r: SplurgeRow): Splurge => ({ id: r.id, what: r.what, size: r.size, where: r.place, calories: r.calories, day: r.day, time: r.time, notes: r.notes, createdAt: r.created_at, updatedAt: r.updated_at });
+const toSplurge = (r: SplurgeRow): Splurge => ({ id: r.id, what: r.what, size: r.size, where: r.place, calories: r.calories, day: r.day, time: r.time, notes: r.notes, planned: !!r.planned, createdAt: r.created_at, updatedAt: r.updated_at });
 
 interface ActivityRow { id: Id; user_id: Id; what: string; minutes: number | null; calories: number | null; day: Day; time: string; notes: string; created_at: string; updated_at: string }
 
@@ -31,6 +31,8 @@ const splurgeSchema = z.object({
   day,
   time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "The time looks wrong.").or(z.literal("")).default(""),
   notes: z.string().max(2000, "Keep the notes under 2,000 characters.").default(""),
+  // a planned treat (Nov 11 2026): still a splurge; in game mode it heals the monster half
+  planned: z.boolean({ error: "Planned treat is on or off." }).default(false),
 });
 const activitySchema = z.object({
   what: z.string({ error: "Say what you did." }).trim().min(1, "Say what you did.").max(120, "Keep what you did under 120 characters."),
@@ -53,16 +55,16 @@ export class Log {
   addSplurge(owner: Id, body: unknown): Splurge {
     const v = parse(splurgeSchema, body) as SplurgeInput;
     const t = now();
-    const row: SplurgeRow = { id: newId(), user_id: owner, what: v.what, size: v.size, place: v.where, calories: v.calories, day: v.day, time: v.time, notes: v.notes.trim(), created_at: t, updated_at: t };
-    this.db.prepare(`INSERT INTO splurges (id, user_id, what, size, place, calories, day, time, notes, created_at, updated_at)
-      VALUES (@id, @user_id, @what, @size, @place, @calories, @day, @time, @notes, @created_at, @updated_at)`).run(row);
+    const row: SplurgeRow = { id: newId(), user_id: owner, what: v.what, size: v.size, place: v.where, calories: v.calories, day: v.day, time: v.time, notes: v.notes.trim(), planned: v.planned ? 1 : 0, created_at: t, updated_at: t };
+    this.db.prepare(`INSERT INTO splurges (id, user_id, what, size, place, calories, day, time, notes, planned, created_at, updated_at)
+      VALUES (@id, @user_id, @what, @size, @place, @calories, @day, @time, @notes, @planned, @created_at, @updated_at)`).run(row);
     return toSplurge(row);
   }
 
   updateSplurge(owner: Id, id: Id, body: unknown): Splurge {
     const v = parse(splurgeSchema, body) as SplurgeInput;
-    const r = this.db.prepare(`UPDATE splurges SET what = ?, size = ?, place = ?, calories = ?, day = ?, time = ?, notes = ?, updated_at = ?
-      WHERE id = ? AND user_id = ?`).run(v.what, v.size, v.where, v.calories, v.day, v.time, v.notes.trim(), now(), id, owner);
+    const r = this.db.prepare(`UPDATE splurges SET what = ?, size = ?, place = ?, calories = ?, day = ?, time = ?, notes = ?, planned = ?, updated_at = ?
+      WHERE id = ? AND user_id = ?`).run(v.what, v.size, v.where, v.calories, v.day, v.time, v.notes.trim(), v.planned ? 1 : 0, now(), id, owner);
     if (!r.changes) throw new UserError("That splurge no longer exists.", 404);
     return toSplurge(this.db.prepare("SELECT * FROM splurges WHERE id = ?").get(id) as SplurgeRow);
   }

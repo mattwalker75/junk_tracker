@@ -20,10 +20,12 @@ export interface Splurge {
   day: Day;
   time: string;
   notes: string;
+  /** a treat the person planned, like a birthday dinner (Nov 11 2026): in game mode it heals the monster half */
+  planned: boolean;
   createdAt: string;
   updatedAt: string;
 }
-export type SplurgeInput = Pick<Splurge, "what" | "size" | "where" | "calories" | "day" | "time" | "notes">;
+export type SplurgeInput = Pick<Splurge, "what" | "size" | "where" | "calories" | "day" | "time" | "notes" | "planned">;
 
 /**
  * Something active the person did (Matt, Nov 9 2026: a walk, a run, the gym). Only the name is

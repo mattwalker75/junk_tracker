@@ -87,7 +87,7 @@ export function Segmented<T extends string | number>({ value, options, onChange,
 /** A switch with its label. */
 export function Toggle({ checked, onChange, label, disabled }: { checked: boolean; onChange: (v: boolean) => void; label: string; disabled?: boolean }) {
   return (
-    <button role="switch" aria-checked={checked} aria-label={label} disabled={disabled} onClick={() => onChange(!checked)}
+    <button type="button" role="switch" aria-checked={checked} aria-label={label} disabled={disabled} onClick={() => onChange(!checked)}
       className={cx("relative h-7 w-12 shrink-0 rounded-full transition", checked ? "bg-accent" : "bg-line-2")}>
       <span className={cx("absolute top-0.5 size-6 rounded-full bg-surface shadow transition", checked ? "left-[22px]" : "left-0.5")} />
     </button>

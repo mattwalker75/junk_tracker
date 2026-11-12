@@ -169,6 +169,7 @@ function SplurgeCard({ s, onEdit }: { s: Splurge; onEdit: () => void }) {
       <div className="flex items-center gap-2">
         <SizeBadge size={s.size} />
         {s.time ? <span className="tabular text-[13px] font-semibold text-mute">{clock(s.time)}</span> : null}
+        {s.planned ? <span title="A planned treat" className="inline-flex h-6 items-center rounded-full bg-surface-2 px-2.5 text-xs font-bold text-ink-2">planned</span> : null}
         <span className="flex-1" />
         <button onClick={onEdit} aria-label={`Edit ${s.what}`}
           className="inline-flex h-8 items-center gap-1.5 rounded-full border border-line-2 px-3 text-[13px] font-semibold text-ink-2 hover:bg-surface-2">

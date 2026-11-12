@@ -237,7 +237,7 @@ describe("activities (Nov 9 2026)", () => {
     const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
     const Database = (await import("better-sqlite3")).default;
     const { MIGRATIONS, openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
-    expect(SCHEMA_VERSION).toBe(3);
+    expect(SCHEMA_VERSION).toBeGreaterThanOrEqual(3);
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-up3-"));
     const file = path.join(dir, "junk.db");
     try {
@@ -250,13 +250,13 @@ describe("activities (Nov 9 2026)", () => {
       old.prepare("INSERT INTO goals VALUES ('g1', 'u1', 'Eat clean', 14, 1, '2026-11-01', NULL, 'x', 'x')").run();
       old.close();
       const db = openDatabase(file);
-      expect(db.pragma("user_version", { simple: true })).toBe(3);
+      expect(db.pragma("user_version", { simple: true })).toBe(SCHEMA_VERSION);
       expect(db.prepare("SELECT what, size, place, calories, day, time, notes FROM splurges").all()).toEqual([{ what: "Pizza", size: "feast", place: "Dominos", calories: 2400, day: "2026-11-01", time: "19:30", notes: "with friends" }]);
       expect(db.prepare("SELECT day, pounds FROM weigh_ins").all()).toEqual([{ day: "2026-11-02", pounds: 188.4 }]);
       expect(db.prepare("SELECT text, started_on FROM goals").all()).toEqual([{ text: "Eat clean", started_on: "2026-11-01" }]);
       expect(db.prepare("SELECT COUNT(*) AS n FROM activities").get()).toEqual({ n: 0 });
       db.close();
-      const copy = new Database(`${file}.before-v3`, { readonly: true });
+      const copy = new Database(`${file}.before-v${SCHEMA_VERSION}`, { readonly: true });
       expect(copy.pragma("user_version", { simple: true })).toBe(2);
       expect((copy.prepare("SELECT COUNT(*) AS n FROM splurges").get() as { n: number }).n).toBe(1);
       copy.close();
@@ -533,5 +533,177 @@ describe("goals (Oct 26 2026)", () => {
       expect((copy.prepare("SELECT name FROM users").get() as { name: string }).name).toBe("Matt");
       copy.close();
     } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+  });
+});
+
+describe("planned treat (Nov 11 2026)", () => {
+  it("a splurge can be a planned treat: off unless said, saved, changed, checked", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    expect((await b.call("POST", "/api/splurges", meal())).body.planned).toBe(false);
+    const bday = (await b.call("POST", "/api/splurges", meal({ what: "Birthday dinner", planned: true }))).body;
+    expect(bday.planned).toBe(true);
+    expect((await b.call("POST", "/api/splurges", meal({ planned: "yes" }))).body.error).toBe("Planned treat is on or off.");
+    expect((await b.call("PUT", `/api/splurges/${bday.id}`, meal({ what: "Birthday dinner", planned: false }))).body.planned).toBe(false);
+    await b.call("PUT", `/api/splurges/${bday.id}`, meal({ what: "Birthday dinner", planned: true }));
+    const list = (await b.call("GET", "/api/splurges?from=2026-10-01&to=2026-10-31")).body;
+    expect(list.map((x: { what: string; planned: boolean }) => [x.what, x.planned]).sort()).toEqual([["Birthday dinner", true], ["Cheeseburger & fries", false]]);
+  });
+
+  it("upgrading a version 3 database adds the planned switch (off) and the game tables, keeping everything", async () => {
+    const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
+    const Database = (await import("better-sqlite3")).default;
+    const { MIGRATIONS, openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
+    expect(SCHEMA_VERSION).toBe(4);
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-up4-"));
+    const file = path.join(dir, "junk.db");
+    try {
+      const old = new Database(file);
+      old.exec(MIGRATIONS[0]); old.exec(MIGRATIONS[1]); old.exec(MIGRATIONS[2]); old.pragma("user_version = 3");
+      old.prepare("INSERT INTO users VALUES ('u1', 'Matt', '', '{}', 'now', NULL)").run();
+      old.prepare("INSERT INTO splurges VALUES ('s1', 'u1', 'Pizza', 'feast', '', NULL, '2026-11-01', '', '', 'x', 'x')").run();
+      old.close();
+      const db = openDatabase(file);
+      expect(db.prepare("SELECT what, planned FROM splurges").all()).toEqual([{ what: "Pizza", planned: 0 }]);
+      for (const t of ["game_runs", "game_fights", "game_events"]) expect((db.prepare(`SELECT COUNT(*) AS n FROM ${t}`).get() as { n: number }).n).toBe(0);
+      db.close();
+      const copy = new Database(`${file}.before-v4`, { readonly: true });
+      expect(copy.pragma("user_version", { simple: true })).toBe(3);
+      copy.close();
+    } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+  });
+});
+
+describe("Craving Crusher (game mode, Nov 11 2026)", () => {
+  const T = "2026-11-10";
+  /** every row the game keeps, to check a read wrote nothing */
+  const snapshot = () => JSON.stringify(["game_runs", "game_fights", "game_events"].map((t) => s.handle.db.prepare(`SELECT * FROM ${t} ORDER BY rowid`).all()));
+
+  it("with no run: nothing on the map yet; the day must be real; starting a run opens Crumbs", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    const none = (await b.call("GET", `/api/game?today=${T}`)).body;
+    expect(none).toMatchObject({ today: T, run: null, fight: null, needsSync: false, events: [] });
+    expect(none.map).toHaveLength(60);
+    expect((await b.call("GET", "/api/game?today=2026-02-30")).body.error).toBe("Which day is it?");
+    expect((await b.call("GET", `/api/game?today=${T}&now=25:99`)).status).toBe(400);
+    expect((await b.call("POST", "/api/game/run", { mode: "easy", today: T })).body.error).toBe("Pick Normal or Hardcore.");
+    expect((await b.call("POST", "/api/game/sync", { today: T })).body.view.run).toBeNull();
+    const r = (await b.call("POST", "/api/game/run", { mode: "normal", today: T, now: "08:00" })).body;
+    expect(r.happened.map((e: { kind: string }) => e.kind)).toEqual(["run_start"]);
+    expect(r.view.run).toMatchObject({ number: 1, mode: "normal", hearts: 3, active: true, score: 0 });
+    expect(r.view.fight).toMatchObject({ level: 1, name: "Crumbs", hp: 100, max: 100, bet: 1, deadlineOn: "2026-11-12", daysLeft: 3, betLocked: false });
+    expect(r.view.map[0].status).toBe("current");
+  });
+
+  it("GET never writes: it says needsSync, and POST /sync settles the KO and opens the next fight", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    await b.call("POST", "/api/game/run", { mode: "normal", today: T });
+    await b.call("POST", "/api/activities", { what: "Long walk", minutes: 150, day: T, time: "09:00" });
+    const before = snapshot();
+    const g = (await b.call("GET", `/api/game?today=${T}&now=10:00`)).body;
+    expect(g.needsSync).toBe(true);
+    expect(g.fight).toMatchObject({ name: "Crumbs", hp: 0 });
+    await b.call("GET", `/api/game?today=2026-12-31`); // even a day far ahead (every deadline missed) changes nothing
+    await b.call("GET", `/api/game/hall?today=${T}`);
+    expect(snapshot()).toBe(before);
+    const synced = (await b.call("POST", "/api/game/sync", { today: T, now: "10:00" })).body;
+    expect(synced.happened.map((e: { kind: string }) => e.kind)).toEqual(["powerup_earned", "ko"]);
+    expect(synced.happened[1].text).toMatch(/^Crumbs went down! \+/);
+    expect(synced.view.fight).toMatchObject({ level: 2, name: "Chiplet", hp: 120 });
+    expect(synced.view.run.potions).toBe(1);
+    expect((await b.call("GET", `/api/game?today=${T}`)).body.needsSync).toBe(false);
+    expect((await b.call("POST", "/api/game/sync", { today: T })).body.happened).toEqual([]);
+    // a splurge logged after the KO heals the new monster; the score counts every entry since the run began
+    await b.call("POST", "/api/splurges", { what: "Fries", size: "meal", day: T, time: "12:00", planned: true });
+    const v = (await b.call("GET", `/api/game?today=${T}`)).body;
+    expect(v.fight.lines.map((l: { text: string }) => l.text)).toEqual(["Chiplet is already at full HP, so that heals nothing."]);
+    expect(v.fight.heals).toBe(0);
+    expect(v.run.liveScore).toBe(v.run.score + 5); // the walk was counted at the sync; the fries since
+    expect(v.run.logPoints).toBe(5);
+  });
+
+  it("a missed deadline: strike, a heart lost, a rematch", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    await b.call("POST", "/api/game/run", { mode: "hardcore", today: T });
+    for (const d of ["2026-11-10", "2026-11-11", "2026-11-12"]) await b.call("POST", "/api/splurges", { what: "Chips", size: "snack", day: d });
+    const r = (await b.call("POST", "/api/game/sync", { today: "2026-11-13" })).body;
+    expect(r.happened.map((e: { kind: string }) => e.kind)).toEqual(["strike"]);
+    expect(r.view.run.hearts).toBe(2);
+    expect(r.view.fight).toMatchObject({ level: 1, attempt: 2, startedOn: "2026-11-13", deadlineOn: "2026-11-15" });
+  });
+
+  it("the bet, power-ups and the mode, each with its own plain refusal", async () => {
+    s = await scratch();
+    const b = await firstPerson();
+    expect((await b.call("POST", "/api/game/bet", { bet: 2, today: T })).status).toBe(409);
+    await b.call("POST", "/api/game/run", { mode: "hardcore", today: T });
+    expect((await b.call("POST", "/api/game/bet", { bet: 3, today: T })).body.error).toBe("Pick Steady, Bold or Daredevil.");
+    expect((await b.call("POST", "/api/game/bet", { bet: 2, today: T })).body.view.fight).toMatchObject({ bet: 2, deadlineOn: T });
+    expect((await b.call("POST", "/api/game/bet", { bet: 1, today: T })).body.view.fight).toMatchObject({ bet: 1, deadlineOn: "2026-11-12" });
+    await b.call("POST", "/api/activities", { what: "Run", minutes: 20, day: T, time: "07:00" });
+    expect((await b.call("POST", "/api/game/bet", { bet: 2, today: T })).body.error).toMatch(/locked/);
+    expect((await b.call("POST", "/api/game/powerup", { kind: "potion", today: T, now: "09:00" })).body.error).toMatch(/no Water Potion/);
+    expect((await b.call("POST", "/api/game/powerup", { kind: "rocket", today: T })).status).toBe(400);
+    expect((await b.call("POST", "/api/game/mode", { to: "hardcore", today: T })).status).toBe(400);
+    const m = (await b.call("POST", "/api/game/mode", { to: "normal", today: T })).body;
+    expect(m.view.run).toMatchObject({ mode: "normal", hardcore: false, hardcoreDroppedOn: T });
+    expect((await b.call("POST", "/api/game/mode", { to: "normal", today: T })).body.error).toMatch(/already Normal/);
+    // a 60-minute workout earns a Water Potion (and finishes Crumbs), and drinking it hits Chiplet for 50
+    await b.call("POST", "/api/activities", { what: "Bike", minutes: 60, day: T, time: "08:00" });
+    expect((await b.call("POST", "/api/game/sync", { today: T })).body.view.fight).toMatchObject({ name: "Chiplet", hp: 120 });
+    const p = (await b.call("POST", "/api/game/powerup", { kind: "potion", today: T, now: "09:00" })).body;
+    expect(p.happened.map((e: { kind: string }) => e.kind)).toEqual(["powerup_used"]);
+    expect(p.view.run.potions).toBe(0);
+    expect(p.view.fight.hp).toBe(70);
+  });
+
+  it("starting a new run ends the one going as abandoned; the Hall of Heroes lists everyone's runs", async () => {
+    s = await scratch();
+    const b = await withUsers();
+    await b.call("POST", "/api/users", { name: "Sarah", password: PW });
+    const sarah = s.browser();
+    await sarah.call("POST", "/api/auth/login", { name: "Sarah", password: PW });
+    await b.call("POST", "/api/game/run", { mode: "normal", today: T });
+    const second = (await b.call("POST", "/api/game/run", { mode: "hardcore", today: T })).body;
+    expect(second.view.run).toMatchObject({ number: 2, mode: "hardcore" });
+    await sarah.call("POST", "/api/game/run", { mode: "normal", today: T });
+    const hall = (await b.call("GET", `/api/game/hall?today=${T}`)).body;
+    expect(hall.allTime.map((r: { name: string; number: number }) => `${r.name} ${r.number}`).sort()).toEqual(["Matt 1", "Matt 2", "Sarah 1"]);
+    expect(hall.allTime.find((r: { number: number; name: string }) => r.name === "Matt" && r.number === 1)).toMatchObject({ endReason: "abandoned", isYou: true });
+    expect(hall.hardcore.map((r: { name: string }) => r.name)).toEqual(["Matt"]);
+    expect(hall.mine).toHaveLength(2);
+    expect(hall.thisMonth).toHaveLength(3);
+    expect((await b.call("GET", "/api/game/hall")).status).toBe(400);
+  });
+
+  it("one person can't touch another person's run: each sees, syncs and changes only their own", async () => {
+    s = await scratch();
+    const b = await withUsers();
+    const sarahUser = (await b.call("POST", "/api/users", { name: "Sarah", password: PW })).body;
+    const sarah = s.browser();
+    await sarah.call("POST", "/api/auth/login", { name: "Sarah", password: PW });
+    await sarah.call("POST", "/api/game/run", { mode: "hardcore", today: T });
+    const hers = () => s.handle.db.prepare("SELECT * FROM game_runs r JOIN game_fights f ON f.run_id = r.id WHERE r.user_id = ?").all(sarahUser.id);
+    const before = JSON.stringify(hers());
+    // Matt has no run of his own, so his game calls find nothing of Sarah's
+    expect((await b.call("GET", `/api/game?today=${T}`)).body.run).toBeNull();
+    expect((await b.call("POST", "/api/game/bet", { bet: 2, today: T })).status).toBe(409);
+    expect((await b.call("POST", "/api/game/mode", { to: "normal", today: T })).status).toBe(409);
+    expect((await b.call("POST", "/api/game/powerup", { kind: "wind", today: T })).status).toBe(409);
+    // his own run and his workouts never reach her fight
+    await b.call("POST", "/api/game/run", { mode: "normal", today: T });
+    await b.call("POST", "/api/activities", { what: "Run", minutes: 300, day: T, time: "07:00" });
+    await b.call("POST", "/api/game/sync", { today: "2026-11-20" });
+    expect(JSON.stringify(hers())).toBe(before);
+    expect((await sarah.call("GET", `/api/game?today=${T}`)).body.fight).toMatchObject({ name: "Crumbs", hp: 100 });
+    expect((await b.call("GET", `/api/game?today=${T}`)).body.run.number).toBe(1);
+    // a write from another site is refused, as everywhere
+    expect((await b.call("POST", "/api/game/sync", { today: T }, { origin: "http://evil.example.com" })).status).toBe(403);
+    // removing a person removes their runs
+    await b.call("DELETE", `/api/users/${sarahUser.id}`, { confirm: "DELETE" });
+    expect(hers()).toEqual([]);
   });
 });

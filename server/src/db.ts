@@ -76,6 +76,62 @@ export const MIGRATIONS: readonly string[] = [
   );
   CREATE INDEX activities_user_day ON activities (user_id, day DESC, time DESC);
   `,
+  // 4 — Craving Crusher (Nov 11 2026): a planned treat on a splurge, and each person's game runs,
+  // their fights and what happened in them (Docs/game/ARCHITECTURE.md)
+  `
+  ALTER TABLE splurges ADD COLUMN planned INTEGER NOT NULL DEFAULT 0;
+  CREATE TABLE game_runs (
+    id                  TEXT PRIMARY KEY,
+    user_id             TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    number              INTEGER NOT NULL,
+    mode                TEXT NOT NULL CHECK (mode IN ('normal', 'hardcore')),
+    started_at          TEXT NOT NULL,
+    started_on          TEXT NOT NULL,
+    ended_on            TEXT,
+    end_reason          TEXT CHECK (end_reason IN ('defeated', 'finished', 'abandoned')),
+    hearts              INTEGER NOT NULL DEFAULT 3,
+    shields             INTEGER NOT NULL DEFAULT 0,
+    potions             INTEGER NOT NULL DEFAULT 0,
+    winds               INTEGER NOT NULL DEFAULT 0,
+    shield_armed        INTEGER NOT NULL DEFAULT 0,
+    knockbacks          INTEGER NOT NULL DEFAULT 0,
+    hardcore_dropped_on TEXT,
+    log_points          INTEGER NOT NULL DEFAULT 0,
+    score               INTEGER NOT NULL DEFAULT 0,
+    UNIQUE (user_id, number)
+  );
+  CREATE TABLE game_fights (
+    id            TEXT PRIMARY KEY,
+    run_id        TEXT NOT NULL REFERENCES game_runs(id) ON DELETE CASCADE,
+    user_id       TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    level         INTEGER NOT NULL CHECK (level BETWEEN 1 AND 60),
+    attempt       INTEGER NOT NULL,
+    started_on    TEXT NOT NULL,
+    started_after TEXT,
+    deadline_on   TEXT NOT NULL,
+    bet           REAL NOT NULL DEFAULT 1 CHECK (bet IN (1, 1.5, 2)),
+    status        TEXT NOT NULL CHECK (status IN ('open', 'won', 'struck')),
+    ended_on      TEXT,
+    damage        INTEGER NOT NULL DEFAULT 0,
+    heals         INTEGER NOT NULL DEFAULT 0,
+    points        INTEGER NOT NULL DEFAULT 0,
+    flawless      INTEGER NOT NULL DEFAULT 0,
+    bet_locked    INTEGER NOT NULL DEFAULT 0,
+    seq           INTEGER NOT NULL
+  );
+  CREATE INDEX game_fights_run ON game_fights (run_id, seq);
+  CREATE TABLE game_events (
+    id        TEXT PRIMARY KEY,
+    run_id    TEXT NOT NULL REFERENCES game_runs(id) ON DELETE CASCADE,
+    fight_id  TEXT REFERENCES game_fights(id) ON DELETE CASCADE,
+    day       TEXT NOT NULL,
+    at        TEXT NOT NULL,
+    kind      TEXT NOT NULL,
+    data_json TEXT NOT NULL DEFAULT '{}',
+    seq       INTEGER NOT NULL
+  );
+  CREATE INDEX game_events_run ON game_events (run_id, seq);
+  `,
 ];
 
 export const SCHEMA_VERSION = MIGRATIONS.length;

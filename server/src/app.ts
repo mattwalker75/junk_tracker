@@ -14,6 +14,7 @@ import { z } from "zod";
 import { QUICK_PICK_MAX } from "../../shared/types.js";
 import { Config, ROOT } from "./config.js";
 import { openDatabase } from "./db.js";
+import { Game } from "./game.js";
 import { Goals } from "./goals.js";
 import { Log } from "./log.js";
 import { hostGuard, networkUrls, sameOriginWrites } from "./security.js";
@@ -66,13 +67,14 @@ const userSettingsSchema = z.object({
   quickPicks: z.array(z.string().max(QUICK_PICK_MAX, `Keep each quick pick under ${QUICK_PICK_MAX} characters.`), { error: "The quick picks are six names." }).max(6, "There are six quick picks."),
 }).partial().strict();
 
-export interface AppHandle { app: express.Express; db: Database.Database; users: Users; log: Log; goals: Goals; config: Config }
+export interface AppHandle { app: express.Express; db: Database.Database; users: Users; log: Log; goals: Goals; game: Game; config: Config }
 
 export function createApp(config = new Config(), opts: { rateLimit?: boolean; webDir?: string } = {}): AppHandle {
   const db = openDatabase(config.resolve(config.get().database.path));
   const users = new Users(db, config);
   const goals = new Goals(db);
   const log = new Log(db, users, goals);
+  const game = new Game(db, users);
   const owner = (req: Request) => users.owner(req);
   const app = express();
   app.disable("x-powered-by");
@@ -141,6 +143,15 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.post("/api/goals/:id/done", h((req) => goals.done(owner(req), param(req, "id"), req.body?.today)));
   app.post("/api/goals/:id/reopen", h((req) => goals.reopen(owner(req), param(req, "id"), req.body?.today)));
   app.delete("/api/goals/:id", h((req) => { goals.remove(owner(req), param(req, "id"), req.body?.today); }));
+  // Craving Crusher (game mode): the person on screen's run. GET never writes — it says needsSync,
+  // and the page calls /sync, which settles KOs, strikes, hearts and power-ups up to the phone's today
+  app.get("/api/game", h((req) => game.view(owner(req), req.query)));
+  app.get("/api/game/hall", h((req) => game.hall(owner(req), req.query)));
+  app.post("/api/game/sync", h((req) => game.sync(owner(req), req.body)));
+  app.post("/api/game/run", h((req) => game.start(owner(req), req.body)));
+  app.post("/api/game/bet", h((req) => game.bet(owner(req), req.body)));
+  app.post("/api/game/powerup", h((req) => game.powerUp(owner(req), req.body)));
+  app.post("/api/game/mode", h((req) => game.mode(owner(req), req.body)));
   app.get("/api/me/settings", h((req) => users.settings(owner(req))));
   app.put("/api/me/settings", h((req) => users.saveSettings(owner(req), parse(userSettingsSchema, req.body))));
 
@@ -205,5 +216,5 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
     res.status(500).json({ error: "Something went wrong on the server. The log has the details (./TRACKER.sh --logs)." });
   });
 
-  return { app, db, users, log, goals, config };
+  return { app, db, users, log, goals, game, config };
 }

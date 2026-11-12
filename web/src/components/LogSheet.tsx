@@ -1,6 +1,7 @@
 /**
  * Log a splurge (approved by Matt as mocked up): "Again?" buttons for recent things, What and How big
- * (required), then Where, Calories, the Day, an optional Time (Matt, Nov 11 2026 — empty means no time; it starts empty, with Now and Clear) and Notes. Under each size: the person's own examples from
+ * (required), then Where, Calories, the Day, an optional Time (Matt, Nov 11 2026 — empty means no time; it starts empty, with Now and Clear), Notes and the
+ * Planned treat switch (Nov 11 2026: a treat you planned; in game mode it heals the monster half). Under each size: the person's own examples from
  * Settings, or the default ones. The same sheet edits a splurge (with Delete).
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -12,7 +13,7 @@ import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
 import { useToday } from "../lib/useToday";
 import { DayPicker } from "./DayPicker";
-import { Button, cx, ErrorLine, Field, Input, Label, Sheet, SIZE_DOT, TextArea } from "./ui";
+import { Button, cx, ErrorLine, Field, Input, Label, Sheet, SIZE_DOT, TextArea, Toggle } from "./ui";
 
 const SELECTED: Record<Size, string> = { snack: "border-snack-ink/0 ring-2 ring-snack", meal: "ring-2 ring-meal", feast: "ring-2 ring-feast" };
 
@@ -27,6 +28,7 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
   const [calories, setCalories] = useState("");
   const [when, setWhen] = useState({ day: today, time: "" });
   const [notes, setNotes] = useState("");
+  const [planned, setPlanned] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -37,9 +39,9 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
     setError(null); setConfirmDelete(false);
     if (edit) {
       setWhat(edit.what); setSize(edit.size); setWhere(edit.where); setCalories(edit.calories === null ? "" : String(edit.calories));
-      setWhen({ day: edit.day, time: edit.time }); setNotes(edit.notes);
+      setWhen({ day: edit.day, time: edit.time }); setNotes(edit.notes); setPlanned(edit.planned);
     } else {
-      setWhat(""); setSize(null); setWhere(""); setCalories(""); setNotes("");
+      setWhat(""); setSize(null); setWhere(""); setCalories(""); setNotes(""); setPlanned(false);
       setWhen({ day: day ?? today, time: "" });
     }
   }, [open, edit, day, today]);
@@ -55,7 +57,7 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
     if (!size) return setError("Pick Snack, Meal or Feast.");
     const cal = calories.trim() === "" ? null : Number(calories.replace(/[, ]/g, ""));
     if (cal !== null && (!Number.isInteger(cal) || cal < 0)) return setError("Calories are a whole number, or leave it empty.");
-    const input = { what: what.trim(), size, where: where.trim(), calories: cal, day: when.day, time: when.time, notes };
+    const input = { what: what.trim(), size, where: where.trim(), calories: cal, day: when.day, time: when.time, notes, planned };
     setBusy(true);
     try {
       if (edit) await api.saveSplurge(edit.id, input); else await api.addSplurge(input);
@@ -137,6 +139,14 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
         </Field>
 
         <Field label="Notes">{(id) => <TextArea id={id} rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="optional — who you were with, how it felt, anything" maxLength={2000} />}</Field>
+
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="text-[13px] font-bold text-mute">Planned treat</div>
+            <p className="mt-0.5 text-[13px] leading-snug text-mute">a treat you planned, like a birthday dinner — in game mode it heals the monster half</p>
+          </div>
+          <Toggle label="Planned treat" checked={planned} onChange={setPlanned} />
+        </div>
 
         <ErrorLine text={error} />
         <Button type="submit" variant="accent" size="xl" className="w-full" disabled={busy}>{edit ? "Save" : "Save splurge"}</Button>

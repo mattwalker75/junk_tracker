@@ -1,4 +1,5 @@
 /** Every call to the server. Errors come back as plain sentences (the server writes them). */
+import type { Bet, GameView, HallView, Mode, PowerUp, SyncResult } from "../../../shared/game/types";
 import type { Activity, ActivityInput, AuthState, CustomTheme, Day, Goal, GoalInput, GoalList, Id, Overview, Splurge, SplurgeInput, UserInfo, UserSettings, WeighIn } from "../../../shared/types";
 
 export class ApiError extends Error {
@@ -63,6 +64,14 @@ export const api = {
   goalDone: (id: Id, today: Day) => call<Goal>("POST", `/api/goals/${id}/done`, { today }),
   reopenGoal: (id: Id, today: Day) => call<Goal>("POST", `/api/goals/${id}/reopen`, { today }),
   deleteGoal: (id: Id, today: Day) => call<{ ok: true }>("DELETE", `/api/goals/${id}`, { today }),
+  // Craving Crusher (game mode). Reads never settle; the page calls gameSync when the view says needsSync, and after every log change
+  game: (today: Day, now: string) => call<GameView>("GET", `/api/game?today=${today}&now=${encodeURIComponent(now)}`),
+  gameSync: (today: Day, now: string) => call<SyncResult>("POST", "/api/game/sync", { today, now }),
+  gameStart: (mode: Mode, today: Day, now: string) => call<SyncResult>("POST", "/api/game/run", { mode, today, now }),
+  gameBet: (bet: Bet, today: Day, now: string) => call<SyncResult>("POST", "/api/game/bet", { bet, today, now }),
+  gamePowerUp: (kind: PowerUp, today: Day, now: string) => call<SyncResult>("POST", "/api/game/powerup", { kind, today, now }),
+  gameToNormal: (today: Day, now: string) => call<SyncResult>("POST", "/api/game/mode", { to: "normal", today, now }),
+  gameHall: (today: Day) => call<HallView>("GET", `/api/game/hall?today=${today}`),
   mySettings: () => call<UserSettings>("GET", "/api/me/settings"),
   saveMySettings: (patch: Partial<Omit<UserSettings, "examples">> & { examples?: Partial<UserSettings["examples"]> }) => call<UserSettings>("PUT", "/api/me/settings", patch),
 

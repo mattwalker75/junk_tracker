@@ -40,9 +40,11 @@ Want other people on it, or a password? Settings → **Users and sign-in** (belo
    from Settings, or a candy bar / burger & fries / a whole pizza. Pick the closest.
 3. Optional: **Where** and **Calories**.
 4. **Day** — **Today** unless you tap **Yesterday**, or **Other day** for a big calendar of the
-   month (arrows for earlier months; days after today can't be picked). There is no time to fill in.
-5. Optional: **Notes**.
-6. **Save splurge**.
+   month (arrows for earlier months; days after today can't be picked).
+5. Optional: **Time** — empty to start; tap **Now** for the time right now, or pick one; **Clear**
+   takes it off again.
+6. Optional: **Notes**.
+7. **Save splurge**.
 
 To change or delete one, tap its day on Home or in the Calendar, then tap **Edit** on the splurge.
 

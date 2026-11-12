@@ -1,6 +1,6 @@
 /**
  * Log a splurge (approved by Matt as mocked up): "Again?" buttons for recent things, What and How big
- * (required), then Where, Calories, the Day (no time — Matt: the day is enough) and Notes. Under each size: the person's own examples from
+ * (required), then Where, Calories, the Day, an optional Time (Matt, Nov 11 2026 — empty means no time; it starts empty, with Now and Clear) and Notes. Under each size: the person's own examples from
  * Settings, or the default ones. The same sheet edits a splurge (with Delete).
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { DEFAULT_EXAMPLES, SIZE_LABEL, SIZES, type Day, type Size, type Splurge } from "../../../shared/types";
 import { LOG_KEYS, refresh } from "../lib/actions";
 import { api } from "../lib/api";
+import { nowTime } from "../lib/dates";
 import { useToday } from "../lib/useToday";
 import { DayPicker } from "./DayPicker";
 import { Button, cx, ErrorLine, Field, Input, Label, Sheet, SIZE_DOT, TextArea } from "./ui";
@@ -123,8 +124,17 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
           <Field label="Calories">{(id) => <Input id={id} value={calories} onChange={(e) => setCalories(e.target.value)} placeholder="optional" inputMode="numeric" />}</Field>
         </div>
 
-        {/* an older splurge keeps the time it was logged with; new ones have none */}
         <DayPicker value={when.day} onChange={(d) => setWhen({ ...when, day: d })} today={today} weekStart={settings?.weekStart ?? 0} />
+        <Field label="Time" hint="optional">
+          {(id) => (
+            <div className="flex items-center gap-2">
+              <div className="w-44"><Input id={id} type="time" value={when.time} onChange={(e) => setWhen({ ...when, time: e.target.value })} /></div>
+              {when.time
+                ? <Button size="lg" onClick={() => setWhen({ ...when, time: "" })}>Clear</Button>
+                : <Button size="lg" onClick={() => setWhen({ ...when, time: nowTime() })}>Now</Button>}
+            </div>
+          )}
+        </Field>
 
         <Field label="Notes">{(id) => <TextArea id={id} rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="optional — who you were with, how it felt, anything" maxLength={2000} />}</Field>
 

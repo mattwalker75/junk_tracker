@@ -5,6 +5,9 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 ## [Unreleased]
 
 ### Added
+- 2026-11-11: **A splurge can have a time.** *Log a splurge* has an optional **Time** under the Day:
+  empty to start, **Now** fills in the time right now, **Clear** takes it off. Splurges with a time
+  show it on the day, as before; nothing already logged changes.
 - 2026-11-09: **How long takes hours too.** Type minutes (`90`) or hours and minutes with a
   colon (`1:30`); the line under the box shows what it will save (*= 1 h 30 min*). An hour or
   more shows as h:mm when you edit it or tap *Again?*. Still saved as minutes.

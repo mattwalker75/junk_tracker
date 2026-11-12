@@ -97,6 +97,10 @@ describe("splurges", () => {
     const full = (await b.call("POST", "/api/splurges", meal())).body;
     const edited = await b.call("PUT", `/api/splurges/${full.id}`, meal({ size: "feast", notes: "and a shake" }));
     expect(edited.body).toMatchObject({ size: "feast", notes: "and a shake" });
+    // the time is optional (Matt, Nov 11 2026): it can be set, cleared again, and a wrong one is refused
+    expect((await b.call("POST", "/api/splurges", meal({ time: "25:00" }))).body.error).toBe("The time looks wrong.");
+    expect((await b.call("PUT", `/api/splurges/${full.id}`, meal({ size: "feast", notes: "and a shake", time: "" }))).body.time).toBe("");
+    expect((await b.call("PUT", `/api/splurges/${full.id}`, meal({ size: "feast", notes: "and a shake", time: "21:40" }))).body.time).toBe("21:40");
     expect((await b.call("GET", "/api/splurges?from=2026-10-01&to=2026-10-31")).body.map((x: { what: string }) => x.what)).toEqual(["Cheeseburger & fries", "Snickers"]);
     expect((await b.call("DELETE", `/api/splurges/${full.id}`)).status).toBe(200);
     expect((await b.call("DELETE", `/api/splurges/${full.id}`)).status).toBe(404);

@@ -79,8 +79,7 @@ The person using it is not a developer — every message the page shows is a pla
     Delete) after the splurges, with **+ Splurge / + Activity**; the Splurges / Activity headings
     show the day's calories eaten / burned when any entry has them. Colours: the `active*` tokens.
     Not yet: goals that count activity (Matt: later).
-11. **Game mode — planned, not built** (Matt, Nov 11 2026): a monster battle ("Crave Crusher", working
-    title) switched on from the initials menu. The design, Matt's decisions and the numbers are in
+11. **Game mode — planned, not built** (Matt, Nov 11 2026): a monster battle (**"Craving Crusher"**, Matt's name) switched on from the initials menu. The design, Matt's decisions and the numbers are in
     `Docs/GAME_MODE.md`; the research behind it is in `Docs/GAME_RESEARCH.md`; mockups are rounds 5–6 of the canvas.
 
 ## Working rules

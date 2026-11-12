@@ -1,4 +1,4 @@
-# Game mode — "Crave Crusher" (planned, not built)
+# Game mode — "Craving Crusher" (planned, not built)
 
 Notes from the Nov 11 2026 brainstorm with Matt. **Nothing here is in the app yet.** This is the
 design to build from. The research behind it is in [GAME_RESEARCH.md](GAME_RESEARCH.md).
@@ -31,6 +31,8 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 - Junk never takes hearts directly. Only a missed deadline does.
 - Every log earns points.
 - A death restarts only the game. The tracker log is never touched.
+
+**Name:** Matt named the game **Craving Crusher** (Nov 11 2026). The other options were Snack Smackdown, Junk Monsters and Belly Brawl.
 
 ## Where it lives
 - **Switch:** the initials menu (MW) gets a **Game mode** item, with a gamepad icon, above Goals, Settings and Sign out. In the game the same item reads **Back to tracker**. Mockup: `GameMenuSwitch`.
@@ -143,7 +145,6 @@ The finished drawings are inlined in the Round 6 boards (Monster Book 1 and 2). 
 | `MonFinalBoss` | The Midnight Snacker's entrance |
 
 ## Still open (ask Matt)
-- **The name.** Crave Crusher is a working title. The other options are Snack Smackdown, Junk Monsters and Belly Brawl.
 - **The numbers:** monster HP, deadlines, heal sizes, starting hearts. The current values were picked for the mockups, not tuned.
 - **Content after the final boss.** Options include World 5, a "New Game+" with harder monsters, or seasonal monsters. Every game effect fades in about 4–6 weeks, so plan a second wave.
 - **High scores across people.** Today several users means separation, not privacy (CLAUDE.md rule 5), so a shared Hall of Heroes fits. Confirm that.

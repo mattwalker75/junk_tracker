@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Ketchup Coyote, a ketchup-bottle coyote howling at the sky">
+  <ellipse cx="100" cy="188" rx="54" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <path d="M58 150 Q24 150 18 120 Q16 104 26 96 Q30 112 40 118 Q38 104 46 96 Q50 116 64 128 Z" fill="#e8333c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M26 96 Q30 112 40 118 Q38 104 46 96 Q44 92 38 92 Q30 92 26 96 Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M24 124 Q30 142 54 146" fill="none" stroke="#b81f2c" stroke-width="4" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="4"><ellipse cx="80" cy="180" rx="14" ry="7" fill="#b81f2c"/><ellipse cx="120" cy="180" rx="14" ry="7" fill="#b81f2c"/></g>
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"><path d="M60 72 L56 26 L88 54 Z" fill="#e8333c"/><path d="M108 50 L124 12 L134 62 Z" fill="#e8333c"/></g>
+  <path d="M63 62 L61 38 L78 54 Z M114 50 L123 28 L128 56 Z" fill="#ffb3a8"/>
+  <path d="M58 84 Q56 56 84 50 L118 50 Q144 54 142 84 L148 154 Q150 178 100 178 Q50 178 52 154 Z" fill="#e8333c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M140 80 L146 154 Q148 176 100 176 Q70 176 58 166 Q130 168 134 120 L132 64 Q140 70 140 80 Z" fill="#b81f2c"/>
+  <path d="M66 140 L64 86 Q64 64 80 58" fill="none" stroke="#ff8a86" stroke-width="7" stroke-linecap="round"/>
+  <path d="M68 128 Q100 120 136 128 L138 160 Q100 168 66 160 Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <circle cx="102" cy="144" r="9" fill="#e8333c" stroke="#2b1d3a" stroke-width="3"/><path d="M96 136 l6 3 l6 -3 l-6 -2 z" fill="#5cb85c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/><circle cx="99" cy="141" r="2" fill="#fff" opacity="0.8"/>
+  <g transform="rotate(-38 118 52)">
+    <rect x="100" y="30" width="38" height="26" rx="7" fill="#fff7e6" stroke="#2b1d3a" stroke-width="4"/>
+    <path d="M104 50 L134 50" stroke="#e5d6bd" stroke-width="5" stroke-linecap="round"/>
+    <path d="M110 30 L114 12 L124 12 L128 30 Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M114 12 L124 12" stroke="#e8333c" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <path d="M150 34 Q156 42 152 46 Q146 46 150 34 Z" fill="#e8333c" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <g fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"><path d="M160 8 q8 6 4 16"/><path d="M174 14 q8 8 2 20"/><path d="M186 26 q6 8 0 16"/></g>
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="78" cy="84" r="13" fill="#fff"/><circle cx="110" cy="80" r="13" fill="#fff"/></g>
+  <circle cx="81" cy="81" r="6.8" fill="#2b1d3a"/><circle cx="113" cy="77" r="6.8" fill="#2b1d3a"/>
+  <circle cx="83.2" cy="78" r="2.4" fill="#fff"/><circle cx="115.2" cy="74" r="2.4" fill="#fff"/>
+  <path d="M62 66 L88 72 M124 60 L102 68" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="96" cy="108" rx="12" ry="13" fill="#7a2a3a" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M88 112 Q96 104 104 112 Q100 118 92 118 Z" fill="#ff6f91"/>
+  <path d="M86 100 L89 107 L92 99 Z M100 99 L103 107 L106 100 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="64" cy="102" r="5" fill="#ffb0a0" opacity="0.6"/><circle cx="128" cy="98" r="5" fill="#ffb0a0" opacity="0.6"/>
+</svg>

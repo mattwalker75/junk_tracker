@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Turkey Leg Troll, a big green troll with tusks and a napkin bib, swinging a giant turkey leg like a club">
+  <ellipse cx="96" cy="190" rx="62" ry="6" fill="#2b1d3a" opacity="0.22"/>
+  <!-- feet -->
+  <g stroke="#2b1d3a" stroke-width="4" fill="#6fa548">
+    <ellipse cx="70" cy="180" rx="20" ry="9"/><ellipse cx="122" cy="180" rx="20" ry="9"/>
+  </g>
+  <path d="M58 176 v-4 M66 174 v-4 M110 174 v-4 M118 174 v-4" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- left arm hanging -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M44 116 Q24 132 26 160" stroke="#2b1d3a" stroke-width="22"/>
+    <path d="M44 116 Q24 132 26 160" stroke="#9ccf6a" stroke-width="14"/>
+  </g>
+  <circle cx="26" cy="164" r="12" fill="#9ccf6a" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- turkey leg club raised over the shoulder (behind the body) -->
+  <path d="M176 112 L158 70" stroke="#2b1d3a" stroke-width="20" stroke-linecap="round"/>
+  <path d="M176 112 L158 70" stroke="#fff3dc" stroke-width="12" stroke-linecap="round"/>
+  <g fill="#fff3dc" stroke="#2b1d3a" stroke-width="4"><circle cx="172" cy="122" r="8"/><circle cx="184" cy="118" r="8"/></g>
+  <path d="M152 76 Q130 62 134 36 Q140 14 164 16 Q190 20 188 46 Q186 68 166 78 Q158 82 152 76 Z" fill="#c2662a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M184 32 Q192 62 164 76 Q180 58 184 32 Z" fill="#94461a"/>
+  <path d="M142 46 Q142 28 156 22" fill="none" stroke="#e89a5c" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#94461a"><circle cx="168" cy="40" r="2.5"/><circle cx="174" cy="56" r="2"/></g>
+  <g fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"><path d="M126 26 h-10 M132 14 l-6 -5 M194 20 l4 -5"/></g>
+  <!-- body -->
+  <path d="M100 30 Q150 30 154 92 Q160 160 120 172 Q100 176 80 172 Q40 160 46 92 Q50 30 100 30 Z" fill="#9ccf6a" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M150 88 Q156 156 118 170 Q100 174 82 170 Q140 150 142 88 Z" fill="#6fa548"/>
+  <path d="M56 110 Q56 70 76 48" fill="none" stroke="#c6eaa0" stroke-width="7" stroke-linecap="round"/>
+  <g fill="#6fa548"><circle cx="64" cy="140" r="3"/><circle cx="134" cy="60" r="2.4"/><circle cx="58" cy="76" r="2.2"/></g>
+  <!-- pointy ears -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#9ccf6a">
+    <path d="M50 70 L22 56 L46 92 Z"/><path d="M150 70 L176 54 L154 92 Z"/>
+  </g>
+  <!-- hair tuft -->
+  <path d="M84 34 Q80 14 92 8 Q92 20 100 22 Q102 8 114 6 Q110 20 118 34 Z" fill="#ff7a2f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <!-- napkin bib -->
+  <path d="M68 134 Q100 144 132 134 L100 172 Z" fill="#fff" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M80 142 L86 150 M100 144 V154 M120 142 L114 150" stroke="#ff4d6d" stroke-width="4" stroke-linecap="round"/>
+  <!-- right arm holding the club -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M146 118 Q172 120 176 100" stroke="#2b1d3a" stroke-width="22"/>
+    <path d="M146 118 Q172 120 176 100" stroke="#9ccf6a" stroke-width="14"/>
+  </g>
+  <circle cx="174" cy="96" r="13" fill="#9ccf6a" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M166 90 h14 M166 97 h14" fill="none" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- face -->
+  <path d="M64 62 L94 70 M136 62 L106 70" stroke="#2b1d3a" stroke-width="7" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="80" cy="80" r="13" fill="#fff"/><circle cx="120" cy="80" r="13" fill="#fff"/></g>
+  <circle cx="83" cy="82" r="7" fill="#2b1d3a"/><circle cx="117" cy="82" r="7" fill="#2b1d3a"/>
+  <circle cx="85" cy="78" r="2.5" fill="#fff"/><circle cx="119" cy="78" r="2.5" fill="#fff"/>
+  <!-- big nose -->
+  <ellipse cx="100" cy="100" rx="13" ry="11" fill="#86bd56" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="96" cy="96" rx="4" ry="2.5" fill="#c6eaa0"/>
+  <ellipse cx="64" cy="104" rx="6" ry="3.5" fill="#ff8a5c" opacity="0.6"/><ellipse cx="136" cy="104" rx="6" ry="3.5" fill="#ff8a5c" opacity="0.6"/>
+  <!-- underbite with tusks -->
+  <path d="M74 118 Q100 112 126 118 Q122 134 100 134 Q78 134 74 118 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M80 126 L84 110 L90 126 Z M110 126 L116 110 L120 126 Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>

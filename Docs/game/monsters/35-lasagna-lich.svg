@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Lasagna Lich, a floating layered-lasagna wizard in a hooded cheese-drip robe with a glowing meatball staff">
+  <ellipse cx="96" cy="192" rx="46" ry="5" fill="#2b1d3a" opacity="0.2"/>
+  <!-- staff -->
+  <path d="M158 46 L150 184" stroke="#2b1d3a" stroke-width="12" stroke-linecap="round"/>
+  <path d="M158 46 L150 184" stroke="#a8673a" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="160" cy="32" r="22" fill="#b8ff7a" opacity="0.35"/>
+  <path d="M146 40 Q150 52 160 50 Q170 52 174 40" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="160" cy="32" r="13" fill="#9e4a2a" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="155" cy="27" r="3.5" fill="#d07a52"/>
+  <g fill="#6b2e18"><circle cx="164" cy="36" r="1.8"/><circle cx="158" cy="38" r="1.4"/></g>
+  <!-- lasagna body: stacked layers -->
+  <path d="M48 96 L144 96 L150 172 Q140 180 132 172 Q122 182 112 172 Q100 182 90 172 Q78 182 68 172 Q58 180 46 172 Z" fill="#f2b84b" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M48 112 Q96 120 145 112 L146 124 Q96 132 47 124 Z" fill="#d8352a"/>
+  <path d="M47 130 Q96 138 147 130 L147.5 140 Q96 148 46.5 140 Z" fill="#fff7e6"/>
+  <path d="M46.5 146 Q96 154 148 146 L148.5 156 Q96 164 46 156 Z" fill="#8a4b2a"/>
+  <path d="M48 112 Q96 120 145 112 M47 124 Q96 132 146 124 M47 130 Q96 138 147 130 M46.5 140 Q96 148 147.5 140 M46.5 146 Q96 154 148 146 M46 156 Q96 164 148.5 156" fill="none" stroke="#2b1d3a" stroke-width="2.5"/>
+  <path d="M48 96 L144 96 L150 172 Q140 180 132 172 Q122 182 112 172 Q100 182 90 172 Q78 182 68 172 Q58 180 46 172 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <!-- hood: a ruffled lasagna noodle -->
+  <path d="M42 102 Q38 58 62 38 Q66 30 74 34 Q80 24 90 30 Q98 22 106 30 Q116 24 122 34 Q130 30 134 40 Q156 60 150 102 Z" fill="#f2b84b" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M58 64 Q64 46 78 40" fill="none" stroke="#ffd98a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M56 104 Q54 62 96 54 Q138 62 136 104 Z" fill="#3a2550" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <!-- glowing eyes in the hood -->
+  <ellipse cx="96" cy="80" rx="34" ry="16" fill="#b8ff7a" opacity="0.22"/>
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="80" cy="80" r="12.5" fill="#f4ffe6"/><circle cx="112" cy="80" r="12.5" fill="#f4ffe6"/></g>
+  <circle cx="82" cy="82" r="7" fill="#2b1d3a"/><circle cx="110" cy="82" r="7" fill="#2b1d3a"/>
+  <circle cx="82" cy="82" r="7" fill="none" stroke="#7bd36b" stroke-width="2"/><circle cx="110" cy="82" r="7" fill="none" stroke="#7bd36b" stroke-width="2"/>
+  <circle cx="84" cy="78" r="2.5" fill="#fff"/><circle cx="112" cy="78" r="2.5" fill="#fff"/>
+  <path d="M86 96 L90 92 L94 96 L98 92 L102 96 L106 92" fill="none" stroke="#f4ffe6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- cheese-drip mantle over the shoulders -->
+  <path d="M40 98 Q96 90 152 98 L152 106 Q148 118 144 108 Q140 124 134 110 Q128 116 122 108 Q116 128 108 110 Q100 116 92 108 Q86 124 78 108 Q72 114 66 108 Q60 126 54 108 Q48 116 42 106 Z" fill="#fff3c4" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M50 100 Q96 94 142 100" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  <!-- bony little hands -->
+  <path d="M48 120 Q30 120 26 132" fill="none" stroke="#2b1d3a" stroke-width="12" stroke-linecap="round"/>
+  <path d="M48 120 Q30 120 26 132" fill="none" stroke="#fff3c4" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="25" cy="136" r="7" fill="#fff3c4" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M146 118 Q154 116 156 108" fill="none" stroke="#2b1d3a" stroke-width="12" stroke-linecap="round"/>
+  <path d="M146 118 Q154 116 156 108" fill="none" stroke="#fff3c4" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="155" cy="104" r="7" fill="#fff3c4" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- spooky basil wisps -->
+  <g fill="#7bd36b" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M22 60 Q30 48 40 54 Q32 66 22 60 Z"/>
+    <path d="M178 86 Q188 78 194 88 Q184 96 178 86 Z"/>
+    <path d="M26 170 Q32 160 40 166 Q34 176 26 170 Z"/>
+  </g>
+  <g fill="#b8ff7a"><circle cx="34" cy="86" r="2.5"/><circle cx="182" cy="130" r="2"/><circle cx="16" cy="112" r="1.8"/></g>
+</svg>

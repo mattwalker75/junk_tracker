@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Jerky Gator, a beef-jerky alligator with leathery strips">
+  <ellipse cx="104" cy="186" rx="78" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <path d="M146 124 Q178 120 186 92 L192 80 L190 94 L198 90 L192 104 Q186 136 150 150 Z" fill="#b2582f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M152 146 Q182 134 190 106 Q188 128 160 148 Z" fill="#83391c"/>
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"><path d="M132 150 L128 176 L150 176 L150 150 Z" fill="#83391c"/><path d="M60 146 L54 176 L78 176 L80 146 Z" fill="#83391c"/></g>
+  <g fill="#fff7e6" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"><path d="M128 176 l3 6 l3 -6 Z M136 176 l3 6 l3 -6 Z M144 176 l3 6 l3 -6 Z M54 176 l3 6 l3 -6 Z M62 176 l3 6 l3 -6 Z M70 176 l3 6 l3 -6 Z"/></g>
+  <path d="M78 98 L90 88 L98 98 L110 86 L120 98 L132 88 L140 100 L152 92 L156 106 Q170 132 154 154 L138 158 L124 154 L108 160 L92 154 L76 158 L62 152 Q50 128 62 104 Z" fill="#b2582f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M156 112 Q166 136 152 152 L138 156 L124 152 L108 158 L94 152 Q140 148 156 112 Z" fill="#83391c"/>
+  <g fill="none" stroke="#83391c" stroke-width="3" stroke-linecap="round"><path d="M80 116 Q104 110 132 118 T152 122"/><path d="M74 134 Q100 128 128 136 T154 138"/></g>
+  <path d="M66 110 Q76 98 96 100" fill="none" stroke="#df8d5c" stroke-width="5" stroke-linecap="round"/>
+  <path d="M14 112 C12 98 24 92 42 92 L58 90 C60 66 76 56 92 58 C104 59 110 66 112 74 C124 68 140 76 140 94 L142 124 C128 142 74 144 30 136 C16 132 14 122 14 112 Z" fill="#b2582f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M140 108 L142 124 C128 142 74 144 30 136 Q96 136 140 108 Z" fill="#83391c"/>
+  <path d="M24 102 Q40 96 58 98 M66 72 Q74 62 88 62" fill="none" stroke="#df8d5c" stroke-width="5" stroke-linecap="round"/>
+  <path d="M20 120 Q70 128 132 120" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
+  <path d="M30 121.5 L34 129 L38 122.6 L42 130 L46 123.4 M98 124 L102 131 L106 123.4 L110 130 L114 122.6" fill="#fff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M40 120 L44 112 L48 121 Z M58 122 L62 114 L66 123 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <g fill="#2b1d3a"><ellipse cx="24" cy="104" rx="2.4" ry="1.8"/><ellipse cx="33" cy="101" rx="2.4" ry="1.8"/></g>
+  <g fill="#6b2b14"><circle cx="50" cy="106" r="1.8"/><circle cx="74" cy="132" r="2"/><circle cx="120" cy="130" r="1.8"/><circle cx="96" cy="146" r="2"/><circle cx="136" cy="146" r="1.6"/><circle cx="114" cy="106" r="1.6"/><circle cx="128" cy="100" r="1.8"/></g>
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="86" cy="78" r="13" fill="#fff"/><circle cx="120" cy="88" r="13" fill="#fff"/></g>
+  <circle cx="83" cy="81" r="6.8" fill="#2b1d3a"/><circle cx="117" cy="91" r="6.8" fill="#2b1d3a"/>
+  <circle cx="85.2" cy="78" r="2.4" fill="#fff"/><circle cx="119.2" cy="88" r="2.4" fill="#fff"/>
+  <path d="M70 62 L98 72 M136 72 L112 80" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="64" cy="112" r="5" fill="#ff8f7a" opacity="0.55"/><circle cx="136" cy="108" r="5" fill="#ff8f7a" opacity="0.55"/>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Crumbs, a round cookie gremlin">
+  <ellipse cx="100" cy="186" rx="50" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+    <ellipse cx="78" cy="174" rx="14" ry="8" fill="#c98340"/>
+    <ellipse cx="124" cy="174" rx="14" ry="8" fill="#c98340"/>
+    <path d="M56 92 L22 68 L46 118 Z" fill="#e8a95b"/>
+    <path d="M33 80 L47 102" fill="none" stroke="#c98340" stroke-width="3"/>
+    <path d="M152 100 L180 96 L156 124 Z" fill="#e8a95b"/>
+    <path d="M171 100 L158 114" fill="none" stroke="#c98340" stroke-width="3"/>
+  </g>
+  <path d="M152.6 87.5 A58 58 0 1 1 115 56 A10 10 0 0 0 124 72 A10 10 0 0 0 141 77 A10 10 0 0 0 152.6 87.5 Z" fill="#e8a95b" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M152 128 A55 55 0 0 1 66 158 Q122 166 152 128 Z" fill="#c98340"/>
+  <path d="M56 104 Q60 76 88 62" fill="none" stroke="#f6cf8f" stroke-width="8" stroke-linecap="round"/>
+  <g fill="#5b3420">
+    <path d="M64 80 l8 -3 l4 6 l-5 6 l-7 -2 z"/>
+    <path d="M136 120 l9 -2 l3 7 l-6 5 l-6 -4 z"/>
+    <path d="M58 136 l7 -2 l3 6 l-6 4 z"/>
+    <path d="M112 156 l8 -2 l2 7 l-7 3 l-4 -4 z"/>
+    <path d="M80 158 l6 -1 l2 5 l-6 3 z"/>
+    <path d="M100 70 l6 -2 l2 5 l-5 3 z"/>
+    <path d="M140 146 l6 0 l1 6 l-6 1 z"/>
+  </g>
+  <g fill="#e8a95b" stroke="#2b1d3a" stroke-width="3">
+    <circle cx="164" cy="60" r="4"/><circle cx="174" cy="72" r="3"/><circle cx="158" cy="44" r="2.6"/>
+  </g>
+  <g stroke="#2b1d3a" stroke-width="4">
+    <circle cx="82" cy="108" r="15" fill="#fff"/>
+    <circle cx="121" cy="108" r="15" fill="#fff"/>
+  </g>
+  <circle cx="86" cy="111" r="7.5" fill="#2b1d3a"/><circle cx="117" cy="111" r="7.5" fill="#2b1d3a"/>
+  <circle cx="89" cy="107" r="2.6" fill="#fff"/><circle cx="120" cy="107" r="2.6" fill="#fff"/>
+  <path d="M66 88 L94 96 M136 88 L108 96" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="64" cy="128" r="6" fill="#ff8f7a" opacity="0.55"/><circle cx="140" cy="128" r="6" fill="#ff8f7a" opacity="0.55"/>
+  <path d="M80 130 Q101 154 124 129 Q101 138 80 130 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M88 133 L92 141 L95 134 Z M108 134 L111 141 L115 133 Z" fill="#fff"/>
+  <g stroke="#2b1d3a" stroke-linecap="round">
+    <path d="M50 146 q-14 4 -18 16" fill="none" stroke-width="12"/><path d="M50 146 q-14 4 -18 16" fill="none" stroke="#e8a95b" stroke-width="5"/>
+    <circle cx="31" cy="164" r="7" fill="#e8a95b" stroke-width="4"/>
+    <path d="M150 146 q14 4 18 16" fill="none" stroke-width="12"/><path d="M150 146 q14 4 18 16" fill="none" stroke="#e8a95b" stroke-width="5"/>
+    <circle cx="169" cy="164" r="7" fill="#e8a95b" stroke-width="4"/>
+  </g>
+</svg>

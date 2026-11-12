@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Jolt, an energy-drink can gremlin with lightning hair">
+  <ellipse cx="100" cy="190" rx="46" ry="6" fill="#2b1d3a" opacity="0.18"/>
+  <g fill="#ffe14a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M72 70 L58 40 L70 42 L60 14 L84 48 L72 46 L84 68 Z"/>
+    <path d="M92 66 L88 30 L98 34 L98 4 L112 40 L102 38 L106 64 Z"/>
+    <path d="M116 68 L126 38 L134 44 L148 16 L144 52 L136 48 L130 70 Z"/>
+  </g>
+  <g fill="#fff8c2"><path d="M64 22 L72 36 L68 36 Z"/><path d="M98 12 L102 26 L99 26 Z"/><path d="M144 26 L139 40 L137 38 Z"/></g>
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"><path d="M64 92 L18 70 L40 108 Z" fill="#a8f03e"/><path d="M136 92 L182 70 L160 108 Z" fill="#a8f03e"/></g>
+  <g fill="#ff8fb0"><path d="M58 94 L32 80 L44 102 Z"/><path d="M142 94 L168 80 L156 102 Z"/></g>
+  <g fill="#3b2a55" stroke="#2b1d3a" stroke-width="4"><ellipse cx="82" cy="184" rx="13" ry="6"/><ellipse cx="118" cy="184" rx="13" ry="6"/></g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M136 130 L156 118 L160 96" stroke="#2b1d3a" stroke-width="15"/><path d="M64 132 L46 140 L36 128" stroke="#2b1d3a" stroke-width="15"/><path d="M136 130 L156 118 L160 96" stroke="#a8f03e" stroke-width="8"/><path d="M64 132 L46 140 L36 128" stroke="#a8f03e" stroke-width="8"/></g>
+  <g fill="#a8f03e" stroke="#2b1d3a" stroke-width="4"><circle cx="160" cy="92" r="9"/><circle cx="34" cy="124" r="8"/></g>
+  <path d="M62 72 L62 170 A38 9 0 0 0 138 170 L138 72 Z" fill="#a8f03e" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M124 76 L136 76 L136 170 A38 9 0 0 1 116 178 C124 150 126 110 124 76 Z" fill="#6cc21f"/>
+  <rect x="68" y="80" width="8" height="84" rx="4" fill="#e4ff9e"/>
+  <path d="M62 138 Q100 146 138 138 L138 162 Q100 170 62 162 Z" fill="#3b2a55" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M104 138 L90 154 L100 154 L94 168 L112 148 L102 148 L108 138 Z" fill="#ffe14a" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="100" cy="72" rx="38" ry="10" fill="#c9d6e2" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="100" cy="71" rx="29" ry="6" fill="#e6eef5" stroke="#2b1d3a" stroke-width="2.5"/>
+  <path d="M96 70 q0 -8 8 -8 h6 q6 0 6 6 q0 6 -6 6 h-6" fill="none" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/><path d="M96 70 q0 -8 8 -8 h6 q6 0 6 6 q0 6 -6 6 h-6" fill="none" stroke="#9fb3c4" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="83" cy="100" r="16" fill="#fff" stroke="#2b1d3a" stroke-width="4"/><circle cx="120" cy="102" r="12" fill="#fff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="85" cy="101" r="5" fill="#2b1d3a"/><circle cx="118" cy="103" r="4" fill="#2b1d3a"/>
+  <circle cx="87" cy="98" r="1.8" fill="#fff"/><circle cx="120" cy="101" r="1.5" fill="#fff"/>
+  <path d="M66 82 L96 88 M136 86 L110 90" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M74 118 Q100 136 128 116 L124 126 Q100 142 78 128 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M80 121 l4 6 l3 -4 l4 6 l3 -5 l4 6 l3 -6 l4 6 l3 -5 l4 5 l3 -6 l4 4 Z" fill="#fff" stroke="#2b1d3a" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="68" cy="116" r="5" fill="#ff5d93" opacity="0.5"/><circle cx="133" cy="116" r="5" fill="#ff5d93" opacity="0.5"/>
+  <g fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M168 40 l6 4 M176 56 l8 -2 M28 52 l-8 -4"/></g>
+  <g fill="#ffe14a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"><path d="M178 124 L168 140 L176 140 L170 156 L186 136 L178 136 L184 124 Z"/><path d="M26 140 L18 154 L25 154 L20 168 L34 150 L27 150 L32 140 Z"/></g>
+  <g fill="#ffe14a" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"><path d="M176 172 l3 6 6 2 -6 2 -3 6 -3 -6 -6 -2 6 -2z"/></g>
+</svg>

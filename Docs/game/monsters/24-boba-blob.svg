@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Boba Blob, a bubble-tea slime with boba pearls for eyes">
+  <defs><clipPath id="boba-blob-cup"><path d="M54 84 L146 84 L134 182 L66 182 Z"/></clipPath></defs>
+  <ellipse cx="100" cy="188" rx="46" ry="6" fill="#2b1d3a" opacity="0.18"/>
+  <g stroke-linecap="round"><path d="M106 80 L134 8" stroke="#2b1d3a" stroke-width="20"/><path d="M106 80 L134 8" stroke="#5fd8cc" stroke-width="13"/><path d="M114 62 L134 10" stroke="#a8f0e8" stroke-width="3.5"/></g>
+  <ellipse cx="134" cy="9" rx="7" ry="3.5" fill="#2e8f86" stroke="#2b1d3a" stroke-width="3" transform="rotate(21 134 9)"/>
+  <path d="M58 112 C38 110 22 120 20 138 C19 146 27 148 29 140 C31 146 39 146 39 138 C43 142 49 138 47 130 C52 124 58 126 62 126 Z" fill="#e8b47c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M142 112 C160 104 172 90 170 74 C169 66 177 64 180 70 C184 64 192 68 188 76 C194 78 194 86 186 86 C182 106 168 120 140 126 Z" fill="#e8b47c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M54 84 L146 84 L134 182 L66 182 Z" fill="#e8b47c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#boba-blob-cup)">
+    <path d="M120 84 L150 84 L140 190 L110 190 C120 150 124 120 120 84 Z" fill="#c98e55"/>
+    <path d="M54 150 Q100 162 146 150 L146 190 L54 190 Z" fill="#d9a06a"/>
+    <circle cx="74" cy="172" r="7" fill="#3a2218" stroke="#2b1d3a" stroke-width="2.5"/><circle cx="72" cy="169.5" r="1.8" fill="#9a7a6a"/>
+    <circle cx="90" cy="176" r="7" fill="#3a2218" stroke="#2b1d3a" stroke-width="2.5"/><circle cx="88" cy="173.5" r="1.8" fill="#9a7a6a"/>
+    <circle cx="106" cy="172" r="7" fill="#3a2218" stroke="#2b1d3a" stroke-width="2.5"/><circle cx="104" cy="169.5" r="1.8" fill="#9a7a6a"/>
+    <circle cx="122" cy="175" r="7" fill="#3a2218" stroke="#2b1d3a" stroke-width="2.5"/><circle cx="120" cy="172.5" r="1.8" fill="#9a7a6a"/>
+    <circle cx="82" cy="162" r="7" fill="#3a2218" stroke="#2b1d3a" stroke-width="2.5"/><circle cx="80" cy="159.5" r="1.8" fill="#9a7a6a"/>
+    <circle cx="114" cy="162" r="7" fill="#3a2218" stroke="#2b1d3a" stroke-width="2.5"/><circle cx="112" cy="159.5" r="1.8" fill="#9a7a6a"/>
+    <circle cx="98" cy="164" r="7" fill="#3a2218" stroke="#2b1d3a" stroke-width="2.5"/><circle cx="96" cy="161.5" r="1.8" fill="#9a7a6a"/>
+    <circle cx="130" cy="164" r="7" fill="#3a2218" stroke="#2b1d3a" stroke-width="2.5"/><circle cx="128" cy="161.5" r="1.8" fill="#9a7a6a"/>
+    <circle cx="68" cy="160" r="7" fill="#3a2218" stroke="#2b1d3a" stroke-width="2.5"/><circle cx="66" cy="157.5" r="1.8" fill="#9a7a6a"/>
+  </g>
+  <path d="M54 84 L146 84 L134 182 L66 182 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M64 96 L72 168" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
+  <path d="M58 86 C60 64 78 56 100 56 C122 56 140 64 142 86 Z" fill="#e8b47c" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M120 60 C134 66 140 74 142 86 L126 86 C128 76 126 68 120 60 Z" fill="#c98e55"/>
+  <path d="M52 84 C52 52 74 38 100 38 C126 38 148 52 148 84 Z" fill="#e6f6ff" fill-opacity="0.55" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M64 72 Q68 52 88 45" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+  <rect x="46" y="80" width="108" height="12" rx="6" fill="#c4e4f6" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M54 84 H146" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="80" cy="116" r="16" fill="#3a2218" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="77" cy="110" rx="5.5" ry="4.5" fill="#ffffff"/><circle cx="88" cy="122" r="2.2" fill="#ffffff" opacity="0.8"/>
+  <circle cx="120" cy="116" r="16" fill="#3a2218" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="113" cy="110" rx="5.5" ry="4.5" fill="#ffffff"/><circle cx="124" cy="122" r="2.2" fill="#ffffff" opacity="0.8"/>
+  <path d="M60 98 L92 104 M140 98 L108 104" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="62" cy="136" r="6" fill="#ff7a8a" opacity="0.5"/><circle cx="138" cy="136" r="6" fill="#ff7a8a" opacity="0.5"/>
+  <path d="M82 136 Q100 156 120 136 Q100 144 82 136 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M88 138 l3 6 3 -5z M114 138 l-3 6 -3 -5z" fill="#fff"/>
+  <path d="M96 146 q4 -3 8 0 q0 6 -4 6 q-4 0 -4 -6z" fill="#ff6f91"/>
+  <g fill="#3a2218" stroke="#2b1d3a" stroke-width="2.5"><circle cx="30" cy="70" r="6"/><circle cx="170" cy="150" r="5"/><circle cx="20" cy="90" r="3.5"/></g>
+  <g fill="#9a7a6a"><circle cx="28" cy="68" r="1.6"/><circle cx="168" cy="148" r="1.4"/></g>
+</svg>

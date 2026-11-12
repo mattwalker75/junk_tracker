@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Queso Kraken, a nacho-tray octopus with cheese tentacles">
+  <ellipse cx="100" cy="190" rx="66" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <g fill="none" stroke-linecap="round">
+    <path d="M62 128 C38 120 18 100 26 80 C32 66 48 68 46 82" stroke="#2b1d3a" stroke-width="20"/>
+    <path d="M62 128 C38 120 18 100 26 80 C32 66 48 68 46 82" stroke="#ffc23a" stroke-width="12"/>
+    <path d="M138 128 C162 120 180 104 176 80 C174 66 166 58 160 54" stroke="#2b1d3a" stroke-width="20"/>
+    <path d="M138 128 C162 120 180 104 176 80 C174 66 166 58 160 54" stroke="#ffc23a" stroke-width="12"/>
+  </g>
+  <g fill="#e8921c"><circle cx="30" cy="96" r="2.6"/><circle cx="40" cy="112" r="2.6"/><circle cx="28" cy="82" r="2.2"/><circle cx="176" cy="94" r="2.6"/><circle cx="168" cy="112" r="2.6"/><circle cx="172" cy="74" r="2.2"/></g>
+  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M150 58 L162 26 L178 54 Z" fill="#f2c14e"/>
+    <path d="M78 52 L66 18 L96 40 Z" fill="#f2c14e"/>
+    <path d="M94 42 L104 6 L120 42 Z" fill="#f7d06a"/>
+    <path d="M118 44 L138 16 L140 58 Z" fill="#f2c14e"/>
+  </g>
+  <g fill="#c98a2a"><circle cx="76" cy="32" r="1.8"/><circle cx="104" cy="22" r="1.8"/><circle cx="110" cy="32" r="1.6"/><circle cx="134" cy="32" r="1.8"/><circle cx="162" cy="40" r="1.8"/></g>
+  <path d="M46 130 C40 76 66 40 100 40 C134 40 160 76 154 130 Z" fill="#ffb52e" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M146 80 C154 100 154 116 152 130 L134 130 C144 116 148 98 146 80 Z" fill="#e8921c"/>
+  <path d="M60 92 Q64 64 86 50" fill="none" stroke="#ffe08a" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="58" cy="106" r="4" fill="#ffe08a"/>
+  <g stroke="#2b1d3a" stroke-width="4">
+    <circle cx="79" cy="88" r="18" fill="#4caf50"/><circle cx="121" cy="88" r="18" fill="#4caf50"/>
+  </g>
+  <circle cx="79" cy="88" r="12.5" fill="#d8f0a8"/><circle cx="121" cy="88" r="12.5" fill="#d8f0a8"/>
+  <g fill="#fff7e6" stroke="#9cc56a" stroke-width="1">
+    <ellipse cx="79" cy="78" rx="2" ry="3"/><ellipse cx="88" cy="84" rx="2" ry="3" transform="rotate(60 88 84)"/><ellipse cx="70" cy="84" rx="2" ry="3" transform="rotate(-60 70 84)"/><ellipse cx="88" cy="94" rx="2" ry="3" transform="rotate(-60 88 94)"/><ellipse cx="70" cy="94" rx="2" ry="3" transform="rotate(60 70 94)"/>
+    <ellipse cx="121" cy="78" rx="2" ry="3"/><ellipse cx="130" cy="84" rx="2" ry="3" transform="rotate(60 130 84)"/><ellipse cx="112" cy="84" rx="2" ry="3" transform="rotate(-60 112 84)"/><ellipse cx="130" cy="94" rx="2" ry="3" transform="rotate(-60 130 94)"/><ellipse cx="112" cy="94" rx="2" ry="3" transform="rotate(60 112 94)"/>
+  </g>
+  <circle cx="81" cy="90" r="6.5" fill="#2b1d3a"/><circle cx="119" cy="90" r="6.5" fill="#2b1d3a"/>
+  <circle cx="83" cy="87" r="2.2" fill="#fff"/><circle cx="121" cy="87" r="2.2" fill="#fff"/>
+  <path d="M58 68 Q72 60 92 70 L92 74 Q74 68 58 74 Z M142 68 Q128 60 108 70 L108 74 Q126 68 142 74 Z" fill="#ffb52e" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M80 112 Q100 130 120 112 Q100 118 80 112 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M87 114 L90 121 L93 115 Z M107 115 L110 121 L113 114 Z" fill="#fff"/>
+  <circle cx="62" cy="108" r="5" fill="#ff8f5a" opacity="0.5"/><circle cx="138" cy="108" r="5" fill="#ff8f5a" opacity="0.5"/>
+  <path d="M26 126 L174 126 L158 180 Q100 188 42 180 Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g fill="#e5533d"><path d="M40 128 L56 128 L60 182 L49 181 Z"/><path d="M76 128 L92 128 L92 184 L80 183 Z"/><path d="M108 128 L124 128 L120 183 L108 184 Z"/><path d="M144 128 L160 128 L151 181 L140 182 Z"/></g>
+  <path d="M30 128 L170 128 L167 138 L33 138 Z" fill="#ffd8c8" opacity="0.6"/>
+  <path d="M26 126 L174 126 L158 180 Q100 188 42 180 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M140 132 L160 132 L154 168 Q148 176 136 178 C144 160 144 146 140 132 Z" fill="#2b1d3a" opacity="0.15"/>
+  <g fill="none" stroke-linecap="round">
+    <path d="M60 126 C42 132 30 150 34 166 C38 180 52 180 52 168" stroke="#2b1d3a" stroke-width="20"/>
+    <path d="M60 126 C42 132 30 150 34 166 C38 180 52 180 52 168" stroke="#ffc23a" stroke-width="12"/>
+    <path d="M140 126 C158 132 170 150 166 166 C162 180 148 180 148 168" stroke="#2b1d3a" stroke-width="20"/>
+    <path d="M140 126 C158 132 170 150 166 166 C162 180 148 180 148 168" stroke="#ffc23a" stroke-width="12"/>
+    <path d="M86 126 C84 138 92 146 86 158" stroke="#2b1d3a" stroke-width="16"/>
+    <path d="M86 126 C84 138 92 146 86 158" stroke="#ffc23a" stroke-width="9"/>
+    <path d="M114 126 C116 140 110 148 116 154" stroke="#2b1d3a" stroke-width="16"/>
+    <path d="M114 126 C116 140 110 148 116 154" stroke="#ffc23a" stroke-width="9"/>
+  </g>
+  <path d="M48 128 L152 128" stroke="#ffc23a" stroke-width="7" stroke-linecap="round"/>
+  <g fill="#e8921c"><circle cx="38" cy="152" r="2.6"/><circle cx="40" cy="168" r="2.6"/><circle cx="162" cy="152" r="2.6"/><circle cx="160" cy="168" r="2.6"/></g>
+  <path d="M42 140 Q38 150 40 158" fill="none" stroke="#ffe08a" stroke-width="3" stroke-linecap="round"/>
+</svg>

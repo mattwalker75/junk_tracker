@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Boxer, a juice-box fighter with red boxing gloves and a bendy-straw antenna">
+  <ellipse cx="100" cy="188" rx="58" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <!-- bubbles -->
+  <g fill="#dff4ff" stroke="#2b1d3a" stroke-width="2.5">
+    <circle cx="26" cy="40" r="5"/><circle cx="38" cy="24" r="3"/><circle cx="178" cy="150" r="4"/><circle cx="16" cy="70" r="2.5"/>
+  </g>
+  <!-- legs and sneakers -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <rect x="74" y="160" width="16" height="20" rx="4" fill="#ffd9a8"/>
+    <rect x="110" y="160" width="16" height="20" rx="4" fill="#ffd9a8"/>
+    <path d="M62 184 Q62 174 76 174 L90 174 Q96 174 96 184 Z" fill="#fff"/>
+    <path d="M104 184 Q104 174 118 174 L128 174 Q140 174 140 184 Z" fill="#fff"/>
+  </g>
+  <path d="M66 182 H94 M106 182 H136" stroke="#ff4d6d" stroke-width="3" stroke-linecap="round"/>
+  <!-- straw antenna -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M118 58 L118 30 L134 16" stroke="#2b1d3a" stroke-width="12"/>
+    <path d="M118 58 L118 30 L134 16" stroke="#fff" stroke-width="6"/>
+    <path d="M118 58 L118 30 L134 16" stroke="#3fb6ff" stroke-width="6" stroke-dasharray="6 6" stroke-linecap="butt"/>
+  </g>
+  <circle cx="138" cy="12" r="7" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5"/>
+  <circle cx="136" cy="10" r="2" fill="#fff"/>
+  <!-- the box: top, side, front -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M54 62 L74 48 L158 48 L146 62 Z" fill="#ffc47a"/>
+    <path d="M146 62 L158 48 L158 150 L146 166 Z" fill="#e06d14"/>
+    <rect x="54" y="62" width="92" height="104" rx="5" fill="#ff9a2e"/>
+  </g>
+  <ellipse cx="118" cy="56" rx="7" ry="3" fill="#2b1d3a"/>
+  <path d="M54 64 H146 V74 H54 Z" fill="#fff" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M62 67 V71 M72 67 V71 M128 67 V71 M138 67 V71" stroke="#3fb6ff" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="61" y="80" width="8" height="44" rx="4" fill="#ffc47a"/>
+  <path d="M130 66 L140 66 L140 160 L124 160 C132 140 132 100 130 66 Z" fill="#e8801f"/>
+  <!-- label band with an orange slice -->
+  <path d="M56 128 H144 V152 H56 Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="100" cy="140" r="9" fill="#ffc93c" stroke="#2b1d3a" stroke-width="2.5"/>
+  <path d="M100 133 V147 M93 140 H107 M95 135 L105 145 M105 135 L95 145" stroke="#ff9a2e" stroke-width="1.8"/>
+  <!-- face -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="82" cy="92" r="13" fill="#fff"/><circle cx="116" cy="92" r="13" fill="#fff"/></g>
+  <circle cx="86" cy="94" r="7" fill="#2b1d3a"/><circle cx="112" cy="94" r="7" fill="#2b1d3a"/>
+  <circle cx="88" cy="90" r="2.5" fill="#fff"/><circle cx="114" cy="90" r="2.5" fill="#fff"/>
+  <path d="M66 76 L94 82 M132 76 L104 82" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M86 110 Q99 124 114 110 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M88 111 H112 L110 115 H90 Z" fill="#7bd3ff"/>
+  <circle cx="68" cy="112" r="5" fill="#ff6f6f" opacity="0.5"/><circle cx="132" cy="112" r="5" fill="#ff6f6f" opacity="0.5"/>
+  <!-- arms -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M58 120 Q44 124 40 112" stroke="#2b1d3a" stroke-width="12"/>
+    <path d="M58 120 Q44 124 40 112" stroke="#ffd9a8" stroke-width="5"/>
+    <path d="M144 110 Q158 108 160 92" stroke="#2b1d3a" stroke-width="12"/>
+    <path d="M144 110 Q158 108 160 92" stroke="#ffd9a8" stroke-width="5"/>
+  </g>
+  <!-- left glove (guard) -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <rect x="26" y="112" width="24" height="12" rx="4" fill="#fff"/>
+    <path d="M22 104 C14 92 20 74 38 74 C56 74 62 90 56 104 C52 114 30 116 22 104 Z" fill="#ff4d6d"/>
+    <path d="M22 98 C14 94 14 84 22 82" fill="#ff4d6d"/>
+  </g>
+  <path d="M30 82 Q36 78 44 80" fill="none" stroke="#ffb3c1" stroke-width="4" stroke-linecap="round"/>
+  <path d="M44 96 Q52 100 56 96" fill="none" stroke="#c8304d" stroke-width="3" stroke-linecap="round"/>
+  <!-- right glove (jab ready, higher) -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <rect x="150" y="90" width="24" height="12" rx="4" fill="#fff" transform="rotate(-10 162 96)"/>
+    <path d="M146 82 C138 70 144 52 162 52 C180 52 186 68 180 82 C176 92 154 94 146 82 Z" fill="#ff4d6d"/>
+    <path d="M180 76 C188 72 188 62 180 60" fill="#ff4d6d"/>
+  </g>
+  <path d="M154 60 Q160 56 168 58" fill="none" stroke="#ffb3c1" stroke-width="4" stroke-linecap="round"/>
+  <!-- action lines -->
+  <path d="M180 36 l8 -6 M184 46 l9 -1" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+</svg>

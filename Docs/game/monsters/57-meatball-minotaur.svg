@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Meatball Minotaur, a round meatball bull with curly spaghetti horns, a sauce cap and a noodle nose ring">
+  <ellipse cx="100" cy="190" rx="62" ry="6" fill="#2b1d3a" opacity="0.22"/>
+  <!-- spaghetti horns (behind) -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M60 64 Q30 62 22 40 Q18 24 32 18" stroke="#2b1d3a" stroke-width="18"/>
+    <path d="M140 64 Q170 62 178 40 Q182 24 168 18" stroke="#2b1d3a" stroke-width="18"/>
+    <path d="M60 64 Q30 62 22 40 Q18 24 32 18" stroke="#ffd66b" stroke-width="10"/>
+    <path d="M140 64 Q170 62 178 40 Q182 24 168 18" stroke="#ffd66b" stroke-width="10"/>
+    <path d="M58 60 Q34 56 26 38 M142 60 Q166 56 174 38" stroke="#f0b53a" stroke-width="3"/>
+    <path d="M54 68 Q38 70 30 60 M146 68 Q162 70 170 60" stroke="#2b1d3a" stroke-width="8"/>
+    <path d="M54 68 Q38 70 30 60 M146 68 Q162 70 170 60" stroke="#ffd66b" stroke-width="3.5"/>
+  </g>
+  <!-- hoof feet -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M58 186 V172 Q58 162 74 162 Q90 162 90 172 V186 Z" fill="#5b3420"/>
+    <path d="M110 186 V172 Q110 162 126 162 Q142 162 142 172 V186 Z" fill="#5b3420"/>
+  </g>
+  <path d="M74 174 V186 M126 174 V186" stroke="#2b1d3a" stroke-width="3"/>
+  <!-- arms -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M48 124 Q24 128 20 150" stroke="#2b1d3a" stroke-width="22"/>
+    <path d="M48 124 Q24 128 20 150" stroke="#9a5532" stroke-width="14"/>
+    <path d="M152 124 Q176 128 180 150" stroke="#2b1d3a" stroke-width="22"/>
+    <path d="M152 124 Q176 128 180 150" stroke="#9a5532" stroke-width="14"/>
+  </g>
+  <g fill="#9a5532" stroke="#2b1d3a" stroke-width="4"><circle cx="20" cy="156" r="12"/><circle cx="180" cy="156" r="12"/></g>
+  <path d="M14 150 q4 -4 8 0 M22 150 q4 -4 8 0 M170 150 q4 -4 8 0 M178 150 q4 -4 8 0" fill="none" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- ears -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M50 80 Q30 76 26 90 Q40 98 56 94 Z" fill="#9a5532"/>
+    <path d="M150 80 Q170 76 174 90 Q160 98 144 94 Z" fill="#9a5532"/>
+  </g>
+  <!-- the meatball -->
+  <circle cx="100" cy="110" r="60" fill="#9a5532" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M152 82 Q172 130 134 160 Q106 178 70 162 Q130 160 152 82 Z" fill="#7a3e22"/>
+  <path d="M50 120 Q48 88 70 68" fill="none" stroke="#c27a4e" stroke-width="7" stroke-linecap="round"/>
+  <g fill="#7a3e22"><circle cx="66" cy="140" r="3"/><circle cx="58" cy="104" r="2.4"/><circle cx="140" cy="96" r="2.6"/><circle cx="120" cy="156" r="2.6"/></g>
+  <g fill="#5aa64a" stroke="#2b1d3a" stroke-width="1.5"><circle cx="82" cy="152" r="2.4"/><circle cx="146" cy="128" r="2.2"/><circle cx="60" cy="122" r="2"/></g>
+  <!-- sauce cap + basil leaf -->
+  <path d="M60 70 Q100 32 140 70 Q144 78 136 78 Q134 90 128 90 Q122 90 122 80 Q112 80 106 82 Q106 94 98 94 Q90 94 92 82 Q80 80 76 80 Q74 88 68 86 Q62 84 64 78 Q56 78 60 70 Z" fill="#e8402e" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M80 60 Q94 50 110 50" fill="none" stroke="#ff8a76" stroke-width="4" stroke-linecap="round"/>
+  <path d="M112 48 Q124 30 140 36 Q132 52 112 48 Z" fill="#5aa64a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M116 46 Q126 40 134 38" fill="none" stroke="#2f7a32" stroke-width="2" stroke-linecap="round"/>
+  <!-- eyes -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="78" cy="104" r="13" fill="#fff"/><circle cx="122" cy="104" r="13" fill="#fff"/></g>
+  <circle cx="82" cy="106" r="7" fill="#2b1d3a"/><circle cx="118" cy="106" r="7" fill="#2b1d3a"/>
+  <circle cx="84" cy="102" r="2.5" fill="#fff"/><circle cx="120" cy="102" r="2.5" fill="#fff"/>
+  <path d="M60 90 L92 98 M140 90 L108 98" stroke="#2b1d3a" stroke-width="6" stroke-linecap="round"/>
+  <!-- bull muzzle -->
+  <ellipse cx="100" cy="136" rx="32" ry="18" fill="#c98a5e" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="88" cy="132" rx="5" ry="4" fill="#2b1d3a"/><ellipse cx="112" cy="132" rx="5" ry="4" fill="#2b1d3a"/>
+  <path d="M84 144 Q100 150 116 144" fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M88 145 L90 151 L93 146 Z M107 146 L110 151 L112 145 Z" fill="#fff" stroke="#2b1d3a" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- noodle nose ring -->
+  <path d="M92 138 Q92 158 100 158 Q108 158 108 138" fill="none" stroke="#2b1d3a" stroke-width="8" stroke-linecap="round"/>
+  <path d="M92 138 Q92 158 100 158 Q108 158 108 138" fill="none" stroke="#ffd66b" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

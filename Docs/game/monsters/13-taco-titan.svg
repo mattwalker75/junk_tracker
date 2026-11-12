@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Taco Titan, a huge flexing taco giant with lettuce hair and salsa drips">
+  <defs>
+    <clipPath id="taco-titan-shell"><path d="M14 140 A86 96 0 0 1 186 140 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="191" rx="66" ry="6" fill="#2b1d3a" opacity="0.15"/>
+  <!-- legs -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M68 146 L64 178 L90 178 L90 146 Z" fill="#e9a640"/>
+    <path d="M110 146 L110 178 L136 178 L132 146 Z" fill="#e9a640"/>
+    <ellipse cx="74" cy="182" rx="21" ry="9" fill="#7a4a2b"/><ellipse cx="126" cy="182" rx="21" ry="9" fill="#7a4a2b"/>
+  </g>
+  <!-- arms: left flexing, right fist down -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M38 104 L14 110 L16 70" stroke="#2b1d3a" stroke-width="30"/>
+    <path d="M38 104 L14 110 L16 70" stroke="#ffcf5a" stroke-width="22"/>
+    <path d="M162 104 L186 110 L184 70" stroke="#2b1d3a" stroke-width="30"/>
+    <path d="M162 104 L186 110 L184 70" stroke="#ffcf5a" stroke-width="22"/>
+  </g>
+  <path d="M21 86 q8 6 4 16" fill="none" stroke="#e9a640" stroke-width="4" stroke-linecap="round"/><path d="M179 86 q-8 6 -4 16" fill="none" stroke="#e9a640" stroke-width="4" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="16" cy="60" r="13" fill="#ffcf5a"/><circle cx="184" cy="60" r="13" fill="#ffcf5a"/></g>
+  <path d="M8 54 q4 -4 8 0 M16 54 q4 -4 8 0 M176 54 q4 -4 8 0 M184 54 q4 -4 8 0" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <!-- filling peeking out under the shell: cheese, tomato, meat -->
+  <g stroke="#2b1d3a" stroke-width="2.5" fill="#ffb02e">
+    <rect x="40" y="140" width="6" height="22" rx="3" transform="rotate(20 43 151)"/>
+    <rect x="150" y="140" width="6" height="22" rx="3" transform="rotate(-24 153 151)"/>
+    <rect x="98" y="142" width="6" height="20" rx="3"/>
+  </g>
+  <g fill="#7bd36b" stroke="#2b1d3a" stroke-width="8"><circle cx="22.0" cy="142.0" r="10"/><circle cx="35.0" cy="146.0" r="12"/><circle cx="48.0" cy="141.0" r="11"/><circle cx="61.0" cy="138.3" r="10"/><circle cx="74.0" cy="144.0" r="12"/><circle cx="87.0" cy="145.2" r="11"/><circle cx="100.0" cy="139.2" r="10"/><circle cx="113.0" cy="139.5" r="12"/><circle cx="126.0" cy="145.4" r="11"/><circle cx="139.0" cy="143.6" r="10"/><circle cx="152.0" cy="138.2" r="12"/><circle cx="165.0" cy="141.4" r="11"/><circle cx="178.0" cy="146.0" r="10"/></g>
+  <g fill="#7bd36b"><circle cx="22.0" cy="142.0" r="10"/><circle cx="35.0" cy="146.0" r="12"/><circle cx="48.0" cy="141.0" r="11"/><circle cx="61.0" cy="138.3" r="10"/><circle cx="74.0" cy="144.0" r="12"/><circle cx="87.0" cy="145.2" r="11"/><circle cx="100.0" cy="139.2" r="10"/><circle cx="113.0" cy="139.5" r="12"/><circle cx="126.0" cy="145.4" r="11"/><circle cx="139.0" cy="143.6" r="10"/><circle cx="152.0" cy="138.2" r="12"/><circle cx="165.0" cy="141.4" r="11"/><circle cx="178.0" cy="146.0" r="10"/></g>
+  <g fill="#ff4d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
+    <rect x="56" y="144" width="11" height="11" rx="2.5" transform="rotate(14 61 149)"/>
+    <rect x="134" y="146" width="11" height="11" rx="2.5" transform="rotate(-18 139 151)"/>
+  </g>
+  <g fill="#8a4b2a" stroke="#2b1d3a" stroke-width="3"><circle cx="84" cy="150" r="6"/><circle cx="118" cy="152" r="6"/></g>
+  <!-- lettuce hair -->
+  <g fill="#7bd36b" stroke="#2b1d3a" stroke-width="8"><circle cx="78" cy="40" r="11"/><circle cx="92" cy="30" r="13"/><circle cx="108" cy="30" r="13"/><circle cx="122" cy="40" r="11"/><circle cx="100" cy="22" r="10"/><circle cx="84" cy="20" r="8"/><circle cx="116" cy="20" r="8"/></g>
+  <g fill="#7bd36b"><circle cx="78" cy="40" r="11"/><circle cx="92" cy="30" r="13"/><circle cx="108" cy="30" r="13"/><circle cx="122" cy="40" r="11"/><circle cx="100" cy="22" r="10"/><circle cx="84" cy="20" r="8"/><circle cx="116" cy="20" r="8"/></g>
+  <g fill="none" stroke="#4fae45" stroke-width="3" stroke-linecap="round"><path d="M86 30 q4 5 10 3"/><path d="M104 28 q4 5 10 3"/></g>
+  <!-- the shell (curved fold on top) -->
+  <path d="M14 140 A86 96 0 0 1 186 140 Z" fill="#ffcf5a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#taco-titan-shell)">
+    <ellipse cx="112" cy="150" rx="86" ry="96" fill="#e9a640"/>
+    <ellipse cx="100" cy="140" rx="84" ry="94" fill="#ffcf5a"/>
+    <g fill="#e9a640"><circle cx="73.2" cy="66.4" r="2.3"/><circle cx="122.9" cy="59.9" r="2.3"/><circle cx="51.5" cy="101.7" r="2.3"/><circle cx="107.3" cy="59.1" r="2.3"/><circle cx="144.7" cy="111.3" r="2.3"/></g>
+    <path d="M14 140 L186 140 L186 132 Q100 124 14 132 Z" fill="#e9a640"/>
+  </g>
+  <path d="M14 140 A86 96 0 0 1 186 140 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M32 90 Q38 74 52 62" fill="none" stroke="#fff0b8" stroke-width="5" stroke-linecap="round"/>
+  <!-- salsa drips from the fold -->
+  <path d="M66 54 Q100 34 134 54 Q138 60 132 60 Q130 70 124 70 Q118 70 120 60 Q108 58 98 60 Q98 74 90 74 Q82 74 84 62 Q76 62 74 64 Q72 70 67 68 Q62 64 66 54 Z" fill="#ff4d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M84 48 Q96 42 108 44" fill="none" stroke="#ff9b8a" stroke-width="3.5" stroke-linecap="round"/>
+  <g fill="#c22a1c"><circle cx="116" cy="50" r="2.5"/><circle cx="78" cy="56" r="2"/></g>
+  <!-- face -->
+  <path d="M60 80 Q80 70 100 82 Q120 70 140 80" fill="none" stroke="#2b1d3a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="80" cy="98" r="14" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="120" cy="98" r="14" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="83" cy="100" r="7.5" fill="#2b1d3a"/><circle cx="117" cy="100" r="7.5" fill="#2b1d3a"/>
+  <circle cx="85" cy="97" r="2.6" fill="#ffffff"/><circle cx="119" cy="97" r="2.6" fill="#ffffff"/>
+  <path d="M72 116 Q100 136 128 116 Q124 130 100 132 Q76 130 72 116 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M79 119 h42 l-3 5 h-36 z" fill="#ffffff"/>
+  <path d="M90 119 v5 M100 120 v5 M110 119 v5" stroke="#2b1d3a" stroke-width="2"/>
+  <ellipse cx="56" cy="112" rx="6.5" ry="3.5" fill="#ff8a5c"/><ellipse cx="144" cy="112" rx="6.5" ry="3.5" fill="#ff8a5c"/>
+</svg>

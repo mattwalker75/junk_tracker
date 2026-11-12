@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Fizz Frog, a lime-soda frog full of bubbles, with a bubble throat, sitting on a bottle cap">
+  <defs>
+    <clipPath id="fizz-frog-body"><path d="M34 150 C28 104 58 80 100 80 C142 80 172 104 166 150 C160 172 40 172 34 150 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="66" ry="6" fill="#2b1d3a" opacity="0.18"/>
+  <!-- bottle-cap lily pad -->
+  <path d="M26 170 V182 Q100 198 174 182 V170 Z" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g stroke="#c8304d" stroke-width="3.5" stroke-linecap="round"><path d="M36 176 V185"/><path d="M50 178 V188"/><path d="M64 179 V190"/><path d="M78 180 V191"/><path d="M92 180 V192"/><path d="M108 180 V192"/><path d="M122 180 V191"/><path d="M136 179 V190"/><path d="M150 178 V188"/><path d="M164 176 V185"/></g>
+  <path d="M26 182 Q100 198 174 182" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="100" cy="170" rx="74" ry="11" fill="#ff7a90" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- folded back legs -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#9be15d">
+    <path d="M44 128 C22 128 14 150 26 166 L58 170 C48 160 52 146 60 140 Z"/>
+    <path d="M156 128 C178 128 186 150 174 166 L142 170 C152 160 148 146 140 140 Z"/>
+  </g>
+  <g fill="#9be15d" stroke="#2b1d3a" stroke-width="3.5"><ellipse cx="28" cy="168" rx="12" ry="6"/><ellipse cx="172" cy="168" rx="12" ry="6"/></g>
+  <!-- eye domes -->
+  <g fill="#9be15d" stroke="#2b1d3a" stroke-width="4"><circle cx="68" cy="66" r="24"/><circle cx="132" cy="66" r="24"/></g>
+  <!-- the body: a big round gulp of lime soda -->
+  <path d="M34 150 C28 104 58 80 100 80 C142 80 172 104 166 150 C160 172 40 172 34 150 Z" fill="#9be15d"/>
+  <g clip-path="url(#fizz-frog-body)">
+    <path d="M140 86 C168 110 168 150 140 168 L180 170 L180 80 Z" fill="#5fb83a"/>
+    <path d="M60 150 Q100 166 140 150 L150 176 L50 176 Z" fill="#5fb83a" opacity="0.6"/>
+    <g fill="#e2ffc4" stroke="#2b1d3a" stroke-width="2" opacity="0.9">
+      <circle cx="52" cy="130" r="5"/><circle cx="62" cy="146" r="3.5"/><circle cx="148" cy="124" r="4.5"/><circle cx="142" cy="142" r="3"/><circle cx="46" cy="114" r="2.5"/>
+    </g>
+  </g>
+  <path d="M34 150 C28 104 58 80 100 80 C142 80 172 104 166 150 C160 172 40 172 34 150 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M48 112 Q56 94 78 88" fill="none" stroke="#e2ffc4" stroke-width="6" stroke-linecap="round"/>
+  <!-- inner eye-dome edge -->
+  <g fill="#9be15d"><circle cx="68" cy="68" r="20"/><circle cx="132" cy="68" r="20"/></g>
+  <!-- eyes -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="68" cy="66" r="15" fill="#ffffff"/><circle cx="132" cy="66" r="15" fill="#ffffff"/></g>
+  <circle cx="72" cy="69" r="8.5" fill="#2b1d3a"/><circle cx="128" cy="69" r="8.5" fill="#2b1d3a"/>
+  <circle cx="75" cy="65" r="3.2" fill="#ffffff"/><circle cx="131" cy="65" r="3.2" fill="#ffffff"/><circle cx="69" cy="73" r="1.5" fill="#ffffff"/><circle cx="125" cy="73" r="1.5" fill="#ffffff"/>
+  <path d="M50 52 Q66 46 84 54 M150 52 Q134 46 116 54" fill="none" stroke="#2b1d3a" stroke-width="4.5" stroke-linecap="round"/>
+  <ellipse cx="56" cy="98" rx="7" ry="4" fill="#ff8fab"/><ellipse cx="144" cy="98" rx="7" ry="4" fill="#ff8fab"/>
+  <!-- huge sneaky grin -->
+  <path d="M56 100 Q100 132 144 100 Q100 116 56 100 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M68 105 l4 7 4 -5z M132 105 l-4 7 -4 -5z" fill="#ffffff"/>
+  <path d="M90 116 Q100 110 112 116 Q100 122 90 116 Z" fill="#ff6f9f"/>
+  <!-- bubble throat pouch -->
+  <circle cx="100" cy="136" r="17" fill="#dff7ff" stroke="#2b1d3a" stroke-width="3.5"/>
+  <path d="M90 128 Q94 122 102 122" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="108" cy="142" r="2.5" fill="#ffffff" stroke="#2b1d3a" stroke-width="1.5"/>
+  <!-- front hands -->
+  <g fill="#9be15d" stroke="#2b1d3a" stroke-width="3.5">
+    <circle cx="66" cy="164" r="6"/><circle cx="76" cy="166" r="6"/><circle cx="56" cy="164" r="5.5"/>
+    <circle cx="134" cy="164" r="6"/><circle cx="124" cy="166" r="6"/><circle cx="144" cy="164" r="5.5"/>
+  </g>
+  <!-- fizz rising off its head -->
+  <g fill="#dff7ff" stroke="#2b1d3a" stroke-width="2.5">
+    <circle cx="100" cy="40" r="6"/><circle cx="90" cy="22" r="4"/><circle cx="108" cy="12" r="3"/><circle cx="160" cy="28" r="5"/><circle cx="172" cy="14" r="3"/><circle cx="32" cy="34" r="4"/>
+  </g>
+  <g fill="#ffffff"><circle cx="98" cy="38" r="1.6"/><circle cx="158" cy="26" r="1.4"/></g>
+</svg>

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Marshmallow Mammoth, a fluffy white marshmallow mammoth with pretzel-stick tusks and a trunk of stacked mini marshmallows">
+  <defs>
+    <clipPath id="marshmallow-mammoth-fluff">
+      <circle cx="100" cy="84" r="40"/><circle cx="72" cy="56" r="18"/><circle cx="100" cy="44" r="20"/><circle cx="128" cy="56" r="18"/><circle cx="64" cy="90" r="20"/><circle cx="136" cy="90" r="20"/>
+    </clipPath>
+  </defs>
+  <ellipse cx="100" cy="188" rx="66" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- body: one big marshmallow behind the head -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <rect x="28" y="104" width="144" height="74" rx="28" fill="#fffaf2"/>
+  </g>
+  <path d="M140 108 Q168 110 168 140 Q168 174 142 175 Q156 140 140 108 Z" fill="#efdcc8"/>
+  <!-- marshmallow legs -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#fffaf2">
+    <rect x="74" y="156" width="26" height="30" rx="10" fill="#efdcc8"/><rect x="100" y="156" width="26" height="30" rx="10" fill="#efdcc8"/>
+    <rect x="38" y="152" width="34" height="34" rx="12"/>
+    <rect x="128" y="152" width="34" height="34" rx="12"/>
+  </g>
+  <g fill="#f3b66a" stroke="#2b1d3a" stroke-width="2.5"><ellipse cx="55" cy="182" rx="12" ry="3.5"/><ellipse cx="145" cy="182" rx="12" ry="3.5"/></g>
+  <!-- tail tuft -->
+  <g fill="#fffaf2" stroke="#2b1d3a" stroke-width="3.5"><circle cx="174" cy="132" r="7"/><circle cx="182" cy="126" r="5"/></g>
+  <!-- big floppy ears -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M60 70 C36 56 12 66 14 96 C16 120 40 130 60 114 Z" fill="#fffaf2"/>
+    <path d="M140 70 C164 56 188 66 186 96 C184 120 160 130 140 114 Z" fill="#fffaf2"/>
+  </g>
+  <path d="M54 80 C38 72 24 80 26 98 C28 112 42 116 54 108 Z" fill="#ffd3e0"/>
+  <path d="M146 80 C162 72 176 80 174 98 C172 112 158 116 146 108 Z" fill="#ffd3e0"/>
+  <!-- fluffy head: outline pass, then fill pass -->
+  <g fill="#2b1d3a">
+    <circle cx="100" cy="84" r="44"/><circle cx="72" cy="56" r="22"/><circle cx="100" cy="44" r="24"/><circle cx="128" cy="56" r="22"/><circle cx="64" cy="90" r="24"/><circle cx="136" cy="90" r="24"/>
+  </g>
+  <g fill="#fffaf2">
+    <circle cx="100" cy="84" r="40"/><circle cx="72" cy="56" r="18"/><circle cx="100" cy="44" r="20"/><circle cx="128" cy="56" r="18"/><circle cx="64" cy="90" r="20"/><circle cx="136" cy="90" r="20"/>
+  </g>
+  <g clip-path="url(#marshmallow-mammoth-fluff)">
+    <path d="M130 50 C160 70 160 110 128 126 L170 126 L170 40 Z" fill="#efdcc8"/>
+    <!-- a toasty golden patch on top -->
+    <ellipse cx="100" cy="28" rx="20" ry="9" fill="#f3b66a"/>
+    <ellipse cx="94" cy="26" rx="7" ry="3" fill="#ffd79a"/>
+  </g>
+  <path d="M66 52 Q72 42 84 40" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <g fill="none" stroke="#e6d2bc" stroke-width="3" stroke-linecap="round"><path d="M56 104 q6 6 14 4"/><path d="M130 108 q8 2 14 -4"/></g>
+  <!-- pretzel tusks -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M80 114 Q60 140 40 128 Q30 122 34 110" stroke="#2b1d3a" stroke-width="15"/>
+    <path d="M120 114 Q140 140 160 128 Q170 122 166 110" stroke="#2b1d3a" stroke-width="15"/>
+    <path d="M80 114 Q60 140 40 128 Q30 122 34 110" stroke="#b8692e" stroke-width="8"/>
+    <path d="M120 114 Q140 140 160 128 Q170 122 166 110" stroke="#b8692e" stroke-width="8"/>
+    <path d="M74 122 Q60 136 44 128" stroke="#d98b45" stroke-width="3"/>
+    <path d="M126 122 Q140 136 156 128" stroke="#d98b45" stroke-width="3"/>
+  </g>
+  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="1.2">
+    <rect x="60" y="128" width="4" height="3" rx="1"/><rect x="48" y="128" width="4" height="3" rx="1" transform="rotate(20 50 130)"/><rect x="36" y="116" width="4" height="3" rx="1"/>
+    <rect x="136" y="128" width="4" height="3" rx="1"/><rect x="148" y="128" width="4" height="3" rx="1" transform="rotate(-20 150 130)"/><rect x="160" y="116" width="4" height="3" rx="1"/>
+  </g>
+  <!-- trunk of stacked mini marshmallows, curling up -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M100 106 C100 132 94 152 110 160 C126 166 136 150 126 140" stroke="#2b1d3a" stroke-width="26"/>
+    <path d="M100 106 C100 132 94 152 110 160 C126 166 136 150 126 140" stroke="#fffaf2" stroke-width="18"/>
+    <path d="M106 112 C106 132 102 148 112 154" stroke="#efdcc8" stroke-width="5"/>
+  </g>
+  <g fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round">
+    <path d="M92 124 Q100 127 108 124"/><path d="M89 141 Q97 145 105 143"/>
+  </g>
+  <ellipse cx="127" cy="140" rx="3" ry="2.2" fill="#2b1d3a" transform="rotate(-30 127 140)"/>
+  <!-- eyes -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="80" cy="80" r="14" fill="#ffffff"/><circle cx="120" cy="80" r="14" fill="#ffffff"/></g>
+  <circle cx="83" cy="83" r="8" fill="#2b1d3a"/><circle cx="117" cy="83" r="8" fill="#2b1d3a"/>
+  <circle cx="86" cy="79" r="3" fill="#ffffff"/><circle cx="120" cy="79" r="3" fill="#ffffff"/><circle cx="80" cy="87" r="1.5" fill="#ffffff"/><circle cx="114" cy="87" r="1.5" fill="#ffffff"/>
+  <path d="M64 62 L90 70 M136 62 L110 70" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="66" cy="102" rx="6" ry="3.5" fill="#ff9db8"/><ellipse cx="134" cy="102" rx="6" ry="3.5" fill="#ff9db8"/>
+  <!-- grin peeking out beside the trunk -->
+  <path d="M70 104 Q78 118 90 112 Q80 112 70 104 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M130 104 Q122 118 110 112 Q120 112 130 104 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M76 109 l2 5 3 -4z M124 109 l-2 5 -3 -4z" fill="#ffffff"/>
+  <!-- snowflake sparkles -->
+  <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M34 30 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M166 32 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

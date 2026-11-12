@@ -1,0 +1,542 @@
+[
+ {
+  "level": 1,
+  "world": "1 \u00b7 Snack Swamp",
+  "name": "Crumbs",
+  "boss": false,
+  "hp": 100,
+  "days": 3,
+  "svg": "01-crumbs.svg"
+ },
+ {
+  "level": 2,
+  "world": "1 \u00b7 Snack Swamp",
+  "name": "Chiplet",
+  "boss": false,
+  "hp": 120,
+  "days": 3,
+  "svg": "02-chiplet.svg"
+ },
+ {
+  "level": 3,
+  "world": "1 \u00b7 Snack Swamp",
+  "name": "Jerky Gator",
+  "boss": false,
+  "hp": 130,
+  "days": 3,
+  "svg": "37-jerky-gator.svg"
+ },
+ {
+  "level": 4,
+  "world": "1 \u00b7 Snack Swamp",
+  "name": "Twisty",
+  "boss": false,
+  "hp": 140,
+  "days": 3,
+  "svg": "17-twisty.svg"
+ },
+ {
+  "level": 5,
+  "world": "1 \u00b7 Snack Swamp",
+  "name": "Gummo",
+  "boss": false,
+  "hp": 160,
+  "days": 3,
+  "svg": "03-gummo.svg"
+ },
+ {
+  "level": 6,
+  "world": "1 \u00b7 Snack Swamp",
+  "name": "Puffball",
+  "boss": false,
+  "hp": 180,
+  "days": 3,
+  "svg": "38-puffball.svg"
+ },
+ {
+  "level": 7,
+  "world": "1 \u00b7 Snack Swamp",
+  "name": "Popcorn Puff",
+  "boss": false,
+  "hp": 190,
+  "days": 3,
+  "svg": "18-popcorn-puff.svg"
+ },
+ {
+  "level": 8,
+  "world": "1 \u00b7 Snack Swamp",
+  "name": "Sour Worm",
+  "boss": false,
+  "hp": 200,
+  "days": 3,
+  "svg": "39-sour-worm.svg"
+ },
+ {
+  "level": 9,
+  "world": "1 \u00b7 Snack Swamp",
+  "name": "Corny",
+  "boss": false,
+  "hp": 220,
+  "days": 3,
+  "svg": "40-corny.svg"
+ },
+ {
+  "level": 10,
+  "world": "1 \u00b7 Snack Swamp",
+  "name": "Sir Soda",
+  "boss": true,
+  "hp": 310,
+  "days": 4,
+  "svg": "04-sir-soda.svg"
+ },
+ {
+  "level": 11,
+  "world": "2 \u00b7 Burger Badlands",
+  "name": "Fry Hydra",
+  "boss": false,
+  "hp": 250,
+  "days": 4,
+  "svg": "05-fry-hydra.svg"
+ },
+ {
+  "level": 12,
+  "world": "2 \u00b7 Burger Badlands",
+  "name": "Slider Trio",
+  "boss": false,
+  "hp": 260,
+  "days": 4,
+  "svg": "19-slider-trio.svg"
+ },
+ {
+  "level": 13,
+  "world": "2 \u00b7 Burger Badlands",
+  "name": "Pickle Prickle",
+  "boss": false,
+  "hp": 280,
+  "days": 4,
+  "svg": "41-pickle-prickle.svg"
+ },
+ {
+  "level": 14,
+  "world": "2 \u00b7 Burger Badlands",
+  "name": "Queso Kraken",
+  "boss": false,
+  "hp": 300,
+  "days": 4,
+  "svg": "06-queso-kraken.svg"
+ },
+ {
+  "level": 15,
+  "world": "2 \u00b7 Burger Badlands",
+  "name": "Bacon Bandit",
+  "boss": false,
+  "hp": 310,
+  "days": 4,
+  "svg": "42-bacon-bandit.svg"
+ },
+ {
+  "level": 16,
+  "world": "2 \u00b7 Burger Badlands",
+  "name": "Ringleader",
+  "boss": false,
+  "hp": 320,
+  "days": 4,
+  "svg": "20-ringleader.svg"
+ },
+ {
+  "level": 17,
+  "world": "2 \u00b7 Burger Badlands",
+  "name": "Tot Rock",
+  "boss": false,
+  "hp": 340,
+  "days": 4,
+  "svg": "43-tot-rock.svg"
+ },
+ {
+  "level": 18,
+  "world": "2 \u00b7 Burger Badlands",
+  "name": "Long Frank",
+  "boss": false,
+  "hp": 360,
+  "days": 4,
+  "svg": "07-long-frank.svg"
+ },
+ {
+  "level": 19,
+  "world": "2 \u00b7 Burger Badlands",
+  "name": "Ketchup Coyote",
+  "boss": false,
+  "hp": 370,
+  "days": 4,
+  "svg": "44-ketchup-coyote.svg"
+ },
+ {
+  "level": 20,
+  "world": "2 \u00b7 Burger Badlands",
+  "name": "Baron Fryer",
+  "boss": true,
+  "hp": 500,
+  "days": 5,
+  "svg": "08-baron-fryer.svg"
+ },
+ {
+  "level": 21,
+  "world": "3 \u00b7 Sugar Peaks",
+  "name": "Brain Freeze",
+  "boss": false,
+  "hp": 400,
+  "days": 5,
+  "svg": "09-brain-freeze.svg"
+ },
+ {
+  "level": 22,
+  "world": "3 \u00b7 Sugar Peaks",
+  "name": "Swirlpop",
+  "boss": false,
+  "hp": 420,
+  "days": 5,
+  "svg": "21-swirlpop.svg"
+ },
+ {
+  "level": 23,
+  "world": "3 \u00b7 Sugar Peaks",
+  "name": "Candy Cane Crab",
+  "boss": false,
+  "hp": 430,
+  "days": 5,
+  "svg": "45-candy-cane-crab.svg"
+ },
+ {
+  "level": 24,
+  "world": "3 \u00b7 Sugar Peaks",
+  "name": "Glazewing",
+  "boss": false,
+  "hp": 440,
+  "days": 5,
+  "svg": "10-glazewing.svg"
+ },
+ {
+  "level": 25,
+  "world": "3 \u00b7 Sugar Peaks",
+  "name": "Taffy Stretch",
+  "boss": false,
+  "hp": 460,
+  "days": 5,
+  "svg": "46-taffy-stretch.svg"
+ },
+ {
+  "level": 26,
+  "world": "3 \u00b7 Sugar Peaks",
+  "name": "Fluffnado",
+  "boss": false,
+  "hp": 480,
+  "days": 5,
+  "svg": "22-fluffnado.svg"
+ },
+ {
+  "level": 27,
+  "world": "3 \u00b7 Sugar Peaks",
+  "name": "Choco Bunny",
+  "boss": false,
+  "hp": 490,
+  "days": 5,
+  "svg": "47-choco-bunny.svg"
+ },
+ {
+  "level": 28,
+  "world": "3 \u00b7 Sugar Peaks",
+  "name": "Shake Ooze",
+  "boss": false,
+  "hp": 500,
+  "days": 5,
+  "svg": "11-shake-ooze.svg"
+ },
+ {
+  "level": 29,
+  "world": "3 \u00b7 Sugar Peaks",
+  "name": "Marshmallow Mammoth",
+  "boss": false,
+  "hp": 520,
+  "days": 5,
+  "svg": "48-marshmallow-mammoth.svg"
+ },
+ {
+  "level": 30,
+  "world": "3 \u00b7 Sugar Peaks",
+  "name": "Queen Frosting",
+  "boss": true,
+  "hp": 700,
+  "days": 6,
+  "svg": "12-queen-frosting.svg"
+ },
+ {
+  "level": 31,
+  "world": "4 \u00b7 Fizzy Falls",
+  "name": "Jolt",
+  "boss": false,
+  "hp": 550,
+  "days": 5,
+  "svg": "23-jolt.svg"
+ },
+ {
+  "level": 32,
+  "world": "4 \u00b7 Fizzy Falls",
+  "name": "Fizz Frog",
+  "boss": false,
+  "hp": 560,
+  "days": 5,
+  "svg": "49-fizz-frog.svg"
+ },
+ {
+  "level": 33,
+  "world": "4 \u00b7 Fizzy Falls",
+  "name": "Boba Blob",
+  "boss": false,
+  "hp": 580,
+  "days": 5,
+  "svg": "24-boba-blob.svg"
+ },
+ {
+  "level": 34,
+  "world": "4 \u00b7 Fizzy Falls",
+  "name": "Sour Squeeze",
+  "boss": false,
+  "hp": 600,
+  "days": 5,
+  "svg": "50-sour-squeeze.svg"
+ },
+ {
+  "level": 35,
+  "world": "4 \u00b7 Fizzy Falls",
+  "name": "Slush",
+  "boss": false,
+  "hp": 610,
+  "days": 5,
+  "svg": "25-slush.svg"
+ },
+ {
+  "level": 36,
+  "world": "4 \u00b7 Fizzy Falls",
+  "name": "Cocoa Croc",
+  "boss": false,
+  "hp": 620,
+  "days": 5,
+  "svg": "51-cocoa-croc.svg"
+ },
+ {
+  "level": 37,
+  "world": "4 \u00b7 Fizzy Falls",
+  "name": "Frappe Phantom",
+  "boss": false,
+  "hp": 640,
+  "days": 5,
+  "svg": "26-frappe-phantom.svg"
+ },
+ {
+  "level": 38,
+  "world": "4 \u00b7 Fizzy Falls",
+  "name": "Float Bear",
+  "boss": false,
+  "hp": 660,
+  "days": 5,
+  "svg": "52-float-bear.svg"
+ },
+ {
+  "level": 39,
+  "world": "4 \u00b7 Fizzy Falls",
+  "name": "Boxer",
+  "boss": false,
+  "hp": 670,
+  "days": 5,
+  "svg": "27-boxer.svg"
+ },
+ {
+  "level": 40,
+  "world": "4 \u00b7 Fizzy Falls",
+  "name": "The Fountain King",
+  "boss": true,
+  "hp": 890,
+  "days": 6,
+  "svg": "28-fountain-king.svg"
+ },
+ {
+  "level": 41,
+  "world": "5 \u00b7 Midnight Drive-Thru",
+  "name": "Nugget Ninja",
+  "boss": false,
+  "hp": 700,
+  "days": 6,
+  "svg": "29-nugget-ninja.svg"
+ },
+ {
+  "level": 42,
+  "world": "5 \u00b7 Midnight Drive-Thru",
+  "name": "Hash Hound",
+  "boss": false,
+  "hp": 720,
+  "days": 6,
+  "svg": "53-hash-hound.svg"
+ },
+ {
+  "level": 43,
+  "world": "5 \u00b7 Midnight Drive-Thru",
+  "name": "Taco Titan",
+  "boss": false,
+  "hp": 730,
+  "days": 6,
+  "svg": "13-taco-titan.svg"
+ },
+ {
+  "level": 44,
+  "world": "5 \u00b7 Midnight Drive-Thru",
+  "name": "Mozz Mantis",
+  "boss": false,
+  "hp": 740,
+  "days": 6,
+  "svg": "54-mozz-mantis.svg"
+ },
+ {
+  "level": 45,
+  "world": "5 \u00b7 Midnight Drive-Thru",
+  "name": "Wrapped Up",
+  "boss": false,
+  "hp": 760,
+  "days": 6,
+  "svg": "30-wrapped-up.svg"
+ },
+ {
+  "level": 46,
+  "world": "5 \u00b7 Midnight Drive-Thru",
+  "name": "Pancake Bot",
+  "boss": false,
+  "hp": 780,
+  "days": 6,
+  "svg": "55-pancake-bot.svg"
+ },
+ {
+  "level": 47,
+  "world": "5 \u00b7 Midnight Drive-Thru",
+  "name": "Wingfire",
+  "boss": false,
+  "hp": 790,
+  "days": 6,
+  "svg": "31-wingfire.svg"
+ },
+ {
+  "level": 48,
+  "world": "5 \u00b7 Midnight Drive-Thru",
+  "name": "Corn Dog Cyclops",
+  "boss": false,
+  "hp": 800,
+  "days": 6,
+  "svg": "56-corn-dog-cyclops.svg"
+ },
+ {
+  "level": 49,
+  "world": "5 \u00b7 Midnight Drive-Thru",
+  "name": "Crust Colossus",
+  "boss": false,
+  "hp": 820,
+  "days": 6,
+  "svg": "14-crust-colossus.svg"
+ },
+ {
+  "level": 50,
+  "world": "5 \u00b7 Midnight Drive-Thru",
+  "name": "Sergeant Supersize",
+  "boss": true,
+  "hp": 1090,
+  "days": 7,
+  "svg": "32-sergeant-supersize.svg"
+ },
+ {
+  "level": 51,
+  "world": "6 \u00b7 Feast Fortress",
+  "name": "Noodle Noggin",
+  "boss": false,
+  "hp": 850,
+  "days": 7,
+  "svg": "33-noodle-noggin.svg"
+ },
+ {
+  "level": 52,
+  "world": "6 \u00b7 Feast Fortress",
+  "name": "Meatball Minotaur",
+  "boss": false,
+  "hp": 860,
+  "days": 7,
+  "svg": "57-meatball-minotaur.svg"
+ },
+ {
+  "level": 53,
+  "world": "6 \u00b7 Feast Fortress",
+  "name": "Gravy Golem",
+  "boss": false,
+  "hp": 880,
+  "days": 7,
+  "svg": "34-gravy-golem.svg"
+ },
+ {
+  "level": 54,
+  "world": "6 \u00b7 Feast Fortress",
+  "name": "Garlic Bread Gargoyle",
+  "boss": false,
+  "hp": 900,
+  "days": 7,
+  "svg": "58-garlic-bread-gargoyle.svg"
+ },
+ {
+  "level": 55,
+  "world": "6 \u00b7 Feast Fortress",
+  "name": "Buffet Beast",
+  "boss": false,
+  "hp": 910,
+  "days": 7,
+  "svg": "15-buffet-beast.svg"
+ },
+ {
+  "level": 56,
+  "world": "6 \u00b7 Feast Fortress",
+  "name": "Fondue Fiend",
+  "boss": false,
+  "hp": 920,
+  "days": 7,
+  "svg": "59-fondue-fiend.svg"
+ },
+ {
+  "level": 57,
+  "world": "6 \u00b7 Feast Fortress",
+  "name": "Lasagna Lich",
+  "boss": false,
+  "hp": 940,
+  "days": 7,
+  "svg": "35-lasagna-lich.svg"
+ },
+ {
+  "level": 58,
+  "world": "6 \u00b7 Feast Fortress",
+  "name": "Turkey Leg Troll",
+  "boss": false,
+  "hp": 960,
+  "days": 7,
+  "svg": "60-turkey-leg-troll.svg"
+ },
+ {
+  "level": 59,
+  "world": "6 \u00b7 Feast Fortress",
+  "name": "Cheesecake Knight",
+  "boss": false,
+  "hp": 970,
+  "days": 7,
+  "svg": "36-cheesecake-knight.svg"
+ },
+ {
+  "level": 60,
+  "world": "6 \u00b7 Feast Fortress",
+  "name": "The Midnight Snacker",
+  "boss": true,
+  "hp": 1280,
+  "days": 8,
+  "svg": "16-midnight-snacker.svg"
+ }
+]

@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="The Midnight Snacker, a big fridge monster in a bathrobe, nightcap and fuzzy slippers, its open door a glowing mouth">
+  <defs>
+    <radialGradient id="midnight-snacker-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff3a8" stop-opacity="0.9"/><stop offset="0.6" stop-color="#ffd34d" stop-opacity="0.35"/><stop offset="1" stop-color="#ffd34d" stop-opacity="0"/></radialGradient>
+    <linearGradient id="midnight-snacker-inside" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe0"/><stop offset="1" stop-color="#ffd34d"/></linearGradient>
+    <clipPath id="midnight-snacker-body"><rect x="44" y="22" width="112" height="152" rx="20"/></clipPath>
+    <clipPath id="midnight-snacker-mouth"><rect x="56" y="90" width="88" height="68" rx="10"/></clipPath>
+  </defs>
+  <!-- the fridge-light glow -->
+  <ellipse cx="100" cy="124" rx="98" ry="74" fill="url(#midnight-snacker-glow)"/>
+  <ellipse cx="100" cy="194" rx="86" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <!-- night sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M14 96 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
+    <path d="M186 20 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+  </g>
+  <path d="M40 6 a9 9 0 1 0 8 12 a7 7 0 1 1 -8 -12z" fill="#fff3a8" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- left robe sleeve, raised, holding a midnight sandwich -->
+  <path d="M50 84 Q26 82 22 54" fill="none" stroke="#2b1d3a" stroke-width="28" stroke-linecap="round"/>
+  <path d="M50 84 Q26 82 22 54" fill="none" stroke="#8a4fc0" stroke-width="20" stroke-linecap="round"/>
+  <path d="M13 60 L31 58" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+  <!-- fridge body -->
+  <rect x="44" y="22" width="112" height="152" rx="20" fill="#e4ecf7" stroke="#2b1d3a" stroke-width="4"/>
+  <g clip-path="url(#midnight-snacker-body)">
+    <rect x="132" y="18" width="30" height="160" fill="#b8c6dc"/>
+    <rect x="52" y="30" width="7" height="44" rx="3.5" fill="#ffffff"/>
+  </g>
+  <rect x="44" y="22" width="112" height="152" rx="20" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M44 82 L156 82" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- glowing open mouth: the inside of the fridge -->
+  <rect x="56" y="90" width="88" height="68" rx="10" fill="url(#midnight-snacker-inside)" stroke="#2b1d3a" stroke-width="4"/>
+  <g clip-path="url(#midnight-snacker-mouth)">
+    <path d="M56 122 H144" stroke="#e0b52e" stroke-width="3"/>
+    <!-- milk carton -->
+    <path d="M66 122 V108 L71 103 L76 108 V122 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M66 112 H76" stroke="#6ec6ff" stroke-width="3"/>
+    <!-- drumstick -->
+    <path d="M118 120 q-4 -12 6 -14 q10 -1 8 10 q-2 6 -14 4z" fill="#c9773a" stroke="#2b1d3a" stroke-width="2.5"/>
+    <path d="M118 120 l-5 2" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+    <!-- cake slice + jar on the lower shelf -->
+    <path d="M70 150 L92 150 L92 138 L72 134 Z" fill="#fff3c4" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M72 134 L92 138 L92 141 L71 137 Z" fill="#ff8fc0"/>
+    <rect x="112" y="134" width="14" height="16" rx="3" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="2.5"/>
+    <rect x="111" y="130" width="16" height="5" rx="2" fill="#ffc93c" stroke="#2b1d3a" stroke-width="2"/>
+  </g>
+  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"><path d="M60 92 l5 11 5 -11z"/><path d="M70 92 l5 11 5 -11z"/><path d="M80 92 l5 11 5 -11z"/><path d="M90 92 l5 11 5 -11z"/><path d="M100 92 l5 11 5 -11z"/><path d="M110 92 l5 11 5 -11z"/><path d="M120 92 l5 11 5 -11z"/><path d="M130 92 l5 11 5 -11z"/><path d="M64 156 l5 -9 5 9z"/><path d="M76 156 l5 -9 5 9z"/><path d="M88 156 l5 -9 5 9z"/><path d="M100 156 l5 -9 5 9z"/><path d="M112 156 l5 -9 5 9z"/><path d="M124 156 l5 -9 5 9z"/></g>
+  <!-- cheese-slice tongue -->
+  <path d="M90 152 Q100 146 110 152 L112 172 Q100 178 88 172 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <g fill="#e8a417"><circle cx="96" cy="160" r="2.5"/><circle cx="105" cy="166" r="2"/></g>
+  <!-- bathrobe: shawl collar and side panels framing the mouth -->
+  <path d="M42 40 Q44 30 54 30 L60 82 L60 176 L40 176 Q34 110 42 40 Z" fill="#8a4fc0" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M158 40 Q156 30 146 30 L140 82 L140 176 L160 176 Q166 110 158 40 Z" fill="#8a4fc0" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M42 40 Q44 30 52 30 Q54 60 64 86 L58 90 Q46 66 42 40 Z" fill="#b28dff" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M158 40 Q156 30 148 30 Q146 60 136 86 L142 90 Q154 66 158 40 Z" fill="#b28dff" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M150 104 L150 170 M50 104 L50 170" stroke="#6b3a9a" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 9"/>
+  <!-- robe belt, untied, hanging -->
+  <path d="M40 132 L60 132 L60 140 L40 140 Z M140 132 L160 132 L160 140 L140 140 Z" fill="#b28dff" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M42 138 Q32 150 36 168" fill="none" stroke="#2b1d3a" stroke-width="9" stroke-linecap="round"/>
+  <path d="M42 138 Q32 150 36 168" fill="none" stroke="#b28dff" stroke-width="4" stroke-linecap="round"/>
+  <!-- the open door, swung out to the right -->
+  <path d="M156 88 L190 80 L190 172 L156 166 Z" fill="#d4deec" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M160 112 L186 108 L186 116 L160 120 Z" fill="#b8c6dc"/>
+    <path d="M160 144 L186 142 L186 150 L160 152 Z" fill="#b8c6dc"/>
+    <rect x="164" y="96" width="7" height="14" rx="2" fill="#ff4d6d"/><rect x="175" y="94" width="7" height="14" rx="2" fill="#7bd36b"/>
+    <rect x="166" y="128" width="8" height="16" rx="3" fill="#ffc93c"/>
+  </g>
+  <path d="M156 88 L190 80 L190 172 L156 166 Z" fill="#ffd34d" opacity="0.18"/>
+  <!-- right robe sleeve, resting on the door -->
+  <path d="M150 96 Q172 96 186 92" fill="none" stroke="#2b1d3a" stroke-width="28" stroke-linecap="round"/>
+  <path d="M150 96 Q172 96 186 92" fill="none" stroke="#8a4fc0" stroke-width="20" stroke-linecap="round"/>
+  <!-- freezer face -->
+  
+  <path d="M64 40 L94 46 M136 40 L106 46" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="80" cy="60" r="15" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="120" cy="60" r="15" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="83" cy="64" r="8" fill="#2b1d3a"/><circle cx="117" cy="64" r="8" fill="#2b1d3a"/>
+  <circle cx="83" cy="64" r="3" fill="#ffc93c"/><circle cx="117" cy="64" r="3" fill="#ffc93c"/>
+  <path d="M65.3 56.9 A15 15 0 0 1 94.7 56.9 Z" fill="#e4ecf7" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M105.3 56.9 A15 15 0 0 1 134.7 56.9 Z" fill="#e4ecf7" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M68 76 q12 5 24 0 M108 76 q12 5 24 0" fill="none" stroke="#9aa8c4" stroke-width="3" stroke-linecap="round"/>
+  <!-- nightcap -->
+  <path d="M56 24 Q66 0 112 2 Q156 4 176 40 Q160 30 146 24 Z" fill="#6ec6ff" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M120 4 Q136 6 150 14 L160 24 Q150 18 140 22 Z" fill="#4aa6e0"/>
+  <path d="M82 4 L92 22 M108 2 L116 22 M134 8 L136 24 M154 18 L150 26" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M56 24 Q66 0 112 2 Q156 4 176 40 Q160 30 146 24 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <rect x="50" y="18" width="100" height="14" rx="7" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="4"><circle cx="177" cy="44" r="9"/></g>
+  <!-- the sandwich in the raised hand -->
+  <circle cx="22" cy="48" r="9" fill="#e4ecf7" stroke="#2b1d3a" stroke-width="4"/>
+  <g stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round" transform="translate(6 0)">
+    <path d="M2 40 Q16 32 32 40 L30 44 L4 44 Z" fill="#f2b366"/>
+    <path d="M3 44 Q10 50 16 44 Q22 50 30 44 L30 47 L3 47 Z" fill="#7bd36b"/>
+    <rect x="3" y="46" width="27" height="5" rx="2" fill="#ff8a5c"/>
+    <path d="M3 51 L30 51 Q30 56 16 56 Q3 56 3 51 Z" fill="#f2b366"/>
+  </g>
+  <!-- right mitt on the door -->
+  <circle cx="188" cy="92" r="10" fill="#e4ecf7" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M182 100 l-2 5 5 -2 M190 102 l0 5 4 -3" fill="#ffffff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- fuzzy slippers -->
+  <g fill="#ff9ec0" stroke="#2b1d3a" stroke-width="8"><circle cx="46.0" cy="179.6" r="9.2"/><circle cx="52.7" cy="181.3" r="9.2"/><circle cx="59.3" cy="177.9" r="9.2"/><circle cx="66.0" cy="179.6" r="9.2"/><circle cx="72.7" cy="181.3" r="9.2"/><circle cx="79.3" cy="177.8" r="9.2"/><circle cx="86.0" cy="179.7" r="9.2"/><circle cx="66.0" cy="176.3" r="11.0"/><circle cx="114.0" cy="179.6" r="9.2"/><circle cx="120.7" cy="181.3" r="9.2"/><circle cx="127.3" cy="177.9" r="9.2"/><circle cx="134.0" cy="179.6" r="9.2"/><circle cx="140.7" cy="181.3" r="9.2"/><circle cx="147.3" cy="177.8" r="9.2"/><circle cx="154.0" cy="179.7" r="9.2"/><circle cx="134.0" cy="176.3" r="11.0"/></g>
+  <g fill="#ff9ec0"><circle cx="46.0" cy="179.6" r="9.2"/><circle cx="52.7" cy="181.3" r="9.2"/><circle cx="59.3" cy="177.9" r="9.2"/><circle cx="66.0" cy="179.6" r="9.2"/><circle cx="72.7" cy="181.3" r="9.2"/><circle cx="79.3" cy="177.8" r="9.2"/><circle cx="86.0" cy="179.7" r="9.2"/><circle cx="66.0" cy="176.3" r="11.0"/><circle cx="114.0" cy="179.6" r="9.2"/><circle cx="120.7" cy="181.3" r="9.2"/><circle cx="127.3" cy="177.9" r="9.2"/><circle cx="134.0" cy="179.6" r="9.2"/><circle cx="140.7" cy="181.3" r="9.2"/><circle cx="147.3" cy="177.8" r="9.2"/><circle cx="154.0" cy="179.7" r="9.2"/><circle cx="134.0" cy="176.3" r="11.0"/></g>
+  <g fill="#ffd3e6"><ellipse cx="60" cy="176" rx="6" ry="3"/><ellipse cx="128" cy="176" rx="6" ry="3"/></g>
+  <g fill="#2b1d3a"><circle cx="60" cy="184" r="2.6"/><circle cx="72" cy="184" r="2.6"/><circle cx="128" cy="184" r="2.6"/><circle cx="140" cy="184" r="2.6"/></g>
+</svg>

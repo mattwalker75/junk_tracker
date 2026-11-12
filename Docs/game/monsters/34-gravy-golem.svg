@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Gravy Golem, a lumpy mashed-potato golem with a lake of gravy on its head and a pat of butter floating in it">
+  <ellipse cx="100" cy="190" rx="76" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <!-- legs -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#f3e2b8">
+    <path d="M62 150 Q56 172 60 184 Q76 190 90 184 Q94 168 90 150 Z"/>
+    <path d="M110 150 Q106 168 110 184 Q124 190 140 184 Q144 172 138 150 Z"/>
+  </g>
+  <!-- boulder arms -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#fff1cf">
+    <path d="M44 84 Q20 84 16 108 Q12 130 22 146 Q36 156 46 140 Q54 116 56 96 Z"/>
+    <path d="M156 84 Q180 84 184 108 Q188 130 178 146 Q164 156 154 140 Q146 116 144 96 Z"/>
+    <path d="M10 150 Q8 136 22 132 Q38 130 42 146 Q44 164 28 168 Q12 168 10 150 Z"/>
+    <path d="M190 150 Q192 136 178 132 Q162 130 158 146 Q156 164 172 168 Q188 168 190 150 Z"/>
+  </g>
+  <path d="M22 100 Q18 114 22 126 M178 100 Q182 114 178 126" fill="none" stroke="#e6cf98" stroke-width="5" stroke-linecap="round"/>
+  <path d="M14 152 q4 -4 8 0 M24 154 q4 -4 8 0 M168 154 q4 -4 8 0 M178 152 q4 -4 8 0" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <!-- torso -->
+  <path d="M40 92 Q36 72 60 70 L140 70 Q164 72 160 92 Q166 120 156 146 Q140 164 100 162 Q60 164 44 146 Q34 120 40 92 Z" fill="#fff1cf" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M154 96 Q160 122 152 142 Q138 158 112 160 Q146 140 154 96 Z" fill="#e6cf98"/>
+  <g fill="none" stroke="#e6cf98" stroke-width="3.5" stroke-linecap="round">
+    <path d="M60 140 q10 6 20 0"/><path d="M108 148 q10 4 18 -2"/><path d="M52 112 q6 -6 14 -4"/>
+  </g>
+  <!-- peas stuck in it -->
+  <g fill="#7bd36b" stroke="#2b1d3a" stroke-width="2.5"><circle cx="66" cy="126" r="5"/><circle cx="138" cy="132" r="5"/><circle cx="84" cy="150" r="4"/></g>
+  <g fill="#c8f0b0"><circle cx="64.5" cy="124.5" r="1.6"/><circle cx="136.5" cy="130.5" r="1.6"/></g>
+  <!-- head with a gravy lake -->
+  <path d="M52 76 Q46 40 72 34 Q100 26 128 34 Q154 40 148 76 Q150 106 124 112 Q100 118 76 112 Q50 106 52 76 Z" fill="#fff1cf" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M60 60 Q62 46 74 40" fill="none" stroke="#fffaf0" stroke-width="6" stroke-linecap="round"/>
+  <path d="M60 44 Q100 30 140 44 Q144 54 136 56 Q138 70 130 72 Q122 72 124 60 Q104 64 86 60 Q88 78 78 78 Q70 78 72 62 Q64 60 62 56 Q54 52 60 44 Z" fill="#8a4b22" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M74 44 Q92 38 110 40" fill="none" stroke="#c0773e" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- butter pat floating in the lake -->
+  <path d="M100 36 L116 34 L120 44 L104 47 Z" fill="#ffe26a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M103 38 L112 37" stroke="#fff6c2" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M96 50 q6 3 12 0 q6 -3 12 0" fill="none" stroke="#c0773e" stroke-width="2" stroke-linecap="round"/>
+  <!-- face -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="82" cy="86" r="13" fill="#fff"/><circle cx="118" cy="86" r="13" fill="#fff"/></g>
+  <circle cx="85" cy="89" r="7" fill="#2b1d3a"/><circle cx="115" cy="89" r="7" fill="#2b1d3a"/>
+  <circle cx="87" cy="85" r="2.5" fill="#fff"/><circle cx="117" cy="85" r="2.5" fill="#fff"/>
+  <path d="M90 104 Q100 110 110 104" fill="none" stroke="#2b1d3a" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M94 106 L96 111 L99 107 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="66" cy="100" r="5.5" fill="#ff8f7a" opacity="0.5"/><circle cx="134" cy="100" r="5.5" fill="#ff8f7a" opacity="0.5"/>
+  <!-- gravy drip down the cheek -->
+  <path d="M130 70 Q134 80 132 90 Q128 94 126 88 Q126 80 124 72 Z" fill="#8a4b22" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+</svg>

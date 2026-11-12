@@ -34,6 +34,34 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 
 **Name:** Matt named the game **Craving Crusher** (Nov 11 2026). The other options were Snack Smackdown, Junk Monsters and Belly Brawl.
 
+## Later decisions (Nov 11 2026) — these override the older numbers below
+- **60 levels, 6 worlds × 10** (Matt: "push it to 60 levels", "more levels per world and increase the
+  number of worlds", "we need to also create more monsters"). **Every level is its own monster**: in
+  each world, 9 monsters and then the boss at level 10. The worlds are Snack Swamp, Burger Badlands,
+  Sugar Peaks, **Fizzy Falls**, **Midnight Drive-Thru** and Feast Fortress. HP = 100 + 15 × (level − 1);
+  a boss gets × 1.3. Deadlines are 3–7 days by world, and a boss gets +1 day. The full table is in
+  `game/LEVELS_60.md` (also `game/levels60.json`). The 44 newer abilities are in `game/MONSTERS.md`, and
+  all 60 drawings are in `game/monsters/`. The 16-monster table further down keeps the original
+  abilities, but its HP and deadlines are replaced by LEVELS_60.
+- **Run mode: Normal or Hardcore**, picked when a run starts (option C).
+  - **Normal:** at 0 hearts you are knocked back to the first level of your world with 3 hearts,
+    and lose 250 points. The run carries on.
+  - **Hardcore:** at 0 hearts the run is over and the next one starts at level 1. You get ×1.25 on
+    all points and a skull badge in the Hall of Heroes, which has its own Hardcore tab.
+  - A Hardcore run can drop to Normal at any time. A Normal run can't be switched to Hardcore.
+- **Splurges have an optional time** in the regular app as well. This shipped Nov 11 2026 (a74b95f).
+  When no time is given, time-based abilities assume the worst: the Midnight Snacker counts it as after
+  9 PM, Hash Hound as before 11 AM, and Fondue Fiend as within 3 hours of another splurge.
+- **The same fields in both modes.** Log a splurge and Log activity have exactly the dashboard's
+  fields, order and labels. Game mode only re-skins them (the game palette and chunky buttons) and
+  adds the live damage or heal panel. Build them as one form with two skins.
+- **No Weigh in in game mode.** The game's bottom buttons are **+ Activity (attack)** and
+  **+ Splurge**. The dashboard keeps all three.
+- **Open:** should *Planned treat* also be a field on the dashboard's Log a splurge sheet? For now it
+  sits only in the game's heal panel.
+- Mockups: canvas rounds 6 and 7. Round 7 has the 60-level map, World 2 up close, Start a run,
+  Knocked back, the game-styled sheets, the bottom buttons and five New monsters pages.
+
 ## Where it lives
 - **Switch:** the initials menu (MW) gets a **Game mode** item, with a gamepad icon, above Goals, Settings and Sign out. In the game the same item reads **Back to tracker**. Mockup: `GameMenuSwitch`.
 - **Logging:** the game has no logging of its own. It reads the person's real log: activities, splurges, clean days.

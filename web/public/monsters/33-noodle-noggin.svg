@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Noodle Noggin, a mac-and-cheese bowl brute with a mohawk of elbow noodles">
+  <ellipse cx="100" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <!-- noodle mohawk -->
+  <g fill="none" stroke-linecap="round">
+    <g stroke="#2b1d3a" stroke-width="14">
+      <path d="M76 50 Q70 34 80 24"/><path d="M90 44 Q84 24 96 12"/><path d="M106 42 Q102 20 116 10"/><path d="M122 48 Q120 30 132 22"/>
+    </g>
+    <g stroke="#ffd257" stroke-width="7">
+      <path d="M76 50 Q70 34 80 24"/><path d="M90 44 Q84 24 96 12"/><path d="M106 42 Q102 20 116 10"/><path d="M122 48 Q120 30 132 22"/>
+    </g>
+  </g>
+  <g fill="#ffd257" stroke="#2b1d3a" stroke-width="3">
+    <ellipse cx="81" cy="23" rx="4.5" ry="3" transform="rotate(-40 81 23)"/><ellipse cx="97" cy="11" rx="4.5" ry="3" transform="rotate(-40 97 11)"/><ellipse cx="117" cy="9" rx="4.5" ry="3" transform="rotate(-50 117 9)"/><ellipse cx="133" cy="21" rx="4.5" ry="3" transform="rotate(-50 133 21)"/>
+  </g>
+  <g fill="#e89a1c"><ellipse cx="81" cy="23" rx="2" ry="1.2" transform="rotate(-40 81 23)"/><ellipse cx="97" cy="11" rx="2" ry="1.2" transform="rotate(-40 97 11)"/><ellipse cx="117" cy="9" rx="2" ry="1.2" transform="rotate(-50 117 9)"/><ellipse cx="133" cy="21" rx="2" ry="1.2" transform="rotate(-50 133 21)"/></g>
+  <!-- big brute arms, knuckles down -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 118 Q14 124 18 168" stroke="#2b1d3a" stroke-width="28"/>
+    <path d="M40 118 Q14 124 18 168" stroke="#ffc23a" stroke-width="20"/>
+    <path d="M160 118 Q186 124 182 168" stroke="#2b1d3a" stroke-width="28"/>
+    <path d="M160 118 Q186 124 182 168" stroke="#ffc23a" stroke-width="20"/>
+  </g>
+  <path d="M20 132 Q14 142 16 154 M180 132 Q186 142 184 154" fill="none" stroke="#e89a1c" stroke-width="4" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="4"><ellipse cx="20" cy="174" rx="16" ry="12" fill="#ffc23a"/><ellipse cx="180" cy="174" rx="16" ry="12" fill="#ffc23a"/></g>
+  <path d="M10 170 q4 -4 8 0 M20 170 q4 -4 8 0 M172 170 q4 -4 8 0 M182 170 q4 -4 8 0" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <!-- cheesy mound (the head) -->
+  <path d="M38 118 Q34 52 100 44 Q166 52 162 118 Z" fill="#ffc23a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M148 80 Q160 98 158 118 L130 118 Q150 100 148 80 Z" fill="#f0a020"/>
+  <path d="M52 92 Q56 66 80 54" fill="none" stroke="#ffe48a" stroke-width="7" stroke-linecap="round"/>
+  <g fill="none" stroke="#d98a12" stroke-width="3" stroke-linecap="round">
+    <path d="M60 106 a6 6 0 0 1 10 -4"/><path d="M138 100 a6 6 0 0 1 10 2"/><path d="M140 74 a6 6 0 0 1 10 2"/><path d="M58 72 a6 6 0 0 1 10 -2"/><path d="M96 54 a6 6 0 0 1 10 0"/><path d="M84 106 a6 6 0 0 1 10 -1"/><path d="M110 104 a6 6 0 0 1 10 1"/><path d="M146 116 a5 5 0 0 1 8 -2"/>
+  </g>
+  <!-- face -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="80" cy="72" r="13" fill="#fff"/><circle cx="120" cy="72" r="13" fill="#fff"/></g>
+  <circle cx="83" cy="75" r="7" fill="#2b1d3a"/><circle cx="117" cy="75" r="7" fill="#2b1d3a"/>
+  <circle cx="85" cy="71" r="2.5" fill="#fff"/><circle cx="119" cy="71" r="2.5" fill="#fff"/>
+  <path d="M62 54 Q78 52 96 62 M138 54 Q122 52 104 62" fill="none" stroke="#2b1d3a" stroke-width="6.5" stroke-linecap="round"/>
+  <!-- underbite with tusks -->
+  <path d="M78 90 Q100 84 122 90 Q120 104 100 104 Q80 104 78 90 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M84 100 L86 84 L92 98 Z M116 100 L114 84 L108 98 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <circle cx="60" cy="90" r="5.5" fill="#ff8f7a" opacity="0.55"/><circle cx="140" cy="90" r="5.5" fill="#ff8f7a" opacity="0.55"/>
+  <!-- the bowl -->
+  <path d="M28 114 H172 Q170 170 100 176 Q30 170 28 114 Z" fill="#4a6fd8" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M150 124 Q150 160 100 170 Q156 168 164 124 Z" fill="#3653b0"/>
+  <path d="M38 128 Q42 150 60 162" fill="none" stroke="#8fa8ff" stroke-width="6" stroke-linecap="round"/>
+  <rect x="24" y="110" width="152" height="12" rx="6" fill="#fff7e6" stroke="#2b1d3a" stroke-width="4"/>
+  <g fill="#fff7e6" stroke="#2b1d3a" stroke-width="2.5"><circle cx="70" cy="142" r="4"/><circle cx="100" cy="150" r="4"/><circle cx="130" cy="142" r="4"/></g>
+  <path d="M80 174 H120 V182 Q100 186 80 182 Z" fill="#3653b0" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- cheese drips over the rim -->
+  <path d="M56 110 Q60 126 54 128 Q48 126 50 112 Z M132 110 Q136 130 130 132 Q124 130 126 112 Z" fill="#ffc23a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+</svg>

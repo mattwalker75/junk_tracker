@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Twisty, a pretzel-knot snake that ties itself in loops">
+  <ellipse cx="100" cy="188" rx="72" ry="6" fill="#2b1d3a" opacity="0.18"/>
+  <path d="M132 166 Q166 176 184 150 Q190 168 172 180 Q152 190 128 182 Z" fill="#d4843f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M184 150 l4 -10 l4 10 z" fill="#a65a26" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 140 C96 118 108 104 102 80" stroke="#2b1d3a" stroke-width="30"/>
+    <path d="M100 140 C96 118 108 104 102 80" stroke="#a65a26" stroke-width="22"/>
+    <path d="M100 140 C96 118 108 104 102 80" stroke="#d4843f" stroke-width="14" transform="translate(-2 -3)"/>
+    <path d="M100 140 C96 118 108 104 102 80" stroke="#f3b46c" stroke-width="4" stroke-dasharray="14 18" transform="translate(-4 -6)"/>
+  </g>
+  <g transform="translate(100 130) scale(0.9) translate(-100 -130)">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M72 168 C82 146 112 118 132 102 C152 86 178 96 178 126 C178 162 146 186 100 186 C54 186 22 162 22 126 C22 96 48 86 68 102 C88 118 118 146 128 168" stroke="#2b1d3a" stroke-width="30"/>
+    <path d="M72 168 C82 146 112 118 132 102 C152 86 178 96 178 126 C178 162 146 186 100 186 C54 186 22 162 22 126 C22 96 48 86 68 102 C88 118 118 146 128 168" stroke="#a65a26" stroke-width="22"/>
+    <path d="M72 168 C82 146 112 118 132 102 C152 86 178 96 178 126 C178 162 146 186 100 186 C54 186 22 162 22 126 C22 96 48 86 68 102 C88 118 118 146 128 168" stroke="#d4843f" stroke-width="14" transform="translate(-2 -3)"/>
+    <path d="M72 168 C82 146 112 118 132 102 C152 86 178 96 178 126 C178 162 146 186 100 186 C54 186 22 162 22 126 C22 96 48 86 68 102 C88 118 118 146 128 168" stroke="#f3b46c" stroke-width="4" stroke-dasharray="14 18" transform="translate(-4 -6)"/>
+  </g>
+  <g fill="none" stroke-linecap="butt" stroke-linejoin="round">
+    <path d="M79.6 111.7 C89.6 120.4 100.4 130.8 109.6 141.3" stroke="#2b1d3a" stroke-width="30"/>
+    <path d="M75.6 108.2 C87.9 118.7 102.2 132.2 113.2 145.6" stroke="#a65a26" stroke-width="22"/>
+    <path d="M75.6 108.2 C87.9 118.7 102.2 132.2 113.2 145.6" stroke="#d4843f" stroke-width="14" transform="translate(-2 -3)"/>
+    <path d="M75.6 108.2 C87.9 118.7 102.2 132.2 113.2 145.6" stroke="#f3b46c" stroke-width="4" stroke-dasharray="14 18" transform="translate(-4 -6)"/>
+  </g>
+  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round">
+    <rect x="43" y="93" width="6" height="6" rx="1.2" transform="rotate(0 46 96)"/>
+    <rect x="27" y="137" width="6" height="6" rx="1.2" transform="rotate(37 30 140)"/>
+    <rect x="57" y="179" width="6" height="6" rx="1.2" transform="rotate(74 60 182)"/>
+    <rect x="107" y="187" width="6" height="6" rx="1.2" transform="rotate(21 110 190)"/>
+    <rect x="147" y="177" width="6" height="6" rx="1.2" transform="rotate(58 150 180)"/>
+    <rect x="169" y="137" width="6" height="6" rx="1.2" transform="rotate(5 172 140)"/>
+    <rect x="153" y="93" width="6" height="6" rx="1.2" transform="rotate(42 156 96)"/>
+    <rect x="137" y="101" width="6" height="6" rx="1.2" transform="rotate(79 140 104)"/>
+    <rect x="93" y="121" width="6" height="6" rx="1.2" transform="rotate(26 96 124)"/>
+    <rect x="51" y="105" width="6" height="6" rx="1.2" transform="rotate(63 54 108)"/>
+    <rect x="81" y="183" width="6" height="6" rx="1.2" transform="rotate(10 84 186)"/>
+    <rect x="165" y="109" width="6" height="6" rx="1.2" transform="rotate(47 168 112)"/>
+  </g>
+  </g>
+  <path d="M58 56 C58 30 80 18 102 18 C126 18 146 32 146 56 C146 78 126 88 102 88 C78 88 58 80 58 56 Z" fill="#d4843f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M140 66 C132 82 112 86 92 84 C116 80 134 72 142 52 Z" fill="#a65a26"/>
+  <path d="M68 44 Q76 28 94 24" fill="none" stroke="#f3b46c" stroke-width="6" stroke-linecap="round"/>
+  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round">
+    <rect x="121" y="23" width="6" height="6" rx="1.2" transform="rotate(0 124 26)"/>
+    <rect x="133" y="35" width="6" height="6" rx="1.2" transform="rotate(37 136 38)"/>
+    <rect x="73" y="27" width="6" height="6" rx="1.2" transform="rotate(74 76 30)"/>
+  </g>
+  <ellipse cx="84" cy="50" rx="14" ry="14" fill="#fff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="86" cy="52" r="7.0" fill="#2b1d3a"/>
+  <circle cx="88.5" cy="48.9" r="2.5" fill="#fff"/>
+  <ellipse cx="120" cy="50" rx="14" ry="14" fill="#fff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="118" cy="52" r="7.0" fill="#2b1d3a"/>
+  <circle cx="120.5" cy="48.9" r="2.5" fill="#fff"/>
+  <path d="M68 32 L94 40 M136 32 L110 40" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#2b1d3a"><circle cx="96" cy="68" r="2"/><circle cx="108" cy="68" r="2"/></g>
+  <path d="M76 72 Q102 92 128 72" fill="none" stroke="#2b1d3a" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M96 82 C96 92 94 100 88 104 M96 82 C98 92 100 100 104 106" fill="none" stroke="#2b1d3a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M96 82 C96 92 94 100 88 104 M96 82 C98 92 100 100 104 106" fill="none" stroke="#ff6f91" stroke-width="3" stroke-linecap="round"/>
+  <path d="M84 78 L88 88 L92 80 Z M112 80 L116 88 L120 78 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <circle cx="68" cy="68" r="5" fill="#ff8f7a" opacity="0.6"/><circle cx="136" cy="68" r="5" fill="#ff8f7a" opacity="0.6"/>
+</svg>

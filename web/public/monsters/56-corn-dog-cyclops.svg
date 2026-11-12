@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Corn Dog Cyclops, a one-eyed corn dog hopping on its stick, shaking a fist">
+  <ellipse cx="100" cy="190" rx="44" ry="6" fill="#2b1d3a" opacity="0.22"/>
+  <!-- the stick -->
+  <rect x="92" y="150" width="16" height="38" rx="6" fill="#d9a066" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M97 160 V182" stroke="#f0c48e" stroke-width="3" stroke-linecap="round"/>
+  <!-- motion lines -->
+  <g fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"><path d="M70 182 h-14 M74 174 h-10 M130 182 h14 M126 174 h10"/></g>
+  <!-- hot dog peeking out the top -->
+  <path d="M80 34 Q80 12 100 12 Q120 12 120 34 Z" fill="#e0564a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M88 22 Q94 16 100 16" fill="none" stroke="#ff9a8a" stroke-width="4" stroke-linecap="round"/>
+  <!-- arms -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M58 104 Q36 96 30 72" stroke="#2b1d3a" stroke-width="13"/>
+    <path d="M58 104 Q36 96 30 72" stroke="#f2b340" stroke-width="5"/>
+    <path d="M142 110 Q164 118 166 138" stroke="#2b1d3a" stroke-width="13"/>
+    <path d="M142 110 Q164 118 166 138" stroke="#f2b340" stroke-width="5"/>
+  </g>
+  <g fill="#f2b340" stroke="#2b1d3a" stroke-width="4"><circle cx="30" cy="66" r="10"/><circle cx="166" cy="142" r="8"/></g>
+  <path d="M24 62 q4 -4 8 0 M30 60 q4 -4 8 0" fill="none" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M16 54 l-6 -4 M14 66 h-7 M22 44 l-3 -6" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <!-- batter body -->
+  <path d="M100 26 Q146 26 146 92 Q146 158 100 158 Q54 158 54 92 Q54 26 100 26 Z" fill="#f2b340" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M138 66 Q148 106 136 138 Q122 158 100 158 Q134 142 138 66 Z" fill="#d48d22"/>
+  <path d="M66 120 Q60 80 74 50" fill="none" stroke="#ffdc8a" stroke-width="7" stroke-linecap="round"/>
+  <g fill="#c97e1a"><circle cx="72" cy="136" r="2.4"/><circle cx="128" cy="128" r="2.4"/><circle cx="84" cy="40" r="2"/><circle cx="122" cy="44" r="2.2"/><circle cx="66" cy="96" r="2"/><circle cx="134" cy="96" r="2"/><circle cx="110" cy="146" r="2.2"/></g>
+  <!-- mustard zigzag -->
+  <path d="M66 48 L78 58 L88 46 L100 58 L112 46 L122 58 L134 48" fill="none" stroke="#2b1d3a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M66 48 L78 58 L88 46 L100 58 L112 46 L122 58 L134 48" fill="none" stroke="#ffd93a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- the one big eye -->
+  <path d="M68 70 Q100 56 132 70" fill="none" stroke="#2b1d3a" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="100" cy="94" r="26" fill="#fff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="104" cy="97" r="13" fill="#2b1d3a"/>
+  <circle cx="104" cy="97" r="6" fill="#ff7a2f"/>
+  <circle cx="104" cy="97" r="3.2" fill="#2b1d3a"/>
+  <circle cx="110" cy="89" r="4" fill="#fff"/><circle cx="98" cy="104" r="1.8" fill="#fff"/>
+  <ellipse cx="68" cy="122" rx="6" ry="3.5" fill="#ff7a5c" opacity="0.7"/><ellipse cx="132" cy="122" rx="6" ry="3.5" fill="#ff7a5c" opacity="0.7"/>
+  <!-- snaggle grin -->
+  <path d="M80 128 Q100 146 120 128 Q116 142 100 144 Q84 142 80 128 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M86 131 L89 138 L93 133 Z M106 133 L111 140 L114 131 Z" fill="#fff"/>
+</svg>

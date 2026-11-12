@@ -5,6 +5,20 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 ## [Unreleased]
 
 ### Added
+- 2026-11-11: **Game mode: Craving Crusher's first screens.** The initials menu has **Game mode**
+  (with a gamepad) above Goals; in the game the same menu starts with **Back to tracker**. The game
+  opens on its title screen: **Start a run** (or **Continue Run #N**), then pick **Normal** or
+  **Hardcore**. The battle screen shows your hearts, run and score, the deadline ticking down to
+  11:59 PM of its last day, the monster with its HP bar and its trick, a **So close!** line that
+  says how many minutes or calories would finish it, your power-ups, the battle log, and two big
+  buttons: **+ Activity (attack)** and **+ Splurge**. **Choose your fight** lets you bet on a
+  shorter deadline (Bold ×1.5, Daredevil ×2) until your first hit lands. In the game, *Log
+  activity* and *Log a splurge* are the same forms with the same boxes, in the game's colours, with
+  a live panel on top: "This hits Fry Hydra for 66 · 26 short…", **FINISHING BLOW!**, or how much
+  a splurge heals it (a planned treat heals half). After you log something the game catches up at
+  once: a knockout opens the next fight and a note says what happened. The Monster Book, Hall of
+  Heroes, How to crush and the map come in the next update. The tracker looks and works exactly as
+  before. The game's fonts (Lilita One, Nunito) come with the app, like the goal note's handwriting.
 - 2026-11-11: **Planned treat on a splurge.** *Log a splurge* has a **Planned treat** switch after
   Notes, for a treat you planned, like a birthday dinner. It is still a splurge everywhere in the
   tracker; the day shows a small *planned* tag on it. In game mode it heals the monster half.

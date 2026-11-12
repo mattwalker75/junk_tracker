@@ -98,6 +98,26 @@ export interface GameClock {
   newId: () => Id;
 }
 
+/** The moment a Veggie Shield went up; "start" = it was already up when this fight began. */
+export type ArmPoint = { day: Day; time: string; at: string } | "start";
+
+export interface FightInput {
+  level: number;
+  startedOn: Day;
+  startedAfter: string | null;
+  deadlineOn: Day;
+  today: Day;
+  /** the log from the day before the fight started (the comeback and "yesterday" look there) to today */
+  splurges: SplurgeEv[];
+  activities: ActivityEv[];
+  /** Water Potions used in this fight */
+  potions?: { id: Id; day: Day; time: string; at: string }[];
+  /** a Veggie Shield that is up: it blocks the first heal after this point */
+  shieldFrom?: ArmPoint | null;
+  /** heals a shield already blocked in this fight (their source ids) */
+  blocked?: string[];
+}
+
 /** One line of the battle log. */
 export interface BattleLine {
   day: Day;
@@ -167,6 +187,11 @@ export interface FightView extends Omit<FightData, "points"> {
   finish: { hp: number; minutes: number; calories: number };
   /** false in Bacon Bandit's fight (Stick 'Em Up) */
   powerUpsAllowed: boolean;
+  /**
+   * The engine's input for this fight (its window, the log it reads, its power-ups), so the page can
+   * run the same `preview()` the server would ("this hits Fry Hydra for 66", "heals +35").
+   */
+  input: FightInput;
 }
 
 export type MapStatus = "beaten" | "current" | "locked";

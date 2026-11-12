@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Sour Worm, a sugar-dusted two-tone sour gummy worm">
+  <ellipse cx="96" cy="186" rx="70" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M30 164 C30 146 52 146 66 156 C82 168 100 174 118 166 C146 154 156 126 140 104 C130 90 120 82 122 66" stroke="#2b1d3a" stroke-width="34"/></g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M30 164 C30 146 52 146 66 156 C82 168 100 174 118 166" stroke="#6fae22" stroke-width="26"/><path d="M30 164 C30 146 52 146 66 156 C82 168 100 174 118 166" stroke="#9fdc3c" stroke-width="16" transform="translate(-2 -3)"/><path d="M30 164 C30 146 52 146 66 156 C82 168 100 174 118 166" stroke="#d6f58a" stroke-width="4" stroke-dasharray="12 16" transform="translate(-5 -7)"/></g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M118 166 C146 154 156 126 140 104 C130 90 120 82 122 66" stroke="#d72f66" stroke-width="26"/><path d="M118 166 C146 154 156 126 140 104 C130 90 120 82 122 66" stroke="#ff4f86" stroke-width="16" transform="translate(-2 -3)"/><path d="M118 166 C146 154 156 126 140 104 C130 90 120 82 122 66" stroke="#ffa3c0" stroke-width="4" stroke-dasharray="12 16" transform="translate(-5 -7)"/></g>
+  <path d="M116 152 Q124 166 120 180" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="120" cy="58" rx="36" ry="32" fill="#ff4f86" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M154 66 C148 86 122 94 98 88 C124 84 146 76 152 52 Z" fill="#d72f66"/>
+  <path d="M92 44 Q100 30 118 28" fill="none" stroke="#ffa3c0" stroke-width="6" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="106" cy="54" r="13" fill="#fff"/></g>
+  <circle cx="109" cy="56" r="6.8" fill="#2b1d3a"/>
+  <circle cx="111.2" cy="53" r="2.4" fill="#fff"/>
+  <path d="M126 54 Q136 46 146 54 M126 54 Q136 60 146 56" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
+  <path d="M92 36 L116 42 M150 38 L130 46" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M100 74 Q118 86 142 72 Q126 80 100 74 Z" fill="#7a2a3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M106 76 L109 83 L112 77 Z M128 78 L131 84 L134 76 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="92" cy="66" r="5" fill="#ffd0dc" opacity="0.7"/><circle cx="150" cy="64" r="5" fill="#ffd0dc" opacity="0.7"/>
+  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"><rect x="33" y="147" width="6" height="6" rx="1.2" transform="rotate(10 36 150)"/><rect x="49" y="157" width="6" height="6" rx="1.2" transform="rotate(40 52 160)"/><rect x="71" y="155" width="6" height="6" rx="1.2" transform="rotate(70 74 158)"/><rect x="89" y="167" width="6" height="6" rx="1.2" transform="rotate(15 92 170)"/><rect x="105" y="157" width="6" height="6" rx="1.2" transform="rotate(50 108 160)"/><rect x="131" y="145" width="6" height="6" rx="1.2" transform="rotate(20 134 148)"/><rect x="143" y="125" width="6" height="6" rx="1.2" transform="rotate(65 146 128)"/><rect x="127" y="105" width="6" height="6" rx="1.2" transform="rotate(30 130 108)"/><rect x="133" y="91" width="6" height="6" rx="1.2" transform="rotate(75 136 94)"/><rect x="95" y="33" width="6" height="6" rx="1.2" transform="rotate(10 98 36)"/><rect x="137" y="31" width="6" height="6" rx="1.2" transform="rotate(45 140 34)"/><rect x="145" y="75" width="6" height="6" rx="1.2" transform="rotate(25 148 78)"/><rect x="87" y="59" width="6" height="6" rx="1.2" transform="rotate(60 90 62)"/><rect x="37" y="165" width="6" height="6" rx="1.2" transform="rotate(30 40 168)"/></g>
+  <g stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M56 112 v8 M52 116 h8"/><path d="M172 112 v8 M168 116 h8"/></g>
+  <g stroke="#2b1d3a" stroke-width="1" fill="none" opacity="0.0"></g>
+</svg>

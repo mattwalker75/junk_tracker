@@ -193,3 +193,26 @@ Where this plan left the flow open, Stage 1 took these readings. All of them are
 - **Several years away** is settled with a loop guard of 5,000 fights.
 - **`now`** is the phone's clock ("HH:MM"). It only places a Water Potion or a Veggie Shield among
   the day's timed entries. `at` times are the server's clock, like a log entry's `created_at`.
+
+## Decisions made while building (Stage 2, Nov 11 2026)
+- **The page previews with the server's own input.** `FightView.input` is the open fight's engine
+  input (its window, the log it reads, potions, shield), so the sheets run the same `preview()` the
+  server would. The screen words and numbers are in `web/src/game/logic.ts` (tested in
+  `test/gameui.test.ts`); the panels replace an entry being edited instead of adding it.
+- **One form, two skins.** `skin` on `Sheet`, `LogSheet` and `ActivitySheet`; the form's parts
+  (`Label`, `Input`, `Button`, `Toggle`, `DayPicker`…) read it from `SkinContext`, so the tracker
+  skin's markup is unchanged. The game skin adds only the live panel, the heal badge under each size,
+  a note under Time about time-tricky monsters and "+5 points" under Save.
+- **Sync:** the page calls `POST /api/game/sync` when the view says `needsSync`, and after every
+  save or delete in a game-skinned sheet. What a sync settled shows in a "What just happened" panel
+  on the battle screen (stage 3 makes the big ones the Victory / Strike / … overlays). After a KO it
+  links to Choose your fight.
+- **Choose your fight's Veggie Shield** is put up (`POST /api/game/powerup`) when Fight! is pressed,
+  after the bet. Potions and Second Winds are used on the battle screen; each power-up asks for a
+  second tap there.
+- **The battle screen has no Log activity button in the middle** (the mockup had one): the two
+  bottom buttons do it. The mockups' "Try a…" demo buttons and the menu's "New" tag are left out.
+- **Arena backgrounds** are the mockup's desert, recoloured per world (`WORLD_LOOK` in
+  `web/src/game/art.tsx`). The game's CSS (`.game`, `.g-*` in `index.css`) lives in the components
+  layer so Tailwind utilities still win; at night the page colour is dimmed and panels go purple.
+  With reduced motion on, nothing in the game moves.

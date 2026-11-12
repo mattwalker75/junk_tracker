@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Queen Frosting, a cupcake empress with a sprinkle crown, a frosting cape and a star scepter">
+  <defs>
+    <clipPath id="queen-frosting-t1"><ellipse cx="100" cy="122" rx="60" ry="20"/></clipPath>
+    <clipPath id="queen-frosting-t2"><ellipse cx="100" cy="86" rx="54" ry="30"/></clipPath>
+    <clipPath id="queen-frosting-t3"><ellipse cx="100" cy="54" rx="28" ry="13"/></clipPath>
+    <clipPath id="queen-frosting-wrap"><path d="M56 134 L144 134 L133 190 L67 190 Z"/></clipPath>
+    <clipPath id="queen-frosting-cape"><path d="M58 92 C30 120 16 160 10 192 L190 192 C184 160 170 120 142 92 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="193" rx="80" ry="6" fill="#2b1d3a" opacity="0.18"/>
+  <!-- royal sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M18 40 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
+    <path d="M182 56 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M30 96 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+  <!-- frosting cape -->
+  <path d="M58 92 C30 120 16 160 10 192 L190 192 C184 160 170 120 142 92 Z" fill="#7c4ddb" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#queen-frosting-cape)">
+    <path d="M142 92 C170 120 184 160 190 192 L160 192 C156 150 148 118 132 96 Z" fill="#5d34b0"/>
+    <path d="M0 178 Q14 168 26 178 Q40 168 52 178 Q66 168 78 178 Q100 168 122 178 Q134 168 148 178 Q160 168 174 178 Q186 168 200 178 L200 200 L0 200 Z" fill="#ff8fc0" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  </g>
+  <path d="M58 92 C30 120 16 160 10 192 L190 192 C184 160 170 120 142 92" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <!-- frosting drips along the cape top -->
+  <path d="M56 94 C70 86 130 86 144 94 L146 104 C140 112 136 104 132 100 C128 114 120 108 118 100 C110 108 104 106 100 100 C96 108 90 106 84 100 C80 110 72 112 68 100 C64 108 58 108 54 104 Z" fill="#ff8fc0" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- lace ruff collar -->
+  <path d="M100 92 L38.0 92.0 A9.4 9.4 0 0 1 40.5 74.5 A9.4 9.4 0 0 1 47.8 58.5 A9.4 9.4 0 0 1 59.4 45.1 A9.4 9.4 0 0 1 74.2 35.6 A9.4 9.4 0 0 1 91.2 30.6 A9.4 9.4 0 0 1 108.8 30.6 A9.4 9.4 0 0 1 125.8 35.6 A9.4 9.4 0 0 1 140.6 45.1 A9.4 9.4 0 0 1 152.2 58.5 A9.4 9.4 0 0 1 159.5 74.5 A9.4 9.4 0 0 1 162.0 92.0 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g stroke="#d8c8ea" stroke-width="2.5"><path d="M100 92 L44.6 84.0"/><path d="M100 92 L49.1 68.7"/><path d="M100 92 L57.7 55.3"/><path d="M100 92 L69.7 44.9"/><path d="M100 92 L84.2 38.3"/><path d="M100 92 L100.0 36.0"/><path d="M100 92 L115.8 38.3"/><path d="M100 92 L130.3 44.9"/><path d="M100 92 L142.3 55.3"/><path d="M100 92 L150.9 68.7"/><path d="M100 92 L155.4 84.0"/></g>
+  <!-- scepter -->
+  <path d="M168 176 L156 70" stroke="#2b1d3a" stroke-width="11" stroke-linecap="round"/>
+  <path d="M168 176 L156 70" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M168 176 L156 70" stroke="#ff4d6d" stroke-width="5" stroke-dasharray="5 6"/>
+  <path d="M155 40 l6 12 13 2 -10 9 3 13 -12 -7 -12 7 3 -13 -10 -9 13 -2z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="153" cy="54" r="2" fill="#fff3c4"/>
+  <!-- cupcake wrapper gown -->
+  <path d="M56 134 L144 134 L133 190 L67 190 Z" fill="#7fe0c4" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#queen-frosting-wrap)">
+    <g fill="#5cc4a6"><path d="M66 128 h8 l-2 62 h-8z"/><path d="M86 128 h8 l-1 62 h-8z"/><path d="M106 128 h8 l1 62 h-8z"/><path d="M126 128 h8 l2 62 h-8z"/></g>
+    <path d="M120 128 L150 128 L140 192 L114 192 Z" fill="#2b1d3a" opacity="0.15"/>
+  </g>
+  <path d="M56 134 L144 134 L133 190 L67 190 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <!-- frosting swirl (the queen herself), three tiers -->
+  <ellipse cx="100" cy="122" rx="60" ry="20" fill="#ff8fc0" stroke="#2b1d3a" stroke-width="4"/>
+  <g clip-path="url(#queen-frosting-t1)"><ellipse cx="112" cy="127" rx="60" ry="20" fill="#f06aa6"/><ellipse cx="96" cy="118" rx="60" ry="20" fill="#ff8fc0"/></g>
+  <ellipse cx="100" cy="122" rx="60" ry="20" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="100" cy="86" rx="54" ry="30" fill="#ff8fc0" stroke="#2b1d3a" stroke-width="4"/>
+  <g clip-path="url(#queen-frosting-t2)"><ellipse cx="111" cy="93" rx="54" ry="30" fill="#f06aa6"/><ellipse cx="96" cy="81" rx="54" ry="30" fill="#ff8fc0"/></g>
+  <ellipse cx="100" cy="86" rx="54" ry="30" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="100" cy="54" rx="28" ry="13" fill="#ff8fc0" stroke="#2b1d3a" stroke-width="4"/>
+  <g clip-path="url(#queen-frosting-t3)"><ellipse cx="107" cy="58" rx="28" ry="13" fill="#f06aa6"/><ellipse cx="97" cy="51" rx="28" ry="13" fill="#ff8fc0"/></g>
+  <ellipse cx="100" cy="54" rx="28" ry="13" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="62" cy="74" rx="4" ry="8" fill="#ffd3e6" transform="rotate(50 62 74)"/>
+  <ellipse cx="50" cy="118" rx="3.5" ry="7" fill="#ffd3e6" transform="rotate(60 50 118)"/>
+  <!-- sprinkles -->
+  <g stroke="#2b1d3a" stroke-width="1.3">
+    <rect x="50" y="122" width="9" height="4" rx="2" fill="#ffc93c" transform="rotate(-30 54 124)"/>
+    <rect x="140" y="120" width="9" height="4" rx="2" fill="#6ec6ff" transform="rotate(40 144 122)"/>
+    <rect x="80" y="130" width="9" height="4" rx="2" fill="#7bd36b" transform="rotate(10 84 132)"/>
+    <rect x="118" y="128" width="9" height="4" rx="2" fill="#ffffff" transform="rotate(-50 122 130)"/>
+    <rect x="112" y="54" width="9" height="4" rx="2" fill="#6ec6ff" transform="rotate(-20 116 56)"/>
+    <rect x="136" y="66" width="9" height="4" rx="2" fill="#ffc93c" transform="rotate(-25 140 68)"/>
+  </g>
+  <!-- face -->
+  <g fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"><path d="M68 80 l-8 -3 M69 75 l-6 -6"/><path d="M132 80 l8 -3 M131 75 l6 -6"/></g>
+  <circle cx="82" cy="86" r="14" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="118" cy="86" r="14" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="84" cy="91" r="7.5" fill="#2b1d3a"/><circle cx="120" cy="91" r="7.5" fill="#2b1d3a"/>
+  <circle cx="86" cy="88" r="2.6" fill="#ffffff"/><circle cx="122" cy="88" r="2.6" fill="#ffffff"/>
+  <path d="M68.5 82.4 A14 14 0 0 1 95.3 81.7 Z" fill="#ff8fc0" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M104.7 81.7 A14 14 0 0 1 131.5 82.4 Z" fill="#ff8fc0" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <ellipse cx="64" cy="102" rx="6" ry="3.5" fill="#ff5d93"/><ellipse cx="136" cy="102" rx="6" ry="3.5" fill="#ff5d93"/>
+  <path d="M86 104 Q100 114 116 102" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
+  <path d="M106 108 l3 6 3 -7z" fill="#ffffff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="130" cy="108" r="1.6" fill="#2b1d3a"/>
+  <!-- little frosting hands -->
+  <path d="M154 120 q10 -2 10 -10 q-6 -4 -10 2" fill="#ff8fc0" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <ellipse cx="160" cy="114" rx="7" ry="6" fill="#ff8fc0" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- sprinkle crown -->
+  <path d="M74 44 L70 14 L84 26 L92 6 L100 22 L108 6 L116 26 L130 14 L126 44 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M108 6 L116 26 L130 14 L126 44 L106 44 Z" fill="#e8a417"/>
+  <path d="M74 44 L70 14 L84 26 L92 6 L100 22 L108 6 L116 26 L130 14 L126 44 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <rect x="72" y="38" width="56" height="10" rx="5" fill="#ffc93c" stroke="#2b1d3a" stroke-width="4"/>
+  <g stroke="#2b1d3a" stroke-width="2"><circle cx="86" cy="43" r="3" fill="#ff4d6d"/><circle cx="100" cy="43" r="3.4" fill="#6ec6ff"/><circle cx="114" cy="43" r="3" fill="#7bd36b"/></g>
+  <g stroke="#2b1d3a" stroke-width="2"><circle cx="70" cy="13" r="3.5" fill="#ff8fc0"/><circle cx="92" cy="6" r="3.5" fill="#ffffff"/><circle cx="108" cy="6" r="3.5" fill="#6ec6ff"/><circle cx="130" cy="13" r="3.5" fill="#7bd36b"/></g>
+  <path d="M80 34 L80 24" stroke="#fff3c4" stroke-width="3" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Corny, a candy-corn crow with dark wings">
+  <ellipse cx="100" cy="188" rx="54" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <path d="M66 96 Q36 74 10 92 L20 108 L8 118 L24 128 L16 140 L62 146 Z" fill="#3b2a55" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M56 104 L24 102 M54 120 L26 118" stroke="#5a4680" stroke-width="3" stroke-linecap="round"/>
+  <path d="M134 96 Q164 74 190 92 L180 108 L192 118 L176 128 L184 140 L138 146 Z" fill="#3b2a55" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M144 104 L176 102 M146 120 L174 118" stroke="#5a4680" stroke-width="3" stroke-linecap="round"/>
+  <g fill="none" stroke="#2b1d3a" stroke-width="9" stroke-linecap="round"><path d="M84 172 V182 M116 172 V182"/></g>
+  <g fill="none" stroke="#ff8a1f" stroke-width="4" stroke-linecap="round"><path d="M84 172 V182 M116 172 V182"/></g>
+  <g fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"><path d="M84 182 l-8 4 M84 182 l0 6 M84 182 l8 4 M116 182 l-8 4 M116 182 l0 6 M116 182 l8 4"/></g>
+  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round" fill="#3b2a55"><path d="M98 30 Q86 10 76 12 Q88 18 92 32 Z"/><path d="M100 28 Q100 6 108 2 Q106 16 106 30 Z"/><path d="M104 30 Q116 12 126 14 Q114 22 110 34 Z"/></g>
+  <path d="M55.2 124 L144.8 124 L164 166 Q100 182 36 166 Z" fill="#ffd23f"/>
+  <path d="M78.1 74 L121.9 74 L144.8 124 L55.2 124 Z" fill="#ff8a1f"/>
+  <path d="M100 26 L121.9 74 L78.1 74 Z" fill="#fffaf0"/>
+  <path d="M101 32 L121.9 74 L115.1 74 Z" fill="#e9dcc6"/>
+  <path d="M115.1 74 L121.9 74 L144.8 124 L133 124 Z" fill="#e0650c"/>
+  <path d="M133 124 L144.8 124 L164 166 Q154 170 144 171 Z" fill="#e8ad1c"/>
+  <path d="M78.1 74 L121.9 74 M55.2 124 L144.8 124" stroke="#2b1d3a" stroke-width="2.5" opacity="0.35"/>
+  <path d="M100 26 L164 166 Q100 182 36 166 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M96.1 52 L52.3 150" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="86" cy="92" r="13" fill="#fff"/><circle cx="116" cy="92" r="13" fill="#fff"/></g>
+  <circle cx="89" cy="94" r="6.8" fill="#2b1d3a"/><circle cx="119" cy="94" r="6.8" fill="#2b1d3a"/>
+  <circle cx="91.2" cy="91" r="2.4" fill="#fff"/><circle cx="121.2" cy="91" r="2.4" fill="#fff"/>
+  <path d="M68 74 L96 82 M134 74 L106 82" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M88 108 L112 108 L100 128 Z" fill="#3b2a55" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M90 110 L110 110 L100 116 Z" fill="#ff6f91"/>
+  <path d="M92 108 L100 104 L108 108" fill="#3b2a55" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M92 112 l2 5 l2 -4 Z M104 112 l2 4 l2 -5 Z" fill="#fff" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/>
+  <circle cx="72" cy="110" r="5" fill="#ff5a3c" opacity="0.45"/><circle cx="128" cy="110" r="5" fill="#ff5a3c" opacity="0.45"/>
+  <g transform="translate(30 46) rotate(-20) scale(0.9)"><path d="M0 -10 L8 8 Q0 12 -8 8 Z" fill="#ffd23f" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/><path d="M0 -10 L4.4 0 L-4.4 0 Z" fill="#fffaf0"/><path d="M-4.4 0 L4.4 0 L6.2 4 L-6.2 4 Z" fill="#ff8a1f"/><path d="M0 -10 L8 8 Q0 12 -8 8 Z" fill="none" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(178 180) rotate(25) scale(0.9)"><path d="M0 -10 L8 8 Q0 12 -8 8 Z" fill="#ffd23f" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/><path d="M0 -10 L4.4 0 L-4.4 0 Z" fill="#fffaf0"/><path d="M-4.4 0 L4.4 0 L6.2 4 L-6.2 4 Z" fill="#ff8a1f"/><path d="M0 -10 L8 8 Q0 12 -8 8 Z" fill="none" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(170 40) rotate(15) scale(0.8)"><path d="M0 -10 L8 8 Q0 12 -8 8 Z" fill="#ffd23f" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/><path d="M0 -10 L4.4 0 L-4.4 0 Z" fill="#fffaf0"/><path d="M-4.4 0 L4.4 0 L6.2 4 L-6.2 4 Z" fill="#ff8a1f"/><path d="M0 -10 L8 8 Q0 12 -8 8 Z" fill="none" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/></g>
+</svg>

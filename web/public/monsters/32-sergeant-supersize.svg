@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Sergeant Supersize, a giant soda-cup general with a straw antenna, medals and a megaphone">
+  <ellipse cx="100" cy="192" rx="74" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <!-- boots -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#3b2a55">
+    <path d="M64 172 H92 V184 Q92 190 86 190 H58 Q52 190 54 184 Q56 176 64 172 Z"/>
+    <path d="M108 172 H136 Q144 176 146 184 Q148 190 142 190 H114 Q108 190 108 184 Z"/>
+  </g>
+  <path d="M60 182 H88 M112 182 H140" stroke="#6b5a8a" stroke-width="3" stroke-linecap="round"/>
+  <!-- straw antenna -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M116 40 L116 16 L130 6" stroke="#2b1d3a" stroke-width="12"/>
+    <path d="M116 40 L116 16 L130 6" stroke="#fff" stroke-width="6"/>
+    <path d="M116 40 L116 16 L130 6" stroke="#ff4d6d" stroke-width="6" stroke-dasharray="6 6" stroke-linecap="butt"/>
+  </g>
+  <circle cx="134" cy="5" r="5" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3"/>
+  <!-- arm on hip (left) -->
+  <path d="M48 106 L24 126 L52 146" fill="none" stroke="#2b1d3a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M48 106 L24 126 L52 146" fill="none" stroke="#6b9a3f" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- the cup -->
+  <path d="M42 60 L158 60 L142 176 L58 176 Z" fill="#6b9a3f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M138 66 L152 66 L138 170 L120 170 C134 140 140 100 138 66 Z" fill="#4d7a2a"/>
+  <path d="M52 72 L60 136" stroke="#9ccc6a" stroke-width="7" stroke-linecap="round"/>
+  <!-- belt -->
+  <path d="M55.5 146 H144.5 L142.8 158 H57.2 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <rect x="91" y="143" width="18" height="18" rx="3" fill="#ffe08a" stroke="#2b1d3a" stroke-width="3"/>
+  <rect x="97" y="149" width="6" height="6" rx="1" fill="#6b9a3f"/>
+  <!-- epaulettes -->
+  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M40 60 Q40 54 52 54 L66 54 Q70 60 66 66 L46 68 Q40 66 40 60 Z" fill="#ffc93c"/>
+    <path d="M160 60 Q160 54 148 54 L134 54 Q130 60 134 66 L154 68 Q160 66 160 60 Z" fill="#ffc93c"/>
+  </g>
+  <path d="M44 68 v7 M50 68 v8 M56 68 v8 M62 67 v7 M156 68 v7 M150 68 v8 M144 68 v8 M138 67 v7" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <!-- the lid, worn as an officer's cap -->
+  <path d="M40 60 Q40 30 100 28 Q160 30 160 60 Z" fill="#f4f1ea" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M140 36 Q156 44 156 58 L144 58 Q144 46 136 38 Z" fill="#d8d2c4"/>
+  <path d="M56 46 Q66 36 82 33" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="116" cy="38" rx="8" ry="3" fill="#2b1d3a"/>
+  <path d="M36 58 H164 V66 H36 Z" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M42 66 Q100 84 158 66 Q100 74 42 66 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="100" cy="48" r="9" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3"/>
+  <path d="M100 42 l1.8 4 l4.2 0.4 l-3.2 2.8 l1 4.2 l-3.8 -2.3 l-3.8 2.3 l1 -4.2 l-3.2 -2.8 l4.2 -0.4 z" fill="#fff2c2"/>
+  <!-- face -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="80" cy="96" r="14" fill="#fff"/><circle cx="120" cy="96" r="14" fill="#fff"/></g>
+  <circle cx="83" cy="99" r="7.5" fill="#2b1d3a"/><circle cx="117" cy="99" r="7.5" fill="#2b1d3a"/>
+  <circle cx="85.5" cy="95" r="2.6" fill="#fff"/><circle cx="119.5" cy="95" r="2.6" fill="#fff"/>
+  <path d="M62 80 L95 88 M138 80 L105 88" stroke="#2b1d3a" stroke-width="6" stroke-linecap="round"/>
+  <!-- shouting mouth -->
+  <path d="M84 114 Q100 108 116 114 Q118 132 100 134 Q82 132 84 114 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M87 115 Q100 110 113 115 L112 119 Q100 115 88 119 Z" fill="#fff"/>
+  <path d="M90 129 Q100 122 110 129 Q100 133 90 129 Z" fill="#ff6f8a"/>
+  <circle cx="62" cy="116" r="5.5" fill="#ff8f7a" opacity="0.55"/><circle cx="138" cy="116" r="5.5" fill="#ff8f7a" opacity="0.55"/>
+  <!-- medals -->
+  <g stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
+    <rect x="118" y="128" width="9" height="6" fill="#ff4d6d"/><rect x="127" y="128" width="9" height="6" fill="#3fb6ff"/><rect x="122.5" y="134" width="9" height="6" fill="#ffc93c"/>
+  </g>
+  <path d="M137 128 L141 136 M145 128 L141 136" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M141 134 l1.6 3.4 l3.7 0.4 l-2.7 2.5 l0.7 3.7 l-3.3 -1.8 l-3.3 1.8 l0.7 -3.7 l-2.7 -2.5 l3.7 -0.4 z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
+  <!-- megaphone arm (right) -->
+  <path d="M152 108 Q170 104 166 84" fill="none" stroke="#2b1d3a" stroke-width="16" stroke-linecap="round"/>
+  <path d="M152 108 Q170 104 166 84" fill="none" stroke="#6b9a3f" stroke-width="9" stroke-linecap="round"/>
+  <path d="M167.3 78.5 L158.7 73.5 L169.2 33.9 L196.8 50.1 Z" fill="#ff7a2f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M163 68 L176 44" stroke="#ffb27a" stroke-width="3.5" stroke-linecap="round"/>
+  <ellipse cx="183" cy="42" rx="16" ry="6.5" transform="rotate(30.5 183 42)" fill="#ffc93c" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="183" cy="42" rx="10" ry="3.2" transform="rotate(30.5 183 42)" fill="#2b1d3a"/>
+  <circle cx="165" cy="82" r="9" fill="#6b9a3f" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- shout lines -->
+  <g fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round">
+    <path d="M170 20 l-4 -9"/><path d="M182 18 l2 -10"/><path d="M193 24 l5 -6"/>
+  </g>
+  <!-- boss sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M22 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 z"/>
+    <path d="M20 150 l2.4 6 l6 2.4 l-6 2.4 l-2.4 6 l-2.4 -6 l-6 -2.4 l6 -2.4 z"/>
+  </g>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Pickle Prickle, a pickle cactus with bumps for spines">
+  <ellipse cx="100" cy="186" rx="66" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M70 120 L48 120 Q40 120 40 110 L40 74" stroke="#2b1d3a" stroke-width="32"/>
+    <path d="M70 120 L48 120 Q40 120 40 110 L40 74" stroke="#4b8a26" stroke-width="24"/>
+    <path d="M70 120 L48 120 Q40 120 40 110 L40 74" stroke="#6fb23c" stroke-width="16" transform="translate(-2 -3)"/>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M130 104 L152 104 Q160 104 160 94 L160 58" stroke="#2b1d3a" stroke-width="32"/>
+    <path d="M130 104 L152 104 Q160 104 160 94 L160 58" stroke="#4b8a26" stroke-width="24"/>
+    <path d="M130 104 L152 104 Q160 104 160 94 L160 58" stroke="#6fb23c" stroke-width="16" transform="translate(-2 -3)"/>
+  </g>
+  <rect x="64" y="30" width="72" height="148" rx="36" fill="#6fb23c" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M134 70 L134 142 Q134 176 100 176 Q82 176 72 166 Q120 168 122 120 L122 46 Q134 56 134 70 Z" fill="#4b8a26"/>
+  <path d="M76 140 L76 64 Q76 46 90 40" fill="none" stroke="#aee070" stroke-width="7" stroke-linecap="round"/>
+  <path d="M36 92 L36 78 M164 74 L164 64" stroke="#aee070" stroke-width="4" stroke-linecap="round" transform="translate(-0 0)"/>
+  <circle cx="84" cy="134" r="4.2" fill="#3d7420"/><circle cx="83" cy="132.6" r="1.6" fill="#aee070"/>
+  <circle cx="112" cy="146" r="4.2" fill="#3d7420"/><circle cx="111" cy="144.6" r="1.6" fill="#aee070"/>
+  <circle cx="124" cy="126" r="4.2" fill="#3d7420"/><circle cx="123" cy="124.6" r="1.6" fill="#aee070"/>
+  <circle cx="92" cy="158" r="4.2" fill="#3d7420"/><circle cx="91" cy="156.6" r="1.6" fill="#aee070"/>
+  <circle cx="118" cy="64" r="4.2" fill="#3d7420"/><circle cx="117" cy="62.6" r="1.6" fill="#aee070"/>
+  <circle cx="80" cy="60" r="4.2" fill="#3d7420"/><circle cx="79" cy="58.6" r="1.6" fill="#aee070"/>
+  <circle cx="106" cy="40" r="4.2" fill="#3d7420"/><circle cx="105" cy="38.6" r="1.6" fill="#aee070"/>
+  <circle cx="44" cy="102" r="4.2" fill="#3d7420"/><circle cx="43" cy="100.6" r="1.6" fill="#aee070"/>
+  <circle cx="156" cy="80" r="4.2" fill="#3d7420"/><circle cx="155" cy="78.6" r="1.6" fill="#aee070"/>
+  <circle cx="100" cy="116" r="4.2" fill="#3d7420"/><circle cx="99" cy="114.6" r="1.6" fill="#aee070"/>
+  <g stroke="#2b1d3a" stroke-width="2.4" stroke-linecap="round"><path d="M39 102 l-6 -2"/><path d="M161 80 l6 -2"/><path d="M79 139 l-6 6"/><path d="M129 126 l6 -2"/><path d="M123 59 l6 -6"/><path d="M75 55 l-6 -6"/><path d="M106 35 l0 -6"/><path d="M87 163 l-6 6"/><path d="M117 151 l6 6"/></g>
+  <g stroke="#2b1d3a" stroke-width="2.4" stroke-linecap="round"><path d="M40 58 v-6 M30 64 l-5 -3 M50 64 l5 -3 M160 42 v-6 M150 48 l-5 -3 M170 48 l5 -3"/></g>
+  <g stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"><circle cx="92" cy="28" r="6" fill="#ffc93c"/><circle cx="104" cy="24" r="6" fill="#ffc93c"/><circle cx="104" cy="34" r="6" fill="#ffc93c"/><circle cx="92" cy="18" r="6" fill="#ffc93c"/></g>
+  <circle cx="98" cy="26" r="4.5" fill="#ff7a2f" stroke="#2b1d3a" stroke-width="2.5"/>
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="86" cy="86" r="13" fill="#fff"/><circle cx="116" cy="86" r="13" fill="#fff"/></g>
+  <circle cx="89" cy="88" r="6.8" fill="#2b1d3a"/><circle cx="119" cy="88" r="6.8" fill="#2b1d3a"/>
+  <circle cx="91.2" cy="85" r="2.4" fill="#fff"/><circle cx="121.2" cy="85" r="2.4" fill="#fff"/>
+  <path d="M70 66 L96 76 M132 66 L106 76" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M80 106 Q101 126 122 106 Q101 114 80 106 Z" fill="#7a2a3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M86 108 L89 116 L93 110 Z M109 110 L113 116 L116 108 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="74" cy="102" r="5" fill="#ffcf5a" opacity="0.6"/><circle cx="128" cy="102" r="5" fill="#ffcf5a" opacity="0.6"/>
+  <path d="M38 182 Q60 164 100 166 Q140 164 164 182 Z" fill="#f2c57c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M64 176 q4 -3 8 0 M126 176 q4 -3 8 0" fill="none" stroke="#d99a4e" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

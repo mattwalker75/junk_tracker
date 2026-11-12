@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Fondue Fiend, a bubbling cheese blob rising from a red fondue pot, waving two long fondue forks">
+  <ellipse cx="100" cy="192" rx="54" ry="5" fill="#2b1d3a" opacity="0.22"/>
+  <!-- burner stand + flame -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M64 162 L54 188 M136 162 L146 188 M64 186 H136"/>
+  </g>
+  <!-- fork arms -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M44 132 L18 70" stroke="#2b1d3a" stroke-width="9"/>
+    <path d="M44 132 L18 70" stroke="#c7d2dc" stroke-width="3.5"/>
+    <path d="M156 132 L182 74" stroke="#2b1d3a" stroke-width="9"/>
+    <path d="M156 132 L182 74" stroke="#c7d2dc" stroke-width="3.5"/>
+    <path d="M44 132 L34 108" stroke="#2b1d3a" stroke-width="16"/>
+    <path d="M44 132 L34 108" stroke="#7a4fb0" stroke-width="9"/>
+    <path d="M156 132 L166 108" stroke="#2b1d3a" stroke-width="16"/>
+    <path d="M156 132 L166 108" stroke="#ff7a2f" stroke-width="9"/>
+  </g>
+  <g fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round">
+    <path d="M10 56 L16 70 L24 66 L18 52 M16 70 L12 54"/>
+    <path d="M176 60 L182 74 L190 70 L184 56"/>
+  </g>
+  <!-- bread cube on the right fork, cheese-dipped -->
+  <rect x="172" y="40" width="20" height="18" rx="4" fill="#f2c46a" stroke="#2b1d3a" stroke-width="3.5" transform="rotate(20 182 49)"/>
+  <path d="M174 52 Q182 60 192 54 Q190 64 184 62 Q180 66 176 60 Z" fill="#ffd23f" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- the pot -->
+  <path d="M38 112 H162 L156 150 Q150 168 100 168 Q50 168 44 150 Z" fill="#e84a3a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M160 120 L155 150 Q148 166 104 168 Q144 156 150 120 Z" fill="#b8322a"/>
+  <path d="M52 124 Q54 144 64 154" fill="none" stroke="#ff9a8a" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="4" fill="#3b2a55"><rect x="26" y="118" width="16" height="10" rx="5"/><rect x="158" y="118" width="16" height="10" rx="5"/></g>
+  <path d="M46 140 Q100 150 154 140" fill="none" stroke="#2b1d3a" stroke-width="3"/>
+  <path d="M47 146 Q100 156 153 146" fill="none" stroke="#ffc93c" stroke-width="3"/>
+  <path d="M84 188 Q84 172 100 166 Q116 172 116 188 Z" fill="#6ec6ff" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M93 186 Q94 177 100 173 Q106 177 107 186 Z" fill="#ffc93c"/>
+  <!-- cheese blob rising out -->
+  <path d="M42 114 Q34 60 72 40 Q100 22 128 40 Q166 60 158 114 Q160 124 152 124 Q150 138 142 138 Q134 138 136 124 Q122 124 116 126 Q116 140 108 140 Q100 140 100 126 Q86 124 76 126 Q74 134 66 134 Q58 134 60 124 Q50 124 46 124 Q40 122 42 114 Z" fill="#ffd23f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M156 92 Q156 116 148 118 Q144 100 140 90 Q150 74 146 58 Q158 70 156 92 Z" fill="#f0b020"/>
+  <path d="M52 92 Q52 62 76 48" fill="none" stroke="#fff2a8" stroke-width="7" stroke-linecap="round"/>
+  <!-- bubbles -->
+  <g fill="#fff2a8" stroke="#2b1d3a" stroke-width="3"><circle cx="100" cy="36" r="6"/><circle cx="116" cy="26" r="4"/><circle cx="86" cy="22" r="3"/><circle cx="140" cy="56" r="4"/></g>
+  <!-- steam -->
+  <path d="M60 30 q-6 -8 0 -14 q6 -6 0 -12 M146 28 q6 -8 0 -14" fill="none" stroke="#b8a8c8" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- face -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="80" cy="74" r="14" fill="#fff"/><circle cx="120" cy="74" r="14" fill="#fff"/></g>
+  <circle cx="83" cy="76" r="7.5" fill="#2b1d3a"/><circle cx="117" cy="76" r="7.5" fill="#2b1d3a"/>
+  <circle cx="85" cy="72" r="2.6" fill="#fff"/><circle cx="119" cy="72" r="2.6" fill="#fff"/>
+  <path d="M62 58 L94 64 M138 58 L106 64" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="62" cy="96" rx="6" ry="3.5" fill="#ff8a5c" opacity="0.7"/><ellipse cx="138" cy="96" rx="6" ry="3.5" fill="#ff8a5c" opacity="0.7"/>
+  <path d="M78 96 Q100 118 122 96 Q118 112 100 114 Q82 112 78 96 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M84 99 L88 107 L91 101 Z M109 101 L112 107 L116 99 Z" fill="#fff"/>
+</svg>

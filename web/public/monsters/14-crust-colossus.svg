@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Crust Colossus, a pizza-slice stone golem with rock arms and a pepperoni shield">
+  <defs>
+    <clipPath id="crust-colossus-slice"><path d="M34 56 L166 56 L104 176 Q100 182 96 176 Z"/></clipPath>
+    <clipPath id="crust-colossus-shield"><circle cx="50" cy="128" r="32"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="191" rx="70" ry="6" fill="#2b1d3a" opacity="0.15"/>
+  <!-- stone legs -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M64 146 L60 182 L92 184 L90 150 Z" fill="#9a93a8"/>
+    <path d="M110 150 L108 184 L140 182 L136 146 Z" fill="#9a93a8"/>
+  </g>
+  <path d="M68 160 l10 4 M120 166 l10 -3" stroke="#6f6880" stroke-width="3" stroke-linecap="round"/>
+  <!-- right rock arm -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M150 62 L176 66 L182 92 L160 98 Z" fill="#9a93a8"/>
+    <path d="M164 96 L186 98 L188 124 L166 126 Z" fill="#9a93a8"/>
+    <path d="M160 124 L192 122 L196 152 L180 162 L160 154 Z" fill="#b2abbf"/>
+  </g>
+  <path d="M166 70 l8 10 M172 104 l6 12 M170 134 l14 2 M168 144 l14 2" stroke="#6f6880" stroke-width="3" stroke-linecap="round"/>
+  <!-- the slice body -->
+  <path d="M34 56 L166 56 L104 176 Q100 182 96 176 Z" fill="#ffd34d" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#crust-colossus-slice)">
+    <path d="M120 56 L170 56 L104 180 L96 180 Z" fill="#f2b630"/>
+    <g fill="#d6453b" stroke="#2b1d3a" stroke-width="3"><circle cx="128" cy="124" r="9"/><circle cx="86" cy="140" r="6"/><circle cx="108" cy="158" r="6"/></g>
+  </g>
+  <path d="M34 56 L166 56 L104 176 Q100 182 96 176 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <!-- cheese drips off the edges -->
+  <path d="M152 84 q6 2 4 14 q-2 8 -7 4 q-2 -6 0 -12z M48 82 q-6 2 -4 12 q2 7 6 3 q2 -6 0 -10z" fill="#ffd34d" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M60 64 Q64 90 80 120" fill="none" stroke="#fff0a8" stroke-width="5" stroke-linecap="round"/>
+  <!-- stone crust brow -->
+  <path d="M26 40 L58 32 L80 38 L104 30 L130 36 L152 30 L176 40 L172 62 L148 66 L124 60 L100 66 L76 60 L52 66 L28 60 Z" fill="#d9934a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M28 54 L52 58 L76 52 L100 58 L124 52 L148 58 L172 54 L172 62 L148 66 L124 60 L100 66 L76 60 L52 66 L28 60 Z" fill="#b06f30"/>
+  <path d="M26 40 L58 32 L80 38 L104 30 L130 36 L152 30 L176 40 L172 62 L148 66 L124 60 L100 66 L76 60 L52 66 L28 60 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M58 36 l-4 10 6 6 M104 34 l4 8 -4 8 M150 34 l-4 10" fill="none" stroke="#7a4a1e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M40 42 L56 38" stroke="#f2c08a" stroke-width="4" stroke-linecap="round"/>
+  <!-- face under the brow -->
+  <circle cx="82" cy="84" r="14" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="118" cy="84" r="14" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="85" cy="89" r="7" fill="#2b1d3a"/><circle cx="115" cy="89" r="7" fill="#2b1d3a"/>
+  <circle cx="87" cy="86" r="2.3" fill="#ffffff"/><circle cx="117" cy="86" r="2.3" fill="#ffffff"/>
+  <path d="M71.3 75.0 A14 14 0 0 1 95.9 82.1 Z" fill="#ffd34d" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M104.1 82.1 A14 14 0 0 1 128.7 75.0 Z" fill="#ffd34d" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M80 108 L87 103 L94 108 L100 103 L106 108 L113 103 L120 108 Q100 124 80 108 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M85 108 l3 6 3 -5z M109 108 l3 6 3 -5z" fill="#ffffff"/>
+  <!-- left rock arm holding the pepperoni shield -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M50 62 L24 66 L18 92 L40 98 Z" fill="#9a93a8"/>
+    <path d="M34 96 L14 100 L14 122 L36 122 Z" fill="#9a93a8"/>
+  </g>
+  <path d="M32 70 l-6 10" stroke="#6f6880" stroke-width="3" stroke-linecap="round"/>
+  <g transform="translate(-4 8)">
+  <circle cx="50" cy="128" r="40" fill="#9a93a8" stroke="#2b1d3a" stroke-width="4"/>
+  <g fill="#2b1d3a"><circle cx="50" cy="91" r="2.5"/><circle cx="87" cy="128" r="2.5"/><circle cx="50" cy="165" r="2.5"/><circle cx="13" cy="128" r="2.5"/></g>
+  <path d="M22 100 A40 40 0 0 1 60 89" fill="none" stroke="#c9c3d4" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="50" cy="128" r="32" fill="#d6453b" stroke="#2b1d3a" stroke-width="4"/>
+  <g clip-path="url(#crust-colossus-shield)">
+    <circle cx="58" cy="136" r="34" fill="#b0322b"/>
+    <circle cx="46" cy="124" r="32" fill="#d6453b"/>
+  </g>
+  <circle cx="50" cy="128" r="32" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="50" cy="128" r="24" fill="none" stroke="#a32b25" stroke-width="3" stroke-dasharray="4 7" stroke-linecap="round"/>
+  <g fill="#8f2520"><circle cx="40" cy="116" r="4"/><circle cx="60" cy="120" r="3"/><circle cx="46" cy="138" r="3.5"/><circle cx="62" cy="142" r="4"/><circle cx="34" cy="132" r="2.5"/></g>
+  <path d="M32 112 Q38 104 48 102" fill="none" stroke="#ff8a7a" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

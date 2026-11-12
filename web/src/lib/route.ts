@@ -1,13 +1,27 @@
-/** A tiny hash router: #/ (home), #/calendar, #/calendar/2026-09, #/goals, #/settings, #/settings/users… The phone's back button works. */
+/**
+ * A tiny hash router: #/ (home), #/calendar, #/calendar/2026-09, #/goals, #/settings, #/settings/users…
+ * and Craving Crusher's #/game (title), #/game/start, #/game/battle, #/game/choose. The game's other
+ * screens (map, world, book, hall, how) come in the next update: until then they show a short note.
+ * The phone's back button works.
+ */
 import { useEffect, useState } from "react";
 
-export type Route = { page: "home" } | { page: "calendar"; month: string | null } | { page: "goals" } | { page: "settings"; section: string | null };
+export type GameScreen = "title" | "start" | "battle" | "choose" | "soon";
+export type Route = { page: "home" } | { page: "calendar"; month: string | null } | { page: "goals" } | { page: "settings"; section: string | null }
+  | { page: "game"; screen: GameScreen; soon?: string };
+
+/** the game screens built so far; the rest of #/game/… shows "coming in the next update" */
+const GAME_SCREENS: Record<string, GameScreen> = { "": "title", start: "start", battle: "battle", choose: "choose" };
 
 export function parse(hash: string): Route {
   const parts = hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   if (parts[0] === "calendar") return { page: "calendar", month: /^\d{4}-\d{2}$/.test(parts[1] || "") ? parts[1] : null };
   if (parts[0] === "goals") return { page: "goals" };
   if (parts[0] === "settings") return { page: "settings", section: parts[1] || null };
+  if (parts[0] === "game") {
+    const screen = GAME_SCREENS[parts[1] ?? ""];
+    return screen ? { page: "game", screen } : { page: "game", screen: "soon", soon: parts[1] };
+  }
   return { page: "home" };
 }
 

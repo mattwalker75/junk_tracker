@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Brain Freeze, a fluffy ice-cream-cone yeti with a cherry on top">
+  <defs>
+    <clipPath id="brain-freeze-cone"><path d="M60 122 L140 122 L100 194 Z"/></clipPath>
+    <clipPath id="brain-freeze-fluff">
+      <circle cx="100" cy="84" r="44"/><circle cx="64" cy="104" r="18"/><circle cx="80" cy="118" r="16"/><circle cx="100" cy="122" r="16"/><circle cx="120" cy="118" r="16"/><circle cx="136" cy="104" r="18"/><circle cx="58" cy="76" r="16"/><circle cx="142" cy="76" r="16"/><circle cx="72" cy="48" r="16"/><circle cx="100" cy="40" r="18"/><circle cx="128" cy="48" r="16"/>
+    </clipPath>
+  </defs>
+  <!-- ground shadow -->
+  <ellipse cx="100" cy="194" rx="34" ry="5" fill="#2b1d3a" opacity="0.15"/>
+  <!-- snow sparkles -->
+  <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M22 132 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+    <path d="M176 36 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M168 170 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+  <!-- waffle cone -->
+  <path d="M60 122 L140 122 L100 194 Z" fill="#f2b366" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#brain-freeze-cone)">
+    <path d="M100 122 L140 122 L100 194 Z" fill="#d98c45"/>
+    <g stroke="#b86e2e" stroke-width="3" fill="none">
+      <path d="M50 130 L120 200 M50 150 L100 200 M60 120 L140 200 M80 120 L150 190 M100 120 L150 170"/>
+      <path d="M150 130 L80 200 M150 150 L100 200 M140 120 L60 200 M120 120 L50 190 M100 120 L50 170"/>
+    </g>
+  </g>
+  <path d="M60 122 L140 122 L100 194 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <!-- furry arms (behind the fluff) -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M70 92 Q44 84 36 54" stroke="#2b1d3a" stroke-width="30"/>
+    <path d="M132 100 Q156 108 164 128" stroke="#2b1d3a" stroke-width="30"/>
+    <path d="M70 92 Q44 84 36 54" stroke="#e8f6ff" stroke-width="22"/>
+    <path d="M132 100 Q156 108 164 128" stroke="#e8f6ff" stroke-width="22"/>
+  </g>
+  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
+    <path d="M26 46 q-6 -6 -4 -12 q6 2 9 8z"/><path d="M35 41 q-1 -8 3 -12 q4 5 3 11z"/><path d="M44 44 q3 -7 9 -8 q0 7 -5 10z"/>
+    <path d="M156 138 q0 7 -5 10 q-3 -6 0 -11z"/><path d="M166 140 q2 7 -2 11 q-4 -5 -3 -11z"/><path d="M175 134 q5 5 3 11 q-6 -2 -7 -8z"/>
+  </g>
+  <!-- drips over the cone -->
+  <g fill="#e8f6ff" stroke="#2b1d3a" stroke-width="4"><rect x="74" y="112" width="13" height="40" rx="6.5"/><rect x="95" y="112" width="13" height="52" rx="6.5"/><rect x="117" y="112" width="12" height="34" rx="6"/></g>
+  <!-- fluffy scoop: outline pass then fill pass -->
+  <g fill="#e8f6ff" stroke="#2b1d3a" stroke-width="8">
+    <circle cx="100" cy="84" r="44"/><circle cx="64" cy="104" r="18"/><circle cx="80" cy="118" r="16"/><circle cx="100" cy="122" r="16"/><circle cx="120" cy="118" r="16"/><circle cx="136" cy="104" r="18"/><circle cx="58" cy="76" r="16"/><circle cx="142" cy="76" r="16"/><circle cx="72" cy="48" r="16"/><circle cx="100" cy="40" r="18"/><circle cx="128" cy="48" r="16"/>
+  </g>
+  <g fill="#e8f6ff">
+    <circle cx="100" cy="84" r="44"/><circle cx="64" cy="104" r="18"/><circle cx="80" cy="118" r="16"/><circle cx="100" cy="122" r="16"/><circle cx="120" cy="118" r="16"/><circle cx="136" cy="104" r="18"/><circle cx="58" cy="76" r="16"/><circle cx="142" cy="76" r="16"/><circle cx="72" cy="48" r="16"/><circle cx="100" cy="40" r="18"/><circle cx="128" cy="48" r="16"/>
+  </g>
+  <!-- shade + highlight inside the fluff -->
+  <g clip-path="url(#brain-freeze-fluff)">
+    <circle cx="124" cy="112" r="50" fill="#b7dcf5"/>
+    <circle cx="106" cy="88" r="52" fill="#e8f6ff"/>
+  </g>
+  <ellipse cx="74" cy="46" rx="9" ry="5" fill="#ffffff" transform="rotate(-30 74 46)"/>
+  <!-- fur tufts -->
+  <g fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round">
+    <path d="M60 92 q4 -4 8 0"/><path d="M134 92 q4 -4 8 0"/>
+  </g>
+  <!-- cherry -->
+  <path d="M100 18 q2 -12 14 -14" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="100" cy="24" r="11" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M104 33 a10 10 0 0 0 6 -12" fill="none" stroke="#c9284a" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="96" cy="20" rx="3.5" ry="2.5" fill="#ffffff"/>
+  <!-- face -->
+  <ellipse cx="100" cy="90" rx="34" ry="30" fill="#a9d6f3"/>
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M70 62 L90 70"/><path d="M130 62 L110 70"/>
+  </g>
+  <circle cx="84" cy="82" r="13" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="116" cy="82" r="13" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="87" cy="84" r="7" fill="#2b1d3a"/><circle cx="113" cy="84" r="7" fill="#2b1d3a"/>
+  <circle cx="89" cy="81" r="2.5" fill="#ffffff"/><circle cx="115" cy="81" r="2.5" fill="#ffffff"/>
+  <ellipse cx="68" cy="98" rx="6" ry="3.5" fill="#ff9ec0"/><ellipse cx="132" cy="98" rx="6" ry="3.5" fill="#ff9ec0"/>
+  <path d="M82 100 q18 18 36 0 z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M93 108 q7 -5 14 0 q-7 5 -14 0z" fill="#6ec6ff"/>
+  <path d="M86 101 l4 7 4 -6z" fill="#ffffff"/><path d="M114 101 l-4 7 -4 -6z" fill="#ffffff"/>
+</svg>

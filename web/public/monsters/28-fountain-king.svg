@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="The Fountain King, a soda-fountain machine king with lever arms and a cup crown">
+  <ellipse cx="100" cy="192" rx="80" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <!-- royal cape -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M52 72 C32 104 20 150 12 190 Q100 180 188 190 C180 150 168 104 148 72 Z" fill="#c2307a"/>
+  </g>
+  <path d="M20 174 C26 140 36 108 52 84 L60 88 C46 114 38 144 36 176 Z" fill="#94205c"/>
+  <path d="M14 188 Q100 178 186 188" fill="none" stroke="#ffc93c" stroke-width="5" stroke-linecap="round"/>
+  <!-- lever arms -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M52 118 L20 74" stroke="#2b1d3a" stroke-width="15"/>
+    <path d="M52 118 L20 74" stroke="#dfe8ef" stroke-width="8"/>
+    <path d="M148 118 L180 74" stroke="#2b1d3a" stroke-width="15"/>
+    <path d="M148 118 L180 74" stroke="#dfe8ef" stroke-width="8"/>
+  </g>
+  <g stroke="#2b1d3a" stroke-width="4">
+    <circle cx="17" cy="66" r="13" fill="#ff4d6d"/><circle cx="183" cy="66" r="13" fill="#ff4d6d"/>
+  </g>
+  <circle cx="13" cy="61" r="4" fill="#ffb3c1"/><circle cx="179" cy="61" r="4" fill="#ffb3c1"/>
+  <!-- feet -->
+  <g stroke="#2b1d3a" stroke-width="4" fill="#9fb3c4">
+    <ellipse cx="70" cy="182" rx="18" ry="8"/><ellipse cx="130" cy="182" rx="18" ry="8"/>
+  </g>
+  <!-- machine body -->
+  <rect x="40" y="64" width="120" height="114" rx="16" fill="#2fc4b2" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M140 70 Q154 70 154 84 L154 160 Q154 172 140 172 L128 172 C140 140 142 100 140 70 Z" fill="#1f9e8f"/>
+  <rect x="47" y="76" width="8" height="46" rx="4" fill="#8ff0e2"/>
+  <g stroke="#2b1d3a" stroke-width="3" fill="#dfe8ef">
+    <circle cx="48" cy="118" r="5"/><circle cx="152" cy="118" r="5"/>
+  </g>
+  <!-- face -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="80" cy="94" r="14.5" fill="#fff"/><circle cx="120" cy="94" r="14.5" fill="#fff"/></g>
+  <circle cx="84" cy="97" r="7.5" fill="#2b1d3a"/><circle cx="116" cy="97" r="7.5" fill="#2b1d3a"/>
+  <circle cx="86.5" cy="93" r="2.7" fill="#fff"/><circle cx="118.5" cy="93" r="2.7" fill="#fff"/>
+  <path d="M62 76 Q76 74 94 84 M138 76 Q124 74 106 84" fill="none" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M84 114 Q100 126 118 112" fill="none" stroke="#2b1d3a" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M90 117 L93 125 L97 119 Z M105 119 L108 125 L111 117 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="62" cy="112" r="5.5" fill="#ff8fb0" opacity="0.6"/><circle cx="138" cy="112" r="5.5" fill="#ff8fb0" opacity="0.6"/>
+  <!-- button panel -->
+  <rect x="50" y="128" width="100" height="16" rx="6" fill="#dfe8ef" stroke="#2b1d3a" stroke-width="3.5"/>
+  <path d="M56 133 H144" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="2.5">
+    <circle cx="74" cy="136" r="4.5" fill="#8a4b22"/><circle cx="100" cy="136" r="4.5" fill="#ff9a2e"/><circle cx="126" cy="136" r="4.5" fill="#7bd36b"/>
+  </g>
+  <!-- dispenser recess, nozzles, soda streams, drip tray -->
+  <rect x="54" y="148" width="92" height="26" rx="6" fill="#16645b" stroke="#2b1d3a" stroke-width="3.5"/>
+  <g stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round" fill="#dfe8ef">
+    <path d="M68 148 H80 L78 156 H70 Z"/><path d="M94 148 H106 L104 156 H96 Z"/><path d="M120 148 H132 L130 156 H122 Z"/>
+  </g>
+  <rect x="72" y="156" width="4" height="12" fill="#8a4b22"/>
+  <rect x="98" y="156" width="4" height="12" fill="#ff9a2e"/>
+  <rect x="124" y="156" width="4" height="12" fill="#7bd36b"/>
+  <rect x="60" y="166" width="80" height="6" rx="2" fill="#9fb3c4" stroke="#2b1d3a" stroke-width="2.5"/>
+  <!-- cup crown -->
+  <path d="M60 26 L62 8 L76 20 L88 4 L100 18 L112 4 L124 20 L138 8 L140 26 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M60 26 L140 26 L134 66 L66 66 Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M73.3 26 L86.7 26 L88.2 56 L76.3 56 Z M113.3 26 L126.7 26 L123.7 56 L111.8 56 Z" fill="#ff4d6d"/>
+  <path d="M60 26 L140 26 L134 66 L66 66 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M64.5 56 H135.5 L134 66 H66 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M66 30 L69 52" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <path d="M95 61 L100 57 L105 61 L100 65 Z" fill="#3fb6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
+  <g stroke="#2b1d3a" stroke-width="2">
+    <circle cx="62" cy="8" r="3" fill="#ff4d6d"/><circle cx="88" cy="4" r="3" fill="#3fb6ff"/><circle cx="112" cy="4" r="3" fill="#7bd36b"/><circle cx="138" cy="8" r="3" fill="#ff4d6d"/>
+  </g>
+  <!-- sparkles and bubbles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M30 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 z"/>
+    <path d="M172 22 l2.4 6 l6 2.4 l-6 2.4 l-2.4 6 l-2.4 -6 l-6 -2.4 l6 -2.4 z"/>
+  </g>
+  <g fill="#dff4ff" stroke="#2b1d3a" stroke-width="2.5">
+    <circle cx="160" cy="48" r="4"/><circle cx="44" cy="56" r="3"/><circle cx="186" cy="110" r="3.5"/><circle cx="12" cy="108" r="3"/>
+  </g>
+</svg>

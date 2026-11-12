@@ -1,15 +1,34 @@
 /** Small shared pieces. Colours only from theme tokens. */
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { forwardRef, useId, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
+import { createContext, forwardRef, useContext, useId, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
 import { SIZE_LABEL, type Size } from "../../../shared/types";
 
 export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
+
+/**
+ * The look of a sheet's parts: "tracker" (the app as always) or "game" (Craving Crusher's chunky
+ * skin, the `.g-*` classes in index.css). One form, two skins: LogSheet and ActivitySheet set it,
+ * and the pieces below (and DayPicker) read it, so the fields, their order and labels never differ.
+ */
+export type Skin = "tracker" | "game";
+export const SkinContext = createContext<Skin>("tracker");
+export const useSkin = () => useContext(SkinContext);
 
 /** "Matt Walker" → "MW": the round bubble on Home and in Settings */
 export const initials = (name: string) => name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 
 type Variant = "accent" | "active" | "strong" | "outline" | "soft" | "ghost" | "danger";
+/** The game skin's fills: + Splurge's save is blue and + Activity's green, like the game's bottom buttons. */
+const GAME_VARIANT: Record<Variant, string> = {
+  accent: "g-btn bg-g-blue font-game text-[22px] font-normal g-stroke-thin",
+  active: "g-btn bg-g-green font-game text-[22px] font-normal g-stroke-thin",
+  strong: "g-btn bg-g-night text-g-night-ink",
+  outline: "g-btn bg-g-panel-2 text-g-text font-black",
+  soft: "g-btn bg-g-soft-yellow text-g-text",
+  ghost: "text-g-text",
+  danger: "g-btn bg-g-panel-2 text-g-red font-black",
+};
 const VARIANT: Record<Variant, string> = {
   accent: "bg-accent text-accent-ink hover:brightness-105",
   active: "bg-active text-active-ink hover:brightness-105",
@@ -21,7 +40,20 @@ const VARIANT: Record<Variant, string> = {
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; size?: "sm" | "md" | "lg" | "xl" }>(
-  ({ variant = "outline", size = "md", className, type = "button", ...rest }, ref) => (
+  ({ variant = "outline", size = "md", className, type = "button", ...rest }, ref) => {
+    const skin = useSkin();
+    if (skin === "game") {
+      return (
+        <button ref={ref} type={type} {...rest}
+          className={cx("inline-flex items-center justify-center gap-2",
+            size === "sm" && "h-9 rounded-xl px-3 text-sm",
+            size === "md" && "h-11 rounded-xl px-4 text-[15px]",
+            size === "lg" && "h-12 rounded-xl px-5 text-base",
+            size === "xl" && "h-[60px] rounded-[18px] px-5",
+            GAME_VARIANT[variant], className)} />
+      );
+    }
+    return (
     <button
       ref={ref}
       type={type}
@@ -36,7 +68,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLBut
       )}
       {...rest}
     />
-  ),
+    );
+  },
 );
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
@@ -44,6 +77,13 @@ export function Card({ className, children }: { className?: string; children: Re
 }
 
 export function Label({ children, required, htmlFor }: { children: ReactNode; required?: boolean; htmlFor?: string }) {
+  if (useSkin() === "game") {
+    return (
+      <label htmlFor={htmlFor} className="mb-[7px] block font-game text-[17px] text-g-text">
+        {children} {required ? <span className="text-g-red" aria-hidden>*</span> : null}
+      </label>
+    );
+  }
   return (
     <label htmlFor={htmlFor} className="mb-1.5 block text-[13px] font-bold text-mute">
       {children} {required ? <span className="text-danger" aria-hidden>*</span> : null}
@@ -51,21 +91,24 @@ export function Label({ children, required, htmlFor }: { children: ReactNode; re
   );
 }
 
-export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(({ className, ...rest }, ref) => (
-  <input ref={ref} className={cx("h-12 w-full min-w-0 rounded-xl border border-line-2 bg-surface px-3.5 text-ink placeholder:text-faint focus:border-accent", className)} {...rest} />
-));
-export const TextArea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<HTMLTextAreaElement>>(({ className, ...rest }, ref) => (
-  <textarea ref={ref} className={cx("w-full rounded-xl border border-line-2 bg-surface px-3.5 py-2.5 text-ink placeholder:text-faint focus:border-accent", className)} {...rest} />
-));
+export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(({ className, ...rest }, ref) => {
+  if (useSkin() === "game") return <input ref={ref} className={cx("g-field h-[50px] w-full min-w-0 rounded-[14px] px-[13px] text-[17px] font-extrabold", className)} {...rest} />;
+  return <input ref={ref} className={cx("h-12 w-full min-w-0 rounded-xl border border-line-2 bg-surface px-3.5 text-ink placeholder:text-faint focus:border-accent", className)} {...rest} />;
+});
+export const TextArea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<HTMLTextAreaElement>>(({ className, ...rest }, ref) => {
+  if (useSkin() === "game") return <textarea ref={ref} className={cx("g-field w-full resize-none rounded-[14px] px-3 py-2.5 font-bold", className)} {...rest} />;
+  return <textarea ref={ref} className={cx("w-full rounded-xl border border-line-2 bg-surface px-3.5 py-2.5 text-ink placeholder:text-faint focus:border-accent", className)} {...rest} />;
+});
 
 /** A labelled box: <Field label="Where"><Input …/></Field> */
 export function Field({ label, required, hint, children }: { label: string; required?: boolean; hint?: ReactNode; children: (id: string) => ReactNode }) {
   const id = useId();
+  const game = useSkin() === "game";
   return (
     <div>
       <Label htmlFor={id} required={required}>{label}</Label>
       {children(id)}
-      {hint ? <p className="mt-1 text-xs text-mute">{hint}</p> : null}
+      {hint ? <p className={game ? "mt-1 text-xs font-extrabold text-g-mute" : "mt-1 text-xs text-mute"}>{hint}</p> : null}
     </div>
   );
 }
@@ -86,6 +129,14 @@ export function Segmented<T extends string | number>({ value, options, onChange,
 
 /** A switch with its label. */
 export function Toggle({ checked, onChange, label, disabled }: { checked: boolean; onChange: (v: boolean) => void; label: string; disabled?: boolean }) {
+  if (useSkin() === "game") {
+    return (
+      <button type="button" role="switch" aria-checked={checked} aria-label={label} disabled={disabled} onClick={() => onChange(!checked)}
+        className={cx("relative h-[30px] w-[50px] shrink-0 rounded-full border-[3px] border-g-line transition", checked ? "bg-g-green" : "bg-g-panel-2")}>
+        <span className={cx("absolute top-[2px] size-5 rounded-full border-2 border-g-line bg-white transition-all", checked ? "left-[22px]" : "left-[2px]")} />
+      </button>
+    );
+  }
   return (
     <button type="button" role="switch" aria-checked={checked} aria-label={label} disabled={disabled} onClick={() => onChange(!checked)}
       className={cx("relative h-7 w-12 shrink-0 rounded-full transition", checked ? "bg-accent" : "bg-line-2")}>
@@ -121,9 +172,37 @@ export function ActiveNotch({ size, on }: { size: Size | null; on: boolean }) {
  * A sheet: slides up from the bottom on a phone, a centred panel on a wider screen. Closes on Esc,
  * the X, or a tap outside.
  */
-export function Sheet({ open, onOpenChange, title, subtitle, children, actions }: {
+export function Sheet({ open, onOpenChange, title, subtitle, children, actions, skin = "tracker", lead, titleNode }: {
   open: boolean; onOpenChange: (o: boolean) => void; title: string; subtitle?: ReactNode; children: ReactNode; actions?: ReactNode;
+  /** "game": Craving Crusher's chunky sheet; its children see the skin too */
+  skin?: Skin;
+  /** game skin: a badge before the title (the monster, a sword) */
+  lead?: ReactNode;
+  /** game skin: the title as words with style ("Attack! Log activity"); `title` stays its plain name */
+  titleNode?: ReactNode;
 }) {
+  if (skin === "game") {
+    return (
+      <Dialog.Root open={open} onOpenChange={onOpenChange}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 z-40 bg-[#2b1d3a]/55" />
+          <Dialog.Content aria-describedby={undefined}
+            className="game fixed inset-x-0 bottom-0 z-50 mx-auto flex max-h-[92dvh] w-full max-w-lg flex-col rounded-t-[26px] border-[3px] border-b-0 border-g-line bg-g-panel text-g-text outline-none sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 sm:rounded-[26px] sm:border-b-[3px]">
+            <div className="mx-auto mt-2 h-1.5 w-12 shrink-0 rounded-full bg-g-line opacity-25" aria-hidden />
+            <div className="flex items-center gap-2.5 px-4 pt-2 pb-2">
+              {lead}
+              <Dialog.Title className="min-w-0 flex-1 font-game text-[26px] leading-[1.05] font-normal">{titleNode ?? title}</Dialog.Title>
+              {actions}
+              <Dialog.Close className="g-btn grid size-10 shrink-0 place-items-center rounded-full bg-g-panel-2 text-g-text" aria-label="Close"><X className="size-5" strokeWidth={3} /></Dialog.Close>
+            </div>
+            <SkinContext.Provider value="game">
+              <div className="pb-safe min-h-0 overflow-y-auto px-4 pt-1">{children}</div>
+            </SkinContext.Provider>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+    );
+  }
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -182,5 +261,14 @@ function ConfirmBody({ body, confirmLabel, word, danger, onConfirm, onCancel }: 
 }
 
 export function ErrorLine({ text }: { text: string | null }) {
+  const game = useSkin() === "game";
+  if (game && text) {
+    return (
+      <p role="alert" className="flex items-center gap-2 rounded-[14px] border-[2.5px] border-g-line bg-g-soft-red px-2.5 py-2 text-sm font-extrabold">
+        <span aria-hidden className="grid size-[22px] shrink-0 place-items-center rounded-full border-2 border-g-line bg-g-red font-game text-sm text-white">!</span>
+        <span>{text}</span>
+      </p>
+    );
+  }
   return text ? <p role="alert" className="rounded-xl bg-danger-soft px-3 py-2 text-sm font-medium text-danger">{text}</p> : null;
 }

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Popcorn Puff, a grinning cloud of popping popcorn">
+  <defs><clipPath id="popcorn-puff-cloud"><circle cx="100" cy="100" r="52"/><circle cx="100" cy="48" r="22"/><circle cx="127" cy="53" r="18"/><circle cx="148" cy="68" r="24"/><circle cx="160" cy="88" r="19"/><circle cx="160" cy="112" r="23"/><circle cx="148" cy="132" r="17"/><circle cx="127" cy="147" r="22"/><circle cx="100" cy="152" r="20"/><circle cx="73" cy="147" r="24"/><circle cx="52" cy="132" r="18"/><circle cx="40" cy="112" r="21"/><circle cx="40" cy="88" r="19"/><circle cx="52" cy="68" r="23"/><circle cx="73" cy="53" r="18"/></clipPath></defs>
+  <ellipse cx="100" cy="190" rx="46" ry="6" fill="#2b1d3a" opacity="0.15"/>
+  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round" fill="none">
+    <path d="M40 22 l6 -8 M12 30 l-9 -2"/>
+    <path d="M160 22 l-6 -8 M188 30 l9 -2"/>
+    <path d="M100 14 l0 -9 M88 17 l-4 -8 M112 17 l4 -8"/>
+  </g>
+  <g transform="translate(24 30) rotate(-20) scale(1.2)">
+    <path d="M-4 9 Q0 16 6 10 Z" fill="#c9823a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+    <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="7"><circle cx="-6" cy="2" r="6.5"/><circle cx="3" cy="-5" r="7"/><circle cx="7" cy="5" r="5.5"/><circle cx="-1" cy="8" r="4.5"/></g>
+    <g fill="#fffaf0"><circle cx="-6" cy="2" r="6.5"/><circle cx="3" cy="-5" r="7"/><circle cx="7" cy="5" r="5.5"/><circle cx="-1" cy="8" r="4.5"/></g>
+    <path d="M1 2 q4 -3 6 2 q-2 4 -6 2 z" fill="#ffd45e"/><path d="M-8 -1 q2 -3 5 -2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(176 30) rotate(25) scale(1.15)">
+    <path d="M-4 9 Q0 16 6 10 Z" fill="#c9823a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+    <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="7"><circle cx="-6" cy="2" r="6.5"/><circle cx="3" cy="-5" r="7"/><circle cx="7" cy="5" r="5.5"/><circle cx="-1" cy="8" r="4.5"/></g>
+    <g fill="#fffaf0"><circle cx="-6" cy="2" r="6.5"/><circle cx="3" cy="-5" r="7"/><circle cx="7" cy="5" r="5.5"/><circle cx="-1" cy="8" r="4.5"/></g>
+    <path d="M1 2 q4 -3 6 2 q-2 4 -6 2 z" fill="#ffd45e"/><path d="M-8 -1 q2 -3 5 -2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(170 172) rotate(10) scale(0.85)">
+    <path d="M-4 9 Q0 16 6 10 Z" fill="#c9823a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+    <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="7"><circle cx="-6" cy="2" r="6.5"/><circle cx="3" cy="-5" r="7"/><circle cx="7" cy="5" r="5.5"/><circle cx="-1" cy="8" r="4.5"/></g>
+    <g fill="#fffaf0"><circle cx="-6" cy="2" r="6.5"/><circle cx="3" cy="-5" r="7"/><circle cx="7" cy="5" r="5.5"/><circle cx="-1" cy="8" r="4.5"/></g>
+    <path d="M1 2 q4 -3 6 2 q-2 4 -6 2 z" fill="#ffd45e"/><path d="M-8 -1 q2 -3 5 -2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(30 174) rotate(-30) scale(0.8)">
+    <path d="M-4 9 Q0 16 6 10 Z" fill="#c9823a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+    <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="7"><circle cx="-6" cy="2" r="6.5"/><circle cx="3" cy="-5" r="7"/><circle cx="7" cy="5" r="5.5"/><circle cx="-1" cy="8" r="4.5"/></g>
+    <g fill="#fffaf0"><circle cx="-6" cy="2" r="6.5"/><circle cx="3" cy="-5" r="7"/><circle cx="7" cy="5" r="5.5"/><circle cx="-1" cy="8" r="4.5"/></g>
+    <path d="M1 2 q4 -3 6 2 q-2 4 -6 2 z" fill="#ffd45e"/><path d="M-8 -1 q2 -3 5 -2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="7"><circle cx="28" cy="132" r="10"/><circle cx="16" cy="122" r="8"/><circle cx="172" cy="132" r="10"/><circle cx="184" cy="122" r="8"/></g>
+  <g fill="#fffaf0"><circle cx="28" cy="132" r="10"/><circle cx="16" cy="122" r="8"/><circle cx="172" cy="132" r="10"/><circle cx="184" cy="122" r="8"/></g>
+  <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="8"><circle cx="100" cy="100" r="52"/><circle cx="100" cy="48" r="22"/><circle cx="127" cy="53" r="18"/><circle cx="148" cy="68" r="24"/><circle cx="160" cy="88" r="19"/><circle cx="160" cy="112" r="23"/><circle cx="148" cy="132" r="17"/><circle cx="127" cy="147" r="22"/><circle cx="100" cy="152" r="20"/><circle cx="73" cy="147" r="24"/><circle cx="52" cy="132" r="18"/><circle cx="40" cy="112" r="21"/><circle cx="40" cy="88" r="19"/><circle cx="52" cy="68" r="23"/><circle cx="73" cy="53" r="18"/></g>
+  <g fill="#fffaf0"><circle cx="100" cy="100" r="52"/><circle cx="100" cy="48" r="22"/><circle cx="127" cy="53" r="18"/><circle cx="148" cy="68" r="24"/><circle cx="160" cy="88" r="19"/><circle cx="160" cy="112" r="23"/><circle cx="148" cy="132" r="17"/><circle cx="127" cy="147" r="22"/><circle cx="100" cy="152" r="20"/><circle cx="73" cy="147" r="24"/><circle cx="52" cy="132" r="18"/><circle cx="40" cy="112" r="21"/><circle cx="40" cy="88" r="19"/><circle cx="52" cy="68" r="23"/><circle cx="73" cy="53" r="18"/></g>
+  <g clip-path="url(#popcorn-puff-cloud)">
+    <path d="M10 136 Q36 128 52 140 Q70 152 88 142 Q106 132 122 144 Q140 154 158 138 Q174 126 192 132 L192 200 L10 200 Z" fill="#f0d9a8"/>
+    <g fill="#ffd45e"><path d="M54 58 q8 -8 16 -2 q4 8 -4 12 q-8 4 -12 -2 z"/><path d="M144 72 q8 -2 10 6 q-2 8 -10 6 q-6 -6 0 -12 z"/><path d="M30 104 q6 -6 12 0 q0 8 -8 8 z"/><path d="M156 136 q8 -4 12 4 q-4 8 -12 4 z"/><path d="M90 158 q10 -6 18 0 q-2 8 -10 8 q-8 0 -8 -8 z"/><path d="M114 36 q6 -4 10 2 q-2 6 -8 4 z"/></g>
+    <g fill="#f2b33d"><circle cx="62" cy="62" r="3.5"/><circle cx="148" cy="80" r="3"/><circle cx="100" cy="162" r="3.5"/></g>
+  </g>
+  <g fill="none" stroke="#2b1d3a" stroke-width="2.6" stroke-linecap="round">
+    <path d="M78 46 q-4 6 0 12 M126 48 q4 5 0 10 M46 82 q6 2 8 8 M154 82 q-6 2 -8 8 M64 150 q6 -1 9 -7 M136 150 q-6 -1 -9 -7 M40 126 q6 0 10 -4 M160 126 q-6 0 -10 -4"/>
+  </g>
+  <g fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"><path d="M80 44 Q88 32 102 30"/><path d="M50 82 Q54 74 62 72"/></g>
+  <path d="M84 30 l-4 0" stroke="#2b1d3a" stroke-width="0"/>
+  <g fill="#b8742e"><path d="M128 54 l5 -2 l2 4 l-5 2 z"/><path d="M44 126 l5 1 l-1 5 l-5 -1 z"/><path d="M146 152 l4 -3 l3 4 l-4 2 z"/></g>
+  <ellipse cx="80" cy="92" rx="15" ry="15" fill="#fff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="82" cy="94" r="7.5" fill="#2b1d3a"/>
+  <circle cx="84.6" cy="90.6" r="2.7" fill="#fff"/>
+  <ellipse cx="120" cy="92" rx="15" ry="15" fill="#fff" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="118" cy="94" r="7.5" fill="#2b1d3a"/>
+  <circle cx="120.6" cy="90.6" r="2.7" fill="#fff"/>
+  <path d="M62 72 L90 80 M138 72 L110 80" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="58" cy="114" r="7" fill="#ff8f7a" opacity="0.55"/><circle cx="142" cy="114" r="7" fill="#ff8f7a" opacity="0.55"/>
+  <path d="M66 110 Q100 150 134 110 Q100 122 66 110 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M90 128 Q100 138 112 128 Q100 124 90 128 Z" fill="#ff6f91"/>
+  <path d="M74 114 l4 8 l4 -6 z M118 116 l4 6 l4 -8 z M94 118 l4 7 l4 -6 z" fill="#fff"/>
+</svg>

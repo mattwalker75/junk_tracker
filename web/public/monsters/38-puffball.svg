@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Puffball, a cheese-puff pufferfish in a cloud of orange dust">
+  <ellipse cx="96" cy="188" rx="52" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <path d="M146 96 L186 70 Q178 104 186 138 L146 116 Z" fill="#ff9a2e" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M164 84 L170 104 L166 124" fill="none" stroke="#e06a14" stroke-width="3" stroke-linecap="round"/>
+  <g fill="#ff9a2e" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"><path d="M107.4 51.2 L105.1 32.8 Q103.2 27.6 100.2 32.2 L93.5 49.6 Z"/><path d="M129 62.3 L134.8 44.7 Q135.5 39.1 130.7 42 L117.2 54.7 Z"/><path d="M126.9 147.4 L142.8 157 Q148 158.9 146.3 153.6 L136.9 137.6 Z"/><path d="M104.8 157.4 L114.9 172.9 Q118.9 176.9 119.6 171.4 L118.1 152.8 Z"/><path d="M80.6 156.8 L82.9 175.2 Q84.8 180.4 87.8 175.8 L94.5 158.4 Z"/><path d="M59 145.7 L53.2 163.3 Q52.5 168.9 57.3 166 L70.8 153.3 Z"/><path d="M44.4 126.4 L31.5 139.7 Q28.5 144.5 34 143.9 L51.7 138.3 Z"/><path d="M39.6 102.7 L22.1 109.1 Q17.4 112 22.6 113.9 L41 116.6 Z"/><path d="M45.5 79.2 L27.1 77.4 Q21.5 78 25.4 82 L40.8 92.4 Z"/><path d="M61.1 60.6 L45.2 51 Q40 49.1 41.7 54.4 L51.1 70.4 Z"/><path d="M83.2 50.6 L73.1 35.1 Q69.1 31.1 68.4 36.6 L69.9 55.2 Z"/></g>
+  <path d="M150 104 Q158.3 113.3 152.5 121.2 Q153.1 131 141.1 134.3 Q143.1 146.6 133.9 150.1 Q129.1 158.7 117.3 154.9 Q112.3 166.4 102.7 164.4 Q94 169 86 159.4 Q75.7 166.4 68.7 159.5 Q58.9 158.7 57.3 146.3 Q44.9 146.6 42.7 137 Q34.9 131 40.3 119.8 Q29.7 113.3 33 104 Q29.7 94.7 40.3 88.2 Q34.9 77 42.7 71 Q44.9 61.4 57.3 61.7 Q58.9 49.3 68.7 48.5 Q75.7 41.6 86 48.6 Q94 39 102.7 43.6 Q112.3 41.6 117.3 53.1 Q129.1 49.3 133.9 57.9 Q143.1 61.4 141.1 73.7 Q153.1 77 152.5 86.8 Q158.3 94.7 150 104 Z" fill="#ff9a2e" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M150 118 Q144 158 96 162 Q58 162 42 136 Q72 160 108 150 Q142 138 150 118 Z" fill="#e06a14"/>
+  <path d="M46 92 Q52 62 82 52" fill="none" stroke="#ffd08a" stroke-width="8" stroke-linecap="round"/>
+  <g fill="#ffd08a"><circle cx="70" cy="140" r="2.2"/><circle cx="122" cy="62" r="2"/><circle cx="134" cy="88" r="1.8"/><circle cx="56" cy="118" r="1.8"/><circle cx="104" cy="148" r="2"/><circle cx="96" cy="58" r="1.6"/></g>
+  <g fill="#e06a14"><circle cx="82" cy="148" r="2"/><circle cx="130" cy="136" r="2.2"/><circle cx="62" cy="76" r="1.6"/><circle cx="112" cy="54" r="1.6"/></g>
+  <path d="M120 120 Q140 116 146 132 Q132 140 120 132 Z" fill="#ffd08a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="76" cy="94" r="14" fill="#fff"/><circle cx="110" cy="94" r="14" fill="#fff"/></g>
+  <circle cx="79" cy="96" r="7.3" fill="#2b1d3a"/><circle cx="113" cy="96" r="7.3" fill="#2b1d3a"/>
+  <circle cx="81.2" cy="93" r="2.4" fill="#fff"/><circle cx="115.2" cy="93" r="2.4" fill="#fff"/>
+  <path d="M58 76 L88 84 M128 76 L98 84" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="93" cy="126" rx="10" ry="8" fill="#7a2a3a" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M86 120 L89 128 L92 121 Z M94 121 L97 128 L100 120 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="60" cy="116" r="5" fill="#ff8f7a" opacity="0.55"/><circle cx="126" cy="114" r="5" fill="#ff8f7a" opacity="0.55"/>
+  <g fill="#ff9a2e" stroke="#2b1d3a" stroke-width="2.5"><circle cx="24" cy="54" r="5"/><circle cx="14" cy="76" r="3"/><circle cx="36" cy="34" r="3"/><circle cx="172" cy="36" r="4"/><circle cx="160" cy="160" r="3.5"/><circle cx="30" cy="160" r="4"/></g>
+</svg>

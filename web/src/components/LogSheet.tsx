@@ -3,9 +3,18 @@
  * (required), then Where, Calories, the Day, an optional Time (Matt, Nov 11 2026 — empty means no time; it starts empty, with Now and Clear), Notes and the
  * Planned treat switch (Nov 11 2026: a treat you planned; in game mode it heals the monster half). Under each size: the person's own examples from
  * Settings, or the default ones. The same sheet edits a splurge (with Delete).
+ *
+ * Two skins, one form (Craving Crusher, Nov 11 2026): `skin="game"` on game pages restyles the same
+ * fields in the same order with the same labels, and adds the live heal panel (the shared engine's
+ * preview, so it matches the server: "Fry Hydra heals +35", a planned treat heals half) and the
+ * heal each size would do. After a save or delete in game mode the game is synced.
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
+import { healPanel, previewStamp, savedText, sizeHeals } from "../game/logic";
+import { ClockSmall, Burger, Cookie, Pizza, Points } from "../game/icons";
+import { HealPreview } from "../game/Panels";
+import { syncAfterLog, useGame } from "../game/state";
 import { toast } from "sonner";
 import { DEFAULT_EXAMPLES, SIZE_LABEL, SIZES, type Day, type Size, type Splurge } from "../../../shared/types";
 import { LOG_KEYS, refresh } from "../lib/actions";
@@ -13,13 +22,17 @@ import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
 import { useToday } from "../lib/useToday";
 import { DayPicker } from "./DayPicker";
-import { Button, cx, ErrorLine, Field, Input, Label, Sheet, SIZE_DOT, TextArea, Toggle } from "./ui";
+import { Button, cx, ErrorLine, Field, Input, Label, Sheet, SIZE_DOT, TextArea, Toggle, type Skin } from "./ui";
 
 const SELECTED: Record<Size, string> = { snack: "border-snack-ink/0 ring-2 ring-snack", meal: "ring-2 ring-meal", feast: "ring-2 ring-feast" };
+/** the game skin's size buttons: the food in a circle of the size's colour */
+const FOOD: Record<Size, { icon: typeof Cookie; fill: string }> = { snack: { icon: Cookie, fill: "#ffd9b3" }, meal: { icon: Burger, fill: "#e8711a" }, feast: { icon: Pizza, fill: "#c0392b" } };
 
-export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onOpenChange: (o: boolean) => void; day?: Day; edit?: Splurge }) {
+export function LogSheet({ open, onOpenChange, day, edit, skin = "tracker" }: { open: boolean; onOpenChange: (o: boolean) => void; day?: Day; edit?: Splurge; skin?: Skin }) {
   const qc = useQueryClient();
   const today = useToday();
+  const game = skin === "game";
+  const fight = useGame(open && game).view?.fight ?? null;
   const overview = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today), enabled: open });
   const settings = overview.data?.settings;
   const [what, setWhat] = useState("");
@@ -62,7 +75,8 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
     try {
       if (edit) await api.saveSplurge(edit.id, input); else await api.addSplurge(input);
       void refresh(qc, LOG_KEYS);
-      toast.success(edit ? "Saved." : `Logged: ${input.what}`);
+      if (game) { void syncAfterLog(qc, today); toast.success(edit ? "Saved." : savedText("splurge", panel)); }
+      else toast.success(edit ? "Saved." : `Logged: ${input.what}`);
       onOpenChange(false);
     } catch (e2) { setError((e2 as Error).message); }
     finally { setBusy(false); }
@@ -74,6 +88,7 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
     try {
       await api.deleteSplurge(edit.id);
       void refresh(qc, LOG_KEYS);
+      if (game) void syncAfterLog(qc, today);
       toast.success("Deleted.");
       onOpenChange(false);
     } catch (e2) { setError((e2 as Error).message); }
@@ -81,16 +96,24 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
   };
 
   const recent = !edit ? overview.data?.recent ?? [] : [];
+  // the game skin's live heal panel: what this splurge would do to the open fight
+  const entry = fight ? { id: edit?.id, what, day: when.day, time: when.time, planned, createdAt: edit?.createdAt ?? previewStamp(fight.input, new Date().toISOString()) } : null;
+  const panel = fight && entry ? healPanel(fight.input, { ...entry, size }) : null;
+  const heals = fight && entry ? sizeHeals(fight.input, entry) : null;
   return (
-    <Sheet open={open} onOpenChange={onOpenChange} title={edit ? "Edit splurge" : "Log a splurge"}>
-      <form onSubmit={save} className="space-y-4 pb-2">
+    <Sheet open={open} onOpenChange={onOpenChange} title={edit ? "Edit splurge" : "Log a splurge"} skin={skin}
+      lead={game ? <span aria-hidden className="grid size-[46px] shrink-0 -rotate-[4deg] place-items-center overflow-hidden rounded-[14px] border-[3px] border-g-line bg-[#ff9a5c] shadow-[0_4px_0_var(--g-line)]">
+        {fight ? <img src={`/monsters/${fight.slug}.svg`} alt="" className="mt-1 w-11" /> : <Burger className="size-8" />}</span> : undefined}>
+      <form onSubmit={save} className={game ? "space-y-3 pb-2" : "space-y-4 pb-2"}>
+        {panel && fight ? <HealPreview p={panel} slug={fight.slug} /> : null}
         {recent.length ? (
           <div>
             <Label>Again?</Label>
-            <div className="flex flex-wrap gap-2">
+            <div className={game ? "flex flex-wrap gap-x-1.5 gap-y-[7px]" : "flex flex-wrap gap-2"}>
               {recent.map((r) => (
                 <button type="button" key={r.what} onClick={() => again(r)}
-                  className="inline-flex min-h-10 items-center gap-2 rounded-full bg-surface-2 px-3.5 text-sm font-semibold hover:brightness-95">
+                  className={game ? "g-btn inline-flex h-[34px] items-center gap-[7px] rounded-full border-[2.5px] bg-g-panel-2 pr-3 pl-2 text-sm font-black text-g-text shadow-[0_3px_0_var(--g-line)]"
+                    : "inline-flex min-h-10 items-center gap-2 rounded-full bg-surface-2 px-3.5 text-sm font-semibold hover:brightness-95"}>
                   <span className={cx("size-2.5 rounded-full", SIZE_DOT[r.size])} />{r.what}
                 </button>
               ))}
@@ -103,11 +126,23 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
         </Field>
 
         <fieldset>
-          <legend className="mb-1.5 text-[13px] font-bold text-mute">How big a splurge? <span className="text-danger" aria-hidden>*</span></legend>
-          <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="How big a splurge">
+          <legend className={game ? "mb-[7px] font-game text-[17px] text-g-text" : "mb-1.5 text-[13px] font-bold text-mute"}>How big a splurge? <span className={game ? "text-g-red" : "text-danger"} aria-hidden>*</span></legend>
+          <div className={game ? "grid grid-cols-3 gap-[9px]" : "grid grid-cols-3 gap-2"} role="radiogroup" aria-label="How big a splurge">
             {SIZES.map((s) => {
               const example = settings?.examples[s] || DEFAULT_EXAMPLES[s];
               const on = size === s;
+              if (game) {
+                const F = FOOD[s].icon;
+                return (
+                  <button type="button" key={s} role="radio" aria-checked={on} onClick={() => setSize(s)}
+                    className={cx("g-btn flex min-h-[150px] flex-col items-center justify-start gap-1 rounded-[18px] px-1.5 pt-2 pb-2 text-center text-g-text", on ? "g-sunk bg-g-yellow text-g-on" : "bg-g-panel-2")}>
+                    <span className="grid size-[54px] place-items-center rounded-full border-[3px] border-g-line" style={{ background: FOOD[s].fill }}><F className="size-10" /></span>
+                    <span className="font-game text-xl leading-none">{SIZE_LABEL[s]}</span>
+                    <span className="text-xs leading-tight font-extrabold opacity-80 [overflow-wrap:anywhere]">{example}</span>
+                    {heals?.[s] ? <span className="mt-auto rounded-full border-2 border-g-line bg-[#ffe0e8] px-1.5 text-[11px] font-black whitespace-nowrap text-[#b8173f]">{heals[s]}</span> : null}
+                  </button>
+                );
+              }
               return (
                 <button type="button" key={s} role="radio" aria-checked={on} onClick={() => setSize(s)}
                   className={cx("flex min-h-[92px] flex-col items-center justify-start gap-1 rounded-2xl border px-2 py-2.5 text-center",
@@ -137,19 +172,26 @@ export function LogSheet({ open, onOpenChange, day, edit }: { open: boolean; onO
             </div>
           )}
         </Field>
+        {game ? (
+          <p className="flex items-start gap-2 rounded-xl bg-g-night px-2.5 py-[7px] text-[12.5px] leading-snug font-extrabold text-g-night-ink">
+            <ClockSmall className="mt-px size-[18px] shrink-0" />
+            <span>Leave it empty and time-tricky monsters assume the worst (the <b className="font-black text-g-yellow">Midnight Snacker</b> counts it as after 9 PM).</span>
+          </p>
+        ) : null}
 
         <Field label="Notes">{(id) => <TextArea id={id} rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="optional — who you were with, how it felt, anything" maxLength={2000} />}</Field>
 
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="text-[13px] font-bold text-mute">Planned treat</div>
-            <p className="mt-0.5 text-[13px] leading-snug text-mute">a treat you planned, like a birthday dinner — in game mode it heals the monster half</p>
+            <div className={game ? "font-game text-[17px] text-g-text" : "text-[13px] font-bold text-mute"}>Planned treat</div>
+            <p className={game ? "mt-0.5 text-[13px] leading-snug font-extrabold text-g-mute" : "mt-0.5 text-[13px] leading-snug text-mute"}>a treat you planned, like a birthday dinner — in game mode it heals the monster half</p>
           </div>
           <Toggle label="Planned treat" checked={planned} onChange={setPlanned} />
         </div>
 
         <ErrorLine text={error} />
         <Button type="submit" variant="accent" size="xl" className="w-full" disabled={busy}>{edit ? "Save" : "Save splurge"}</Button>
+        {game ? <p className="flex items-center justify-center gap-1.5 text-[12.5px] font-extrabold text-g-mute"><Points className="h-5 w-[18px] shrink-0" />Logging it earns <b className="font-black text-g-text">+5 points</b>: honest logs always count.</p> : null}
         {edit ? (
           confirmDelete
             ? <div className="grid grid-cols-2 gap-2.5"><Button size="lg" onClick={() => setConfirmDelete(false)}>Keep it</Button><Button size="lg" variant="danger" onClick={remove} disabled={busy}>Delete it</Button></div>

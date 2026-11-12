@@ -14,7 +14,7 @@ import { firstLevelOfWorld, LEVEL_COUNT, LEVELS, levelInfo } from "./levels.js";
 import { logPoints, runScore, struckPoints, wonPoints } from "./score.js";
 import {
   BET_LABEL, BETS, MAX_HEARTS, MAX_POWER_UPS, START_HEARTS,
-  type ActivityEv, type BattleLine, type Bet, type EventData, type EventKind, type EventView, type FightData, type FightResult, type FightView,
+  type ActivityEv, type ArmPoint, type BattleLine, type Bet, type EventData, type EventKind, type EventView, type FightData, type FightInput, type FightResult, type FightView,
   type GameClock, type GameLog, type GameView, type MapLevel, type Mode, type PowerUp, type RunData, type RunState, type SplurgeEv,
 } from "./types.js";
 
@@ -52,26 +52,6 @@ export const rawDamage = (a: Pick<ActivityEv, "minutes" | "calories">): number =
 const half = (n: number) => Math.ceil(n / 2);
 
 // ================================================================ one fight
-
-/** The moment a Veggie Shield went up; "start" = it was already up when this fight began. */
-export type ArmPoint = { day: Day; time: string; at: string } | "start";
-
-export interface FightInput {
-  level: number;
-  startedOn: Day;
-  startedAfter: string | null;
-  deadlineOn: Day;
-  today: Day;
-  /** the log from the day before the fight started (the comeback and "yesterday" look there) to today */
-  splurges: SplurgeEv[];
-  activities: ActivityEv[];
-  /** Water Potions used in this fight */
-  potions?: { id: Id; day: Day; time: string; at: string }[];
-  /** a Veggie Shield that is up: it blocks the first heal after this point */
-  shieldFrom?: ArmPoint | null;
-  /** heals a shield already blocked in this fight (their source ids) */
-  blocked?: string[];
-}
 
 /** Does an entry count for a fight: its day is in the window, and on a part-day it was made after the fight began. */
 export function counts(e: { day: Day; createdAt: string }, f: { startedOn: Day; startedAfter: string | null; deadlineOn: Day }, today: Day): boolean {
@@ -534,7 +514,8 @@ export function buildView(st: RunState | null, log: GameLog | null, today: Day, 
   if (open) {
     const lv = levelInfo(open.level);
     const ab = abilityFor(open.level);
-    const sim = simulateFight(fightInputFor(st, open, lg, today));
+    const input = fightInputFor(st, open, lg, today);
+    const sim = simulateFight(input);
     const locked = open.betLocked || today > open.startedOn || sim.attacked;
     const { points: _p, ...rest } = open;
     fight = {
@@ -546,6 +527,7 @@ export function buildView(st: RunState | null, log: GameLog | null, today: Day, 
       hp: sim.hp, max: sim.max, todayDamage: sim.todayDamage, todayHeals: sim.todayHeals, lines: sim.lines,
       finish: { hp: sim.hp, minutes: sim.hp, calories: sim.hp * 10 },
       powerUpsAllowed: !ab.noPowerUps,
+      input,
     };
   }
   const at = run.endReason === "finished" ? LEVEL_COUNT + 1 : (open ?? st.fights[st.fights.length - 1])?.level ?? 1;

@@ -69,12 +69,12 @@ const userSettingsSchema = z.object({
 
 export interface AppHandle { app: express.Express; db: Database.Database; users: Users; log: Log; goals: Goals; game: Game; config: Config }
 
-export function createApp(config = new Config(), opts: { rateLimit?: boolean; webDir?: string } = {}): AppHandle {
+export function createApp(config = new Config(), opts: { rateLimit?: boolean; webDir?: string; serverDay?: () => string } = {}): AppHandle {
   const db = openDatabase(config.resolve(config.get().database.path));
   const users = new Users(db, config);
   const goals = new Goals(db);
   const log = new Log(db, users, goals);
-  const game = new Game(db, users);
+  const game = new Game(db, users, opts.serverDay);
   const owner = (req: Request) => users.owner(req);
   const app = express();
   app.disable("x-powered-by");

@@ -13,7 +13,7 @@ import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
 import { go } from "../lib/route";
 import { Ability, Flame, Potion, Shield, Star, Wind } from "./icons";
-import { betPlan, shortDate } from "./logic";
+import { betPlan, dueText, shortDate } from "./logic";
 import { GameBg, GameMenu, GameNote, Hearts } from "./parts";
 import { applyResult, useGame } from "./state";
 
@@ -145,7 +145,7 @@ export function Choose() {
                     </span>
                     <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                       <span className="flex items-center gap-1.5"><span className="font-game text-[19px]">{p.label}</span><span className={cx("rounded-full px-1.5 text-xs font-black", p.bet === 2 ? "border-2 border-[#2b1d3a] bg-g-red text-white" : p.bet === 1.5 ? "bg-[#2b1d3a] text-g-yellow" : "bg-[#2b1d3a] text-white")}>×{p.bet}</span></span>
-                      <span className="text-xs font-black text-[#5b4a6b]">Due {shortDate(p.deadlineOn)}, 11:59 PM</span>
+                      <span className="text-xs font-black text-[#5b4a6b]">Due {dueText(p.deadlineOn)}</span>
                       <span className="text-xs leading-tight">≈ <b>{p.perDay} damage a day</b> ≈ {p.example}</span>
                     </span>
                     <span className="grid size-[26px] shrink-0 place-items-center rounded-full border-[3px] border-[#2b1d3a] bg-white">
@@ -178,7 +178,7 @@ export function Choose() {
           </section>
         </>
       ) : (
-        <GameNote title="The deadline is set">The bet can only change before your first attack lands, on the fight's first day. This fight runs to {shortDate(fight.deadlineOn)}, 11:59 PM, at ×{fight.bet}.</GameNote>
+        <GameNote title="The deadline is set">The bet can only change before your first attack lands, on the fight's first day. This fight runs to the {dueText(fight.deadlineOn)}, at ×{fight.bet}.</GameNote>
       )}
 
       {/* power-ups */}

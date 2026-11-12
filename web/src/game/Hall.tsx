@@ -113,13 +113,13 @@ function Row({ r, rank, mine }: { r: HallRun; rank: number; mine: boolean }) {
           </span>
           <span className="truncate text-[13px] font-extrabold text-[#8a4a1f]">{reachedText(r)}{!mine && r.number > 1 ? ` · Run #${r.number}` : ""}</span>
           {mine ? (
-            <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[12px] font-extrabold text-[#9a86ac]">
+            <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[12px] font-extrabold text-[#6b587d]">
               <span className="inline-flex shrink-0 items-center gap-0.5 rounded-full border-2 border-[#2b1d3a] px-1.5 text-[11px] leading-[16px] font-black" style={{ background: r.hardcore ? "#ff4d6d" : "#6ec6ff", color: "#1a1024" }}>
-                {r.hardcore ? <Skull className="size-3" /> : <ShieldBlue className="size-3" />}{r.hardcore ? "HARDCORE" : "NORMAL"}
+                {r.hardcore ? <Skull className="size-3" /> : <ShieldBlue className="size-3" />}{r.hardcore ? "HARDCORE" : r.droppedFromHardcore ? "HARDCORE → NORMAL" : "NORMAL"}
               </span>
               <span>{state} · {shortDate(when).slice(4)}</span>
             </span>
-          ) : <span className="truncate text-[12px] font-extrabold text-[#9a86ac]">World {lv.world} · {shortDate(when).slice(4)}</span>}
+          ) : <span className="truncate text-[12px] font-extrabold text-[#6b587d]">World {lv.world}{r.droppedFromHardcore ? " · Hardcore → Normal" : ""} · {shortDate(when).slice(4)}</span>}
         </span>
         <span className="shrink-0 font-game text-[24px] text-[#ffc93c]" style={{ WebkitTextStroke: "2px #2b1d3a", paintOrder: "stroke fill" }}>{fmt(r.score)}</span>
       </div>

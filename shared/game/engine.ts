@@ -53,10 +53,18 @@ const half = (n: number) => Math.ceil(n / 2);
 
 // ================================================================ one fight
 
-/** Does an entry count for a fight: its day is in the window, and on a part-day it was made after the fight began. */
-export function counts(e: { day: Day; createdAt: string }, f: { startedOn: Day; startedAfter: string | null; deadlineOn: Day }, today: Day): boolean {
+/**
+ * Does an entry count for a fight: its day is in the window. On a part-day (the fight began after a
+ * KO that day) it counts unless the fight before used it: `usedBefore` holds the ids of that day's
+ * entries the knocked-out fight read, in the fight's own order up to the knockout. So every entry of
+ * the KO day counts for exactly one of the two fights, whatever order they were made in. Fights
+ * stored before that list existed fall back to "made after the knockout".
+ */
+export function counts(e: { id?: Id; day: Day; createdAt: string }, f: { startedOn: Day; startedAfter: string | null; deadlineOn: Day; usedBefore?: Id[] | null }, today: Day): boolean {
   if (e.day < f.startedOn || e.day > minDay(f.deadlineOn, today)) return false;
-  return !(f.startedAfter && e.day === f.startedOn && e.createdAt <= f.startedAfter);
+  if (!f.startedAfter || e.day !== f.startedOn) return true;
+  if (f.usedBefore) return e.id === undefined || !f.usedBefore.includes(e.id);
+  return e.createdAt > f.startedAfter;
 }
 
 /** Within a day: entries with a time first, by time; then the ones with no time, in the order they were made. */
@@ -104,7 +112,7 @@ export function simulateFight(inp: FightInput): FightResult {
   const last = minDay(inp.deadlineOn, inp.today);
   const splByDay = groupByDay(inp.splurges);
   const actByDay = groupByDay(inp.activities);
-  const isCounted = (e: { day: Day; createdAt: string }) => counts(e, inp, inp.today);
+  const isCounted = (e: { id: Id; day: Day; createdAt: string }) => counts(e, inp, inp.today);
 
   for (let d = inp.startedOn; d <= last && !ko; d = addDays(d, 1)) {
     const allSpl = [...(splByDay.get(d) ?? [])].sort(entryOrder);
@@ -118,6 +126,7 @@ export function simulateFight(inp: FightInput): FightResult {
     const baseOf = (a: ActivityEv) => rawDamage(a) * (comebackOf(a) ? 2 : 1);
     let dmgToday = 0, healToday = 0;
     let curPlanned = false, curId = "";
+    const usedToday: Id[] = [];
     const cx: Cx = {
       level, hp, max, day: d, deadlineOn: inp.deadlineOn, lastDay: d === inp.deadlineOn, damageToday: 0, healsToday: 0,
       splurgesToday: spl, splurgedYesterday: !!splByDay.get(yesterday)?.length, workoutsToday: act, workedOutToday: act.length > 0,
@@ -189,6 +198,7 @@ export function simulateFight(inp: FightInput): FightResult {
     for (const it of items) {
       if (ko) break;
       refresh();
+      if (it.k !== "p") usedToday.push(it.id);
       if (it.k === "s") {
         const s = it.s;
         cx.index = spl.indexOf(s); curPlanned = s.planned; curId = s.id;
@@ -216,6 +226,8 @@ export function simulateFight(inp: FightInput): FightResult {
         hit(POTION_DAMAGE, "potion", it.stamp, it.time, `Water Potion: ${POTION_DAMAGE} damage.`, it.id);
       }
     }
+    // a knockout during the day: the next fight gets the rest of the day, without what this one used
+    if (ko) (ko as NonNullable<FightResult["ko"]>).used = usedToday;
 
     // the end of a finished day: a clean day's crit, then the monster's own day-end tricks
     if (!ko && d < inp.today) {
@@ -254,17 +266,55 @@ const clone = <T>(v: T): T => JSON.parse(JSON.stringify(v)) as T;
 const openFightOf = (st: RunState) => st.fights.find((f) => f.status === "open") ?? null;
 const isUse = (e: EventData, kind: PowerUp, action?: string) => e.kind === "powerup_used" && e.data.kind === kind && (action === undefined || e.data.action === action);
 
+/** A Veggie Shield going up: put up from the battle screen ("arm"), or up again because the heal it blocked no longer counts ("back"). */
+const isRaise = (e: EventData) => isUse(e, "shield", "arm") || isUse(e, "shield", "back");
+
+/** On a part-day, the start day's entries the fights before this one used (the KO event of the one just before keeps the whole day's list). */
+function usedBeforeOf(st: RunState, f: FightData): Id[] | null {
+  if (!f.startedAfter) return null;
+  const i = st.fights.findIndex((x) => x.id === f.id);
+  const prev = i > 0 ? st.fights[i - 1] : null;
+  const ko = prev && st.events.find((e) => e.kind === "ko" && e.fightId === prev.id);
+  return ko && Array.isArray(ko.data.used) ? (ko.data.used as unknown[]).map(String) : null;
+}
+
+/**
+ * The Veggie Shield in one fight: the heals it blocked that still count, where it went up (when it
+ * is up), and `voided` — the block whose heal was deleted or moved out of the fight since, which
+ * puts the shield back up (it was never really used).
+ */
+function shieldIn(st: RunState, f: FightData, log: GameLog, today: Day, usedBefore: Id[] | null): { blocked: string[]; shieldFrom: ArmPoint | null; voided: { block: EventData; from: ArmPoint } | null } {
+  const win = { startedOn: f.startedOn, startedAfter: f.startedAfter, deadlineOn: f.deadlineOn, usedBefore };
+  const stillCounts = (healId: string) => {
+    const src = healId.endsWith(":later") ? healId.slice(0, -":later".length) : healId;
+    if (src.includes(":")) return true; // the monster's own day-end heal
+    const s = log.splurges.find((x) => x.id === src);
+    return !!s && counts(s, win, today);
+  };
+  const pointOf = (raise: EventData | undefined): ArmPoint => {
+    if (!raise) return "start";
+    if (isUse(raise, "shield", "back")) return (raise.data.from as ArmPoint | undefined) ?? "start";
+    return raise.fightId === f.id ? { day: raise.day, time: String(raise.data.time ?? ""), at: raise.at } : "start";
+  };
+  const blocks = st.events.filter((e) => e.fightId === f.id && isUse(e, "shield", "block"));
+  const live = blocks.filter((b) => stillCounts(String(b.data.healId)));
+  let lastRaise: EventData | undefined, lastRaiseAt = -1;
+  st.events.forEach((e, i) => { if (isRaise(e)) { lastRaise = e; lastRaiseAt = i; } });
+  const lastBlock = blocks[blocks.length - 1];
+  const voided = lastBlock && !live.includes(lastBlock) && st.events.indexOf(lastBlock) > lastRaiseAt ? { block: lastBlock, from: pointOf(lastRaise) } : null;
+  let shieldFrom: ArmPoint | null = null;
+  if (st.run.shieldArmed) shieldFrom = pointOf(lastRaise);
+  else if (voided) shieldFrom = voided.from;
+  return { blocked: live.map((b) => String(b.data.healId)), shieldFrom, voided };
+}
+
 /** The engine's input for one fight of a run: its window, the log, and its power-ups. */
 export function fightInputFor(st: RunState, f: FightData, log: GameLog, today: Day): FightInput {
   const mine = st.events.filter((e) => e.fightId === f.id);
   const potions = mine.filter((e) => isUse(e, "potion")).map((e) => ({ id: e.id, day: e.day, time: String(e.data.time ?? ""), at: e.at }));
-  const blocked = mine.filter((e) => isUse(e, "shield", "block")).map((e) => String(e.data.healId));
-  let shieldFrom: ArmPoint | null = null;
-  if (st.run.shieldArmed) {
-    const arm = [...st.events].reverse().find((e) => isUse(e, "shield", "arm"));
-    shieldFrom = arm && arm.fightId === f.id ? { day: arm.day, time: String(arm.data.time ?? ""), at: arm.at } : "start";
-  }
-  return { level: f.level, startedOn: f.startedOn, startedAfter: f.startedAfter, deadlineOn: f.deadlineOn, today, splurges: log.splurges, activities: log.activities, potions, shieldFrom, blocked };
+  const usedBefore = usedBeforeOf(st, f);
+  const { blocked, shieldFrom } = shieldIn(st, f, log, today, usedBefore);
+  return { level: f.level, startedOn: f.startedOn, startedAfter: f.startedAfter, usedBefore, deadlineOn: f.deadlineOn, today, splurges: log.splurges, activities: log.activities, potions, shieldFrom, blocked };
 }
 
 /** A new run: number N, 3 hearts, no power-ups, fight 1 (Crumbs) started today at Steady. */
@@ -313,11 +363,21 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
     st.events.push(e); added.push(e);
   };
   const hardcore = () => run.mode === "hardcore";
+  const award = awarder(st, log, ev);
 
-  for (let guard = 0; guard < 5000; guard++) {
+  // each pass ends a fight (or stops): at most 60 KOs and one strike a day, so the days bound it
+  const first = openFightOf(st);
+  const passes = first ? 61 * (Math.max(0, daysBetween(first.startedOn, clock.today)) + 2) : 0;
+  for (let guard = 0; guard < passes; guard++) {
     const f = openFightOf(st);
     if (!f) break;
     const lv = levelInfo(f.level);
+    // the heal a Veggie Shield blocked was deleted (or moved out of the fight): the shield is up again
+    const sh = shieldIn(st, f, log, clock.today, usedBeforeOf(st, f));
+    if (sh.voided && !run.shieldArmed) {
+      run.shieldArmed = true;
+      ev("powerup_used", sh.voided.block.day, f.id, { kind: "shield", action: "back", healId: sh.voided.block.data.healId, from: sh.voided.from });
+    }
     const sim = simulateFight(fightInputFor(st, f, log, clock.today));
     // a Water Potion for every 60-minute workout that counted
     for (const a of sim.counted) {
@@ -336,10 +396,14 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
 
     if (sim.ko) {
       const k = sim.ko;
-      award(st, log, addDays(k.day, -1), ev);
+      // everything the day's earlier fights used stays used: the list grows through the day, so a
+      // workout that KO'd one monster can't come back for the one after next
+      const before = f.startedAfter && k.day === f.startedOn ? usedBeforeOf(st, f) ?? [] : [];
+      const used = k.used ? [...before, ...k.used] : undefined;
+      award(addDays(k.day, -1));
       f.status = "won"; f.endedOn = k.day; f.betLocked = true;
       f.points = wonPoints({ damage: f.damage, max: lv.hp, koDay: k.day, deadlineOn: f.deadlineOn, flawless: f.flawless, boss: lv.boss, bet: f.bet, hardcore: hardcore() });
-      ev("ko", k.day, f.id, { level: f.level, name: lv.name, points: f.points, damage: f.damage, flawless: f.flawless, bet: f.bet, daysLeft: Math.max(0, daysBetween(k.day, f.deadlineOn)), boss: lv.boss }, k.at ?? clock.nowIso);
+      ev("ko", k.day, f.id, { level: f.level, name: lv.name, points: f.points, damage: f.damage, flawless: f.flawless, bet: f.bet, daysLeft: Math.max(0, daysBetween(k.day, f.deadlineOn)), boss: lv.boss, ...(k.at && used ? { used } : {}) }, k.at ?? clock.nowIso);
       if (lv.boss) {
         const heart = run.hearts < MAX_HEARTS;
         if (heart) run.hearts += 1;
@@ -353,14 +417,15 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
         ev("finish", k.day, f.id, {});
         break;
       }
-      // the next monster at once: the same day, counting only what is logged after the knockout
-      // (a knockout by a clean-day crit lands at midnight, so the next fight starts the next morning)
+      // the next monster at once: the same day, with the rest of the day (the entries the KO'd fight
+      // didn't use: `used` on the KO event). A knockout by a clean-day crit or a day-end trick lands
+      // at midnight, so the next fight starts the next morning with the whole day.
       openFight(st, f.level + 1, k.at ? k.day : addDays(k.day, 1), k.at, clock);
       continue;
     }
 
     if (clock.today > f.deadlineOn) {
-      award(st, log, f.deadlineOn, ev);
+      award(f.deadlineOn);
       f.status = "struck"; f.endedOn = f.deadlineOn; f.betLocked = true;
       f.points = struckPoints({ damage: f.damage, hardcore: hardcore() });
       run.hearts -= 1;
@@ -384,8 +449,10 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
     }
     break;
   }
-  if (!run.endReason) award(st, log, addDays(clock.today, -1), ev);
-  run.logPoints = logPoints(log.entriesSinceStart);
+  if (!run.endReason) award(addDays(clock.today, -1));
+  // a run that ended counts only the entries up to its last day
+  const ended = run.endReason && run.endedOn && log.entryDays;
+  run.logPoints = logPoints(ended ? log.entryDays!.filter((d) => d <= run.endedOn!).length : log.entriesSinceStart);
   run.score = scoreOf(st);
   if (run.endReason === "defeated") added[added.length - 1].data.score = run.score;
   return { state: st, added };
@@ -393,34 +460,45 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
 
 const scoreOf = (st: RunState) => runScore(st.fights.filter((f) => f.status !== "open").map((f) => f.points), st.run.logPoints, st.run.knockbacks);
 
-/** Weekly hearts and Veggie Shields earned on finished days up to `upTo`. */
-function award(st: RunState, log: GameLog, upTo: Day, ev: (kind: EventKind, day: Day, fightId: Id | null, data: Record<string, unknown>) => void): void {
+/**
+ * Weekly hearts and Veggie Shields earned on finished days: `award(upTo)` gives what is due up to
+ * that day. It carries on from where the last call stopped (one settle calls it again and again,
+ * always further on), so a long time away costs one pass over the days, not one per fight.
+ */
+function awarder(st: RunState, log: GameLog, ev: (kind: EventKind, day: Day, fightId: Id | null, data: Record<string, unknown>) => void): (upTo: Day) => void {
   const run = st.run;
-  if (upTo < run.startedOn) return;
-  // a week (the person's own week start) with 5+ active days inside the run: +1 heart when it ends
   const active = new Set(log.activities.map((a) => a.day));
-  const done = new Set(st.events.filter((e) => e.kind === "heart" && e.data.reason === "week").map((e) => String(e.data.week)));
-  for (let ws = weekStartOf(run.startedOn, log.weekStart); addDays(ws, 6) <= upTo; ws = addDays(ws, 7)) {
-    if (done.has(ws)) continue;
-    let n = 0;
-    for (let i = 0; i < 7; i++) { const d = addDays(ws, i); if (d >= run.startedOn && active.has(d)) n += 1; }
-    if (n < WEEK_ACTIVE_DAYS) continue;
-    const gained = run.hearts < MAX_HEARTS;
-    if (gained) run.hearts += 1;
-    ev("heart", addDays(ws, 6), null, { reason: "week", week: ws, activeDays: n, gained });
-  }
-  // clean days in a row: each time they reach 3, a Veggie Shield, and the count starts again
   const splurged = new Set(log.splurges.map((s) => s.day));
+  // weeks already given a heart (by their first day); a week that overlaps one of them is skipped,
+  // so changing the week start mid-run can't pay the same days twice
+  const paid = st.events.filter((e) => e.kind === "heart" && e.data.reason === "week").map((e) => String(e.data.week));
+  let ws = weekStartOf(run.startedOn, log.weekStart);
+  // clean days in a row: each time they reach 3, a Veggie Shield, and the count starts again
   const lastShield = st.events.filter((e) => e.kind === "powerup_earned" && e.data.kind === "shield").map((e) => String(e.data.day)).sort().pop();
+  let sd = lastShield ? addDays(lastShield, 1) : run.startedOn;
   let streak = 0;
-  for (let d = lastShield ? addDays(lastShield, 1) : run.startedOn; d <= upTo; d = addDays(d, 1)) {
-    if (splurged.has(d)) { streak = 0; continue; }
-    if (++streak < SHIELD_STREAK) continue;
-    streak = 0;
-    const gained = run.shields < MAX_POWER_UPS;
-    if (gained) run.shields += 1;
-    ev("powerup_earned", d, null, { kind: "shield", day: d, gained });
-  }
+  return (upTo) => {
+    if (upTo < run.startedOn) return;
+    // a week (the person's own week start) with 5+ active days inside the run: +1 heart when it ends
+    for (; addDays(ws, 6) <= upTo; ws = addDays(ws, 7)) {
+      if (paid.some((w) => Math.abs(daysBetween(w, ws)) < 7)) continue;
+      let n = 0;
+      for (let i = 0; i < 7; i++) { const d = addDays(ws, i); if (d >= run.startedOn && active.has(d)) n += 1; }
+      if (n < WEEK_ACTIVE_DAYS) continue;
+      const gained = run.hearts < MAX_HEARTS;
+      if (gained) run.hearts += 1;
+      paid.push(ws);
+      ev("heart", addDays(ws, 6), null, { reason: "week", week: ws, activeDays: n, gained });
+    }
+    for (; sd <= upTo; sd = addDays(sd, 1)) {
+      if (splurged.has(sd)) { streak = 0; continue; }
+      if (++streak < SHIELD_STREAK) continue;
+      streak = 0;
+      const gained = run.shields < MAX_POWER_UPS;
+      if (gained) run.shields += 1;
+      ev("powerup_earned", sd, null, { kind: "shield", day: sd, gained });
+    }
+  };
 }
 
 /** Change the bet on Choose your fight — only until the first attack lands or the start day ends. */
@@ -493,7 +571,7 @@ export function eventText(e: EventData): string {
     case "powerup_earned":
       return (d.kind === "shield" ? "A Veggie Shield for 3 clean days in a row." : d.kind === "potion" ? `A Water Potion for ${d.what ?? "a workout"} (${d.minutes} min).` : `A Second Wind for beating ${d.name}.`) + keep;
     case "powerup_used":
-      if (d.kind === "shield") return d.action === "block" ? "The Veggie Shield blocked a heal." : "Veggie Shield up: the next heal is blocked.";
+      if (d.kind === "shield") return d.action === "block" ? "The Veggie Shield blocked a heal." : d.action === "back" ? "The Veggie Shield is up again: the heal it blocked no longer counts." : "Veggie Shield up: the next heal is blocked.";
       return d.kind === "potion" ? `Water Potion: ${POTION_DAMAGE} damage.` : "Second Wind: one more day on the deadline.";
     case "mode_drop": return "Switched from Hardcore to Normal.";
   }

@@ -576,11 +576,13 @@ describe("planned treat (Nov 11 2026)", () => {
 
 describe("Craving Crusher (game mode, Nov 11 2026)", () => {
   const T = "2026-11-10";
+  /** this computer's date for the game's sanity check on the phone's day: the tests' days are near it */
+  const GAME = { serverDay: () => "2026-11-12" };
   /** every row the game keeps, to check a read wrote nothing */
   const snapshot = () => JSON.stringify(["game_runs", "game_fights", "game_events"].map((t) => s.handle.db.prepare(`SELECT * FROM ${t} ORDER BY rowid`).all()));
 
   it("with no run: nothing on the map yet; the day must be real; starting a run opens Crumbs", async () => {
-    s = await scratch();
+    s = await scratch({}, GAME);
     const b = await firstPerson();
     const none = (await b.call("GET", `/api/game?today=${T}`)).body;
     expect(none).toMatchObject({ today: T, run: null, fight: null, needsSync: false, events: [] });
@@ -597,7 +599,7 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
   });
 
   it("GET never writes: it says needsSync, and POST /sync settles the KO and opens the next fight", async () => {
-    s = await scratch();
+    s = await scratch({}, GAME);
     const b = await firstPerson();
     await b.call("POST", "/api/game/run", { mode: "normal", today: T });
     await b.call("POST", "/api/activities", { what: "Long walk", minutes: 150, day: T, time: "09:00" });
@@ -605,7 +607,10 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     const g = (await b.call("GET", `/api/game?today=${T}&now=10:00`)).body;
     expect(g.needsSync).toBe(true);
     expect(g.fight).toMatchObject({ name: "Crumbs", hp: 0 });
-    await b.call("GET", `/api/game?today=2026-12-31`); // even a day far ahead (every deadline missed) changes nothing
+    // a phone whose date is far off is refused, and nothing is settled
+    expect((await b.call("GET", `/api/game?today=2026-12-31`)).body.error).toMatch(/^Your phone's date looks wrong/);
+    expect((await b.call("POST", "/api/game/sync", { today: "2200-12-31" })).status).toBe(400);
+    expect((await b.call("GET", `/api/game?today=2026-11-14`)).status).toBe(200); // two days away is fine (time zones)
     await b.call("GET", `/api/game/hall?today=${T}`);
     expect(snapshot()).toBe(before);
     const synced = (await b.call("POST", "/api/game/sync", { today: T, now: "10:00" })).body;
@@ -625,7 +630,7 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
   });
 
   it("a missed deadline: strike, a heart lost, a rematch", async () => {
-    s = await scratch();
+    s = await scratch({}, GAME);
     const b = await firstPerson();
     await b.call("POST", "/api/game/run", { mode: "hardcore", today: T });
     for (const d of ["2026-11-10", "2026-11-11", "2026-11-12"]) await b.call("POST", "/api/splurges", { what: "Chips", size: "snack", day: d });
@@ -636,7 +641,7 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
   });
 
   it("the bet, power-ups and the mode, each with its own plain refusal", async () => {
-    s = await scratch();
+    s = await scratch({}, GAME);
     const b = await firstPerson();
     expect((await b.call("POST", "/api/game/bet", { bet: 2, today: T })).status).toBe(409);
     await b.call("POST", "/api/game/run", { mode: "hardcore", today: T });
@@ -661,7 +666,7 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
   });
 
   it("starting a new run ends the one going as abandoned; the Hall of Heroes lists everyone's runs", async () => {
-    s = await scratch();
+    s = await scratch({}, GAME);
     const b = await withUsers();
     await b.call("POST", "/api/users", { name: "Sarah", password: PW });
     const sarah = s.browser();
@@ -674,15 +679,21 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     expect(hall.allTime.map((r: { name: string; number: number }) => `${r.name} ${r.number}`).sort()).toEqual(["Matt 1", "Matt 2", "Sarah 1"]);
     expect(hall.allTime.find((r: { number: number; name: string }) => r.name === "Matt" && r.number === 1)).toMatchObject({ endReason: "abandoned", isYou: true });
     expect(hall.hardcore.map((r: { name: string }) => r.name)).toEqual(["Matt"]);
+    // a run switched from Hardcore to Normal says so
+    await sarah.call("POST", "/api/game/run", { mode: "hardcore", today: T });
+    await sarah.call("POST", "/api/game/mode", { to: "normal", today: T });
+    const dropped = (await b.call("GET", `/api/game/hall?today=${T}`)).body.allTime.find((r: { name: string; number: number }) => r.name === "Sarah" && r.number === 2);
+    expect(dropped).toMatchObject({ mode: "normal", hardcore: false, droppedFromHardcore: true });
     expect(hall.mine).toHaveLength(2);
     expect(hall.thisMonth).toHaveLength(3);
+    expect(hall.allTime.every((r: { droppedFromHardcore: boolean }) => r.droppedFromHardcore === false)).toBe(true);
     // the badges are the person on screen's, from their stored fights
     expect(hall.badges.map((x: { id: string }) => x.id)).toEqual(["first-blood", "flawless", "daredevil", "world-1", "comeback"]);
     expect((await b.call("GET", "/api/game/hall")).status).toBe(400);
   });
 
   it("one person can't touch another person's run: each sees, syncs and changes only their own", async () => {
-    s = await scratch();
+    s = await scratch({}, GAME);
     const b = await withUsers();
     const sarahUser = (await b.call("POST", "/api/users", { name: "Sarah", password: PW })).body;
     const sarah = s.browser();
@@ -698,7 +709,7 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     // his own run and his workouts never reach her fight
     await b.call("POST", "/api/game/run", { mode: "normal", today: T });
     await b.call("POST", "/api/activities", { what: "Run", minutes: 300, day: T, time: "07:00" });
-    await b.call("POST", "/api/game/sync", { today: "2026-11-20" });
+    await b.call("POST", "/api/game/sync", { today: "2026-11-14" });
     expect(JSON.stringify(hers())).toBe(before);
     expect((await sarah.call("GET", `/api/game?today=${T}`)).body.fight).toMatchObject({ name: "Crumbs", hp: 100 });
     expect((await b.call("GET", `/api/game?today=${T}`)).body.run.number).toBe(1);

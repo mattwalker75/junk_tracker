@@ -36,7 +36,7 @@ files disagree, this plan wins on *how* the game is built and they win on *what*
 - `game_fights`:
   - `id, run_id, user_id, level, attempt`
   - `started_on` (day), `started_after` (ISO or NULL; see "Which entries count")
-  - `deadline_on` (day; the fight ends at 23:59 that day), `bet` (1 | 1.5 | 2)
+  - `deadline_on` (day; the fight ends at midnight at the end of that day), `bet` (1 | 1.5 | 2)
   - `status` ('open' | 'won' | 'struck'), `ended_on`
   - `damage`, `heals`, `points`, `flawless`
   - `bet_locked` (set by the first attack, or at the end of the start day)
@@ -49,7 +49,9 @@ files disagree, this plan wins on *how* the game is built and they win on *what*
 
 ## Which log entries count for a fight
 - An activity or splurge counts for the open fight when its **day** is between `started_on` and `deadline_on`.
-- If the fight began partway through a day (`started_after` is set, after a KO), an entry on that same day counts only if it was **created** after `started_after`.
+- If the fight began partway through a day (`started_after` is set, after a KO), an entry on that
+  same day counts unless a fight before it that day **used** it (see "The KO day" under Stage 4).
+  Every entry of a KO day counts for exactly one fight.
 - Backdated entries count if they land inside the open fight's window. Entries in a finished fight's window are ignored.
 
 ## Order of events within a day
@@ -104,7 +106,7 @@ interface Ability {
 - **KO:**
   1. Settle the fight (won, with points).
   2. A boss kill gives +1 heart (max 5) and +1 Second Wind (max 3).
-  3. Open the next level at once: same day, `started_after` = when the knockout entry was created, Steady bet. The player can change the bet on **Choose your fight** until the first attack lands or the start day ends.
+  3. Open the next level at once: same day, `started_after` = the knockout's moment, Steady bet. The KO event keeps `used`, the day's entries the fights so far used (Stage 4). The player can change the bet on **Choose your fight** until the first attack lands or the start day ends.
   4. After level 60: the run is 'finished'.
 - **Strike** (today > deadline_on and HP > 0):
   1. Hearts −1 and the fight is 'struck'.
@@ -190,7 +192,8 @@ Where this plan left the flow open, Stage 1 took these readings. All of them are
 - **Hall of Heroes, "this month":** runs still going, or started or ended in today's month.
 - **Stored order:** `game_fights` and `game_events` have a `seq` column (their order in the run),
   which the plan's column list did not name.
-- **Several years away** is settled with a loop guard of 5,000 fights.
+- **Several years away** is settled with a loop guard of 5,000 fights. (Stage 4: replaced by a bound
+  in days, and the phone's day must be within 2 days of the server's.)
 - **`now`** is the phone's clock ("HH:MM"). It only places a Water Potion or a Veggie Shield among
   the day's timed entries. `at` times are the server's clock, like a log entry's `created_at`.
 
@@ -251,7 +254,8 @@ Where this plan left the flow open, Stage 1 took these readings. All of them are
   Clear (level 10 won), Comeback Kid (a win at a level that struck you earlier in the same run). Each
   is earned by the first fight that qualifies.
 - **Hall tabs** follow the mockup's order: All time · This month · My runs · Hardcore. A run switched
-  from Hardcore to Normal is listed as Normal (the server's `hardcore` flag).
+  from Hardcore to Normal is listed as Normal (the server's `hardcore` flag). (Stage 4: it now reads
+  "Hardcore → Normal", from `HallRun.droppedFromHardcore`.)
 - **How to crush** takes every number from the engine (`HEAL`, `CRIT`, `POTION_*`, `SHIELD_STREAK`,
   `WEEK_ACTIVE_DAYS`, `POINTS`, the heart limits, `betDays`, `wonPoints`). Its examples use the
   monster you're fighting, or Crumbs before a run.
@@ -264,3 +268,61 @@ Where this plan left the flow open, Stage 1 took these readings. All of them are
 - **Finish and Defeated** have a plain **Close** as well as "Start Run #N", so you can look at the
   map or the Hall first.
 
+
+## Decisions made while building (Stage 4, Nov 11 2026: the review fixes)
+- **The KO day.** Within a day a fight reads entries in its own order (timed ones by time, then the
+  untimed ones by when they were made). The next fight's cut used to be the KO entry's *created*
+  time, which is a different order: an entry could count for two fights or for none. Now the KO
+  event stores `used`: the ids of that day's entries the fights so far used, in the fight's own
+  order, up to and including the knockout (a potion KO: the entries before the potion). The list
+  grows through the day (fight 3's KO keeps fight 2's list too), so a workout can't come back for
+  the monster after next. The next fight counts a KO-day entry **if it isn't in that list**, so:
+  - an entry that sorted after the knockout counts for the next monster;
+  - one logged later with an earlier time (the KO'd fight is frozen) also counts for the next one;
+  - one the KO'd fight read never counts again.
+  A KO by a clean-day crit or a monster's day-end trick lands at midnight: the next fight starts the
+  next day with no split. Fights stored before `used` existed fall back to the created-time cut.
+  `FightInput.usedBefore` carries the list to the engine (and to the page's previews).
+- **The phone's day must be within 2 days of the server's own UTC date.** It is a sanity bound,
+  not working out "today" (time zones put the two a day apart): a phone set to 2200 would otherwise
+  settle 170 years of missed deadlines in one sync. The refusal says "Your phone's date looks
+  wrong…". `Game` takes the server's day as a function, so tests pass a fixed one.
+- **Settling is linear in days.** `award` (weekly hearts, Veggie Shields) is an `awarder` made once
+  per settle that carries on from where its last call stopped, instead of rescanning from the run's
+  start for every fight. The loop is bounded by 61 passes per day since the open fight began.
+- **Log points of an ended run** count only entries on or before its last day (`GameLog.entryDays`):
+  something logged after a defeat but before the next sync is not part of the run.
+- **Weekly hearts never pay the same days twice.** A week that overlaps one already given a heart is
+  skipped, so changing the week start mid-run can't give a second heart for those days.
+- **A Veggie Shield whose blocked heal no longer counts** (the splurge was deleted, or moved out of
+  the fight) goes back up from where it went up: a `powerup_used` event with `action: 'back'` (and
+  the original point in `from`), so the next heal is blocked instead. With nothing to block it stays
+  up, into the next fight too.
+- **Results survive a reload.** `state.ts` keeps, per person in localStorage
+  (`jt-game-seen:<person id>`, every access in try/catch), the newest event they are done with:
+  while a result waits, that is the event just before it. On load the queue is rebuilt from
+  `view.events` newer than that. With nothing stored (the first time on this browser), old history
+  isn't replayed; the newest id is only noted. The queue and toasts are one person's: a different
+  person on the game page (Switch to, signing in as someone else) starts with an empty queue.
+- **Starting a run** tells what happened after its own `run_start` (fight 1 counts the whole of
+  today, so earlier workouts can KO Crumbs at once: the Victory comes up), and the "Run #N begins!"
+  splash shows the monster the run is really on (`view.fight`). Ending a run that is still going
+  takes a second tap: "End Run #N? It can't be brought back."
+- **Tracker logs reach the game.** `LOG_KEYS` includes `["game"]` and `["game-hall"]`, so any log
+  change refetches the game the next time it shows (and that view's `needsSync` runs the sync).
+  One auto-sync at a time, however many screens read the view. A game change drops any read still
+  in flight, so an older view can't come back over it.
+- **Deadline wording.** A fight ends at midnight at the end of its last day (a log at 23:59 still
+  counts), shown as "Due end of Sat Nov 14". The countdown counts to that midnight, and every screen
+  (battle, map flag, Monster Book) uses the countdown's own words ("3 days 1 h left").
+- **Previews** stamp a new entry after the newest server time in the fight's input (an entry, a
+  potion, the shield going up, the fight's start), so a phone clock behind the server previews it
+  in the order the server will use.
+- **Phones narrower than 390 px:** the map and the world page are drawn at 390 and scaled to fit;
+  the NOW flag anchors on its node's side so it never runs off the edge. Above 3 hearts, the battle's
+  top row and the map's bar show one heart × N, and below 370 px the battle drops the word SCORE.
+- **Small ones:** "Back to tracker" on a Strike closes that one and keeps the rest of the queue; the
+  results overlay keeps Tab inside it; the "Run #N begins!" splash is a dialog with a button (Enter
+  or Esc to go on); the Hall's date lines are #6b587d (about 5.6:1 on the cards, which are the same
+  in both themes); only the deadline panel ticks each second; `#/game/<anything else>` (even
+  `toString`) is the title screen.

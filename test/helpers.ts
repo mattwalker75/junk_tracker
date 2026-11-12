@@ -20,11 +20,11 @@ export interface Browser {
   call(method: string, p: string, body?: unknown, headers?: Record<string, string>): Promise<{ status: number; body: any }>;
 }
 
-export async function scratch(config: Record<string, unknown> = {}): Promise<Scratch> {
+export async function scratch(config: Record<string, unknown> = {}, opts: { serverDay?: () => string } = {}): Promise<Scratch> {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-test-"));
   const file = path.join(dir, "config.json");
   fs.writeFileSync(file, JSON.stringify({ database: { path: "./data/junk.db" }, ...config }));
-  const handle = createApp(new Config(file), { rateLimit: false, webDir: path.join(dir, "no-web") });
+  const handle = createApp(new Config(file), { rateLimit: false, webDir: path.join(dir, "no-web"), serverDay: opts.serverDay });
   const server: Server = await new Promise((resolve) => { const s = handle.app.listen(0, "127.0.0.1", () => resolve(s)); });
   const port = (server.address() as { port: number }).port;
   const url = `http://127.0.0.1:${port}`;

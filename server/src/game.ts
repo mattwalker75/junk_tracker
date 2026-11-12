@@ -13,7 +13,7 @@ import type Database from "better-sqlite3";
 import { z } from "zod";
 import type { Day, Id } from "../../shared/types.js";
 import {
-  abandonRun, addDays, badgesFor, BETS, buildView, dropToNormal, GameRuleError, newRun, setBet, settle, toEventView, usePowerUp,
+  abandonRun, addDays, badgesFor, daysBetween, BETS, buildView, dropToNormal, GameRuleError, newRun, setBet, settle, toEventView, usePowerUp,
   type ActivityEv, type Bet, type EventData, type FightData, type GameClock, type GameLog, type GameView, type HallRun, type HallView,
   type Mode, type RunData, type RunState, type SplurgeEv, type SyncResult,
 } from "../../shared/game/index.js";
@@ -45,16 +45,34 @@ const toEvent = (r: EventRow): EventData => {
   return { id: r.id, fightId: r.fight_id, day: r.day, at: r.at, kind: r.kind, data };
 };
 
-const today = z.string({ error: "Which day is it?" }).refine(realDay, "Which day is it?");
+/**
+ * The phone's day, as everywhere (CLAUDE.md rule 3). It must be within two days of this computer's
+ * own date: not to work out "today" (time zones put the two a day apart), only to refuse a phone
+ * whose clock is far off — a day years ahead would settle years of missed deadlines at once.
+ */
+export const DAY_SLACK = 2;
+const daySchema = (serverDay: () => Day) => z.string({ error: "Which day is it?" }).refine(realDay, "Which day is it?")
+  .refine((d) => Math.abs(daysBetween(serverDay(), d)) <= DAY_SLACK, "Your phone's date looks wrong: it is more than two days away from this computer's date. Check the date on your phone, then try again.");
+const utcDay = (): Day => new Date().toISOString().slice(0, 10);
 const nowTime = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "The time looks wrong.").or(z.literal("")).default("");
-const clockSchema = z.object({ today, now: nowTime });
-const runSchema = clockSchema.extend({ mode: z.enum(["normal", "hardcore"], { error: "Pick Normal or Hardcore." }) });
-const betSchema = clockSchema.extend({ bet: z.union(BETS.map((b) => z.literal(b)) as [z.ZodLiteral<1>, z.ZodLiteral<1.5>, z.ZodLiteral<2>], { error: "Pick Steady, Bold or Daredevil." }) });
-const powerSchema = clockSchema.extend({ kind: z.enum(["shield", "potion", "wind"], { error: "Pick a Veggie Shield, a Water Potion or a Second Wind." }) });
-const modeSchema = clockSchema.extend({ to: z.literal("normal", { error: "A run can only switch from Hardcore to Normal." }) });
+function schemas(serverDay: () => Day) {
+  const today = daySchema(serverDay);
+  const clock = z.object({ today, now: nowTime });
+  return {
+    today, clock,
+    run: clock.extend({ mode: z.enum(["normal", "hardcore"], { error: "Pick Normal or Hardcore." }) }),
+    bet: clock.extend({ bet: z.union(BETS.map((b) => z.literal(b)) as [z.ZodLiteral<1>, z.ZodLiteral<1.5>, z.ZodLiteral<2>], { error: "Pick Steady, Bold or Daredevil." }) }),
+    power: clock.extend({ kind: z.enum(["shield", "potion", "wind"], { error: "Pick a Veggie Shield, a Water Potion or a Second Wind." }) }),
+    mode: clock.extend({ to: z.literal("normal", { error: "A run can only switch from Hardcore to Normal." }) }),
+  };
+}
 
 export class Game {
-  constructor(private readonly db: Database.Database, private readonly users: Users) {}
+  private readonly sc: ReturnType<typeof schemas>;
+  /** `serverDay` is this computer's UTC date, only for the sanity check on the phone's day (tests pass a fixed one) */
+  constructor(private readonly db: Database.Database, private readonly users: Users, serverDay: () => Day = utcDay) {
+    this.sc = schemas(serverDay);
+  }
 
   // ---------------------------------------------------------------- loading and storing
   private latestRun(owner: Id): RunRow | undefined {
@@ -78,8 +96,9 @@ export class Game {
     const activities = (this.db.prepare("SELECT id, what, day, time, minutes, calories, created_at FROM activities WHERE user_id = ? AND day BETWEEN ? AND ?").all(owner, from, t) as
       { id: Id; what: string; day: Day; time: string; minutes: number | null; calories: number | null; created_at: string }[])
       .map((a): ActivityEv => ({ id: a.id, what: a.what, day: a.day, time: a.time, minutes: a.minutes, calories: a.calories, createdAt: a.created_at }));
-    const n = (table: string) => (this.db.prepare(`SELECT COUNT(*) AS n FROM ${table} WHERE user_id = ? AND created_at >= ?`).get(owner, run.startedAt) as { n: number }).n;
-    return { splurges, activities, entriesSinceStart: n("splurges") + n("activities") + n("weigh_ins"), weekStart: this.users.settings(owner).weekStart };
+    const made = (table: string) => (this.db.prepare(`SELECT day FROM ${table} WHERE user_id = ? AND created_at >= ?`).all(owner, run.startedAt) as { day: Day }[]).map((r) => r.day);
+    const entryDays = [...made("splurges"), ...made("activities"), ...made("weigh_ins")];
+    return { splurges, activities, entriesSinceStart: entryDays.length, entryDays, weekStart: this.users.settings(owner).weekStart };
   }
 
   /** Write a run as the engine left it: the run row, every fight (new ones added), and the new events. */
@@ -133,7 +152,7 @@ export class Game {
   // ---------------------------------------------------------------- the routes
   /** GET /api/game: everything the game screens need. Never writes; `needsSync` says a POST /sync would change something. */
   view(owner: Id, q: { today?: unknown; now?: unknown }): GameView {
-    const t = parse(today, q.today);
+    const t = parse(this.sc.today, q.today);
     if (q.now !== undefined && q.now !== "") parse(nowTime, q.now);
     const st = this.load(owner);
     if (!st) return buildView(null, null, t, false);
@@ -145,14 +164,14 @@ export class Game {
 
   /** POST /api/game/sync: settle KOs, strikes, weekly hearts and power-ups up to today. */
   sync(owner: Id, body: unknown): SyncResult {
-    const v = parse(clockSchema, body);
+    const v = parse(this.sc.clock, body);
     const c = this.clock(v.today, v.now);
     return this.db.transaction(() => { const { st, happened } = this.settleAndStore(owner, c); return this.result(owner, st, happened, v.today); })();
   }
 
   /** POST /api/game/run: start run N+1 (a run still going is settled, then ends as abandoned). */
   start(owner: Id, body: unknown): SyncResult {
-    const v = parse(runSchema, body);
+    const v = parse(this.sc.run, body);
     const c = this.clock(v.today, v.now);
     return this.db.transaction(() => {
       const { st: old } = this.settleAndStore(owner, c);
@@ -168,7 +187,7 @@ export class Game {
 
   /** POST /api/game/bet: Steady, Bold or Daredevil, until the bet locks. */
   bet(owner: Id, body: unknown): SyncResult {
-    const v = parse(betSchema, body);
+    const v = parse(this.sc.bet, body);
     const c = this.clock(v.today, v.now);
     return this.db.transaction(() => {
       const { st, happened } = this.settleAndStore(owner, c);
@@ -181,7 +200,7 @@ export class Game {
 
   /** POST /api/game/powerup: put up a Veggie Shield, drink a Water Potion or take a Second Wind. */
   powerUp(owner: Id, body: unknown): SyncResult {
-    const v = parse(powerSchema, body);
+    const v = parse(this.sc.power, body);
     const c = this.clock(v.today, v.now);
     return this.db.transaction(() => {
       const { st, happened } = this.settleAndStore(owner, c);
@@ -194,7 +213,7 @@ export class Game {
 
   /** POST /api/game/mode: Hardcore → Normal (one way). */
   mode(owner: Id, body: unknown): SyncResult {
-    const v = parse(modeSchema, body);
+    const v = parse(this.sc.mode, body);
     const c = this.clock(v.today, v.now);
     return this.db.transaction(() => {
       const { st, happened } = this.settleAndStore(owner, c);
@@ -207,14 +226,14 @@ export class Game {
 
   /** GET /api/game/hall: everyone's runs (several users = separation, not privacy). Reads only. */
   hall(owner: Id, q: { today?: unknown }): HallView {
-    const t = parse(today, q.today);
+    const t = parse(this.sc.today, q.today);
     const rows = this.db.prepare(`SELECT r.*, u.name AS user_name,
         (SELECT level FROM game_fights f WHERE f.run_id = r.id ORDER BY seq DESC LIMIT 1) AS at_level
       FROM game_runs r JOIN users u ON u.id = r.user_id ORDER BY r.score DESC, r.started_at`).all() as (RunRow & { user_name: string; at_level: number | null })[];
     const month = t.slice(0, 7);
     const runs: (HallRun & { _month: boolean })[] = rows.map((r) => ({
       userId: r.user_id, name: r.user_name, isYou: r.user_id === owner, number: r.number, mode: r.mode, hardcore: r.mode === "hardcore",
-      startedOn: r.started_on, endedOn: r.ended_on, endReason: r.end_reason, level: r.at_level ?? 1, score: r.score,
+      droppedFromHardcore: r.mode === "normal" && !!r.hardcore_dropped_on, startedOn: r.started_on, endedOn: r.ended_on, endReason: r.end_reason, level: r.at_level ?? 1, score: r.score,
       // played this month: still going, or started or ended in it
       _month: !r.end_reason || r.started_on.slice(0, 7) === month || (r.ended_on ?? "").slice(0, 7) === month,
     }));

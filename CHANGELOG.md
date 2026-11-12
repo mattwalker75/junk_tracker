@@ -4,6 +4,46 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+### Fixed
+- 2026-11-11: **Craving Crusher: fixes after two reviews and a full play-through.**
+  - On the day a monster goes down, every workout and splurge now counts for exactly one monster.
+    Before, a workout logged with an earlier time could hit two monsters, and one logged out of
+    order could hit none. Two big workouts on one day now beat two monsters, as they should.
+  - A phone with its date far off (years ahead, say) no longer freezes the app: the game says
+    "Your phone's date looks wrong" instead. Catching up after a long time away is quick.
+  - A run that ended no longer collects +5 points for things logged after it ended.
+  - Changing your week start in the middle of a run can't give the same week's heart twice.
+  - Deleting the splurge a Veggie Shield blocked gives you the shield back.
+  - Starting a run on a day you already worked out now shows the Victory over Crumbs, and the
+    "Run #N begins!" screen shows the monster you are really on.
+  - Starting a new run while one is going asks first: "End Run #N? It can't be brought back."
+  - A workout logged from the tracker now shows up in the game (and its Victory) as soon as you go
+    back to the game, not up to 15 seconds later.
+  - A Victory or Strike screen comes back if you reload or close the app before you've seen it.
+    The first time on a phone, old history isn't replayed.
+  - "Back to tracker" on a Strike screen no longer throws away the screens waiting behind it.
+  - Results and pop-ups belong to the person on screen: after Switch to they don't show over
+    someone else's game.
+  - With 4 or 5 hearts and a big score, the battle's top row no longer cuts the score off (hearts
+    show as one heart × 5). The map and a world up close now fit phones narrower than 390 px, and
+    the flag over your monster no longer runs off the left edge.
+  - The deadline is "the end of" its last day everywhere, and the battle countdown, the map flag
+    and the Monster Book say the time left in the same words. A log in the last minute before
+    midnight still counts, and the countdown no longer says "Time's up" a minute early.
+  - The damage and heal previews are right even when the phone's clock is a little behind.
+  - The Hall of Heroes shows a run switched from Hardcore as "Hardcore → Normal", and its dates are
+    easier to read.
+  - Smaller things: keyboard focus stays inside a result screen, the "Run #N begins!" screen works
+    with the keyboard, the battle screen no longer redraws everything every second, an odd address
+    like `#/game/toString` opens the title screen, and one sync goes out instead of four.
+
+### Docs
+- 2026-11-11: The user guide has a **Craving Crusher (game mode)** section (how to open it,
+  attacks and heals, deadlines and the bet, hearts, Normal or Hardcore, power-ups, points, and
+  that your log is never changed), and the splurge section explains **Planned treat** and **Time**.
+  CLAUDE.md rule 11 now says the game is built and lists its rules; README and DEVELOPMENT.md say
+  where the game lives and how to test it.
+
 ### Added
 - 2026-11-11: **Game mode: the map, the results and the rest of Craving Crusher's screens.**
   - **Adventure map:** all 60 levels on one winding path through the six worlds, each world in its

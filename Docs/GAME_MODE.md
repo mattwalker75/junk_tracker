@@ -1,7 +1,8 @@
-# Game mode — "Craving Crusher" (planned, not built)
+# Game mode — "Craving Crusher" (built Nov 11 2026)
 
-Notes from the Nov 11 2026 brainstorm with Matt. **Nothing here is in the app yet.** This is the
-design to build from. The research behind it is in [GAME_RESEARCH.md](GAME_RESEARCH.md).
+Notes from the Nov 11 2026 brainstorm with Matt. **It is built** (stages 1–4, Nov 11 2026): how is in
+[game/ARCHITECTURE.md](game/ARCHITECTURE.md), how to play is in [USER_GUIDE.md](USER_GUIDE.md). This
+was the design it was built from; where the later decisions below change a number, they win. The research behind it is in [GAME_RESEARCH.md](GAME_RESEARCH.md).
 The mockups are in the canvas artifact JaQKDBbcdYyzDybDBx2eXS
 (https://claude.ai/artifact/JaQKDBbcdYyzDybDBx2eXS), rows **Round 5** (eight game ideas) and
 **Round 6** (the chosen game, 13 boards).

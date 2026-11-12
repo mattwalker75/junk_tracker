@@ -3,15 +3,16 @@
  * going would end (as "abandoned", it stays in the Hall of Heroes), so the screen says so first.
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { levelInfo, type Mode } from "../../../shared/game";
+import { useEffect, useRef, useState } from "react";
+import { levelInfo, type FightView, type Mode } from "../../../shared/game";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
 import { go } from "../lib/route";
 import { Check, HeartFull, Info, PlayDark, ShieldBlue, Skull } from "./icons";
+import { dueText } from "./logic";
 import { GameBg, GameHeader } from "./parts";
-import { applyResult, clearResults, useGame } from "./state";
+import { applyResult, startedRun, useGame } from "./state";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
@@ -27,7 +28,9 @@ export function StartRun() {
   const [mode, setMode] = useState<Mode>("normal");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [begun, setBegun] = useState<{ number: number; mode: Mode } | null>(null);
+  const [begun, setBegun] = useState<{ number: number; mode: Mode; fight: FightView | null } | null>(null);
+  // a run still going ends when a new one starts: that takes a second tap
+  const [sure, setSure] = useState(false);
   const run = view?.run ?? null;
   const next = (run?.number ?? 0) + 1;
   const going = !!run?.active;
@@ -35,14 +38,15 @@ export function StartRun() {
   const crumbs = levelInfo(1);
 
   const start = async () => {
-    setBusy(true); setError(null);
+    if (going && !sure) { setSure(true); return; }
+    setBusy(true); setError(null); setSure(false);
     try {
       const r = await api.gameStart(mode, today, nowTime());
-      clearResults();
-      // what settled in the old run is moot now: the new run starts with a clean slate
-      applyResult(qc, today, { ...r, happened: [] });
+      // what settled in the old run is moot now; what came after the new run's start is told (a
+      // workout logged earlier today can KO Crumbs at once: its Victory comes up)
+      applyResult(qc, today, { ...r, happened: startedRun(r) });
       void qc.invalidateQueries({ queryKey: ["game-hall"] });
-      setBegun({ number: r.view.run?.number ?? next, mode });
+      setBegun({ number: r.view.run?.number ?? next, mode, fight: r.view.fight });
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   };
@@ -109,26 +113,51 @@ export function StartRun() {
       <div className="flex-1" />
       <div className="relative z-[2] mx-4 flex flex-col gap-2">
         {error ? <p role="alert" className="g-panel bg-g-soft-red px-3 py-2 text-sm font-extrabold">{error}</p> : null}
-        <button onClick={() => void start()} disabled={busy} className="g-btn flex min-h-[60px] items-center justify-center gap-2 rounded-[18px] bg-g-yellow font-game text-[22px] shadow-[0_5px_0_var(--g-line)]">
-          <PlayDark className="size-[22px]" />Start Run #{next} · {mode === "hardcore" ? "Hardcore" : "Normal"}
-        </button>
+        {sure && run ? (
+          <div role="alertdialog" aria-label={`End Run #${run.number}?`} className="g-panel flex flex-col gap-2 bg-g-soft-red px-3 py-2.5">
+            <p className="text-[15px] leading-snug font-black">End Run #{run.number}? It can't be brought back.</p>
+            <div className="grid grid-cols-2 gap-2">
+              <button onClick={() => setSure(false)} className="g-btn h-11 rounded-xl bg-g-panel font-game text-[16px] text-g-text">Keep going</button>
+              <button onClick={() => void start()} disabled={busy} className="g-btn h-11 rounded-xl bg-g-yellow font-game text-[16px]">End it, start #{next}</button>
+            </div>
+          </div>
+        ) : (
+          <button onClick={() => void start()} disabled={busy} className="g-btn flex min-h-[60px] items-center justify-center gap-2 rounded-[18px] bg-g-yellow font-game text-[22px] shadow-[0_5px_0_var(--g-line)]">
+            <PlayDark className="size-[22px]" />Start Run #{next} · {mode === "hardcore" ? "Hardcore" : "Normal"}
+          </button>
+        )}
         <span className="text-center text-xs font-extrabold text-[#e3f7da]">Level 1 · Crumbs · {crumbs.hp} HP · 3 hearts · score 0</span>
       </div>
 
-      {begun ? (
-        <div role="dialog" aria-label={`Run #${begun.number} begins`} onClick={() => go("/game/battle")}
-          className="fixed inset-0 z-50 flex cursor-pointer flex-col items-center justify-center gap-3.5 text-[#2b1d3a]" style={{ background: "radial-gradient(80% 50% at 50% 45%, #9be37f 0%, #4fae4a 55%, #2d6e3a 100%)" }}>
-          <span className="font-game text-[15px] tracking-[0.14em] text-[#1a3d1f]">WORLD 1 · SNACK SWAMP · LEVEL 1 / 60</span>
-          <span className="g-anim-pop font-game text-[46px] leading-none text-g-yellow" style={{ WebkitTextStroke: "3px #1a1024", paintOrder: "stroke fill", textShadow: "0 5px 0 #1a1024" }}>Run #{begun.number} begins!</span>
-          <span className={cx("inline-flex items-center gap-1.5 rounded-full border-[3px] border-[#1a1024] py-1 pr-3 pl-2 font-game text-base tracking-[0.04em] shadow-[0_3px_0_#1a1024]", begun.mode === "hardcore" ? "bg-[#2b1d3a] text-white" : "bg-g-blue text-[#1a1024]")}>
-            {begun.mode === "hardcore" ? <Skull className="size-5" /> : <ShieldBlue className="size-5" />}{begun.mode === "hardcore" ? "HARDCORE RUN" : "NORMAL RUN"}
-          </span>
-          <div className="flex gap-1.5">{[0, 1, 2].map((i) => <HeartFull key={i} className="h-8 w-9" />)}</div>
-          <img src={`/monsters/${crumbs.slug}.svg`} alt="" className="g-anim-bob w-[140px]" />
-          <span className="rounded-full border-[3px] border-g-line bg-[#fff7e6] px-3.5 py-1.5 text-sm font-black">Crumbs · {crumbs.hp} HP · {crumbs.days}-day deadline</span>
-          <span className="text-[13px] font-extrabold text-[#1a3d1f]">{begun.mode === "hardcore" ? "All points ×1.25 · no checkpoints · tap to go" : "A checkpoint at every world · tap to go"}</span>
-        </div>
-      ) : null}
+      {begun ? <Begins begun={begun} /> : null}
     </main>
+  );
+}
+
+/** "Run #N begins!": the monster you fight first (Crumbs, or the next one if Crumbs went down at once). Tap, Enter or Esc to go. */
+function Begins({ begun }: { begun: { number: number; mode: Mode; fight: FightView | null } }) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const f = begun.fight;
+  const lv = levelInfo(f?.level ?? 1);
+  useEffect(() => {
+    ref.current?.focus();
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") go("/game/battle"); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  return (
+    <div role="dialog" aria-modal="true" aria-label={`Run #${begun.number} begins`} className="fixed inset-0 z-50 text-[#2b1d3a]" style={{ background: "radial-gradient(80% 50% at 50% 45%, #9be37f 0%, #4fae4a 55%, #2d6e3a 100%)" }}>
+      <button ref={ref} onClick={() => go("/game/battle")} className="flex size-full cursor-pointer flex-col items-center justify-center gap-3.5 outline-none">
+        <span className="font-game text-[15px] tracking-[0.14em] text-[#1a3d1f]">WORLD {lv.world} · {lv.worldName.toUpperCase()} · LEVEL {lv.level} / 60</span>
+        <span className="g-anim-pop font-game text-[46px] leading-none text-g-yellow" style={{ WebkitTextStroke: "3px #1a1024", paintOrder: "stroke fill", textShadow: "0 5px 0 #1a1024" }}>Run #{begun.number} begins!</span>
+        <span className={cx("inline-flex items-center gap-1.5 rounded-full border-[3px] border-[#1a1024] py-1 pr-3 pl-2 font-game text-base tracking-[0.04em] shadow-[0_3px_0_#1a1024]", begun.mode === "hardcore" ? "bg-[#2b1d3a] text-white" : "bg-g-blue text-[#1a1024]")}>
+          {begun.mode === "hardcore" ? <Skull className="size-5" /> : <ShieldBlue className="size-5" />}{begun.mode === "hardcore" ? "HARDCORE RUN" : "NORMAL RUN"}
+        </span>
+        <span className="flex gap-1.5">{[0, 1, 2].map((i) => <HeartFull key={i} className="h-8 w-9" />)}</span>
+        <img src={`/monsters/${lv.slug}.svg`} alt="" className="g-anim-bob w-[140px]" />
+        <span className="rounded-full border-[3px] border-g-line bg-[#fff7e6] px-3.5 py-1.5 text-sm font-black">{lv.name} · {f ? `${f.hp} / ${f.max} HP · due ${dueText(f.deadlineOn)}` : `${lv.hp} HP · ${lv.days}-day deadline`}</span>
+        <span className="text-[13px] font-extrabold text-[#1a3d1f]">{begun.mode === "hardcore" ? "All points ×1.25 · no checkpoints · tap to go" : "A checkpoint at every world · tap to go"}</span>
+      </button>
+    </div>
   );
 }

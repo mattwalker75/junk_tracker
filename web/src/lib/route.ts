@@ -18,7 +18,9 @@ export function parse(hash: string): Route {
   if (parts[0] === "goals") return { page: "goals" };
   if (parts[0] === "settings") return { page: "settings", section: parts[1] || null };
   if (parts[0] === "game") {
-    const screen = GAME_SCREENS[parts[1] ?? ""] ?? "title";
+    // own keys only: "#/game/toString" or "#/game/constructor" is not a screen
+    const name = parts[1] ?? "";
+    const screen = Object.hasOwn(GAME_SCREENS, name) ? GAME_SCREENS[name] : "title";
     if (screen === "world") {
       const n = Number(parts[2]);
       return { page: "game", screen, world: Number.isInteger(n) && n >= 1 && n <= 6 ? n : undefined };

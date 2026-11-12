@@ -42,9 +42,13 @@ Want other people on it, or a password? Settings → **Users and sign-in** (belo
 4. **Day** — **Today** unless you tap **Yesterday**, or **Other day** for a big calendar of the
    month (arrows for earlier months; days after today can't be picked).
 5. Optional: **Time** — empty to start; tap **Now** for the time right now, or pick one; **Clear**
-   takes it off again.
-6. Optional: **Notes**.
-7. **Save splurge**.
+   takes it off again. The tracker doesn't need it; in game mode a few monsters care about the time
+   of day (see *Craving Crusher* below), and with no time they assume the worst.
+6. Optional: **Planned treat** — switch it on for a treat you planned ahead (a birthday dinner, a
+   night out). It is still a splurge and counts on Home like any other; in game mode it heals the
+   monster only half as much.
+7. Optional: **Notes**.
+8. **Save splurge**.
 
 To change or delete one, tap its day on Home or in the Calendar, then tap **Edit** on the splurge.
 
@@ -95,6 +99,95 @@ Any month: days coloured like Home, the green bar under active days, a small dot
 days with a weigh-in, then the month's
 splurge count, clean days and weight change, and the list of that month's splurges. Arrows move
 between months. Tap a day to open it.
+
+## Craving Crusher (game mode)
+A monster battle made from your own log. Workouts hit the monster, splurges feed it, and each
+monster has a deadline. It is just for fun: **the game never changes your log.** Everything you
+log in the game is a normal entry in the tracker, and the tracker looks and works the same whether
+you play or not.
+
+**Opening it.** Tap your initials (top right) → **Game mode**. In the game the same menu has
+**Back to tracker**. The first time, tap **Start a run** and pick **Normal** or **Hardcore**
+(below). Each person has their own run.
+
+**The battle screen** shows your hearts, the run number, your score, the deadline counting down,
+the monster with its HP bar and its special trick, a **So close!** line (how many minutes or
+calories would finish it), your power-ups and the battle log. The two big buttons at the bottom are
+**+ Activity (attack)** and **+ Splurge** — the same forms as in the tracker, with the same fields,
+plus a live panel that shows what the entry will do before you save it. There is no Weigh in
+button in the game; weigh in from the tracker as usual.
+
+**Attacks (your workouts).**
+- Damage = **minutes + calories burned ÷ 10**. A 45-minute walk burning 210 calories does
+  45 + 21 = **66** damage. So 10 minutes = 100 calories = 10 damage. There is no cap.
+- **Comeback:** the first workout after a day with no activity does **double** damage.
+- **Clean day:** every day that ends with no splurge is a **critical hit of 25**, landed at midnight.
+- A workout with no minutes and no calories does no damage, but still earns its points.
+
+**Heals (your splurges).** A **Snack heals 10**, a **Meal 25**, a **Feast 60**. A **planned treat**
+heals half. A monster never heals past its full HP. Some monsters change these numbers (each one's
+trick is on the battle screen and in the **Monster Book**).
+
+**Deadlines and the bet.** Each monster must go down by midnight at the end of its last day (the
+first day counts as day 1; a monster that starts right after a knockout gets the rest of that day
+free). On **Choose your fight** you can bet on a shorter deadline for more points: **Steady** (×1),
+**Bold** (one day less, ×1.5) or **Daredevil** (two days less, ×2). The bet can change only before
+your first hit lands, on the fight's first day.
+
+**Hearts, strikes, knock-back and defeat.**
+- A run starts with **3 hearts**; you can hold up to **5**.
+- If the deadline passes and the monster still has HP, it **strikes**: you lose a heart, it heals
+  back to full and you fight it again with a fresh deadline.
+- You win a heart back by beating a **boss** (every 10th level) and for every week with **5 or
+  more active days** (your own week start, from Settings).
+- At **0 hearts**, what happens depends on the run's mode (next).
+
+**Normal or Hardcore.** You pick when the run starts.
+- **Normal:** at 0 hearts you are **knocked back** to the first level of your world, lose 250
+  points, get 3 hearts again, and the run carries on.
+- **Hardcore:** at 0 hearts you are **defeated**: the run is over and its score goes into the Hall
+  of Heroes. In return every fight's points are worth ×1.25, and the run gets a skull badge.
+- A Hardcore run can switch to Normal at any time (tap the mode badge on the map). It can't go back,
+  and the Hall shows it as "Hardcore → Normal".
+
+**Power-ups.** You can hold up to 3 of each. Tap one on the battle screen, then tap again to use it.
+- **Veggie Shield** — blocks the next heal. Earned with **3 clean days in a row**. If you delete the
+  splurge it blocked, the shield comes back.
+- **Water Potion** — **50 damage** at once. Earned with a workout of **60 minutes or more**.
+- **Second Wind** — **one more day** on the deadline. Earned by beating a boss.
+- One monster (Bacon Bandit) doesn't let you use power-ups in its fight; you keep them for later.
+
+**Points.**
+- A monster beaten: the damage you did + the monster's full HP + **50 for each day left** on the
+  deadline + **100** if no heal landed (flawless) + **500** for a boss, all times your bet (and ×1.25
+  on Hardcore).
+- A monster that struck you: the damage you did.
+- **Every entry you log during the run** (activity, splurge or weigh-in): **+5**, even a Feast — so
+  being honest always pays.
+- Each knock-back: −250.
+
+**Planned treat and the splurge Time** are the same switches as in the tracker. A few monsters read
+the time of a splurge (the Midnight Snacker cares about after 9 PM, Hash Hound about before 11 AM,
+Fondue Fiend about splurges close together). If you leave Time empty, they assume the worst.
+
+**What happened while you were away.** When you open the game, it catches up on everything since
+you last looked: a **Victory** for each knockout, a **Strike** for each missed deadline, then
+**Knocked back** or **Defeated** if a heart ran out. They come one after another; **Next** shows the
+next one. If you close the app in the middle, they come back the next time you open the game. A
+workout logged from the tracker counts too: the next time you open the game, you see the Victory.
+
+**Finished fights are frozen.** Once a monster is beaten (or has struck), that fight's result stays
+as it was, even if you later edit or delete an entry from those days. Changing an entry inside the
+fight going on now changes it right away. An entry logged later on the day of a knockout counts for
+the next monster.
+
+**The other screens.** The **Adventure map** shows all 60 levels in six worlds (tap a monster for
+its card, or a world's sign to see it up close). The **Hall of Heroes** lists everyone's runs (All
+time, This month, My runs, Hardcore) and your badges. **How to crush** has every rule and number.
+The **Monster Book** has all 60 monsters and their tricks.
+
+**If the game says "Your phone's date looks wrong"**, the phone's date is more than two days away
+from the computer running Junk Tracker. Fix the date on the phone and try again.
 
 ## Settings
 Tap your initials at the top right of Home, then **Settings**. The same menu has **Goals**, and

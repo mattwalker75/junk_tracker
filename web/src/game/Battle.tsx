@@ -1,6 +1,6 @@
 /**
  * The battle (mockup MonBattle), from GET /api/game: hearts, run and score; the deadline ticking
- * down to 23:59 of its last day on the phone's clock; the monster with its HP bar and ability; the
+ * down to midnight at the end of its last day on the phone's clock; the monster with its HP bar and ability; the
  * "So close!" nudge; power-ups; what a sync just settled; the battle log; and the game's two bottom
  * buttons, + Activity (attack) and + Splurge (no Weigh in in game mode).
  */
@@ -12,7 +12,7 @@ import { api } from "../lib/api";
 import { useActions } from "../lib/actions";
 import { nowTime } from "../lib/dates";
 import { Arena, Clock, worldLook } from "./art";
-import { Ability, HeartBroken, HeartPlus, IconBlock, IconCrit, IconHeal, IconHit, Potion, Shield, Skull, Star, Sword, Target, Wind } from "./icons";
+import { Ability, HeartBroken, HeartFull, HeartPlus, IconBlock, IconCrit, IconHeal, IconHit, Potion, Shield, Skull, Star, Sword, Target, Wind } from "./icons";
 import { countdown, lineRow, soClose, type LineIcon } from "./logic";
 import { levelInfo } from "../../../shared/game";
 import { Burst, Confetti } from "./art";
@@ -22,11 +22,49 @@ import { applyResult, markShown, useGame, useResults, type QueuedResult } from "
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
-/** The time now, once a second (the deadline clock). */
+/** The time now, once a second (the deadline clock). Only the Deadline panel ticks, not the whole battle. */
 function useNow(): Date {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => { const t = window.setInterval(() => setNow(new Date()), 1000); return () => window.clearInterval(t); }, []);
   return now;
+}
+
+/** The deadline, counting down to midnight at the end of its last day. */
+function Deadline({ deadlineOn }: { deadlineOn: string }) {
+  const cd = countdown(deadlineOn, useNow());
+  return (
+    <section aria-label="Deadline" className={cx("g-panel mx-3 mt-2.5 flex items-center gap-2.5 py-1.5 pr-2.5 pl-1.5", cd.passed && "bg-g-soft-red")}>
+      <Clock passed={cd.passed} className="size-[54px] shrink-0" />
+      <div className="flex min-w-0 flex-1 flex-col leading-tight">
+        <span className="text-[10px] font-black tracking-[0.02em] whitespace-nowrap text-g-warn">{cd.kicker}</span>
+        <span className="font-game text-[23px] leading-[1.05]">{cd.passed ? "Time’s up!" : cd.big}</span>
+        <span className="text-xs font-extrabold text-g-mute">{cd.passed ? "It strikes once the day is over: −1 heart." : "Miss it: it strikes, −1 heart"}</span>
+      </div>
+      <div className="flex shrink-0 flex-col items-center gap-0.5">
+        <span aria-hidden className={cx("tabular rounded-[10px] bg-g-night px-[7px] py-[5px] text-[15px] font-black whitespace-nowrap", cd.passed ? "text-[#ff7a95]" : "text-g-yellow")}>{cd.digits}</span>
+        <span className="text-[10px] font-black tracking-[0.06em] text-g-mute">D · H · M · S</span>
+      </div>
+    </section>
+  );
+}
+
+/** Hearts in the battle's top row: up to 3 drawn one by one; more as one heart × N, so the score keeps its room. */
+function BattleHearts({ hearts, crack }: { hearts: number; crack: boolean }) {
+  if (hearts + (crack ? 1 : 0) <= 3) {
+    return crack ? (
+      <span className="relative">
+        <Hearts hearts={hearts + 1} />
+        <span aria-hidden className="g-anim-crack absolute top-0" style={{ left: hearts * 27 }}><HeartBroken className="h-[22px] w-6" /></span>
+      </span>
+    ) : <Hearts hearts={hearts} />;
+  }
+  return (
+    <span className="flex items-center gap-1" role="img" aria-label={`${hearts} hearts`}>
+      <HeartFull className="h-[22px] w-6" />
+      <span className="g-stroke-thin font-game text-lg leading-none">×{hearts}</span>
+      {crack ? <HeartBroken aria-hidden className="g-anim-crack h-[22px] w-6" /> : null}
+    </span>
+  );
 }
 
 export function Battle() {
@@ -90,8 +128,6 @@ function useScene(head: QueuedResult | null): { kind: "ko" | "strike"; level: nu
 
 function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightView; today: string; head: QueuedResult | null }) {
   const act = useActions();
-  const now = useNow();
-  const cd = countdown(fight.deadlineOn, now);
   const so = soClose(fight.hp);
   const look = worldLook(fight.world);
 
@@ -121,12 +157,7 @@ function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightVie
       {/* hearts · run · score */}
       <div className="mx-3 mt-2 flex items-stretch gap-2">
         <div className="g-panel flex h-10 shrink-0 items-center gap-1 rounded-[14px] px-2.5">
-          {scene?.crack ? (
-            <span className="relative">
-              <Hearts hearts={run.hearts + 1} />
-              <span aria-hidden className="g-anim-crack absolute top-0" style={{ left: run.hearts * 27 }}><HeartBroken className="h-[22px] w-6" /></span>
-            </span>
-          ) : <Hearts hearts={run.hearts} />}
+          <BattleHearts hearts={run.hearts} crack={!!scene?.crack} />
         </div>
         <div className={cx("g-panel flex h-10 shrink-0 flex-col items-center justify-center rounded-[14px] px-2.5 leading-none", run.hardcore ? "bg-g-night text-g-night-ink" : "bg-g-blue text-g-on")}>
           <span className="flex items-center gap-0.5 text-[10px] font-black tracking-[0.06em]">{run.hardcore ? <Skull className="size-3" /> : null}RUN</span>
@@ -134,24 +165,12 @@ function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightVie
         </div>
         <div className="g-panel flex h-10 min-w-0 flex-1 items-center justify-between gap-1.5 rounded-[14px] bg-g-yellow pr-3 pl-2 text-g-on" aria-label={`Score ${fmt(run.liveScore)}`}>
           <Star className="size-6 shrink-0" />
-          <span className="text-[11px] font-black tracking-[0.06em]">SCORE</span>
-          <span className="g-stroke-thin truncate font-game text-[22px] leading-none">{fmt(run.liveScore)}</span>
+          <span aria-hidden className="text-[11px] font-black tracking-[0.06em] max-[370px]:hidden">SCORE</span>
+          <span aria-hidden className="g-stroke-thin min-w-0 truncate font-game text-[22px] leading-none tabular max-[370px]:text-[19px]">{fmt(run.liveScore)}</span>
         </div>
       </div>
 
-      {/* the deadline */}
-      <section aria-label="Deadline" className={cx("g-panel mx-3 mt-2.5 flex items-center gap-2.5 py-1.5 pr-2.5 pl-1.5", cd.passed && "bg-g-soft-red")}>
-        <Clock passed={cd.passed} className="size-[54px] shrink-0" />
-        <div className="flex min-w-0 flex-1 flex-col leading-tight">
-          <span className="text-[10px] font-black tracking-[0.02em] whitespace-nowrap text-g-warn">{cd.kicker}</span>
-          <span className="font-game text-[23px] leading-[1.05]">{cd.passed ? "Time’s up!" : cd.big}</span>
-          <span className="text-xs font-extrabold text-g-mute">{cd.passed ? "It strikes once the day is over: −1 heart." : "Miss it: it strikes, −1 heart"}</span>
-        </div>
-        <div className="flex shrink-0 flex-col items-center gap-0.5">
-          <span aria-hidden className={cx("tabular rounded-[10px] bg-g-night px-[7px] py-[5px] text-[15px] font-black whitespace-nowrap", cd.passed ? "text-[#ff7a95]" : "text-g-yellow")}>{cd.digits}</span>
-          <span className="text-[10px] font-black tracking-[0.06em] text-g-mute">D · H · M · S</span>
-        </div>
-      </section>
+      <Deadline deadlineOn={fight.deadlineOn} />
 
       {/* the arena */}
       <section aria-label="Battle arena" className={cx("relative mx-3 mt-2.5 h-[260px] overflow-hidden rounded-[22px] border-[3px] border-g-line shadow-[0_4px_0_var(--g-line)]", (fx?.kind === "hit" || scene) && "g-anim-shake")}>

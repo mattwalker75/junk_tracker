@@ -5,7 +5,7 @@
  * screens (Results.tsx) and toasts.
  */
 import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import type { EventView, GameView, SyncResult } from "../../../shared/game/types";
 import type { Day } from "../../../shared/types";
 import { api } from "../lib/api";
@@ -14,25 +14,90 @@ import { useToday } from "../lib/useToday";
 import { planResults, type Result } from "./outcomes";
 
 // ---------------------------------------------------------------- what just happened
-/** A result screen waiting to be seen; `shown` once its overlay is up (the battle screen plays its KO or strike first). */
-export interface QueuedResult { result: Result; shown: boolean }
+/**
+ * A result screen waiting to be seen; `shown` once its overlay is up (the battle screen plays its KO
+ * or strike first). `mark` is the newest event before it: while it waits, that is how far the
+ * person has seen, so a reload or a killed tab brings it back.
+ */
+export interface QueuedResult { result: Result; shown: boolean; mark: string | null }
 let queue: QueuedResult[] = [];
 let toasts: EventView[] = [];
-const seen = new Set<string>();
+let seen = new Set<string>();
 const listeners = new Set<() => void>();
 const emit = () => { for (const l of listeners) l(); };
 const subscribe = (l: () => void) => { listeners.add(l); return () => { listeners.delete(l); }; };
+
+// whose game this is: the queue and the toasts are one person's (Switch to, sign out and back in
+// as someone else start afresh), and how far they have seen is kept in the browser per person
+let person: string | null = null;
+let runId: string | null = null;
+/** the newest event told about (null: none yet in this run) */
+let newest: string | null = null;
+let ready = false;
+const seenKey = (p: string) => `jt-game-seen:${p}`;
+function readSeen(p: string): { run: string | null; id: string | null } | null {
+  try {
+    const v = JSON.parse(window.localStorage.getItem(seenKey(p)) ?? "null") as unknown;
+    return v && typeof v === "object" ? { run: String((v as { run?: unknown }).run ?? "") || null, id: (v as { id?: unknown }).id ? String((v as { id: unknown }).id) : null } : null;
+  } catch { return null; }
+}
+function saveSeen(): void {
+  if (!person || !ready) return;
+  // with a result still waiting, only what came before it has been seen
+  const id = queue.length ? queue[0].mark : newest;
+  try { window.localStorage.setItem(seenKey(person), JSON.stringify({ run: runId, id })); } catch {}
+}
+
+/** The game page says whose game is on screen; a different person starts with an empty queue. */
+export function setGamePerson(p: string): void {
+  if (p === person) return;
+  person = p; runId = null; newest = null; ready = false;
+  queue = []; toasts = []; seen = new Set();
+}
+
+/**
+ * The first view for this person since the page loaded: bring back what they hadn't seen yet (a
+ * reload or a killed tab in the middle of a Victory). With nothing kept (the first time on this
+ * phone), old history isn't replayed; it is only noted as seen.
+ */
+function startFrom(view: GameView): void {
+  if (ready || !person) return;
+  ready = true;
+  runId = view.run?.id ?? null;
+  const events = view.events; // newest first
+  const kept = readSeen(person);
+  let fresh: EventView[] = [];
+  if (kept && runId) {
+    const at = kept.id ? events.findIndex((e) => e.id === kept.id) : -1;
+    if (at >= 0) fresh = events.slice(0, at);
+    else if (kept.run === runId || !kept.id) fresh = events;
+    else {
+      // a run started elsewhere since: what happened after its start
+      const start = events.findIndex((e) => e.kind === "run_start");
+      fresh = start >= 0 ? events.slice(0, start) : events;
+    }
+  }
+  newest = events[0]?.id ?? null;
+  for (const e of events) if (!fresh.includes(e)) seen.add(e.id);
+  if (fresh.length) pushHappened([...fresh].reverse());
+  else saveSeen();
+}
 
 /** Tell about what a game change settled: big results queue up one after another, the rest are toasts. */
 export function pushHappened(events: EventView[]): void {
   const fresh = events.filter((e) => !seen.has(e.id));
   if (!fresh.length) return;
   for (const e of fresh) seen.add(e.id);
+  const before = newest;
+  newest = fresh[fresh.length - 1].id;
   const plan = planResults(fresh);
-  if (!plan.results.length && !plan.toasts.length) return;
-  queue = [...queue, ...plan.results.map((result) => ({ result, shown: false }))];
+  queue = [...queue, ...plan.results.map((result) => {
+    const i = fresh.findIndex((e) => e.id === result.id);
+    return { result, shown: false, mark: i > 0 ? fresh[i - 1].id : before };
+  })];
   toasts = [...toasts, ...plan.toasts].slice(-4);
-  emit();
+  saveSeen();
+  if (plan.results.length || plan.toasts.length) emit();
 }
 /** The result on screen (or about to be) and how many more wait behind it. */
 export function useResults(): { head: QueuedResult | null; waiting: number } {
@@ -48,9 +113,28 @@ export function markShown(id: string): void {
 export function nextResult(): void {
   if (!queue.length) return;
   queue = queue.slice(1).map((q, i) => (i === 0 ? { ...q, shown: true } : q));
+  saveSeen();
   emit();
 }
-export function clearResults(): void { if (queue.length || toasts.length) { queue = []; toasts = []; emit(); } }
+/** "Skip all": everything waiting counts as seen. */
+export function clearResults(): void {
+  if (queue.length || toasts.length) { queue = []; toasts = []; saveSeen(); emit(); }
+}
+/**
+ * A new run was just started on this phone: what settled in the old run is moot, so the queue starts
+ * empty and only what came after the new run's start is told (fight 1 counts the whole of today,
+ * so a workout logged earlier can KO Crumbs at once).
+ */
+export function startedRun(r: SyncResult): EventView[] {
+  queue = []; toasts = [];
+  const start = r.happened.findIndex((e) => e.kind === "run_start");
+  for (const e of r.happened.slice(0, start + 1)) seen.add(e.id);
+  runId = r.view.run?.id ?? null;
+  newest = start >= 0 ? r.happened[start].id : newest;
+  ready = true;
+  emit();
+  return r.happened.slice(start + 1);
+}
 export function useToasts(): EventView[] { return useSyncExternalStore(subscribe, () => toasts, () => toasts); }
 export function dropToast(id: string): void { const t = toasts.filter((e) => e.id !== id); if (t.length !== toasts.length) { toasts = t; emit(); } }
 
@@ -59,7 +143,10 @@ export const gameKey = (today: Day) => ["game", today] as const;
 
 /** Store what a game change returned, and tell about what happened. */
 export function applyResult(qc: QueryClient, today: Day, r: SyncResult): SyncResult {
+  // a read that left before this change would bring the old view back: drop it
+  void qc.cancelQueries({ queryKey: ["game"] });
   qc.setQueryData(gameKey(today), r.view);
+  if (r.view.run) runId = r.view.run.id;
   pushHappened(r.happened);
   return r;
 }
@@ -70,17 +157,22 @@ export async function syncAfterLog(qc: QueryClient, today: Day): Promise<SyncRes
   catch { void qc.invalidateQueries({ queryKey: ["game"] }); return null; }
 }
 
+// one sync at a time when a view says needsSync, however many screens read the view
+let autoSync: Promise<unknown> | null = null;
+let autoSyncedFor: GameView | null = null;
+
 /** The game view for today, settled first whenever the server says something is waiting. */
 export function useGame(enabled = true): { today: Day; view: GameView | undefined; error: Error | null; loading: boolean } {
   const qc = useQueryClient();
   const today = useToday();
   const q = useQuery({ queryKey: gameKey(today), queryFn: () => api.game(today, nowTime()), enabled });
-  const syncing = useRef<GameView | null>(null);
   useEffect(() => {
     const v = q.data;
-    if (!v?.needsSync || syncing.current === v) return;
-    syncing.current = v;
-    void syncAfterLog(qc, today);
+    if (!v) return;
+    startFrom(v);
+    if (!v.needsSync || autoSyncedFor === v || autoSync) return;
+    autoSyncedFor = v;
+    autoSync = syncAfterLog(qc, today).finally(() => { autoSync = null; });
   }, [q.data, qc, today]);
   return { today, view: q.data, error: q.error, loading: q.isPending };
 }

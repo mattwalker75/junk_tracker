@@ -19,22 +19,23 @@ const workout = (minutes: number | null, calories: number | null, o: Partial<{ d
 const splurge = (size: SplurgeEv["size"] | null, planned = false) => ({ what: "Cheeseburger", day: D, time: "", size, planned, createdAt: `${D}T23:00:00.000Z` });
 
 describe("the deadline countdown", () => {
-  it("counts down to 23:59 of the last day on the phone's clock", () => {
+  it("counts down to midnight at the end of the last day on the phone's clock", () => {
     const c = countdown("2026-11-14", new Date(2026, 10, 11, 19, 47, 12));
-    expect(c.digits).toBe("3 · 04:11:48");
+    expect(c.digits).toBe("3 · 04:12:48");
     expect(c.big).toBe("3 days 4 h left");
-    expect(c.kicker).toBe("DUE SAT NOV 14 · 11:59 PM");
+    expect(c.kicker).toBe("DUE END OF SAT NOV 14");
     expect(c.passed).toBe(false);
   });
   it("says hours and minutes on the last day, and Time’s up after", () => {
-    expect(countdown("2026-11-14", new Date(2026, 10, 14, 18, 47, 0)).big).toBe("5 h 12 min left");
-    expect(countdown("2026-11-14", new Date(2026, 10, 14, 23, 40, 0)).big).toBe("19 min left");
-    expect(countdown("2026-11-14", new Date(2026, 10, 14, 23, 58, 30)).big).toBe("Under a minute left");
+    expect(countdown("2026-11-14", new Date(2026, 10, 14, 18, 47, 0)).big).toBe("5 h 13 min left");
+    expect(countdown("2026-11-14", new Date(2026, 10, 14, 23, 40, 0)).big).toBe("20 min left");
+    // the last minute still counts: a log at 23:59 is on the deadline day
+    expect(countdown("2026-11-14", new Date(2026, 10, 14, 23, 59, 30)).big).toBe("Under a minute left");
     const over = countdown("2026-11-14", new Date(2026, 10, 15, 0, 5, 0));
     expect(over).toMatchObject({ secs: 0, passed: true, digits: "0 · 00:00:00", big: "Time’s up!", kicker: "DEADLINE PASSED" });
   });
   it("one day", () => {
-    expect(countdown("2026-11-14", new Date(2026, 10, 13, 23, 59, 0)).big).toBe("1 day left");
+    expect(countdown("2026-11-14", new Date(2026, 10, 14, 0, 0, 0)).big).toBe("1 day left");
   });
 });
 
@@ -148,5 +149,11 @@ describe("preview stamps", () => {
     const inp = hydra({ startedAfter: `${D}T15:00:00.000Z` });
     expect(previewStamp(inp, `${D}T14:59:00.000Z`) > inp.startedAfter!).toBe(true);
     expect(previewStamp(inp, `${D}T16:00:00.000Z`)).toBe(`${D}T16:00:00.000Z`);
+  });
+  it("never stamps before the newest server time in the input (a phone clock behind the server)", () => {
+    const inp = hydra({ shieldFrom: { day: D, time: "", at: `${D}T18:00:00.000Z` } });
+    expect(previewStamp(inp, `${D}T17:00:00.000Z`) > `${D}T18:00:00.000Z`).toBe(true);
+    const later = hydra({ splurges: [{ id: "x", what: "Chips", day: D, time: "", size: "snack", planned: false, createdAt: `${D}T19:00:00.000Z` }] });
+    expect(previewStamp(later, `${D}T18:30:00.000Z`) > `${D}T19:00:00.000Z`).toBe(true);
   });
 });

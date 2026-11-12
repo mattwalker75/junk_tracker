@@ -30,6 +30,11 @@ export interface GameLog {
   activities: ActivityEv[];
   /** log entries (activities, splurges, weigh-ins) created since the run started: +5 points each */
   entriesSinceStart: number;
+  /**
+   * the days of those entries: a run that ends counts only the ones on or before its last day (an
+   * entry made after a defeat but before the next sync is not part of the run)
+   */
+  entryDays?: Day[];
   /** the person's week start, for the weekly heart */
   weekStart: 0 | 1;
 }
@@ -62,9 +67,12 @@ export interface FightData {
   level: number;
   attempt: number;
   startedOn: Day;
-  /** set when the fight began partway through a day (after a KO): entries on that day count only if created after it */
+  /**
+   * set when the fight began partway through a day (after a KO): the knockout's moment. Which of
+   * that day's entries count is decided by the KO event's `used` list (engine.ts `counts`).
+   */
   startedAfter: string | null;
-  /** the fight ends at 23:59 that day */
+  /** the fight ends at midnight at the end of that day */
   deadlineOn: Day;
   bet: Bet;
   status: FightStatus;
@@ -106,6 +114,8 @@ export interface FightInput {
   level: number;
   startedOn: Day;
   startedAfter: string | null;
+  /** on a part-day: the start day's entries the fight before used (they don't count here) */
+  usedBefore?: Id[] | null;
   deadlineOn: Day;
   today: Day;
   /** the log from the day before the fight started (the comeback and "yesterday" look there) to today */
@@ -143,7 +153,11 @@ export interface FightResult {
   heals: number;
   /** no heal from a splurge (or a day without a workout) landed */
   flawless: boolean;
-  ko: { day: Day; at: string | null; by: "workout" | "potion" | "crit" } | null;
+  /**
+   * the knockout: its day, its moment (null = at midnight, by a clean-day crit or a day-end trick),
+   * and the ids of that day's log entries this fight used, up to and including the knockout
+   */
+  ko: { day: Day; at: string | null; by: "workout" | "potion" | "crit"; used?: Id[] } | null;
   /** a workout or potion did damage (that locks the bet) */
   attacked: boolean;
   lines: BattleLine[];
@@ -224,6 +238,8 @@ export interface HallRun {
   mode: Mode;
   /** still Hardcore: the skull badge */
   hardcore: boolean;
+  /** began as Hardcore and was switched to Normal: shown as "Hardcore → Normal" */
+  droppedFromHardcore: boolean;
   startedOn: Day;
   endedOn: Day | null;
   endReason: EndReason | null;

@@ -149,6 +149,9 @@ describe("the game's routes", () => {
     expect(parse("#/game/world/9")).toEqual({ page: "game", screen: "world", world: undefined });
     expect(parse("#/game/book")).toEqual({ page: "game", screen: "book" });
     expect(parse("#/game/hall")).toEqual({ page: "game", screen: "hall" });
+    // only the game's own screens: names every object has are not screens
+    expect(parse("#/game/toString")).toEqual({ page: "game", screen: "title" });
+    expect(parse("#/game/constructor")).toEqual({ page: "game", screen: "title" });
     expect(parse("#/game/how")).toEqual({ page: "game", screen: "how" });
     expect(parse("#/game/nope")).toEqual({ page: "game", screen: "title" });
   });

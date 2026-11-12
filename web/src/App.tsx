@@ -71,7 +71,7 @@ export function App() {
         {route.page === "calendar" ? <CalendarPage month={route.month} /> : null}
         {route.page === "goals" ? <GoalsPage /> : null}
         {route.page === "settings" ? <SettingsPage section={route.section} state={st} /> : null}
-        {route.page === "game" ? <GamePage screen={route.screen} world={route.world} who={st.acting?.name ?? st.me.name} loginEnabled={st.loginEnabled} /> : null}
+        {route.page === "game" ? <GamePage screen={route.screen} world={route.world} who={st.acting?.name ?? st.me.name} person={owner} loginEnabled={st.loginEnabled} /> : null}
         <LogSheet open={!!logOpen} onOpenChange={closeLog} day={logOpen?.day} edit={logOpen?.edit} skin={skin} />
         <ActivitySheet open={!!activityOpen} onOpenChange={closeActivity} day={activityOpen?.day} edit={activityOpen?.edit} skin={skin} />
         <DaySheet day={dayOpen} onClose={() => setDayOpen(null)} />

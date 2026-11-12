@@ -27,11 +27,17 @@ export function daysFrom(a: Day, b: Day): number {
 
 // ---------------------------------------------------------------- the deadline
 
-/** A fight ends at 23:59 of its last day, on the phone's own clock. */
+/**
+ * A fight ends at midnight at the end of its last day, on the phone's own clock: a log made at
+ * 23:59 still counts (the server reads the day, not the minute).
+ */
 export function deadlineMoment(deadlineOn: Day): Date {
   const [y, m, d] = ymd(deadlineOn);
-  return new Date(y, m - 1, d, 23, 59, 0, 0);
+  return new Date(y, m - 1, d + 1, 0, 0, 0, 0);
 }
+
+/** "Due end of Sat Nov 14": how every screen names a deadline. */
+export const dueText = (deadlineOn: Day): string => `end of ${shortDate(deadlineOn)}`;
 
 export interface Countdown {
   /** seconds left (0 once it has passed) */
@@ -39,9 +45,9 @@ export interface Countdown {
   passed: boolean;
   /** "3 · 04:11:46" (days · hours:minutes:seconds) */
   digits: string;
-  /** "3 days 4 h left", "5 h 12 min left", "12 min left", "Time’s up!" */
+  /** "3 days 4 h left", "5 h 12 min left", "12 min left", "Time’s up!": the same words on every screen (the map's flag, the Monster Book) */
   big: string;
-  /** "DUE SAT NOV 14 · 11:59 PM" */
+  /** "DUE END OF SAT NOV 14" */
   kicker: string;
 }
 
@@ -55,7 +61,7 @@ export function countdown(deadlineOn: Day, now: Date): Countdown {
   return {
     secs, passed: secs === 0, big,
     digits: `${d} · ${pad(h)}:${pad(m)}:${pad(s)}`,
-    kicker: secs === 0 ? "DEADLINE PASSED" : `DUE ${shortDate(deadlineOn).toUpperCase()} · 11:59 PM`,
+    kicker: secs === 0 ? "DEADLINE PASSED" : `DUE ${dueText(deadlineOn).toUpperCase()}`,
   };
 }
 
@@ -143,11 +149,18 @@ export function lineRow(l: BattleLine, today: Day, i: number): LineRow {
 export const NEW_ID = "preview-new";
 
 /**
- * When an entry being logged now "was made": the phone's clock, but never before the fight began
- * partway through a day (a phone a little behind the server would otherwise preview it as not counting).
+ * When an entry being logged now "was made": the phone's clock, but never before the newest server
+ * time in the input (the fight's start, an entry, a potion, the shield going up) — the server will
+ * stamp it after all of them, so a phone a little behind must preview it that way too.
  */
 export function previewStamp(input: FightInput, nowIso: string): string {
-  return input.startedAfter && nowIso <= input.startedAfter ? `${input.startedAfter}~` : nowIso;
+  let newest = input.startedAfter ?? "";
+  const see = (t: string | undefined) => { if (t && t > newest) newest = t; };
+  for (const e of input.splurges) see(e.createdAt);
+  for (const e of input.activities) see(e.createdAt);
+  for (const p of input.potions ?? []) see(p.at);
+  if (input.shieldFrom && input.shieldFrom !== "start") see(input.shieldFrom.at);
+  return newest && nowIso <= newest ? `${newest}~` : nowIso;
 }
 
 export interface AttackPanel {

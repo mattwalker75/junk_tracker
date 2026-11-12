@@ -16,8 +16,12 @@ export interface Actions {
 export const ActionsContext = createContext<Actions>({ log: () => {}, activity: () => {}, day: () => {}, weigh: () => {} });
 export const useActions = () => useContext(ActionsContext);
 
-/** Everything that reads the log, so one change refreshes every screen. */
-export const LOG_KEYS = [["overview"], ["month"], ["day"]] as const;
+/**
+ * Everything that reads the log, so one change refreshes every screen — Craving Crusher's view and
+ * the Hall of Heroes too: a workout logged on the tracker can KO the monster, and the game screens
+ * read again (and sync) the next time they show.
+ */
+export const LOG_KEYS = [["overview"], ["month"], ["day"], ["game"], ["game-hall"]] as const;
 /** Everything that shows goals: the list, and the note and menu on Home. */
 export const GOAL_KEYS = [["goals"], ["overview"]] as const;
 /** Refetch everything under these keys, all at once. */

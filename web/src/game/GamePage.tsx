@@ -14,9 +14,12 @@ import { MapPage, WorldPage } from "./Map";
 import { PlayerContext } from "./parts";
 import { ResultHost } from "./Results";
 import { StartRun } from "./StartRun";
+import { setGamePerson } from "./state";
 import { TitleScreen } from "./TitleScreen";
 
-export function GamePage({ screen, world, who, loginEnabled }: { screen: GameScreen; world?: number; who: string; loginEnabled: boolean }) {
+export function GamePage({ screen, world, who, person, loginEnabled }: { screen: GameScreen; world?: number; who: string; person: string; loginEnabled: boolean }) {
+  // the results queue and toasts are this person's (Switch to / signing in as someone else starts afresh)
+  setGamePerson(person);
   return (
     <PlayerContext.Provider value={{ who, loginEnabled }}>
       <div className="game min-h-dvh">

@@ -20,6 +20,9 @@ active you were this week, and watch your weight trend. It runs on your own comp
 - **Just you, no sign-in** to start with. Turn on *Users and sign-in* in Settings to add other
   people, each with their own log and settings, each signing in with a password. Anyone can
   *switch to* anyone (to check in or to fill it in for them) — it keeps logs apart; it is not privacy.
+- **Craving Crusher** (game mode, from the initials menu): a monster battle made from your own log —
+  workouts hit the monster, splurges heal it, beat 60 monsters before their deadlines. Your log is
+  never changed by it.
 - **Settings**: your own examples of a Snack, Meal and Feast; your six activity quick picks; pounds or kilograms; the trend
   period (1 week, 2 weeks or a month); users and sign-in on or off; light, dark or a theme you
   make; other devices on your network on or off.

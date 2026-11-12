@@ -10,7 +10,7 @@ import { abilityFor, bioFor, LEVELS, LEVELS_PER_WORLD, WORLDS, type FightView, t
 import { Sheet } from "../components/ui";
 import { worldMap } from "./art";
 import { Crown } from "./icons";
-import { shortDate } from "./logic";
+import { countdown, shortDate } from "./logic";
 import { GameBg, GameHeader, GameNote } from "./parts";
 import { useGame } from "./state";
 
@@ -97,7 +97,7 @@ function Card({ lv, status, fight, onOpen }: { lv: Level; status: MapStatus; fig
           <span className="text-[13px] leading-snug font-extrabold"><b className="font-black">{ab.name}:</b> {ab.text}</span>
           {fight ? (
             <>
-              <span className="text-[13px] font-black text-[#c2410c]">Fighting now: {fight.hp}/{fight.max} · {fight.daysLeft} {fight.daysLeft === 1 ? "day" : "days"} left</span>
+              <span className="text-[13px] font-black text-[#c2410c]">Fighting now: {fight.hp}/{fight.max} · {countdown(fight.deadlineOn, new Date()).big}</span>
               <span className="mt-0.5 h-3 overflow-hidden rounded-full border-2 border-[#2b1d3a] bg-[#3a2238]"><span className="block h-full rounded-full bg-g-orange" style={{ width: `${(fight.hp / fight.max) * 100}%` }} /></span>
             </>
           ) : null}

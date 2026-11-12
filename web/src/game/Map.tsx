@@ -18,7 +18,7 @@ import { nowTime } from "../lib/dates";
 import { worldMap } from "./art";
 import { Castle, CheckBadge, Hero, Padlock, Play, ShieldBlue, Skull } from "./icons";
 import { ALL_LEVELS, BAND_H, bandTop, cardBox, MAP_H, MAP_START, MAP_W, mapNode, paths, trailEnd, WORLD_H, WORLD_START, worldLevels, worldNode, worldOf, type Pt } from "./layout";
-import { shortDate, soClose } from "./logic";
+import { countdown, dueText, shortDate, soClose } from "./logic";
 import { GameMenu, GameNote } from "./parts";
 import { applyResult, useGame } from "./state";
 
@@ -80,10 +80,13 @@ function ModeBadge({ run, today }: { run: RunView; today: string }) {
   );
 }
 
+/** Up to 3 hearts drawn one by one; more as one heart × N (the HUD keeps room for the score and the level bar). */
 function SmallHearts({ hearts }: { hearts: number }) {
-  const slots = Math.max(3, hearts);
+  const many = hearts > 3;
+  const slots = many ? 1 : 3;
   return (
-    <div role="img" aria-label={`${hearts} ${hearts === 1 ? "heart" : "hearts"}`} className="flex shrink-0 gap-px rounded-xl bg-[#1a1024] px-1.5 py-[3px]">
+    <div role="img" aria-label={`${hearts} ${hearts === 1 ? "heart" : "hearts"}`} className="flex shrink-0 items-center gap-px rounded-xl bg-[#1a1024] px-1.5 py-[3px]">
+      {many ? <span aria-hidden className="order-last pl-0.5 font-game text-[14px] leading-none text-[#ff7a95]">×{hearts}</span> : null}
       {Array.from({ length: slots }, (_, i) => (
         <svg key={i} viewBox="0 0 24 22" className="h-4 w-[18px]" aria-hidden><path d="M12 20 C4 14 2 10 2 7 a5 5 0 0 1 10 -1 a5 5 0 0 1 10 1 c0 3 -2 7 -10 13z" fill={i < hearts ? "#ff4d6d" : "#5b4a6b"} stroke={i < hearts ? "#2b1d3a" : "#1a1024"} strokeWidth="2.6" strokeLinejoin="round" /></svg>
       ))}
@@ -124,7 +127,7 @@ function LevelBar({ map }: { map: MapLevel[] }) {
   const cur = map.find((m) => m.status === "current");
   return (
     <div aria-label={cur ? `Level ${cur.level} of 60` : `${beaten} of 60 beaten`} className="flex min-w-0 flex-1 flex-col gap-0.5">
-      <span className="flex justify-between text-[11px] font-black whitespace-nowrap text-white"><span>{cur ? `Level ${cur.level} / ${LEVEL_COUNT}` : `${beaten} / ${LEVEL_COUNT}`}</span><span className="text-[#c8b6e6]">{beaten} beaten</span></span>
+      <span className="flex justify-between gap-1.5 text-[11px] font-black whitespace-nowrap text-white"><span>{cur ? `Level ${cur.level} / ${LEVEL_COUNT}` : `${beaten} / ${LEVEL_COUNT}`}</span><span className="truncate text-[#c8b6e6]">{beaten} beaten</span></span>
       <span className="block h-[9px] overflow-hidden rounded-full border-2 border-[#1a1024] bg-[#1a1024]">
         <span className="block h-full rounded-full" style={{ width: `${Math.max(3, (beaten / LEVEL_COUNT) * 100)}%`, background: "linear-gradient(90deg, #7bd36b, #ffc93c)" }} />
       </span>
@@ -228,7 +231,7 @@ function NodeCard({ m, view, box, onClose }: { m: MapLevel; view: GameView; box:
       </div>
       <div className="flex flex-wrap gap-1.5">
         <span className="rounded-full bg-[#2b1d3a] px-2 py-0.5 text-xs font-black text-white">{fight ? `${fight.hp} / ${fight.max} HP` : `${lv.hp} HP`}</span>
-        <span className="rounded-full border-2 border-[#2b1d3a] bg-white px-2 py-0.5 text-xs font-black">{fight ? `Due ${shortDate(fight.deadlineOn)} · ${fight.daysLeft} ${fight.daysLeft === 1 ? "day" : "days"} left` : `${lv.days}-day deadline`}</span>
+        <span className="rounded-full border-2 border-[#2b1d3a] bg-white px-2 py-0.5 text-xs font-black">{fight ? `Due ${dueText(fight.deadlineOn)} · ${countdown(fight.deadlineOn, new Date()).big}` : `${lv.days}-day deadline`}</span>
       </div>
       <div className="flex items-center gap-2 rounded-xl border-2 border-[#2b1d3a] px-2.5 py-[7px]" style={{ background: fight ? "#ffe3a1" : m.status === "beaten" ? "#d7f5c8" : "#ece6f0" }}>
         <span className="text-[13px] leading-[1.25] font-black">{status}</span>
@@ -244,15 +247,33 @@ function NodeCard({ m, view, box, onClose }: { m: MapLevel; view: GameView; box:
   );
 }
 
+/**
+ * How much the 390-wide map has to shrink to fit the screen (1 on a 390 phone and wider; 0.82 at
+ * 320). The map is drawn at 390 and scaled as a whole, so every node, label and card keeps its place.
+ */
+function useFit(w: number): number {
+  const get = () => (typeof document === "undefined" ? 1 : Math.min(1, document.documentElement.clientWidth / w));
+  const [k, setK] = useState(get);
+  useEffect(() => {
+    const on = () => setK(get());
+    window.addEventListener("resize", on);
+    return () => window.removeEventListener("resize", on);
+  }, []);
+  return k;
+}
+
 /** The flag over the current fight ("92/250 · 3 days left") and your hero beside it. */
 function NowFlag({ fight, at, big }: { fight: FightView; at: Pt; big: boolean }) {
   const lv = levelInfo(fight.level);
   const r = lv.boss ? (big ? 64 : 40) : big ? 34 : 23;
   return (
     <>
-      <div aria-hidden className="pointer-events-none absolute z-[6] flex" style={{ left: Math.min(at.x + 10, MAP_W - 8) - 220, width: 220, top: at.y - r - (big ? 40 : 29), justifyContent: "flex-end" }}>
+      {/* anchored on the node's side of the map, so it never runs off the edge */}
+      <div aria-hidden className="pointer-events-none absolute z-[6] flex" style={at.x < MAP_W / 2
+        ? { left: Math.max(6, at.x - (big ? 40 : 30)), width: 220, top: at.y - r - (big ? 40 : 29), justifyContent: "flex-start" }
+        : { left: Math.min(at.x + (big ? 40 : 30), MAP_W - 6) - 220, width: 220, top: at.y - r - (big ? 40 : 29), justifyContent: "flex-end" }}>
         <span className="g-anim-wave rounded-xl border-[3px] border-[#2b1d3a] bg-[#ff4d6d] font-black whitespace-nowrap text-white shadow-[0_3px_0_#1a1024]"
-          style={{ padding: big ? "4px 12px" : "3px 9px", fontSize: big ? 14 : 12 }}>{fight.hp}/{fight.max} · {fight.daysLeft} {fight.daysLeft === 1 ? "day" : "days"} left</span>
+          style={{ padding: big ? "4px 12px" : "3px 9px", fontSize: big ? 14 : 12 }}>{fight.hp}/{fight.max} · {countdown(fight.deadlineOn, new Date()).big}</span>
       </div>
       <Hero aria-label="Your hero" className="g-anim-bob pointer-events-none absolute z-[6]"
         style={{ left: at.x < 120 ? at.x + r - 2 : at.x - r - (big ? 40 : 30), top: at.y - (big ? 8 : 18), width: big ? 44 : 34, height: big ? 52 : 40 }} />
@@ -265,6 +286,7 @@ function NowFlag({ fight, at, big }: { fight: FightView; at: Pt; big: boolean })
 export function MapPage() {
   const { today, view, error } = useGame();
   const [sel, setSel] = useState<number | null>(null);
+  const k = useFit(MAP_W);
   const jumped = useRef(false);
   const jump = (smooth: boolean) => {
     const el = document.getElementById("g-now") ?? document.getElementById("g-reached");
@@ -287,12 +309,12 @@ export function MapPage() {
   const curFight = fight && map[fight.level - 1]?.status === "current" ? fight : null;
 
   return (
-    <main className="relative flex flex-col overflow-x-clip bg-[#2b1d3a]" style={{ height: MAP_H }}>
-      {/* the six bands, full width; the map itself is 390 wide in the middle */}
+    <main className="relative flex flex-col overflow-x-clip bg-[#2b1d3a]" style={{ height: MAP_H * k }}>
+      {/* the six bands, full width; the map itself is 390 wide in the middle (scaled down on a narrower phone) */}
       {[6, 5, 4, 3, 2, 1].map((w) => (
-        <div key={w} aria-hidden className="absolute inset-x-0" style={{ top: w === 6 ? 0 : bandTop(w), height: w === 6 ? bandTop(6) + BAND_H : BAND_H, background: worldMap(w).band }} />
+        <div key={w} aria-hidden className="absolute inset-x-0" style={{ top: (w === 6 ? 0 : bandTop(w)) * k, height: (w === 6 ? bandTop(6) + BAND_H : BAND_H) * k, background: worldMap(w).band }} />
       ))}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2" style={{ width: MAP_W, height: MAP_H }} onClick={(e) => { if (e.target === e.currentTarget) setSel(null); }}>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2" style={{ width: MAP_W, height: MAP_H, transform: k < 1 ? `scale(${k})` : undefined, transformOrigin: "top center" }} onClick={(e) => { if (e.target === e.currentTarget) setSel(null); }}>
         <img src="/game-map-scenery.svg" alt="" aria-hidden decoding="async" className="g-art pointer-events-none absolute inset-0" style={{ width: MAP_W, height: MAP_H }} />
         <span aria-hidden className="absolute top-[637px] left-[104px] w-16 text-center font-game text-[11px] leading-none text-[#ffd0f4]">OPEN 24/7</span>
         <span aria-hidden className="absolute top-[607px] left-[14px] w-11 text-center font-game text-[10px] leading-none text-[#cffaff]">DRIVE</span>
@@ -396,6 +418,7 @@ function WorldSign({ w, map }: { w: number; map: MapLevel[] }) {
 export function WorldPage({ world }: { world?: number }) {
   const { today, view, error } = useGame();
   const [sel, setSel] = useState<number | null>(null);
+  const k = useFit(MAP_W);
   useEffect(() => setSel(null), [world]);
   if (error) return <main className="min-h-dvh bg-[#2b1d3a] pt-4"><GameNote title="Hmm, that didn't load">{error.message}</GameNote></main>;
   if (!view) return <main className="min-h-dvh bg-[#2b1d3a]" />;
@@ -414,8 +437,8 @@ export function WorldPage({ world }: { world?: number }) {
   const scale = WORLD_H / BAND_H;
 
   return (
-    <main className="relative flex flex-col overflow-clip" style={{ height: WORLD_H, background: look.band }}>
-      <div className="absolute top-0 left-1/2 -translate-x-1/2" style={{ width: MAP_W, height: WORLD_H }} onClick={(e) => { if (e.target === e.currentTarget) setSel(null); }}>
+    <main className="relative flex flex-col overflow-clip" style={{ height: WORLD_H * k, background: look.band }}>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2" style={{ width: MAP_W, height: WORLD_H, transform: k < 1 ? `scale(${k})` : undefined, transformOrigin: "top center" }} onClick={(e) => { if (e.target === e.currentTarget) setSel(null); }}>
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden opacity-90">
           <img src="/game-map-scenery.svg" alt="" decoding="async" className="g-art absolute max-w-none"
             style={{ width: MAP_W * scale, height: MAP_H * scale, left: -(MAP_W * scale - MAP_W) / 2, top: -bandTop(w) * scale }} />
@@ -437,7 +460,7 @@ export function WorldPage({ world }: { world?: number }) {
 
       <Hud kicker={`WORLD ${w} · LEVELS ${levels[0]}–${levels[9]}${run ? ` · RUN #${run.number}` : ""}`} title={WORLDS[w - 1]} back="#/game/map" run={run} today={today}>
         <div aria-label={`World progress: ${beaten} of 10 beaten`} className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="flex justify-between text-[11px] font-black whitespace-nowrap text-white"><span>World progress</span><span className="text-[#ffc93c]">{beaten}/10</span></span>
+          <span className="flex justify-between gap-1.5 text-[11px] font-black whitespace-nowrap text-white"><span className="truncate">World progress</span><span className="text-[#ffc93c]">{beaten}/10</span></span>
           <span className="flex gap-[3px]">
             {ms.map((m) => <span key={m.level} className="h-[9px] flex-1 rounded-full border-2 border-[#1a1024]" style={{ background: m.status === "beaten" ? "#7bd36b" : m.status === "current" ? "#ffc93c" : levelInfo(m.level).boss ? "#ff7a95" : "#4a3a5e" }} />)}
           </span>

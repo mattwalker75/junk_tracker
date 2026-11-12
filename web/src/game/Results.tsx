@@ -15,7 +15,7 @@ import type { GameScreen } from "../lib/route";
 import { Arena, Burst, Confetti, worldLook } from "./art";
 import { ClockSmall, HeartBroken, HeartEmpty, HeartFull, Hero, Home, Padlock, PlayDark, Potion, Replay, Shield, Skull, Sword, Trophy, Wind } from "./icons";
 import { worldOf } from "./layout";
-import { dayExample, daysFrom, shortDate } from "./logic";
+import { dayExample, daysFrom, dueText, shortDate } from "./logic";
 import { GameMenu } from "./parts";
 import { countUp, victoryBreakdown, type Result } from "./outcomes";
 import { dropToast, markShown, nextResult, clearResults, useGame, useResults, useToasts } from "./state";
@@ -76,7 +76,16 @@ function Overlay({ r, view, today, waiting }: { r: Result; view: GameView; today
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     ref.current?.focus();
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") nextResult(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { nextResult(); return; }
+      // keep Tab inside the result screen (it covers everything)
+      if (e.key !== "Tab" || !ref.current || (document.activeElement as HTMLElement | null)?.closest("[role=menu]")) return;
+      const all = [...ref.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')].filter((x) => x.offsetParent !== null);
+      if (!all.length) { e.preventDefault(); return; }
+      const first = all[0], last = all[all.length - 1], at = document.activeElement;
+      if (e.shiftKey && (at === first || at === ref.current || !ref.current.contains(at))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && (at === last || !ref.current.contains(at))) { e.preventDefault(); first.focus(); }
+    };
     window.addEventListener("keydown", onKey);
     const html = document.documentElement, was = html.style.overflow;
     html.style.overflow = "hidden";
@@ -281,7 +290,7 @@ function Strike({ r, view }: { r: Extract<Result, { kind: "strike" }>; view: Gam
   const slots = Math.max(START_HEARTS, before);
   return (
     <>
-      <Top kicker={`CRAVING CRUSHER · RUN #${run?.number ?? ""}`} sub={<><ClockSmall className="size-4" />Deadline passed · {shortDate(r.strike.day)}, 11:59 PM</>} />
+      <Top kicker={`CRAVING CRUSHER · RUN #${run?.number ?? ""}`} sub={<><ClockSmall className="size-4" />Deadline passed · {dueText(r.strike.day)}</>} />
       <section className="relative mx-4 mt-3 h-[260px] overflow-hidden rounded-[24px] border-[3px] border-[#1a1024] shadow-[0_5px_0_#1a1024]">
         <Arena world={lv.world} className="g-art absolute inset-0 size-full" />
         <div aria-hidden className="absolute inset-0 bg-[#ff4d6d]/25" />
@@ -307,7 +316,7 @@ function Strike({ r, view }: { r: Extract<Result, { kind: "strike" }>; view: Gam
         <p className="text-[16px] leading-snug font-extrabold">{lv.name} is back to full ({lv.hp} HP){fight ? <> — new deadline {shortDate(fight.deadlineOn)}.</> : "."} <span className="text-[#2f9a2a]">You've got this.</span></p>
         <div className="mt-2 flex justify-between text-[13px] font-black"><span>{lv.name}</span><span>{fight ? `${fight.hp} / ${fight.max}` : `${lv.hp} / ${lv.hp}`} HP</span></div>
         <div className="mt-1 h-[18px] overflow-hidden rounded-full border-[3px] border-[#2b1d3a] bg-[#3a2238]"><div className="h-full rounded-full bg-[#ff7a2f]" style={{ width: `${fight ? (fight.hp / fight.max) * 100 : 100}%` }} /></div>
-        {fight ? <span className="mt-2 inline-block rounded-full border-2 border-[#2b1d3a] bg-[#ffe3e8] px-2.5 py-0.5 text-[13px] font-black">{shortDate(fight.deadlineOn)}, 11:59 PM</span> : null}
+        {fight ? <span className="mt-2 inline-block rounded-full border-2 border-[#2b1d3a] bg-[#ffe3e8] px-2.5 py-0.5 text-[13px] font-black">Due {dueText(fight.deadlineOn)}</span> : null}
         <p className="mt-2 text-[13px] font-black text-[#6b5a7a]">{days} fresh days · about {perDay} damage a day</p>
         <p className="mt-1 text-[13px] leading-snug font-bold text-[#6b5a7a]">{Number(d.hpLeft) < lv.hp
           ? `You had it down to ${String(d.hpLeft)} HP. Every minute you put in still counts: ${fmt(Number(d.points ?? 0))} points kept.`
@@ -334,7 +343,8 @@ function Strike({ r, view }: { r: Extract<Result, { kind: "strike" }>; view: Gam
       </Panel>
       <div className="mx-4 mt-3.5 grid grid-cols-2 gap-2.5">
         <BigBtn href={fightHref(view)} onClick={nextResult} color="#ff7a2f"><Sword className="size-7" /><span className="text-white" style={{ WebkitTextStroke: "2px #2b1d3a", paintOrder: "stroke fill" }}>Rematch</span></BigBtn>
-        <BigBtn href="#/" onClick={clearResults} color="#fff7e6" className="gap-1.5 px-1.5 text-[15px] whitespace-nowrap"><Home className="size-[18px] shrink-0" />Back to tracker</BigBtn>
+        {/* closes this one; anything still waiting behind it comes up next time in the game */}
+        <BigBtn href="#/" onClick={nextResult} color="#fff7e6" className="gap-1.5 px-1.5 text-[15px] whitespace-nowrap"><Home className="size-[18px] shrink-0" />Back to tracker</BigBtn>
       </div>
     </>
   );

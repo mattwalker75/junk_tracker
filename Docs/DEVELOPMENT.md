@@ -5,17 +5,25 @@
 server/src/   index.ts (listen) · app.ts (routes, guards) · config.ts · security.ts
               db.ts (tables, migrations) · users.ts (people, sessions, settings) · log.ts (splurges, activities, weigh-ins)
               goals.ts (each person's goal list)
+              game.ts (Craving Crusher: loads a run, calls the engine, stores what it settled)
 shared/       types.ts — the data model both sides use
+              game/ — Craving Crusher's pure engine: levels, abilities, engine (fights, settling a run,
+              the view), score, badges, bios, days
 web/src/      App.tsx · components/ (Home, GoalNote, UserMenu, GoalsPage, GoalSheet, LogSheet, ActivitySheet, WeighSheet,
               DaySheet, CalendarPage, AuthScreen, ui) · fonts/ (Caveat, the goal note's handwriting)
               settings/ · lib/ (api, dates, stats, theme, route)
-test/         api.test.ts (the server, end to end) · stats.test.ts (home-screen numbers) · helpers.ts
+              game/ — the game's screens (Title, StartRun, Battle, Choose, Map, Hall, How, Book, Results),
+              state.ts (the view, the sync, the results queue), logic.ts + layout.ts + outcomes.ts (pure)
+test/         api.test.ts (the server, end to end, game routes included) · stats.test.ts (home-screen numbers)
+              game.test.ts (the engine: every ability, settling, points) · gameui.test.ts (logic.ts)
+              game3.test.ts (bios, badges, map layout, results queue, routes) · helpers.ts
 ```
+The game's rules and every reading taken while building it are in `Docs/game/ARCHITECTURE.md`.
 `npm run build` → `dist/node` (tsc) and `dist/web` (Vite). The server serves `dist/web`.
 
 ## Commands
 ```bash
-npm test                 # vitest: 53 tests
+npm test                 # vitest: 178 tests
 npm run typecheck        # server + page
 ./TRACKER.sh --dev       # live-reloading page on :5173, API proxied to the server port
 ./TRACKER.sh --fg        # run the built app in the foreground
@@ -25,6 +33,13 @@ Use a scratch config so nothing real is touched:
 JT_CONFIG=/tmp/jt/config.json JT_NO_OPEN=1 ./TRACKER.sh --start
 ```
 Relative paths in a config (the database) are from that config file's folder.
+
+**Testing the game.** The engine is pure, so most of it is unit tests (`test/game.test.ts`: build a
+`RunState` with `newRun`, a `GameLog`, a clock with the phone's day, then `settle`/`buildView`). The
+server's game routes refuse a `today` more than 2 days from the computer's own date, so the API
+tests pass a fixed one: `scratch({}, { serverDay: () => "2026-11-12" })`. To play it for real, run
+a scratch config as above and open `#/game`; to see a strike without waiting days, move the open
+fight back in the scratch database (`started_on`, `deadline_on`) and log splurges on those days.
 
 ## Updating a copy that is in use
 ```bash

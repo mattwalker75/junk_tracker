@@ -107,7 +107,7 @@ function Fight({ example }: { example: number }) {
             );
           })}
         </div>
-        <p className="mt-2 text-[13px] font-bold text-g-mute">The first day counts as day 1; a fight that starts after a knockout gets the rest of that day free. The deadline ends at 11:59 PM. The bet locks at your first hit or once the first day is over.</p>
+        <p className="mt-2 text-[13px] font-bold text-g-mute">The first day counts as day 1; a fight that starts after a knockout gets the rest of that day free. The deadline ends at midnight, at the end of its last day. The bet locks at your first hit or once the first day is over.</p>
       </Card>
       <Card title="Hearts">
         <div className="mt-1 flex items-center gap-1" aria-hidden>{Array.from({ length: MAX_HEARTS }, (_, i) => i < START_HEARTS ? <HeartFull key={i} className="h-6 w-7" /> : <HeartEmpty key={i} className="h-6 w-7" />)}</div>

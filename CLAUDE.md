@@ -80,8 +80,20 @@ The person using it is not a developer — every message the page shows is a pla
     Delete) after the splurges, with **+ Splurge / + Activity**; the Splurges / Activity headings
     show the day's calories eaten / burned when any entry has them. Colours: the `active*` tokens.
     Not yet: goals that count activity (Matt: later).
-11. **Game mode — planned, not built** (Matt, Nov 11 2026): a monster battle (**"Craving Crusher"**, Matt's name) switched on from the initials menu. The design, Matt's decisions and the numbers are in
-    `Docs/GAME_MODE.md`; the research behind it is in `Docs/GAME_RESEARCH.md`; mockups are rounds 5–6 of the canvas.
+11. **Game mode — built** (Matt, Nov 11 2026): **Craving Crusher**, a monster battle made from the
+    person's own log, opened from the initials menu (**Game mode** / **Back to tracker**). What it does:
+    `Docs/GAME_MODE.md`; how it is built and every reading taken: `Docs/game/ARCHITECTURE.md`; mockups
+    are canvas rounds 5–7. Keep these:
+    - **Same fields in both skins:** the game's Log a splurge / Log activity are the tracker's sheets
+      (`skin="game"`), same fields, order and labels; the game only adds the live panel. No Weigh in.
+    - **GET never writes:** `GET /api/game` says `needsSync`; only `POST /api/game/sync` (and the
+      action routes) settle and store.
+    - **Settled fights are frozen:** editing old entries never rewrites a won or struck fight; only
+      the open fight is worked out from the log. On a KO day each entry counts for exactly one fight.
+    - **Today comes from the phone** (rule 3); the server only refuses a day more than 2 days from
+      its own date ("Your phone's date looks wrong").
+    - The engine (`shared/game/`) is pure and shared by the server and the page; the tracker's log is
+      never changed by the game.
 
 ## Working rules
 - Commit locally per feature with a dated CHANGELOG entry; `git add` explicit paths.

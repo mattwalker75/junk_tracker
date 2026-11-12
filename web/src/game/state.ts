@@ -166,13 +166,15 @@ export function useGame(enabled = true): { today: Day; view: GameView | undefine
   const qc = useQueryClient();
   const today = useToday();
   const q = useQuery({ queryKey: gameKey(today), queryFn: () => api.game(today, nowTime()), enabled });
+  // disabled (e.g. the log sheets on tracker pages) means no game at all: no cached view, no sync —
+  // the tracker never shows game visuals (Matt, Nov 12 2026)
   useEffect(() => {
-    const v = q.data;
+    const v = enabled ? q.data : undefined;
     if (!v) return;
     startFrom(v);
     if (!v.needsSync || autoSyncedFor === v || autoSync) return;
     autoSyncedFor = v;
     autoSync = syncAfterLog(qc, today).finally(() => { autoSync = null; });
-  }, [q.data, qc, today]);
-  return { today, view: q.data, error: q.error, loading: q.isPending };
+  }, [enabled, q.data, qc, today]);
+  return { today, view: enabled ? q.data : undefined, error: enabled ? q.error : null, loading: enabled && q.isPending };
 }

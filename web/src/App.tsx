@@ -21,6 +21,11 @@ import { api } from "./lib/api";
 import { useRoute } from "./lib/route";
 import { applyTheme, onSystemThemeChange, rememberTheme } from "./lib/theme";
 
+/** "When the app opens" (Settings → You): checked once per page load, and only when the app is opened at
+ * its front door (no #/… address), so a bookmark, a reload of a page or Back to tracker always wins. */
+let openInChecked = false;
+const atFrontDoor = () => /^#?\/?$/.test(window.location.hash);
+
 export function App() {
   const qc = useQueryClient();
   const me = useQuery({ queryKey: ["me"], queryFn: api.me });
@@ -54,6 +59,16 @@ export function App() {
   }), []);
   const closeLog = useCallback((o: boolean) => { if (!o) setLogOpen(null); }, []);
   const closeActivity = useCallback((o: boolean) => { if (!o) setActivityOpen(null); }, []);
+
+  const signedIn = me.data?.status === "ok";
+  const mine = useQuery({ queryKey: ["me-settings"], queryFn: api.mySettings, enabled: signedIn && !openInChecked && atFrontDoor() });
+  useEffect(() => {
+    if (openInChecked || !mine.data) return;
+    openInChecked = true;
+    if (mine.data.openIn === "game" && atFrontDoor()) window.location.replace("#/game");
+  }, [mine.data]);
+  // nothing to wait for when the app was opened at a page of its own
+  useEffect(() => { if (signedIn && !atFrontDoor()) openInChecked = true; }, [signedIn]);
 
   if (me.isPending) return <div className="min-h-dvh" />;
   if (me.isError) return <div className="grid min-h-dvh place-items-center p-6 text-center text-mute">{me.error.message}</div>;

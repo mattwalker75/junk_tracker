@@ -56,6 +56,13 @@ export function YouSettings() {
         </div>
       </Card>
 
+      <Card className="space-y-3 p-4">
+        <h2 className="text-[15px] font-extrabold">When the app opens</h2>
+        <p className="text-sm text-mute">Where you land each time you open Junk Tracker. You can still switch any time from the menu under your initials.</p>
+        {s ? (
+          <Segmented label="When the app opens" value={s.openIn} options={[["tracker", "Tracker"], ["game", "Craving Crusher"]]} onChange={(v) => void save({ openIn: v })} />
+        ) : <div className="h-11 animate-pulse rounded-xl bg-surface-2" />}
+      </Card>
       <Card className="space-y-3.5 p-4">
         <h2 className="text-[15px] font-extrabold">Weight and weeks</h2>
         {s ? (

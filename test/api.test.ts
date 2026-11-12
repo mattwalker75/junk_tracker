@@ -117,7 +117,7 @@ describe("splurges", () => {
     expect(o.last.what).toBe("Cheeseburger & fries"); // not the one dated after today
     expect(o.splurges.map((x: { day: string }) => x.day)).toEqual(["2026-10-11", "2026-10-03"]); // the 40-day window
     expect(o.recent.map((x: { what: string }) => x.what)).toEqual(["Future cake", "Cheeseburger & fries", "Pizza"]); // one "pizza", newest first
-    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""] });
+    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker" });
   });
 });
 
@@ -218,6 +218,10 @@ describe("activities (Nov 9 2026)", () => {
   it("the six quick picks are each person's own, always six, trimmed and checked", async () => {
     s = await scratch();
     const b = await firstPerson();
+    // where the app opens (Nov 12 2026): the tracker by default, game mode when chosen, nothing else
+    expect((await b.call("PUT", "/api/me/settings", { openIn: "game" })).body.openIn).toBe("game");
+    expect((await b.call("PUT", "/api/me/settings", { openIn: "map" })).body.error).toBe("Open in the tracker or in game mode.");
+    expect((await b.call("PUT", "/api/me/settings", { openIn: "tracker" })).body.openIn).toBe("tracker");
     const set = await b.call("PUT", "/api/me/settings", { quickPicks: ["  Hike ", "", "Peloton"] });
     expect(set.body.quickPicks).toEqual(["Hike", "", "Peloton", "", "", ""]);
     // the page sends all six; an empty box goes back to the default

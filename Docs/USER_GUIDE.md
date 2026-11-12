@@ -201,6 +201,10 @@ usual example.
 things you do most (Hike, Peloton, Tennis…). Leave a box empty for the usual one (Walk, Run,
 Bike, Gym, Swim, Yoga).
 
+**When the app opens** — **Tracker** (Home) or **Craving Crusher** (the game). It only decides
+where you land when you open the app; the menu under your initials still switches any time, and a
+bookmarked page opens where it points.
+
 **Weight and weeks** — pounds or kilograms (weigh-ins are kept exactly; only the display
 changes); the trend over 1 week, 2 weeks or a month; weeks start on Sunday or Monday.
 

@@ -73,8 +73,10 @@ export interface UserSettings {
   examples: Record<Size, string>;
   /** the six quick picks on Log activity, in order; "" = the default (Walk, Run, Bike, Gym, Swim, Yoga) */
   quickPicks: string[];
+  /** where the app opens: the tracker (Home) or Craving Crusher (Matt, Nov 12 2026) */
+  openIn: "tracker" | "game";
 }
-export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""] };
+export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker" };
 
 export interface UserInfo {
   id: Id;

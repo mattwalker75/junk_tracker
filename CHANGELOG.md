@@ -4,6 +4,19 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-11-12
+Version 1.0.0: the tracker (splurges, activity, weight, goals) and Craving Crusher.
+
+### Added
+- 2026-11-12: **When the app opens** (Settings → You): open in the **Tracker** or straight into
+  **Craving Crusher**. Each person picks their own; the menu still switches any time.
+
+### Changed
+- 2026-11-12: **The tracker and the game stay apart.** On the tracker's pages, *Log a splurge* and
+  *Log activity* never show a monster or a damage/heal panel — even right after playing; all the
+  game's looks stay in game mode. (The Planned treat hint there no longer mentions the monster.)
+
+
 ### Fixed
 - 2026-11-11: **Craving Crusher: fixes after two reviews and a full play-through.**
   - On the day a monster goes down, every workout and splurge now counts for exactly one monster.

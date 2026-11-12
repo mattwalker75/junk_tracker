@@ -32,7 +32,8 @@ export function LogSheet({ open, onOpenChange, day, edit, skin = "tracker" }: { 
   const qc = useQueryClient();
   const today = useToday();
   const game = skin === "game";
-  const fight = useGame(open && game).view?.fight ?? null;
+  const gameView = useGame(open && game).view;
+  const fight = game ? gameView?.fight ?? null : null; // tracker pages never show the game
   const overview = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today), enabled: open });
   const settings = overview.data?.settings;
   const [what, setWhat] = useState("");
@@ -184,7 +185,7 @@ export function LogSheet({ open, onOpenChange, day, edit, skin = "tracker" }: { 
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className={game ? "font-game text-[17px] text-g-text" : "text-[13px] font-bold text-mute"}>Planned treat</div>
-            <p className={game ? "mt-0.5 text-[13px] leading-snug font-extrabold text-g-mute" : "mt-0.5 text-[13px] leading-snug text-mute"}>a treat you planned, like a birthday dinner — in game mode it heals the monster half</p>
+            <p className={game ? "mt-0.5 text-[13px] leading-snug font-extrabold text-g-mute" : "mt-0.5 text-[13px] leading-snug text-mute"}>{game ? "a treat you planned, like a birthday dinner — it heals the monster half" : "a treat you planned, like a birthday dinner"}</p>
           </div>
           <Toggle label="Planned treat" checked={planned} onChange={setPlanned} />
         </div>

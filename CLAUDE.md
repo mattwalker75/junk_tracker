@@ -86,6 +86,9 @@ The person using it is not a developer — every message the page shows is a pla
     are canvas rounds 5–7. Keep these:
     - **Same fields in both skins:** the game's Log a splurge / Log activity are the tracker's sheets
       (`skin="game"`), same fields, order and labels; the game only adds the live panel. No Weigh in.
+    - **Game visuals stay in the game** (Matt, Nov 12 2026): on tracker pages the sheets never show a
+      monster or panel (`useGame(false)` returns nothing). **When the app opens** (`openIn`, Settings →
+      You) sends a front-door open to `#/game`; a `#/…` address always wins.
     - **GET never writes:** `GET /api/game` says `needsSync`; only `POST /api/game/sync` (and the
       action routes) settle and store.
     - **Settled fights are frozen:** editing old entries never rewrites a won or struck fight; only

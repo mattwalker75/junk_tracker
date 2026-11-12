@@ -40,7 +40,8 @@ export function ActivitySheet({ open, onOpenChange, day, edit, skin = "tracker" 
   const qc = useQueryClient();
   const today = useToday();
   const game = skin === "game";
-  const fight = useGame(open && game).view?.fight ?? null;
+  const gameView = useGame(open && game).view;
+  const fight = game ? gameView?.fight ?? null : null; // tracker pages never show the game
   const overview = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today), enabled: open });
   const settings = overview.data?.settings;
   const picks = quickPickNames(settings?.quickPicks);

@@ -64,6 +64,7 @@ const userSettingsSchema = z.object({
   weekStart: z.union([z.literal(0), z.literal(1)]),
   examples: z.object({ snack: z.string().max(120), meal: z.string().max(120), feast: z.string().max(120) }).partial(),
   // the six quick picks on Log activity, in order ("" = the default one)
+  openIn: z.enum(["tracker", "game"], { error: "Open in the tracker or in game mode." }),
   quickPicks: z.array(z.string().max(QUICK_PICK_MAX, `Keep each quick pick under ${QUICK_PICK_MAX} characters.`), { error: "The quick picks are six names." }).max(6, "There are six quick picks."),
 }).partial().strict();
 

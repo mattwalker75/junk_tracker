@@ -1,17 +1,16 @@
 /**
  * A tiny hash router: #/ (home), #/calendar, #/calendar/2026-09, #/goals, #/settings, #/settings/users…
- * and Craving Crusher's #/game (title), #/game/start, #/game/battle, #/game/choose. The game's other
- * screens (map, world, book, hall, how) come in the next update: until then they show a short note.
- * The phone's back button works.
+ * and Craving Crusher's #/game (title), #/game/start, #/game/battle, #/game/choose, #/game/map,
+ * #/game/world/2, #/game/book, #/game/hall, #/game/how. The phone's back button works.
  */
 import { useEffect, useState } from "react";
 
-export type GameScreen = "title" | "start" | "battle" | "choose" | "soon";
+export type GameScreen = "title" | "start" | "battle" | "choose" | "map" | "world" | "book" | "hall" | "how";
 export type Route = { page: "home" } | { page: "calendar"; month: string | null } | { page: "goals" } | { page: "settings"; section: string | null }
-  | { page: "game"; screen: GameScreen; soon?: string };
+  | { page: "game"; screen: GameScreen; world?: number };
 
-/** the game screens built so far; the rest of #/game/… shows "coming in the next update" */
-const GAME_SCREENS: Record<string, GameScreen> = { "": "title", start: "start", battle: "battle", choose: "choose" };
+/** the game's screens; anything else under #/game/ is the title screen */
+const GAME_SCREENS: Record<string, GameScreen> = { "": "title", start: "start", battle: "battle", choose: "choose", map: "map", world: "world", book: "book", hall: "hall", how: "how" };
 
 export function parse(hash: string): Route {
   const parts = hash.replace(/^#\/?/, "").split("/").filter(Boolean);
@@ -19,8 +18,12 @@ export function parse(hash: string): Route {
   if (parts[0] === "goals") return { page: "goals" };
   if (parts[0] === "settings") return { page: "settings", section: parts[1] || null };
   if (parts[0] === "game") {
-    const screen = GAME_SCREENS[parts[1] ?? ""];
-    return screen ? { page: "game", screen } : { page: "game", screen: "soon", soon: parts[1] };
+    const screen = GAME_SCREENS[parts[1] ?? ""] ?? "title";
+    if (screen === "world") {
+      const n = Number(parts[2]);
+      return { page: "game", screen, world: Number.isInteger(n) && n >= 1 && n <= 6 ? n : undefined };
+    }
+    return { page: "game", screen };
   }
   return { page: "home" };
 }

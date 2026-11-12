@@ -115,3 +115,40 @@ export function Clock({ passed, className }: { passed: boolean; className?: stri
     </svg>
   );
 }
+
+/**
+ * Each world on the adventure map and the world pages (mockups MonMap60, MonWorld2): its band's
+ * colours, its number chip, the ink for its kicker and a short name for the world chips.
+ */
+export const WORLD_MAP: Record<number, { band: string; chip: string; ink: string; short: string; banner: string }> = {
+  1: { band: "linear-gradient(180deg, #a3e08f 0%, #6cbf62 50%, #3f8f4a 100%)", chip: "#5fb35a", ink: "#2f7a2a", short: "Swamp", banner: "linear-gradient(180deg, #a8e6a0 0%, #7bd36b 100%)" },
+  2: { band: "linear-gradient(180deg, #f6a25c 0%, #ec7a3e 55%, #d9562f 100%)", chip: "#e8632f", ink: "#c2410c", short: "Badlands", banner: "linear-gradient(180deg, #ffb877 0%, #ff8a4c 100%)" },
+  3: { band: "linear-gradient(180deg, #ffd0e6 0%, #fff6fa 55%, #ffe1ee 100%)", chip: "#ff8fbf", ink: "#c2417a", short: "Sugar", banner: "linear-gradient(180deg, #ffe3f1 0%, #ffb3d9 100%)" },
+  4: { band: "linear-gradient(180deg, #8ee8dc 0%, #43c4b8 55%, #1d9a95 100%)", chip: "#22b8aa", ink: "#0f766e", short: "Fizzy", banner: "linear-gradient(180deg, #8ee8dc 0%, #3fa0d8 100%)" },
+  5: { band: "linear-gradient(180deg, #170e2e 0%, #2a1850 55%, #3b2266 100%)", chip: "#8b5cf6", ink: "#6d28d9", short: "Midnight", banner: "linear-gradient(180deg, #4a3480 0%, #2a1850 100%)" },
+  6: { band: "linear-gradient(180deg, #2e1d3a 0%, #4a3150 45%, #6e4e5e 100%)", chip: "#7a5868", ink: "#6b4a7a", short: "Fortress", banner: "linear-gradient(180deg, #c94a3a 0%, #7a4a2a 100%)" },
+};
+export const worldMap = (w: number) => WORLD_MAP[w] ?? WORLD_MAP[1];
+
+/** Confetti that falls once over a result screen (still with reduced motion: CSS turns it off). */
+export function Confetti({ className }: { className?: string }) {
+  const bits = ["#ffc93c", "#ff4d6d", "#6ec6ff", "#7bd36b", "#b96ad9", "#ffffff"];
+  return (
+    <div aria-hidden className={className}>
+      {Array.from({ length: 18 }, (_, i) => (
+        <span key={i} className="g-anim-confetti absolute top-0 block h-3 w-2 rounded-[2px] border-2 border-[#2b1d3a]"
+          style={{ left: `${(i * 37) % 100}%`, background: bits[i % bits.length], animationDelay: `${(i % 6) * 0.18}s`, animationDuration: `${2.2 + (i % 4) * 0.35}s`, transform: `rotate(${i * 29}deg)` }} />
+      ))}
+    </div>
+  );
+}
+
+/** The spiky "K.O.!" / "WHAM!" burst. */
+export function Burst({ text, fill = "#ff4d6d", className }: { text: string; fill?: string; className?: string }) {
+  return (
+    <svg viewBox="0 0 120 100" aria-hidden className={className}>
+      <path d="M60 4 L70 26 L94 12 L90 38 L116 40 L96 56 L114 76 L88 74 L86 98 L66 82 L50 98 L44 76 L18 86 L28 62 L4 52 L28 40 L16 16 L42 26 Z" fill={fill} stroke="#2b1d3a" strokeWidth="4" strokeLinejoin="round"/>
+      <text x="60" y="61" textAnchor="middle" fontFamily="Lilita One, Nunito, sans-serif" fontSize={text.length > 4 ? 21 : 26} fill="#ffffff" stroke="#2b1d3a" strokeWidth="4" paintOrder="stroke" transform="rotate(-8 60 52)">{text}</text>
+    </svg>
+  );
+}

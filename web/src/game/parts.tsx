@@ -1,10 +1,9 @@
-/** Pieces the game screens share: the page colour, the header with the menu, hearts, the monster, the "what happened" panel. */
+/** Pieces the game screens share: the page colour, the header with the menu, hearts, the monster, a note panel. */
 import { createContext, useContext, type ReactNode } from "react";
-import { START_HEARTS, type EventView } from "../../../shared/game/types";
+import { START_HEARTS } from "../../../shared/game/types";
 import { cx } from "../components/ui";
 import { UserMenu } from "../components/UserMenu";
 import { HeartEmpty, HeartFull } from "./icons";
-import { clearNews } from "./state";
 
 /** Who is playing, for the menu. */
 export const PlayerContext = createContext<{ who: string; loginEnabled: boolean }>({ who: "", loginEnabled: false });
@@ -59,26 +58,6 @@ export function Monster({ slug, name, pose = "normal", motion = "idle", classNam
     <div className={cx(motion === "idle" && "g-anim-bob")}>
       <img key={motionKey} src={src} alt={name} draggable={false} className={cx("block origin-[50%_85%] select-none", inner, className)} />
     </div>
-  );
-}
-
-/** What a sync just settled (a KO, a strike, a heart…), until it is dismissed. Stage 3 makes the big ones full-screen. */
-export function NewsPanel({ news, choose }: { news: EventView[]; choose: boolean }) {
-  if (!news.length) return null;
-  const ko = news.some((e) => e.kind === "ko");
-  return (
-    <section aria-label="What just happened" role="status" className="g-panel g-anim-rise mx-3 mt-2.5 bg-g-soft-green px-3 py-2.5">
-      <div className="flex items-center justify-between gap-2">
-        <h2 className="font-game text-[19px] leading-tight">{ko ? "K.O.!" : "What just happened"}</h2>
-        <button onClick={clearNews} className="g-btn h-8 rounded-[10px] bg-g-panel-2 px-2.5 text-[13px] font-black text-g-text">Got it</button>
-      </div>
-      <ul className="mt-1 space-y-0.5 text-sm leading-snug font-extrabold">
-        {[...news].sort((a, b) => Number(b.kind === "ko") - Number(a.kind === "ko")).map((e) => <li key={e.id}>{e.text}</li>)}
-      </ul>
-      {ko && choose ? (
-        <a href="#/game/choose" onClick={clearNews} className="g-btn mt-2 flex h-11 items-center justify-center rounded-xl bg-g-yellow font-game text-[17px]">Choose your next fight →</a>
-      ) : null}
-    </section>
   );
 }
 

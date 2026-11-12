@@ -112,3 +112,64 @@ export const HeartPlus = (p: P) => (
 export const InfoBlue = (p: P) => (
   <svg {...p} aria-hidden viewBox="0 0 26 26"><circle cx="13" cy="13" r="11" fill="#6ec6ff" stroke="#2b1d3a" strokeWidth="2.6"/><path d="M13 11.5 V18.5" stroke="#2b1d3a" strokeWidth="3" strokeLinecap="round"/><circle cx="13" cy="7.6" r="1.9" fill="#2b1d3a"/></svg>
 );
+export const Padlock = (p: P) => (
+  <svg {...p} aria-hidden viewBox="0 0 24 26"><path d="M7 11V8a5 5 0 0 1 10 0v3" fill="none" stroke="#2b1d3a" strokeWidth="3.2"/><rect x="3" y="10.5" width="18" height="13" rx="3.5" fill="#b9b0c2" stroke="#2b1d3a" strokeWidth="3"/><circle cx="12" cy="16" r="2" fill="#2b1d3a"/><path d="M12 17v3" stroke="#2b1d3a" strokeWidth="2.4" strokeLinecap="round"/></svg>
+);
+export const CheckBadge = (p: P) => (
+  <svg {...p} aria-hidden viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#7bd36b" stroke="#2b1d3a" strokeWidth="3"/><path d="M7 12.5l3.2 3 6-6.5" fill="none" stroke="#2b1d3a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+);
+/** The player's little hero (mockup MonMap60); `ko` gives it dizzy X eyes. */
+export const Hero = ({ ko, ...p }: P & { ko?: boolean }) => (
+  <svg {...p} aria-hidden viewBox="0 0 40 46">
+    <ellipse cx="20" cy="43" rx="12" ry="3" fill="#2b1d3a" opacity="0.3"/>
+    <path d="M9 26 L4 38 L18 36Z" fill="#ff4d6d" stroke="#2b1d3a" strokeWidth="2.4" strokeLinejoin="round"/>
+    <rect x="11" y="24" width="18" height="16" rx="6" fill="#6ec6ff" stroke="#2b1d3a" strokeWidth="2.6"/>
+    <circle cx="20" cy="15" r="11" fill="#ffd2a8" stroke="#2b1d3a" strokeWidth="2.6"/>
+    <path d="M9 14 a11 11 0 0 1 22 0 Z" fill="#ffc93c" stroke="#2b1d3a" strokeWidth="2.6" strokeLinejoin="round"/>
+    <path d="M20 4 C22 0 27 0 28 2" fill="none" stroke="#ff4d6d" strokeWidth="3" strokeLinecap="round"/>
+    {ko
+      ? <path d="M14 16.5 l4 3.5 M18 16.5 l-4 3.5 M22 16.5 l4 3.5 M26 16.5 l-4 3.5" stroke="#2b1d3a" strokeWidth="1.8" strokeLinecap="round"/>
+      : <><circle cx="16" cy="18" r="1.8" fill="#2b1d3a"/><circle cx="24" cy="18" r="1.8" fill="#2b1d3a"/><path d="M16.5 22 q3.5 2.5 7 0" fill="none" stroke="#2b1d3a" strokeWidth="1.8" strokeLinecap="round"/></>}
+    <path d="M31 30 L37 18" stroke="#2b1d3a" strokeWidth="5" strokeLinecap="round"/><path d="M31 30 L37 18" stroke="#e8f6ff" strokeWidth="2.4" strokeLinecap="round"/>
+    <path d="M28 30 h6" stroke="#2b1d3a" strokeWidth="3" strokeLinecap="round"/>
+  </svg>
+);
+/** A boss's castle (mockup MonMap60): green once beaten, grey while locked, gold while you fight it. */
+export const Castle = ({ tone, ...p }: P & { tone: "beaten" | "current" | "locked" }) => {
+  const wall = tone === "beaten" ? "#8fd27c" : tone === "current" ? "#ffd765" : "#a79fb0";
+  const flag = tone === "locked" ? "#d8d2de" : "#ff4d6d";
+  return (
+    <svg {...p} aria-hidden viewBox="0 0 88 84">
+      <path d="M8 82 V30 H6 V18 H14 V24 H20 V18 H28 V30 H26 V40 H62 V30 H60 V18 H68 V24 H74 V18 H82 V30 H80 V82 Z" fill={wall} stroke="#2b1d3a" strokeWidth="3.5" strokeLinejoin="round"/>
+      <path d="M30 40 V22 H28 V12 H36 V17 H41 V12 H47 V17 H52 V12 H60 V22 H58 V40 Z" fill={wall} stroke="#2b1d3a" strokeWidth="3.5" strokeLinejoin="round"/>
+      <path d="M44 12 V2 M44 2 l10 3.5 -10 3.5" fill={flag} stroke="#2b1d3a" strokeWidth="2.6" strokeLinejoin="round" strokeLinecap="round"/>
+      <path d="M12 34 H22 M66 34 H76" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" opacity="0.5"/>
+    </svg>
+  );
+};
+export const MapIcon = (p: P) => (
+  <svg {...p} aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>
+);
+export const Crown = (p: P) => (
+  <svg {...p} aria-hidden viewBox="0 0 40 30"><path d="M4 26 L2 8 L12 16 L20 3 L28 16 L38 8 L36 26 Z" fill="#ffc93c" stroke="#2b1d3a" strokeWidth="3" strokeLinejoin="round"/><circle cx="20" cy="18" r="3" fill="#ff4d6d" stroke="#2b1d3a" strokeWidth="2"/></svg>
+);
+export const Replay = (p: P) => (
+  <svg {...p} aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></svg>
+);
+export const HeartBroken = (p: P) => (
+  <svg {...p} aria-hidden viewBox="0 0 24 22"><path d="M12 21C5 15 1.5 11.5 1.5 7.2 1.5 4 4 1.5 7 1.5c2 0 4 1.1 5 2.9 1-1.8 3-2.9 5-2.9 3 0 5.5 2.5 5.5 5.7 0 4.3-3.5 7.8-10.5 13.8z" fill="#ecdcc0" stroke="#2b1d3a" strokeWidth="2.4" strokeLinejoin="round"/><path d="M12 4.4 L10 9 L13.5 11.5 L11 16" fill="none" stroke="#2b1d3a" strokeWidth="2.2" strokeLinejoin="round" strokeLinecap="round"/></svg>
+);
+/** The five Hall of Heroes badges (mockup MonHall). */
+export const BadgeArt = ({ id, earned, ...p }: P & { id: string; earned: boolean }) => {
+  const g = earned ? undefined : "grayscale(1)";
+  const ring = (fill: string) => <circle cx="22" cy="22" r="19" fill={fill} stroke="#2b1d3a" strokeWidth="3"/>;
+  return (
+    <svg {...p} aria-hidden viewBox="0 0 44 44" style={{ filter: g, opacity: earned ? 1 : 0.55 }}>
+      {id === "first-blood" ? <>{ring("#ff4d6d")}<circle cx="22" cy="22" r="13" fill="none" stroke="#ffd0d8" strokeWidth="2" strokeDasharray="3 3"/><g transform="rotate(45 22 22)"><path d="M22 8 L25 12 V27 H19 V12 Z" fill="#e9f1fb" stroke="#2b1d3a" strokeWidth="2.2" strokeLinejoin="round"/><rect x="15" y="27" width="14" height="4" rx="2" fill="#ffc93c" stroke="#2b1d3a" strokeWidth="2"/><rect x="20.5" y="31" width="3" height="5" fill="#a0603a" stroke="#2b1d3a" strokeWidth="1.6"/></g></> : null}
+      {id === "flawless" ? <>{ring("#6ec6ff")}<path d="M14 17 L18 12 H26 L30 17 L22 32 Z" fill="#ffffff" stroke="#2b1d3a" strokeWidth="2.4" strokeLinejoin="round"/><path d="M14 17 H30 M18 12 L22 32 L26 12" fill="none" stroke="#2b1d3a" strokeWidth="1.8" strokeLinejoin="round"/></> : null}
+      {id === "daredevil" ? <>{ring("#ff7a2f")}<path d="M22 9 C29 16 31 21 29 27 C27.5 31 25 33 22 33 C18 33 14.5 30 14.5 26 C14.5 22 17 20 19 17 C19 21 20.5 22.5 22 22.5 C21 18 20.5 13 22 9Z" fill="#ffc93c" stroke="#2b1d3a" strokeWidth="2.2" strokeLinejoin="round"/><text x="22" y="30" textAnchor="middle" fontSize="8" fontWeight="900" fill="#2b1d3a">×2</text></> : null}
+      {id === "world-1" ? <>{ring("#7bd36b")}<path d="M17 33 V11" stroke="#2b1d3a" strokeWidth="2.6" strokeLinecap="round"/><path d="M17 11 L30 15 L17 20 Z" fill="#ffc93c" stroke="#2b1d3a" strokeWidth="2.2" strokeLinejoin="round"/><rect x="12" y="25" width="20" height="8" rx="4" fill="#2f7a2a" stroke="#2b1d3a" strokeWidth="2"/><text x="22" y="31.6" textAnchor="middle" fontSize="7" fontWeight="900" fill="#ffffff">W1</text></> : null}
+      {id === "comeback" ? <>{ring("#ffc93c")}<path d="M22 33 C13 26 10 22 10 17.5 A5.5 5.5 0 0 1 22 15 A5.5 5.5 0 0 1 34 17.5 C34 22 31 26 22 33Z" fill="#ff4d6d" stroke="#2b1d3a" strokeWidth="2.4" strokeLinejoin="round"/><path d="M16.5 22 l4 4 7-8" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></> : null}
+    </svg>
+  );
+};

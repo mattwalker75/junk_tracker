@@ -676,6 +676,8 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     expect(hall.hardcore.map((r: { name: string }) => r.name)).toEqual(["Matt"]);
     expect(hall.mine).toHaveLength(2);
     expect(hall.thisMonth).toHaveLength(3);
+    // the badges are the person on screen's, from their stored fights
+    expect(hall.badges.map((x: { id: string }) => x.id)).toEqual(["first-blood", "flawless", "daredevil", "world-1", "comeback"]);
     expect((await b.call("GET", "/api/game/hall")).status).toBe(400);
   });
 

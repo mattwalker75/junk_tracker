@@ -12,10 +12,13 @@ import { api } from "../lib/api";
 import { useActions } from "../lib/actions";
 import { nowTime } from "../lib/dates";
 import { Arena, Clock, worldLook } from "./art";
-import { Ability, HeartPlus, IconBlock, IconCrit, IconHeal, IconHit, Potion, Shield, Skull, Star, Sword, Target, Wind } from "./icons";
+import { Ability, HeartBroken, HeartPlus, IconBlock, IconCrit, IconHeal, IconHit, Potion, Shield, Skull, Star, Sword, Target, Wind } from "./icons";
 import { countdown, lineRow, soClose, type LineIcon } from "./logic";
-import { GameBg, GameHeader, GameNote, Hearts, Monster, NewsPanel } from "./parts";
-import { applyResult, useGame, useNews } from "./state";
+import { levelInfo } from "../../../shared/game";
+import { Burst, Confetti } from "./art";
+import { MapIcon } from "./icons";
+import { GameBg, GameHeader, GameNote, Hearts, Monster } from "./parts";
+import { applyResult, markShown, useGame, useResults, type QueuedResult } from "./state";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
@@ -28,14 +31,13 @@ function useNow(): Date {
 
 export function Battle() {
   const { today, view, error, loading } = useGame();
-  const news = useNews();
+  const { head } = useResults();
   if (error) return <Shell><GameNote title="Hmm, that didn't load">{error.message}</GameNote></Shell>;
   if (loading || !view) return <Shell><div className="h-40" /></Shell>;
   const run = view.run, fight = view.fight;
   if (!run || !run.active || !fight) {
     return (
       <Shell>
-        <NewsPanel news={news} choose={false} />
         <GameNote title={run ? `Run #${run.number} is over` : "No run going yet"}
           action={<a href="#/game/start" className="g-btn flex h-12 items-center justify-center rounded-2xl bg-g-yellow font-game text-xl">Start a run</a>}>
           {run ? `It ended with ${fmt(run.score)} points. A new run starts again with Crumbs.` : "Start a run and Crumbs is your first monster. Every workout you log is a hit."}
@@ -43,14 +45,14 @@ export function Battle() {
       </Shell>
     );
   }
-  return <BattleBody run={run} fight={fight} today={today} news={news} />;
+  return <BattleBody run={run} fight={fight} today={today} head={head} />;
 }
 
 function Shell({ children }: { children: ReactNode }) {
   return (
     <main className="relative min-h-dvh pb-6">
       <GameBg background={worldLook(2).page} />
-      <GameHeader kicker="CRAVING CRUSHER" title="Battle" back={{ href: "#/game", label: "Back to the title screen" }} />
+      <GameHeader kicker="CRAVING CRUSHER" title="Battle" back={{ href: "#/game", label: "Back to the title screen" }}><MapLink /></GameHeader>
       {children}
     </main>
   );
@@ -58,7 +60,35 @@ function Shell({ children }: { children: ReactNode }) {
 
 type Fx = { kind: "hit" | "heal"; amount: number; n: number } | null;
 
-function BattleBody({ run, fight, today, news }: { run: RunView; fight: FightView; today: string; news: ReturnType<typeof useNews> }) {
+/** The adventure map, from the battle screen's header. */
+function MapLink() {
+  return (
+    <a href="#/game/map" aria-label="Adventure map" className="g-btn grid size-11 shrink-0 place-items-center rounded-full bg-g-panel text-g-text">
+      <MapIcon className="size-6" />
+    </a>
+  );
+}
+
+/**
+ * A KO or a strike that just came in plays here first: the monster that went down spins with a
+ * K.O.! burst and confetti, or the one that struck lunges with WHAM! while a heart cracks. Then its
+ * result screen comes up (Results.tsx). Reduced motion skips straight to the screen.
+ */
+const SCENE_MS = 1700;
+function useScene(head: QueuedResult | null): { kind: "ko" | "strike"; level: number; crack: boolean } | null {
+  const pending = head && !head.shown ? head.result : null;
+  const id = pending?.id;
+  useEffect(() => {
+    if (!id) return;
+    const t = window.setTimeout(() => markShown(id), SCENE_MS);
+    return () => window.clearTimeout(t);
+  }, [id]);
+  if (!pending) return null;
+  if (pending.kind === "victory" || pending.kind === "finish") return { kind: "ko", level: Number(pending.ko.data.level ?? 60), crack: false };
+  return { kind: "strike", level: Number(pending.strike.data.level), crack: pending.kind === "strike" };
+}
+
+function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightView; today: string; head: QueuedResult | null }) {
   const act = useActions();
   const now = useNow();
   const cd = countdown(fight.deadlineOn, now);
@@ -77,18 +107,26 @@ function BattleBody({ run, fight, today, news }: { run: RunView; fight: FightVie
     const t = window.setTimeout(() => setFx((f) => (f?.n === n ? null : f)), 1200);
     return () => window.clearTimeout(t);
   }, [fight.id, fight.hp]);
-  const struck = news.some((e) => e.kind === "strike");
-  const pct = Math.max(0, Math.min(100, (fight.hp / fight.max) * 100));
+  const scene = useScene(head);
+  const struck = scene?.kind === "strike";
+  const ko = scene?.kind === "ko" ? levelInfo(scene.level) : null;
+  const strikeBy = struck ? levelInfo(scene.level) : null;
+  const pct = ko ? 0 : Math.max(0, Math.min(100, (fight.hp / fight.max) * 100));
 
   return (
     <main className="relative min-h-dvh pb-2">
       <GameBg background={look.page} />
-      <GameHeader kicker={`CRAVING CRUSHER · WORLD ${fight.world} · LEVEL ${fight.level} OF 60`} title={fight.worldName} />
+      <GameHeader kicker={`WORLD ${fight.world} · LEVEL ${fight.level} OF 60`} title={fight.worldName}><MapLink /></GameHeader>
 
       {/* hearts · run · score */}
       <div className="mx-3 mt-2 flex items-stretch gap-2">
         <div className="g-panel flex h-10 shrink-0 items-center gap-1 rounded-[14px] px-2.5">
-          <Hearts hearts={run.hearts} />
+          {scene?.crack ? (
+            <span className="relative">
+              <Hearts hearts={run.hearts + 1} />
+              <span aria-hidden className="g-anim-crack absolute top-0" style={{ left: run.hearts * 27 }}><HeartBroken className="h-[22px] w-6" /></span>
+            </span>
+          ) : <Hearts hearts={run.hearts} />}
         </div>
         <div className={cx("g-panel flex h-10 shrink-0 flex-col items-center justify-center rounded-[14px] px-2.5 leading-none", run.hardcore ? "bg-g-night text-g-night-ink" : "bg-g-blue text-g-on")}>
           <span className="flex items-center gap-0.5 text-[10px] font-black tracking-[0.06em]">{run.hardcore ? <Skull className="size-3" /> : null}RUN</span>
@@ -116,12 +154,12 @@ function BattleBody({ run, fight, today, news }: { run: RunView; fight: FightVie
       </section>
 
       {/* the arena */}
-      <section aria-label="Battle arena" className={cx("relative mx-3 mt-2.5 h-[260px] overflow-hidden rounded-[22px] border-[3px] border-g-line shadow-[0_4px_0_var(--g-line)]", fx?.kind === "hit" && "g-anim-shake")}>
+      <section aria-label="Battle arena" className={cx("relative mx-3 mt-2.5 h-[260px] overflow-hidden rounded-[22px] border-[3px] border-g-line shadow-[0_4px_0_var(--g-line)]", (fx?.kind === "hit" || scene) && "g-anim-shake")}>
         <Arena world={fight.world} className="g-art absolute inset-0 size-full" />
         <div className="absolute inset-x-2.5 top-2 flex flex-col gap-1">
           <div className="flex items-end justify-between gap-2">
-            <span className="g-stroke truncate font-game text-2xl leading-none" style={{ textShadow: "0 2px 0 #2b1d3a" }}>{fight.name}</span>
-            <span className="g-stroke-thin shrink-0 text-base font-black">HP {fight.hp} / {fight.max}</span>
+            <span className="g-stroke truncate font-game text-2xl leading-none" style={{ textShadow: "0 2px 0 #2b1d3a" }}>{ko?.name ?? strikeBy?.name ?? fight.name}</span>
+            <span className="g-stroke-thin shrink-0 text-base font-black">{ko ? `HP 0 / ${ko.hp}` : strikeBy ? `HP ${strikeBy.hp} / ${strikeBy.hp}` : `HP ${fight.hp} / ${fight.max}`}</span>
           </div>
           <div role="progressbar" aria-label={`${fight.name} hit points`} aria-valuemin={0} aria-valuemax={fight.max} aria-valuenow={fight.hp}
             className="relative box-content h-[18px] overflow-hidden rounded-full border-[3px] border-[#2b1d3a] bg-[#3a2238]">
@@ -129,17 +167,23 @@ function BattleBody({ run, fight, today, news }: { run: RunView; fight: FightVie
             <div className="absolute inset-x-1.5 top-[3px] h-1 rounded bg-white opacity-35" />
           </div>
           <div className="mt-0.5 flex items-center justify-between gap-2">
-            <span className="inline-flex max-w-[80%] -rotate-2 items-center gap-1.5 rounded-full bg-[#2b1d3a] py-[3px] pr-2.5 pl-1 text-xs font-black text-g-yellow shadow-[0_3px_0_rgba(43,29,58,.35)]">
+{scene ? <span /> : <span className="inline-flex max-w-[80%] -rotate-2 items-center gap-1.5 rounded-full bg-[#2b1d3a] py-[3px] pr-2.5 pl-1 text-xs font-black text-g-yellow shadow-[0_3px_0_rgba(43,29,58,.35)]">
               <Ability className="size-[22px] shrink-0" />
               <span className="min-w-0"><span className="text-white">{fight.ability.name}:</span> {fight.ability.text}</span>
-            </span>
+            </span>}
             {run.shieldArmed && fight.powerUpsAllowed ? <span className="g-anim-pulse shrink-0 rounded-full border-2 border-[#2b1d3a] bg-g-green px-2 py-[3px] text-xs font-black text-[#2b1d3a]">Shield up</span> : null}
           </div>
         </div>
         <div className="pointer-events-none absolute inset-x-0 bottom-1 flex justify-center">
-          <Monster slug={fight.slug} name={fight.name} pose={struck ? "strike" : fx?.kind === "hit" ? "hurt" : "normal"}
-            motion={struck ? "strike" : fx ? (fx.kind === "hit" ? "hurt" : "heal") : "idle"} motionKey={fx?.n} className="h-[170px] w-[170px]" />
+          {ko ? <img src={`/monsters/${ko.slug}.svg`} alt={`${ko.name}, knocked out`} className="g-anim-ko h-[170px] w-[170px] origin-[50%_85%]" />
+            : <Monster slug={strikeBy?.slug ?? fight.slug} name={strikeBy?.name ?? fight.name} pose={struck ? "strike" : fx?.kind === "hit" ? "hurt" : "normal"}
+              motion={struck ? "strike" : fx ? (fx.kind === "hit" ? "hurt" : "heal") : "idle"} motionKey={fx?.n} className="h-[170px] w-[170px]" />}
         </div>
+        {ko ? <>
+          <Confetti className="pointer-events-none absolute inset-0 z-10" />
+          <Burst text="K.O.!" className="g-anim-burst absolute top-[104px] right-2 z-10 w-[112px]" />
+        </> : null}
+        {struck ? <Burst text="WHAM!" fill="#ffc93c" className="g-anim-burst absolute top-[104px] left-2 z-10 w-[112px]" /> : null}
         {fx ? (
           <div key={fx.n} aria-hidden className="g-anim-float pointer-events-none absolute top-24 right-4 z-10 flex flex-col items-center">
             <span className="g-stroke-thick font-game text-[40px] leading-none" style={{ color: fx.kind === "hit" ? "#fff" : "#ff7a95", textShadow: "0 4px 0 #2b1d3a" }}>{fx.kind === "hit" ? `−${fx.amount}` : `+${fx.amount}`}</span>
@@ -158,8 +202,6 @@ function BattleBody({ run, fight, today, news }: { run: RunView; fight: FightVie
           </span>
         </div>
       </section>
-
-      <NewsPanel news={news} choose={fight.betOptions.length > 0} />
 
       {fight.betOptions.length ? (
         <a href="#/game/choose" className="g-btn mx-3 mt-2.5 flex min-h-11 items-center justify-between gap-2 rounded-2xl bg-g-panel px-3 text-g-text">

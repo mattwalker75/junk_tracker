@@ -1,8 +1,8 @@
 /**
  * The game's data on the page: GET /api/game (reads never write), the sync that settles a KO or a
- * missed deadline when the view says `needsSync`, and "what just happened" — the events a sync
- * returned, shown on the battle screen until they are dismissed (stage 3 turns the big ones into
- * the Victory / Strike / Knocked back / Defeated overlays).
+ * missed deadline when the view says `needsSync`, and "what just happened" — the events a sync or
+ * any game change returned, queued as the Victory / Strike / Knocked back / Defeated / finish
+ * screens (Results.tsx) and toasts.
  */
 import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useSyncExternalStore } from "react";
@@ -11,24 +11,48 @@ import type { Day } from "../../../shared/types";
 import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
 import { useToday } from "../lib/useToday";
+import { planResults, type Result } from "./outcomes";
 
 // ---------------------------------------------------------------- what just happened
-let news: EventView[] = [];
+/** A result screen waiting to be seen; `shown` once its overlay is up (the battle screen plays its KO or strike first). */
+export interface QueuedResult { result: Result; shown: boolean }
+let queue: QueuedResult[] = [];
+let toasts: EventView[] = [];
+const seen = new Set<string>();
 const listeners = new Set<() => void>();
 const emit = () => { for (const l of listeners) l(); };
-/** The kinds worth telling about (a shield going up is shown on the shield itself). */
-const TELL = new Set(["ko", "strike", "knockback", "defeat", "finish", "heart", "powerup_earned", "run_start"]);
+const subscribe = (l: () => void) => { listeners.add(l); return () => { listeners.delete(l); }; };
 
-export function pushNews(events: EventView[]): void {
-  const fresh = events.filter((e) => TELL.has(e.kind) && !news.some((n) => n.id === e.id));
+/** Tell about what a game change settled: big results queue up one after another, the rest are toasts. */
+export function pushHappened(events: EventView[]): void {
+  const fresh = events.filter((e) => !seen.has(e.id));
   if (!fresh.length) return;
-  news = [...fresh, ...news].slice(0, 8);
+  for (const e of fresh) seen.add(e.id);
+  const plan = planResults(fresh);
+  if (!plan.results.length && !plan.toasts.length) return;
+  queue = [...queue, ...plan.results.map((result) => ({ result, shown: false }))];
+  toasts = [...toasts, ...plan.toasts].slice(-4);
   emit();
 }
-export function clearNews(): void { if (news.length) { news = []; emit(); } }
-export function useNews(): EventView[] {
-  return useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => news, () => news);
+/** The result on screen (or about to be) and how many more wait behind it. */
+export function useResults(): { head: QueuedResult | null; waiting: number } {
+  const q = useSyncExternalStore(subscribe, () => queue, () => queue);
+  return { head: q[0] ?? null, waiting: Math.max(0, q.length - 1) };
 }
+export function markShown(id: string): void {
+  if (queue[0]?.result.id !== id || queue[0].shown) return;
+  queue = [{ ...queue[0], shown: true }, ...queue.slice(1)];
+  emit();
+}
+/** Close the result on screen; the next one (if any) comes up at once (the battle scene played for the first). */
+export function nextResult(): void {
+  if (!queue.length) return;
+  queue = queue.slice(1).map((q, i) => (i === 0 ? { ...q, shown: true } : q));
+  emit();
+}
+export function clearResults(): void { if (queue.length || toasts.length) { queue = []; toasts = []; emit(); } }
+export function useToasts(): EventView[] { return useSyncExternalStore(subscribe, () => toasts, () => toasts); }
+export function dropToast(id: string): void { const t = toasts.filter((e) => e.id !== id); if (t.length !== toasts.length) { toasts = t; emit(); } }
 
 // ---------------------------------------------------------------- the view and the sync
 export const gameKey = (today: Day) => ["game", today] as const;
@@ -36,7 +60,7 @@ export const gameKey = (today: Day) => ["game", today] as const;
 /** Store what a game change returned, and tell about what happened. */
 export function applyResult(qc: QueryClient, today: Day, r: SyncResult): SyncResult {
   qc.setQueryData(gameKey(today), r.view);
-  pushNews(r.happened);
+  pushHappened(r.happened);
   return r;
 }
 

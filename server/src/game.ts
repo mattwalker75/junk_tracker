@@ -13,7 +13,7 @@ import type Database from "better-sqlite3";
 import { z } from "zod";
 import type { Day, Id } from "../../shared/types.js";
 import {
-  abandonRun, addDays, BETS, buildView, dropToNormal, GameRuleError, newRun, setBet, settle, toEventView, usePowerUp,
+  abandonRun, addDays, badgesFor, BETS, buildView, dropToNormal, GameRuleError, newRun, setBet, settle, toEventView, usePowerUp,
   type ActivityEv, type Bet, type EventData, type FightData, type GameClock, type GameLog, type GameView, type HallRun, type HallView,
   type Mode, type RunData, type RunState, type SplurgeEv, type SyncResult,
 } from "../../shared/game/index.js";
@@ -219,6 +219,10 @@ export class Game {
       _month: !r.end_reason || r.started_on.slice(0, 7) === month || (r.ended_on ?? "").slice(0, 7) === month,
     }));
     const clean = (l: typeof runs): HallRun[] => l.slice(0, 50).map(({ _month: _m, ...x }) => x);
-    return { allTime: clean(runs), thisMonth: clean(runs.filter((r) => r._month)), hardcore: clean(runs.filter((r) => r.hardcore)), mine: clean(runs.filter((r) => r.isYou)) };
+    const fights = this.db.prepare(`SELECT r.number AS run, f.seq, f.level, f.status, f.bet, f.flawless, f.ended_on
+      FROM game_fights f JOIN game_runs r ON r.id = f.run_id WHERE f.user_id = ? AND r.user_id = ?`).all(owner, owner) as
+      { run: number; seq: number; level: number; status: FightData["status"]; bet: number; flawless: number; ended_on: Day | null }[];
+    const badges = badgesFor(fights.map((f) => ({ run: f.run, seq: f.seq, level: f.level, status: f.status, bet: f.bet as Bet, flawless: !!f.flawless, endedOn: f.ended_on })));
+    return { allTime: clean(runs), thisMonth: clean(runs.filter((r) => r._month)), hardcore: clean(runs.filter((r) => r.hardcore)), mine: clean(runs.filter((r) => r.isYou)), badges };
   }
 }

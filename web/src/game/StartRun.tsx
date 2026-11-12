@@ -11,7 +11,7 @@ import { nowTime } from "../lib/dates";
 import { go } from "../lib/route";
 import { Check, HeartFull, Info, PlayDark, ShieldBlue, Skull } from "./icons";
 import { GameBg, GameHeader } from "./parts";
-import { applyResult, clearNews, useGame } from "./state";
+import { applyResult, clearResults, useGame } from "./state";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
@@ -38,8 +38,9 @@ export function StartRun() {
     setBusy(true); setError(null);
     try {
       const r = await api.gameStart(mode, today, nowTime());
-      clearNews();
-      applyResult(qc, today, { ...r, happened: r.happened.filter((e) => e.kind !== "run_start") });
+      clearResults();
+      // what settled in the old run is moot now: the new run starts with a clean slate
+      applyResult(qc, today, { ...r, happened: [] });
       void qc.invalidateQueries({ queryKey: ["game-hall"] });
       setBegun({ number: r.view.run?.number ?? next, mode });
     } catch (e) { setError((e as Error).message); }

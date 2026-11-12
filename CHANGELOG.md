@@ -5,6 +5,31 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 ## [Unreleased]
 
 ### Added
+- 2026-11-11: **Game mode: the map, the results and the rest of Craving Crusher's screens.**
+  - **Adventure map:** all 60 levels on one winding path through the six worlds, each world in its
+    own colours and scenery. Beaten monsters have a check, the one you're fighting pulses with your
+    little hero beside it and a flag with its HP and days left, and the ones ahead are greyed out
+    with a padlock. Bosses live in castles. The bar at the top shows your hearts, score, "Level N /
+    60" and whether the run is Normal or Hardcore; tap that badge to see what it means. On a
+    Hardcore run it also offers **Switch to Normal**, which asks first because it can't be undone.
+    **Jump to me** takes you back to your fight, and tapping a monster opens a card about it.
+  - **A world up close:** tap a world's sign for its ten levels as big circles, with buttons for
+    all six worlds.
+  - **What just happened, full screen:** **Victory** (the knockout, the score counting up, what's
+    next, and "Choose your deadline"), **Strike** (a heart cracks, rematch tips), **Knocked back**
+    (Normal run, 0 hearts), **Defeated** (Hardcore run, 0 hearts, with your place in the Hall and
+    **Start Run #N**) and a celebration for beating all 60. When several things happened while you
+    were away they come one after another. Smaller news (a heart, a power-up) pops up at the top
+    for a few seconds. On the battle screen you first see the knockout or the strike happen. With
+    "reduce motion" turned on, nothing moves.
+  - **Hall of Heroes:** your best run, then All time, This month, My runs and Hardcore, and five
+    badges (First Blood, Flawless, Daredevil, World 1 Clear, Comeback Kid).
+  - **How to crush:** every rule and number, taken straight from the game's own rules.
+  - **Monster Book:** all 60 monsters by world, each with a short funny line about it. Beaten ones
+    get a stamp, the current one shows its fight, and the ones ahead show their drawing and level.
+    Tap one for its page.
+  - The title screen and the battle screen now link to the map. The "coming in the next update"
+    note is gone. The tracker looks and works exactly as before.
 - 2026-11-11: **Game mode: Craving Crusher's first screens.** The initials menu has **Game mode**
   (with a gamepad) above Goals; in the game the same menu starts with **Back to tracker**. The game
   opens on its title screen: **Start a run** (or **Continue Run #N**), then pick **Normal** or

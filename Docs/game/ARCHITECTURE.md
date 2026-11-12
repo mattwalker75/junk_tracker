@@ -216,3 +216,51 @@ Where this plan left the flow open, Stage 1 took these readings. All of them are
   `web/src/game/art.tsx`). The game's CSS (`.game`, `.g-*` in `index.css`) lives in the components
   layer so Tailwind utilities still win; at night the page colour is dimmed and panels go purple.
   With reduced motion on, nothing in the game moves.
+
+## Decisions made while building (Stage 3, Nov 11 2026)
+- **Map layout is worked out, not stored.** `web/src/game/layout.ts` places the 60 nodes exactly
+  where MonMap60 has them (three rows of three snaking up each 426 px band, the boss on top) and draws
+  the path the way the mockup does (Catmull-Rom, 1/6 tangents). Tests check it against the mockup's
+  coordinates. The world page uses MonWorld2's ten spots for every world. The scenery is the
+  mockup's drawing, without its path and text, as one file (`web/public/game-map-scenery.svg`). The
+  world page shows its band of that same file, enlarged. Each portrait is one `<img>`.
+- **The gold trail** runs to the current fight, or to the last level beaten when no fight is going.
+  After a knock-back the levels above the checkpoint are locked again (as `view.map` says).
+- **Results queue** (`web/src/game/outcomes.ts`, tested): a KO is a Victory screen, and a boss's
+  heart and Second Wind go on it as "Boss loot", not as toasts. Level 60's KO is the finish screen.
+  A strike that took the last heart becomes Knocked back or Defeated (one screen, not two). Heart,
+  power-up earned and Hardcore → Normal are toasts. Run start and power-ups *used* are not shown
+  (the battle screen shows those already). The queue lives in `state.ts` and keeps the order things
+  happened.
+- **The battle scene plays once.** On the battle screen, the first result of a batch plays for
+  1.7 s first (the KO'd monster spins with K.O.! and confetti, or the striker lunges with WHAM! while
+  a heart cracks). Then its screen comes up. The ones queued behind it come up at once after
+  **Next**. On any other screen, when the run has ended, or with reduced motion, a result comes up
+  at once.
+- **Starting a new run clears the queue** and doesn't show what settled in the old run.
+- **The Victory breakdown** is worked back from the KO event's own numbers (damage, days left,
+  flawless, boss, bet). Its total is the server's `points`. A Hardcore ×1.25 row shows when only
+  that multiplier reaches the total. Victory shows "run score now" (the live score), not "before +
+  this fight". The mockup's "honest logs" row is left out because log points aren't counted per fight.
+- **Defeated screen:** "Best combo" and "Biggest hit" from the mockup are left out (the game doesn't
+  keep them). It shows days of fighting and monsters beaten. The monster wears your helmet, with two
+  party guests (Chiplet and Gummo).
+- **Badges** (`shared/game/badges.ts`, tested) are worked out on the server from the person's stored
+  fights in all their runs, and returned as `HallView.badges`. All five can be computed honestly:
+  First Blood (first win), Flawless (a win with `flawless`), Daredevil (a win on bet ×2), World 1
+  Clear (level 10 won), Comeback Kid (a win at a level that struck you earlier in the same run). Each
+  is earned by the first fight that qualifies.
+- **Hall tabs** follow the mockup's order: All time · This month · My runs · Hardcore. A run switched
+  from Hardcore to Normal is listed as Normal (the server's `hardcore` flag).
+- **How to crush** takes every number from the engine (`HEAL`, `CRIT`, `POTION_*`, `SHIELD_STREAK`,
+  `WEEK_ACTIVE_DAYS`, `POINTS`, the heart limits, `betDays`, `wonPoints`). Its examples use the
+  monster you're fighting, or Crumbs before a run.
+- **Bios** for all 60 are the approved boards' lines (MonBestiary1–2, MonNewA–E), in
+  `shared/game/bios.ts`.
+- **Monster Book:** monsters up ahead show their full drawing with "Up ahead · Level N" (Matt wants
+  to see the art). Their HP, deadline and ability are shown too, rather than the old "???".
+- **Map links:** the title screen has an **Adventure map** button, and the battle screen's header has
+  a map button. The battle header's kicker drops "CRAVING CRUSHER ·" to make room.
+- **Finish and Defeated** have a plain **Close** as well as "Start Run #N", so you can look at the
+  map or the Hall first.
+

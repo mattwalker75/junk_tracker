@@ -4,6 +4,7 @@
  * as a log entry's `createdAt`, so the two can be compared.
  */
 import type { Day, Id, Size } from "../types.js";
+import type { Badge } from "./badges.js";
 
 export type Mode = "normal" | "hardcore";
 export type EndReason = "defeated" | "finished" | "abandoned";
@@ -230,4 +231,8 @@ export interface HallRun {
   level: number;
   score: number;
 }
-export interface HallView { allTime: HallRun[]; thisMonth: HallRun[]; hardcore: HallRun[]; mine: HallRun[] }
+export interface HallView {
+  allTime: HallRun[]; thisMonth: HallRun[]; hardcore: HallRun[]; mine: HallRun[];
+  /** the person on screen's badges, from all their runs (badges.ts) */
+  badges: Badge[];
+}

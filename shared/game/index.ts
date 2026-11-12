@@ -5,3 +5,5 @@ export * from "./levels.js";
 export * from "./abilities.js";
 export * from "./score.js";
 export * from "./engine.js";
+export * from "./bios.js";
+export * from "./badges.js";

@@ -1,13 +1,13 @@
 /**
  * The title screen (mockup MonTitle, without the name picker: Matt named it Craving Crusher).
  * Continue Run #N while a run is going, or Start a run; Monster Book, Hall of Heroes and How to
- * crush (their screens come in the next update); the monsters peeking over the hill.
+ * crush; the adventure map; the monsters peeking over the hill.
  */
 import { useQuery } from "@tanstack/react-query";
 import { levelInfo } from "../../../shared/game";
 import { api } from "../lib/api";
 import { Clouds, Hill, LogoBurst, Sunburst } from "./art";
-import { Book, Fist, HeartFull, PadSmall, Play, Trophy } from "./icons";
+import { Book, Fist, HeartFull, MapIcon, PadSmall, Play, Trophy } from "./icons";
 import { GameBg, GameMenu } from "./parts";
 import { useGame } from "./state";
 
@@ -88,7 +88,10 @@ export function TitleScreen() {
             </a>
           ))}
         </div>
-        {going && run ? <a href="#/game/start" className="self-center text-[13px] font-black text-[#2b1d3a] underline decoration-2 underline-offset-2 g-kicker">Start a new run instead</a> : null}
+        <div className="flex items-center justify-center gap-4">
+          <a href="#/game/map" className="g-btn flex h-10 items-center gap-1.5 rounded-full bg-[#fff7e6] px-3.5 font-game text-[16px] text-[#2b1d3a]"><MapIcon className="size-5" />Adventure map</a>
+          {going && run ? <a href="#/game/start" className="text-[13px] font-black text-[#2b1d3a] underline decoration-2 underline-offset-2 g-kicker">Start a new run instead</a> : null}
+        </div>
       </nav>
 
       {/* the crowd peeking over the hill */}

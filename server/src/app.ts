@@ -65,6 +65,7 @@ const userSettingsSchema = z.object({
   examples: z.object({ snack: z.string().max(120), meal: z.string().max(120), feast: z.string().max(120) }).partial(),
   // the six quick picks on Log activity, in order ("" = the default one)
   openIn: z.enum(["tracker", "game"], { error: "Open in the tracker or in game mode." }),
+  autoStart: z.boolean({ error: "Keep the monsters coming is on or off." }),
   quickPicks: z.array(z.string().max(QUICK_PICK_MAX, `Keep each quick pick under ${QUICK_PICK_MAX} characters.`), { error: "The quick picks are six names." }).max(6, "There are six quick picks."),
 }).partial().strict();
 
@@ -150,6 +151,7 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.get("/api/game/hall", h((req) => game.hall(owner(req), req.query)));
   app.post("/api/game/sync", h((req) => game.sync(owner(req), req.body)));
   app.post("/api/game/run", h((req) => game.start(owner(req), req.body)));
+  app.post("/api/game/auto", h((req) => game.auto(owner(req), req.body)));
   app.post("/api/game/bet", h((req) => game.bet(owner(req), req.body)));
   app.post("/api/game/powerup", h((req) => game.powerUp(owner(req), req.body)));
   app.post("/api/game/mode", h((req) => game.mode(owner(req), req.body)));

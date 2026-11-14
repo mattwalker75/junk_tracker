@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { DEFAULT_EXAMPLES, DEFAULT_QUICK_PICKS, QUICK_PICK_MAX, SIZE_LABEL, SIZES, type Size, type UserSettings } from "../../../shared/types";
-import { Card, cx, Input, Segmented, SIZE_DOT } from "../components/ui";
+import { Card, cx, Input, Segmented, SIZE_DOT, Toggle } from "../components/ui";
 import { api } from "../lib/api";
 
 export function YouSettings() {
@@ -62,6 +62,15 @@ export function YouSettings() {
         {s ? (
           <Segmented label="When the app opens" value={s.openIn} options={[["tracker", "Tracker"], ["game", "Craving Crusher"]]} onChange={(v) => void save({ openIn: v })} />
         ) : <div className="h-11 animate-pulse rounded-xl bg-surface-2" />}
+      </Card>
+      <Card className="space-y-2 p-4">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-[15px] font-extrabold">Keep the monsters coming</h2>
+          {s ? <Toggle label="Keep the monsters coming" checked={s.autoStart} onChange={(v) => void save({ autoStart: v })} /> : null}
+        </div>
+        <p className="text-sm text-mute">
+          In Craving Crusher the next monster always starts the moment you beat one. With this on, a new run starts by itself too: the first time you open game mode each day, if your last run is over (or you never started one), a new run starts with Crumbs, in the same mode as the last one. When a run ends, you see how it went first, and the new one starts the next day.
+        </p>
       </Card>
       <Card className="space-y-3.5 p-4">
         <h2 className="text-[15px] font-extrabold">Weight and weeks</h2>

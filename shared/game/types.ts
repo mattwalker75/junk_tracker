@@ -135,8 +135,10 @@ export interface BattleLine {
   /** "HH:MM", or "" (no time, or the start / end of the day) */
   time: string;
   kind: "hit" | "heal" | "crit" | "potion" | "blocked" | "ability" | "revive" | "ko" | "note";
-  /** damage (a hit, crit or potion) or HP healed; 0 for a note */
+  /** damage (a hit, crit or potion) or HP healed (bonus HP included); 0 for a note */
   amount: number;
+  /** a heal: how much of `amount` went on as bonus HP (the monster was full) */
+  bonus?: number;
   /** a plain sentence for the battle screen */
   text: string;
   /** the log entry it came from, when there is one */
@@ -149,8 +151,14 @@ export interface FightResult {
   max: number;
   /** all damage dealt (overkill included) */
   damage: number;
-  /** HP the monster gained from heals (capped at its max HP) */
+  /** HP the monster gained from heals (bonus HP included) */
   heals: number;
+  /**
+   * bonus HP: a heal past full HP goes on as bonus HP, up to `bonusMax` (20% of max HP); damage
+   * takes it off first, so there is bonus HP only while `hp` is at `max`
+   */
+  bonus: number;
+  bonusMax: number;
   /** no heal from a splurge (or a day without a workout) landed */
   flawless: boolean;
   /**
@@ -195,10 +203,13 @@ export interface FightView extends Omit<FightData, "points"> {
   betOptions: { bet: Bet; label: string; deadlineOn: Day }[];
   hp: number;
   max: number;
+  /** bonus HP on top of a full HP bar (splurges past full), and its cap: 20% of max HP */
+  bonus: number;
+  bonusMax: number;
   todayDamage: number;
   todayHeals: number;
   lines: BattleLine[];
-  /** the "so close" nudge: HP left, as minutes or as calories */
+  /** the "so close" nudge: HP left (bonus HP included), as minutes or as calories */
   finish: { hp: number; minutes: number; calories: number };
   /** false in Bacon Bandit's fight (Stick 'Em Up) */
   powerUpsAllowed: boolean;
@@ -229,6 +240,11 @@ export interface GameView {
 }
 
 export interface SyncResult { happened: EventView[]; view: GameView }
+/**
+ * POST /api/game/auto: whether a run started by itself (Keep the monsters coming), and if so what
+ * came of it. `checked`: today's look has been taken (false only while the setting is off).
+ */
+export type AutoResult = { started: false; checked: boolean } | ({ started: true; checked: true } & SyncResult);
 
 export interface HallRun {
   userId: Id;

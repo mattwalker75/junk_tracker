@@ -20,7 +20,7 @@ files disagree, this plan wins on *how* the game is built and they win on *what*
 4. **Days and times always come from the phone** (CLAUDE.md rule 3). The server never works out "today".
 5. **Each person has their own run.** Several users means separation, not privacy (rule 5), so the Hall of Heroes lists everyone's runs.
 
-## Data (database version 4: one migration, saved first as `junk.db.before-v4`)
+## Data (database version 4: one migration, saved first as `junk.db.before-v4`; version 5 adds `users.game_checked_on`, below)
 - `splurges.planned INTEGER NOT NULL DEFAULT 0`: the **Planned treat** switch, in both the dashboard and game mode. `Splurge.planned: boolean`.
 - `game_runs`:
   - `id, user_id, number` (1, 2, 3… per person)
@@ -64,7 +64,8 @@ files disagree, this plan wins on *how* the game is built and they win on *what*
 ## Attacks, heals and day effects (defaults; abilities change them)
 - **Workout damage:** minutes + round(calories ÷ 10), with no cap. Minutes or calories missing count as 0. A workout with neither does 0 damage but still earns its log points.
 - **Comeback:** the first workout after a calendar day with no activity does ×2 damage. This looks at the whole log, not just the fight.
-- **Splurge heal:** Snack 10, Meal 25, Feast 60. A planned treat heals half, rounded up. Healing is capped at max HP.
+- **Splurge heal:** Snack 10, Meal 25, Feast 60. A planned treat heals half, rounded up.
+- **Bonus HP** (Matt, Nov 14 2026): a heal fills the HP bar first; what is left goes on as bonus HP, up to `BONUS_SHARE` (20%) of max HP (`bonusMaxOf`, rounded). Anything past that is lost. Damage takes bonus HP off before HP, so there is bonus HP only while HP is full. See "Bonus HP" under the Nov 14 decisions.
 - **Clean-day crit:** a crit of 25 for every **finished** day (before today) inside the window with no splurge. A planned treat is still a splurge. It is applied at the end of that day.
 - **Veggie Shield armed:** the next heal is blocked, the shield is used up, and the battle log shows it.
 - **Water Potion:** using it deals 50 damage at that moment, as an event with a time.
@@ -103,6 +104,7 @@ interface Ability {
 
 ## Run flow (all of it in `POST /api/game/sync` and the action routes)
 - `POST /api/game/run {mode, today, now}` starts run N+1 and opens fight 1: Crumbs, Steady bet, started today. If a run is still going, starting a new one ends it as 'abandoned'.
+- `POST /api/game/auto {today, now}` (Keep the monsters coming, Nov 14 2026) can start run N+1 by itself; see the Nov 14 decisions.
 - **KO:**
   1. Settle the fight (won, with points).
   2. A boss kill gives +1 heart (max 5) and +1 Second Wind (max 3).
@@ -126,6 +128,7 @@ interface Ability {
 | `GET /api/game?today=&now=` | everything the game screens need: run, open fight (computed: hp, max, battle log lines, deadline, ability, so-close numbers), map statuses for all 60 levels, power-ups, hearts, score, `needsSync` |
 | `POST /api/game/sync` | settle KOs, strikes, weekly hearts and power-ups up to today; returns what happened (for the Victory / Strike / Knocked back / Defeated screens) |
 | `POST /api/game/run` | start a run `{mode}` |
+| `POST /api/game/auto` | Keep the monsters coming: the day's first look starts run N+1 when none is going (`{started, checked}`, plus the SyncResult when it started) |
 | `POST /api/game/bet` | `{bet}` for the open fight, while it isn't locked |
 | `POST /api/game/powerup` | `{kind: 'shield'|'potion'|'wind'}`: arm or use one |
 | `POST /api/game/mode` | Hardcore → Normal |
@@ -326,3 +329,48 @@ Where this plan left the flow open, Stage 1 took these readings. All of them are
   or Esc to go on); the Hall's date lines are #6b587d (about 5.6:1 on the cards, which are the same
   in both themes); only the deadline panel ticks each second; `#/game/<anything else>` (even
   `toString`) is the title screen.
+
+## Decisions made while building (Nov 14 2026: bonus HP and Keep the monsters coming)
+Matt asked for two things: a splurge at full HP should still cost something, and a setting that
+keeps a monster going every day without tapping Start a run.
+
+**Bonus HP** (`simulateFight`'s `heal()` and `hit()` in engine.ts)
+- **Overflow, not a flat 20%.** A heal past full goes on as bonus HP, up to 20% of max HP. Matt said
+  "maybe 20% bonus health". A flat +20% per splurge would make a Snack at full HP cost a boss 256
+  (20% of 1,280), more than a Feast heals. Overflow keeps "splurge size sets the heal" and makes 20%
+  the cap of the violet bar he described.
+- **Every heal that "lands" can go into bonus HP:** a splurge, its "then N more the next day" part,
+  and the day-end heals (Slurp, Sundown Howl). The monster's own comebacks (Wobble Back, Reboot,
+  Brother Act, Rise Again) stay capped at max HP, as before.
+- **Damage takes bonus HP off first.** So bonus HP > 0 only while `hp === max`. The abilities' HP
+  checks (half, a quarter) read `hp` alone, so bonus HP never moves them.
+- **The whole hit counts as damage dealt**, bonus HP included, so the points still add up.
+- **"HP left" includes bonus HP** everywhere it means "what you still have to beat": `finish`, the
+  strike event's `hpLeft`, `preview().change`, "So close!", the map and the book, and `betPlan`.
+  `FightView.hp` stays the HP bar; `bonus` and `bonusMax` sit beside it.
+- **Battle line:** `amount` is the whole heal and `bonus` is the part that went on as bonus HP. The
+  text ends with `bonusNote()`, which the heal panel strips before it reads the ability's name.
+- **Already-settled fights are untouched** (frozen). The open fight is worked out again from the
+  log, so a splurge at full HP logged before this change now gives that fight bonus HP.
+- **The page:** `HpBar` (parts.tsx) draws orange up to max HP, then bonus HP as a violet (`#a35cff`)
+  bar laid over it from the left (20 bonus on 100 HP covers a fifth). A preview stripes the part of
+  either bar that would change. `hpText` gives "250 / 250 +20"; `hpShort` gives "250+20" for "before → after".
+
+**Keep the monsters coming** (`UserSettings.autoStart`, `Game.auto`, `dailyCheck` in state.ts)
+- **What was already true:** inside a run a fight is always open. A KO opens the next level at once
+  and a strike opens the rematch. Only before the first run, or after a run ends (defeated,
+  finished), is there no monster. So the setting starts a **run**.
+- **Once a day per person, on the server.** `users.game_checked_on` (database version 5) is the
+  phone day the look was last taken. The first `POST /api/game/auto` of a day takes it (whichever
+  phone sends it); later ones that day do nothing. With the setting off, nothing is stamped
+  (`checked: false`), so turning it on later the same day still works.
+- **It reads the run as stored, before any sync.** If the stored run is still going, nothing starts
+  that day, even when its missed deadline is about to end it. The sync then brings the Defeated
+  screen, and the new run starts the next day. That way the auto start never replaces the result
+  screen.
+- **Mode:** the latest run's mode. A run dropped from Hardcore is Normal; the first run is Normal.
+- **The page asks before the first game read of each day.** `useGame`'s query runs `dailyCheck`
+  first, once per person and day per page load, forgotten when `checked` is false or the call fails.
+  So the first view already shows the new run and the sync never races it. A started run is told
+  like Start a run (`startedRun`), plus the `run_start` event (`data.auto`) as a toast. Tracker
+  pages (`useGame(false)`) never ask.

@@ -18,7 +18,7 @@ import { nowTime } from "../lib/dates";
 import { worldMap } from "./art";
 import { Castle, CheckBadge, Hero, Padlock, Play, ShieldBlue, Skull } from "./icons";
 import { ALL_LEVELS, BAND_H, bandTop, cardBox, MAP_H, MAP_START, MAP_W, mapNode, paths, trailEnd, WORLD_H, WORLD_START, worldLevels, worldNode, worldOf, type Pt } from "./layout";
-import { countdown, dueText, shortDate, soClose } from "./logic";
+import { countdown, dueText, hpLeft, hpText, shortDate, soClose } from "./logic";
 import { GameMenu, GameNote } from "./parts";
 import { applyResult, useGame } from "./state";
 
@@ -204,8 +204,8 @@ function NodeCard({ m, view, box, onClose }: { m: MapLevel; view: GameView; box:
   const cur = view.map.find((x) => x.status === "current");
   let status: string;
   if (fight) {
-    const so = soClose(fight.hp);
-    status = `Fighting now · ${fight.hp} HP to go. ${so.minutes} more minutes, or ${so.calories} calories, or mix.`;
+    const so = soClose(hpLeft(fight));
+    status = `Fighting now · ${hpLeft(fight)} HP to go. ${so.minutes} more minutes, or ${so.calories} calories, or mix.`;
   } else if (m.status === "beaten") {
     status = m.wins ? `Beaten${m.wins > 1 ? ` ${m.wins} times` : ""} in Run #${view.run?.number}${m.attempts > m.wins ? ` · it struck ${m.attempts - m.wins} ${m.attempts - m.wins === 1 ? "time" : "times"}` : ""} · best ${fmt(m.bestPoints)} points` : `Beaten in Run #${view.run?.number}`;
   } else if (!view.run) {
@@ -230,7 +230,7 @@ function NodeCard({ m, view, box, onClose }: { m: MapLevel; view: GameView; box:
         </button>
       </div>
       <div className="flex flex-wrap gap-1.5">
-        <span className="rounded-full bg-[#2b1d3a] px-2 py-0.5 text-xs font-black text-white">{fight ? `${fight.hp} / ${fight.max} HP` : `${lv.hp} HP`}</span>
+        <span className="rounded-full bg-[#2b1d3a] px-2 py-0.5 text-xs font-black text-white">{fight ? `${hpText(hpLeft(fight), fight.max)} HP` : `${lv.hp} HP`}</span>
         <span className="rounded-full border-2 border-[#2b1d3a] bg-white px-2 py-0.5 text-xs font-black">{fight ? `Due ${dueText(fight.deadlineOn)} · ${countdown(fight.deadlineOn, new Date()).big}` : `${lv.days}-day deadline`}</span>
       </div>
       <div className="flex items-center gap-2 rounded-xl border-2 border-[#2b1d3a] px-2.5 py-[7px]" style={{ background: fight ? "#ffe3a1" : m.status === "beaten" ? "#d7f5c8" : "#ece6f0" }}>
@@ -273,7 +273,7 @@ function NowFlag({ fight, at, big }: { fight: FightView; at: Pt; big: boolean })
         ? { left: Math.max(6, at.x - (big ? 40 : 30)), width: 220, top: at.y - r - (big ? 40 : 29), justifyContent: "flex-start" }
         : { left: Math.min(at.x + (big ? 40 : 30), MAP_W - 6) - 220, width: 220, top: at.y - r - (big ? 40 : 29), justifyContent: "flex-end" }}>
         <span className="g-anim-wave rounded-xl border-[3px] border-[#2b1d3a] bg-[#ff4d6d] font-black whitespace-nowrap text-white shadow-[0_3px_0_#1a1024]"
-          style={{ padding: big ? "4px 12px" : "3px 9px", fontSize: big ? 14 : 12 }}>{fight.hp}/{fight.max} · {countdown(fight.deadlineOn, new Date()).big}</span>
+          style={{ padding: big ? "4px 12px" : "3px 9px", fontSize: big ? 14 : 12 }}>{hpText(hpLeft(fight), fight.max, "/")} · {countdown(fight.deadlineOn, new Date()).big}</span>
       </div>
       <Hero aria-label="Your hero" className="g-anim-bob pointer-events-none absolute z-[6]"
         style={{ left: at.x < 120 ? at.x + r - 2 : at.x - r - (big ? 40 : 30), top: at.y - (big ? 8 : 18), width: big ? 44 : 34, height: big ? 52 : 40 }} />

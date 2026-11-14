@@ -161,11 +161,37 @@ export async function syncAfterLog(qc: QueryClient, today: Day): Promise<SyncRes
 let autoSync: Promise<unknown> | null = null;
 let autoSyncedFor: GameView | null = null;
 
+/**
+ * Keep the monsters coming (Settings → You, Matt Nov 14 2026): before the first game view of the
+ * day, ask the server whether a run should start by itself. It decides (the setting, once a day per
+ * person on any phone, only when no run is going); this page asks once per person and day. A run
+ * that started is told like one started from Start a run, plus a toast that says it started by itself.
+ */
+const checked = new Map<string, Promise<void>>();
+function dailyCheck(today: Day): Promise<void> {
+  if (!person) return Promise.resolve();
+  const key = `${person}|${today}`;
+  let p = checked.get(key);
+  if (!p) {
+    p = api.gameAuto(today, nowTime()).then((r) => {
+      // the setting is off: ask again next time (it may be turned on later today)
+      if (!r.checked) checked.delete(key);
+      if (!r.started) return;
+      const rest = startedRun(r);
+      const start = r.happened.find((e) => e.kind === "run_start");
+      if (start) { toasts = [...toasts, start]; emit(); }
+      pushHappened(rest);
+    }, () => { checked.delete(key); /* the game still opens; it asks again next time */ });
+    checked.set(key, p);
+  }
+  return p;
+}
+
 /** The game view for today, settled first whenever the server says something is waiting. */
 export function useGame(enabled = true): { today: Day; view: GameView | undefined; error: Error | null; loading: boolean } {
   const qc = useQueryClient();
   const today = useToday();
-  const q = useQuery({ queryKey: gameKey(today), queryFn: () => api.game(today, nowTime()), enabled });
+  const q = useQuery({ queryKey: gameKey(today), queryFn: async () => { await dailyCheck(today); return api.game(today, nowTime()); }, enabled });
   // disabled (e.g. the log sheets on tracker pages) means no game at all: no cached view, no sync —
   // the tracker never shows game visuals (Matt, Nov 12 2026)
   useEffect(() => {

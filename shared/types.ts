@@ -75,8 +75,13 @@ export interface UserSettings {
   quickPicks: string[];
   /** where the app opens: the tracker (Home) or Craving Crusher (Matt, Nov 12 2026) */
   openIn: "tracker" | "game";
+  /**
+   * Keep the monsters coming (Matt, Nov 14 2026): the first time game mode opens each day, if no run
+   * is going, a new one starts by itself (in the last run's mode)
+   */
+  autoStart: boolean;
 }
-export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker" };
+export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false };
 
 export interface UserInfo {
   id: Id;

@@ -20,6 +20,12 @@ import {
 
 export const HEAL: Record<Size, number> = { snack: 10, meal: 25, feast: 60 };
 export const CRIT = 25;
+/** a heal past full HP goes on as bonus HP, up to this share of max HP (Matt, Nov 14 2026) */
+export const BONUS_SHARE = 0.2;
+export const bonusMaxOf = (max: number): number => Math.round(max * BONUS_SHARE);
+/** The sentence a heal's battle line ends with when some of it went on as bonus HP (the page strips it to find the ability's name). */
+export const bonusNote = (extra: number, gain: number, full: boolean): string =>
+  `${gain ? `It fills up, and the extra ${extra} is bonus HP` : `It was at full HP, so that's +${extra} bonus HP`}${full ? " (the bonus bar is full)" : ""}.`;
 export const POTION_DAMAGE = 50;
 /** a workout this long earns a Water Potion */
 export const POTION_MINUTES = 60;
@@ -99,7 +105,8 @@ export function simulateFight(inp: FightInput): FightResult {
   const ab = abilityFor(inp.level);
   const max = level.hp;
   const name = level.name;
-  let hp = max, damage = 0, heals = 0, landed = 0, attacked = false, revived = false, thresholdDone = false;
+  const bonusMax = bonusMaxOf(max);
+  let hp = max, bonus = 0, damage = 0, heals = 0, landed = 0, attacked = false, revived = false, thresholdDone = false;
   let ko: FightResult["ko"] = null;
   let shield: ArmPoint | null = ab.noPowerUps ? null : inp.shieldFrom ?? null;
   let shieldBlocked: string | null = null;
@@ -149,15 +156,26 @@ export function simulateFight(inp: FightInput): FightResult {
         lines.push({ day: d, time, kind: "blocked", amount, text: blockedText, sourceId });
         return;
       }
+      // a heal fills the HP bar first; past full it goes on as bonus HP, up to 20% of max HP
       const gain = Math.min(amount, max - hp);
-      hp += gain; heals += gain; healToday += gain; landed += 1;
-      lines.push({ day: d, time, kind: "heal", amount: gain, text: gain ? text(gain) + (gain < amount ? " (it was nearly full)" : "") : `${name} is already at full HP, so that heals nothing.`, sourceId });
+      const extra = Math.min(amount - gain, bonusMax - bonus);
+      const total = gain + extra;
+      hp += gain; bonus += extra; heals += total; healToday += total; landed += 1;
+      lines.push({
+        day: d, time, kind: "heal", amount: total, ...(extra ? { bonus: extra } : {}), sourceId,
+        text: !total ? `${name} is at full HP with a full bonus bar, so that heals nothing.`
+          : extra ? `${text(total)} ${bonusNote(extra, gain, bonus >= bonusMax)}`
+          : text(total),
+      });
     };
 
     const hit = (amount: number, by: "workout" | "potion" | "crit", at: string | null, time: string, text: string, sourceId?: string) => {
       if (amount <= 0) { lines.push({ day: d, time, kind: "note", amount: 0, text, sourceId }); return; }
       if (by !== "crit") attacked = true;
-      damage += amount; dmgToday += amount; hp -= amount;
+      damage += amount; dmgToday += amount;
+      // bonus HP goes first
+      const off = Math.min(bonus, amount);
+      bonus -= off; hp -= amount - off;
       lines.push({ day: d, time, kind: by === "workout" ? "hit" : by, amount, text, sourceId });
       refresh();
       if (hp <= 0) {
@@ -246,7 +264,7 @@ export function simulateFight(inp: FightInput): FightResult {
     }
     if (d === inp.today) { todayDamage = dmgToday; todayHeals = healToday; }
   }
-  return { level: inp.level, hp, max, damage, heals, flawless: landed === 0, ko, attacked, lines, shieldBlocked, counted, todayDamage, todayHeals };
+  return { level: inp.level, hp, max, bonus, bonusMax, damage, heals, flawless: landed === 0, ko, attacked, lines, shieldBlocked, counted, todayDamage, todayHeals };
 }
 
 /** What logging one more splurge or workout would do to the fight (the page's "this hits for 66"). */
@@ -257,7 +275,7 @@ export function preview(inp: FightInput, extra: { splurge?: SplurgeEv; activity?
     splurges: extra.splurge ? [...inp.splurges.filter((s) => s.id !== extra.splurge!.id), extra.splurge] : inp.splurges,
     activities: extra.activity ? [...inp.activities.filter((a) => a.id !== extra.activity!.id), extra.activity] : inp.activities,
   });
-  return { before, after, change: after.hp - before.hp };
+  return { before, after, change: after.hp + after.bonus - (before.hp + before.bonus) };
 }
 
 // ================================================================ a run
@@ -317,15 +335,15 @@ export function fightInputFor(st: RunState, f: FightData, log: GameLog, today: D
   return { level: f.level, startedOn: f.startedOn, startedAfter: f.startedAfter, usedBefore, deadlineOn: f.deadlineOn, today, splurges: log.splurges, activities: log.activities, potions, shieldFrom, blocked };
 }
 
-/** A new run: number N, 3 hearts, no power-ups, fight 1 (Crumbs) started today at Steady. */
-export function newRun(number: number, mode: Mode, clock: GameClock): { state: RunState; added: EventData[] } {
+/** A new run: number N, 3 hearts, no power-ups, fight 1 (Crumbs) started today at Steady. `auto`: started by Keep the monsters coming. */
+export function newRun(number: number, mode: Mode, clock: GameClock, auto = false): { state: RunState; added: EventData[] } {
   const run: RunData = {
     id: clock.newId(), number, mode, startedAt: clock.nowIso, startedOn: clock.today, endedOn: null, endReason: null,
     hearts: START_HEARTS, shields: 0, potions: 0, winds: 0, shieldArmed: false, knockbacks: 0, hardcoreDroppedOn: null, logPoints: 0, score: 0,
   };
   const st: RunState = { run, fights: [], events: [] };
   openFight(st, 1, clock.today, null, clock);
-  const e: EventData = { id: clock.newId(), fightId: st.fights[0].id, day: clock.today, at: clock.nowIso, kind: "run_start", data: { number, mode } };
+  const e: EventData = { id: clock.newId(), fightId: st.fights[0].id, day: clock.today, at: clock.nowIso, kind: "run_start", data: { number, mode, ...(auto ? { auto: true } : {}) } };
   st.events.push(e);
   return { state: st, added: [e] };
 }
@@ -429,7 +447,7 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
       f.status = "struck"; f.endedOn = f.deadlineOn; f.betLocked = true;
       f.points = struckPoints({ damage: f.damage, hardcore: hardcore() });
       run.hearts -= 1;
-      ev("strike", f.deadlineOn, f.id, { level: f.level, name: lv.name, hpLeft: sim.hp, hearts: Math.max(0, run.hearts), points: f.points });
+      ev("strike", f.deadlineOn, f.id, { level: f.level, name: lv.name, hpLeft: sim.hp + sim.bonus, hearts: Math.max(0, run.hearts), points: f.points });
       const next = addDays(f.deadlineOn, 1);
       if (run.hearts <= 0) {
         if (run.mode === "normal") {
@@ -561,7 +579,9 @@ export function eventText(e: EventData): string {
   const d = e.data;
   const keep = d.gained === false ? (e.kind === "heart" ? " Your hearts were already full." : " You already hold 3.") : "";
   switch (e.kind) {
-    case "run_start": return `Run #${d.number} started (${d.mode === "hardcore" ? "Hardcore" : "Normal"}). Crumbs is first.`;
+    case "run_start": return d.auto
+      ? `Run #${d.number} started by itself (${d.mode === "hardcore" ? "Hardcore" : "Normal"}): Keep the monsters coming is on. Crumbs is first.`
+      : `Run #${d.number} started (${d.mode === "hardcore" ? "Hardcore" : "Normal"}). Crumbs is first.`;
     case "ko": return `${d.name} went down! +${Number(d.points).toLocaleString("en-US")} points.`;
     case "strike": return `${d.name} struck: the deadline passed with ${d.hpLeft} HP left. You lost a heart.`;
     case "knockback": return `Knocked back to level ${d.to}, the start of ${d.worldName}. −250 points, and 3 hearts again.`;
@@ -602,8 +622,8 @@ export function buildView(st: RunState | null, log: GameLog | null, today: Day, 
       ability: { id: ab.id, name: ab.name, text: ab.text },
       daysLeft: Math.max(0, daysBetween(today, open.deadlineOn) + 1),
       betOptions: locked ? [] : BETS.map((b) => ({ bet: b, label: BET_LABEL[String(b)], deadlineOn: addDays(open.deadlineOn, betDays(open.bet) - betDays(b)) })),
-      hp: sim.hp, max: sim.max, todayDamage: sim.todayDamage, todayHeals: sim.todayHeals, lines: sim.lines,
-      finish: { hp: sim.hp, minutes: sim.hp, calories: sim.hp * 10 },
+      hp: sim.hp, max: sim.max, bonus: sim.bonus, bonusMax: sim.bonusMax, todayDamage: sim.todayDamage, todayHeals: sim.todayHeals, lines: sim.lines,
+      finish: { hp: sim.hp + sim.bonus, minutes: sim.hp + sim.bonus, calories: (sim.hp + sim.bonus) * 10 },
       powerUpsAllowed: !ab.noPowerUps,
       input,
     };

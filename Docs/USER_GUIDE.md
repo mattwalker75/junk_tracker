@@ -108,7 +108,10 @@ you play or not.
 
 **Opening it.** Tap your initials (top right) → **Game mode**. In the game the same menu has
 **Back to tracker**. The first time, tap **Start a run** and pick **Normal** or **Hardcore**
-(below). Each person has their own run.
+(below). Each person has their own run. Inside a run the next monster starts the moment you beat
+one (and a rematch starts the day after a missed deadline), so there is always a monster to fight
+until the run ends. To have a new run start by itself as well, turn on **Keep the monsters coming**
+in Settings → You.
 
 **The battle screen** shows your hearts, the run number, your score, the deadline counting down,
 the monster with its HP bar and its special trick, a **So close!** line (how many minutes or
@@ -125,8 +128,14 @@ button in the game; weigh in from the tracker as usual.
 - A workout with no minutes and no calories does no damage, but still earns its points.
 
 **Heals (your splurges).** A **Snack heals 10**, a **Meal 25**, a **Feast 60**. A **planned treat**
-heals half. A monster never heals past its full HP. Some monsters change these numbers (each one's
-trick is on the battle screen and in the **Monster Book**).
+heals half. Some monsters change these numbers (each one's trick is on the battle screen and in
+the **Monster Book**).
+
+**Bonus HP.** A splurge still counts when the monster is at full HP: whatever doesn't fit goes on
+as **bonus HP**, a violet bar laid over the orange one. It holds up to **20% of the monster's max
+HP** (20 for Crumbs, who has 100). Your workouts knock the bonus HP off first, so "So close!" and
+the live panels count it in the HP you still have to beat. With full HP and a full bonus bar, a
+splurge heals nothing more (the size buttons say *maxed out*).
 
 **Deadlines and the bet.** Each monster must go down by midnight at the end of its last day (the
 first day counts as day 1; a monster that starts right after a knockout gets the rest of that day
@@ -204,6 +213,12 @@ Bike, Gym, Swim, Yoga).
 **When the app opens** — **Tracker** (Home) or **Craving Crusher** (the game). It only decides
 where you land when you open the app; the menu under your initials still switches any time, and a
 bookmarked page opens where it points.
+
+**Keep the monsters coming** — off to start with. With it on, the first time you open game mode
+each day, if your last run is over (or you never started one), a new run starts by itself with
+Crumbs, in the same mode as your last run (Normal for your first). A note at the top says so.
+When a run ends you see how it went first (the Defeated or the finish screen), and the new run
+starts the next day. Starting a run yourself still works as before.
 
 **Weight and weeks** — pounds or kilograms (weigh-ins are kept exactly; only the display
 changes); the trend over 1 week, 2 weeks or a month; weeks start on Sunday or Monday.

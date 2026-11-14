@@ -97,6 +97,11 @@ The person using it is not a developer — every message the page shows is a pla
       its own date ("Your phone's date looks wrong").
     - The engine (`shared/game/`) is pure and shared by the server and the page; the tracker's log is
       never changed by the game.
+    - **Bonus HP** (Matt, Nov 14 2026): a heal past full HP goes on as bonus HP (a violet bar over the
+      HP bar), capped at 20% of max HP; damage takes it off first. "HP left" counts it.
+    - **Keep the monsters coming** (`autoStart`, Settings → You, off by default): the first game open of
+      a day starts a new run when none is going (once a day per person, on the server, from the run as
+      stored, so a run that just ended gets its result screen first).
 
 ## Working rules
 - Commit locally per feature with a dated CHANGELOG entry; `git add` explicit paths.

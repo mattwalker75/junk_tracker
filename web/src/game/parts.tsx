@@ -71,3 +71,44 @@ export function GameNote({ title, children, action }: { title: string; children:
     </section>
   );
 }
+
+/** Bonus HP's colour: violet, so it never reads as the orange HP or the pink of a heal. */
+export const BONUS_FILL = "#a35cff";
+
+/**
+ * An HP bar. Orange fills up to max HP; bonus HP (a splurge past full, up to 20% of max HP — Matt,
+ * Nov 14 2026) is a violet bar laid over it from the left, so 20 bonus on a 100 HP monster covers a
+ * fifth of the bar. `value` is HP + bonus HP; `change` stripes the part between `value` and
+ * `value + change` (what a workout takes off, or what a splurge would add).
+ */
+export function HpBar({ label, max, value, change = 0, kind = "hit", fill = "#ff7a2f", className, fillClass, gloss = true }: {
+  label: string; max: number; value: number; change?: number; kind?: "hit" | "heal"; fill?: string; className?: string; fillClass?: string; gloss?: boolean;
+}) {
+  const pct = (v: number) => `${Math.max(0, Math.min(100, (v / max) * 100))}%`;
+  const v = Math.max(0, value), end = Math.max(0, value + change);
+  const main = Math.min(v, max), mainEnd = Math.min(end, max);
+  const bonus = Math.max(0, v - max), bonusEnd = Math.max(0, end - max);
+  const shown = kind === "hit" ? v : end;
+  const stripe = kind === "hit" ? "repeating-linear-gradient(135deg, #ffffff 0 4px, #ffc93c 4px 8px)" : "repeating-linear-gradient(135deg, #ff7a95 0 4px, #ff4d6d 4px 8px)";
+  const bonusStripe = kind === "hit" ? "repeating-linear-gradient(135deg, #ffffff 0 4px, #d9b8ff 4px 8px)" : "repeating-linear-gradient(135deg, #e7d2ff 0 4px, #a35cff 4px 8px)";
+  return (
+    <div role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={max} aria-valuenow={Math.min(shown, max)}
+      aria-valuetext={shown > max ? `${max} of ${max} HP, plus ${shown - max} bonus HP` : `${shown} of ${max} HP`}
+      className={cx("relative box-content overflow-hidden rounded-full border-[3px] border-[#2b1d3a] bg-[#3a2238]", className ?? "h-[18px]")}>
+      <div className={cx("absolute inset-y-0 left-0 transition-[width,background] duration-500", fillClass)} style={{ width: pct(main), background: fill }} />
+      {mainEnd > main ? <div className="g-anim-blink absolute inset-y-0 transition-[left,width] duration-200" style={{ left: pct(main), width: pct(mainEnd - main), background: stripe }} /> : null}
+      {bonus > 0 ? <div className="absolute inset-y-0 left-0 border-r-2 border-[#2b1d3a] transition-[width] duration-500" style={{ width: pct(bonus), background: BONUS_FILL }} /> : null}
+      {bonusEnd > bonus ? <div className="g-anim-blink absolute inset-y-0 transition-[left,width] duration-200" style={{ left: pct(bonus), width: pct(bonusEnd - bonus), background: bonusStripe }} /> : null}
+      {gloss ? <div className="absolute inset-x-1.5 top-[3px] h-1 rounded bg-white opacity-30" /> : null}
+    </div>
+  );
+}
+
+/** "HP 250 / 250" with bonus HP as a violet "+20 bonus" after it. */
+export function HpNumbers({ hp, max, bonus, className }: { hp: number; max: number; bonus: number; className?: string }) {
+  return (
+    <span className={className}>
+      {hp} / {max}{bonus > 0 ? <> <span className="whitespace-nowrap rounded-md px-1 text-white" style={{ background: BONUS_FILL }}>+{bonus} bonus</span></> : null}
+    </span>
+  );
+}

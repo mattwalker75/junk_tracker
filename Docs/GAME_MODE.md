@@ -82,6 +82,9 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 - Snack +10, Meal +25, Feast +60, by the splurge's size, not its calories.
 - A splurge marked **planned treat** (a birthday dinner) heals half.
 - A monster's ability can change these numbers (see the roster).
+- **Bonus HP** (Matt, Nov 14 2026): a splurge at full HP is no longer free. What doesn't fit goes on
+  as bonus HP, up to 20% of the monster's max HP, shown as a violet bar over the HP bar. Workouts
+  take the bonus off first.
 
 ### Deadlines
 - Each monster has a default deadline in days from when the fight starts.

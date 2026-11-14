@@ -1,5 +1,5 @@
 /** Every call to the server. Errors come back as plain sentences (the server writes them). */
-import type { Bet, GameView, HallView, Mode, PowerUp, SyncResult } from "../../../shared/game/types";
+import type { AutoResult, Bet, GameView, HallView, Mode, PowerUp, SyncResult } from "../../../shared/game/types";
 import type { Activity, ActivityInput, AuthState, CustomTheme, Day, Goal, GoalInput, GoalList, Id, Overview, Splurge, SplurgeInput, UserInfo, UserSettings, WeighIn } from "../../../shared/types";
 
 export class ApiError extends Error {
@@ -68,6 +68,7 @@ export const api = {
   game: (today: Day, now: string) => call<GameView>("GET", `/api/game?today=${today}&now=${encodeURIComponent(now)}`),
   gameSync: (today: Day, now: string) => call<SyncResult>("POST", "/api/game/sync", { today, now }),
   gameStart: (mode: Mode, today: Day, now: string) => call<SyncResult>("POST", "/api/game/run", { mode, today, now }),
+  gameAuto: (today: Day, now: string) => call<AutoResult>("POST", "/api/game/auto", { today, now }),
   gameBet: (bet: Bet, today: Day, now: string) => call<SyncResult>("POST", "/api/game/bet", { bet, today, now }),
   gamePowerUp: (kind: PowerUp, today: Day, now: string) => call<SyncResult>("POST", "/api/game/powerup", { kind, today, now }),
   gameToNormal: (today: Day, now: string) => call<SyncResult>("POST", "/api/game/mode", { to: "normal", today, now }),

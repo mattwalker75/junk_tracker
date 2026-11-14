@@ -13,8 +13,8 @@ import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
 import { go } from "../lib/route";
 import { Ability, Flame, Potion, Shield, Star, Wind } from "./icons";
-import { betPlan, dueText, shortDate } from "./logic";
-import { GameBg, GameMenu, GameNote, Hearts } from "./parts";
+import { betPlan, dueText, hpLeft, shortDate } from "./logic";
+import { GameBg, GameMenu, GameNote, Hearts, HpBar, HpNumbers } from "./parts";
 import { applyResult, useGame } from "./state";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
@@ -110,11 +110,8 @@ export function Choose() {
             <h2 className="m-0 font-game text-[27px] leading-none font-normal">{fight.name}</h2>
           </div>
           <div className="flex flex-col gap-[3px]">
-            <div className="flex justify-between text-xs font-black"><span>HP</span><span>{fight.hp} / {fight.max}</span></div>
-            <div role="img" aria-label={`HP ${fight.hp} of ${fight.max}`} className="relative h-4 overflow-hidden rounded-full border-[3px] border-[#2b1d3a] bg-[#3a2a4a]">
-              <div className="absolute inset-y-0 left-0 bg-g-orange" style={{ width: `${(fight.hp / fight.max) * 100}%` }} />
-              <div className="absolute inset-x-1 top-0.5 h-[3px] rounded-full bg-white opacity-45" />
-            </div>
+            <div className="flex justify-between gap-1 text-xs font-black"><span>HP</span><HpNumbers hp={fight.hp} max={fight.max} bonus={fight.bonus} /></div>
+            <HpBar label={`${fight.name} hit points`} max={fight.max} value={hpLeft(fight)} fill="var(--g-orange)" className="h-2.5" gloss={false} />
           </div>
           <div className="flex flex-col gap-px rounded-xl border-2 border-[#2b1d3a] bg-white px-2 py-1.5">
             <span className="flex items-center gap-1 font-game text-sm text-[#c27a00]"><Ability className="size-4" />{fight.ability.name}</span>

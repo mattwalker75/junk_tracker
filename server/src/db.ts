@@ -132,6 +132,11 @@ export const MIGRATIONS: readonly string[] = [
   );
   CREATE INDEX game_events_run ON game_events (run_id, seq);
   `,
+  // 5 — Keep the monsters coming (Nov 14 2026): the phone day game mode last checked for a run to
+  // start by itself, so it happens once a day per person, whichever phone opens the game
+  `
+  ALTER TABLE users ADD COLUMN game_checked_on TEXT;
+  `,
 ];
 
 export const SCHEMA_VERSION = MIGRATIONS.length;

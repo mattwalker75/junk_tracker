@@ -67,7 +67,7 @@ Created from `config.example.json` on first start. Settings edits the same file.
 everyone out. Delete it to sign everyone out.
 
 ## Data
-SQLite with WAL; the schema version is `PRAGMA user_version` (now 3). A newer database than the
+SQLite with WAL; the schema version is `PRAGMA user_version` (now 5). A newer database than the
 app knows is refused. Add a migration to `MIGRATIONS` in `db.ts` for any change. Before upgrading
 a database that already has data, the app saves a copy beside it as `junk.db.before-v<new version>`
 (made once; delete it when you no longer need it). To go back to an older app, stop it and put that

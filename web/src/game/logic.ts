@@ -4,7 +4,7 @@
  * panel in the game-skinned sheets. Pure (tested in test/gameui.test.ts). The panel numbers come
  * from the shared engine's `preview()`, so they are what the server will do.
  */
-import { BET_LABEL, levelInfo, POINTS, preview, type ActivityEv, type BattleLine, type Bet, type FightInput, type SplurgeEv } from "../../../shared/game";
+import { BET_LABEL, bonusMaxOf, levelInfo, POINTS, preview, type ActivityEv, type BattleLine, type Bet, type FightInput, type SplurgeEv } from "../../../shared/game";
 import type { Day, Size } from "../../../shared/types";
 import { SIZE_LABEL } from "../../../shared/types";
 
@@ -78,6 +78,19 @@ export function mixFor(dmg: number): string {
 
 export interface SoClose { title: string; hp: number; minutes: string; calories: string; mix: string }
 /** The nudge on the battle screen: what would finish the monster, in minutes and in calories (10 min = 100 cal = 10 damage). */
+/**
+ * HP as the screens write it: "92 / 250", or with bonus HP (a splurge past full) "250 / 250 +20".
+ * `total` is HP + bonus HP (bonus HP only exists on top of a full bar).
+ */
+export function hpText(total: number, max: number, sep = " / "): string {
+  const t = Math.max(0, total);
+  return t > max ? `${fmt(max)}${sep}${fmt(max)} +${fmt(t - max)}` : `${fmt(t)}${sep}${fmt(max)}`;
+}
+/** The short form for "before → after": "92", or "250+20" with bonus HP. */
+export const hpShort = (total: number, max: number): string => { const t = Math.max(0, total); return t > max ? `${fmt(max)}+${fmt(t - max)}` : fmt(t); };
+/** A fight's HP left, bonus HP included (what a workout has to get through). */
+export const hpLeft = (f: { hp: number; bonus?: number }): number => f.hp + (f.bonus ?? 0);
+
 export function soClose(hp: number): SoClose {
   return {
     title: hp <= 0 ? "Finished!" : hp <= 100 ? "So close!" : "Still in reach!",
@@ -111,9 +124,9 @@ export function dayExample(perDay: number): string {
   return `a ${mins}-min ${mins <= 45 ? "walk" : "run"}${cal ? ` burning ${fmt(cal)} cal` : ""}`;
 }
 
-export function betPlan(o: { bet: Bet; deadlineOn: Day }, f: { hp: number; max: number; boss: boolean }, today: Day, hardcore: boolean): BetPlan {
+export function betPlan(o: { bet: Bet; deadlineOn: Day }, f: { hp: number; bonus?: number; max: number; boss: boolean }, today: Day, hardcore: boolean): BetPlan {
   const days = Math.max(1, daysFrom(today, o.deadlineOn) + 1);
-  const perDay = Math.ceil(Math.max(0, f.hp) / days);
+  const perDay = Math.ceil(Math.max(0, hpLeft(f)) / days);
   const hc = hardcore ? POINTS.hardcore : 1;
   return {
     bet: o.bet, label: BET_LABEL[String(o.bet)] ?? "Steady", deadlineOn: o.deadlineOn, days, perDay, example: dayExample(perDay),
@@ -167,6 +180,9 @@ export interface AttackPanel {
   state: "idle" | "short" | "finish" | "down" | "outside";
   name: string;
   max: number;
+  /** its bonus HP cap (20% of max HP) */
+  bonusMax: number;
+  /** HP before and after, bonus HP included (so either can be over `max`) */
   hpBefore: number;
   hpAfter: number;
   /** this workout's damage (abilities and the comeback ×2 included) */
@@ -195,17 +211,18 @@ export function attackPanel(input: FightInput, a: { id?: string; what: string; d
   const raw = minutes + Math.round(cal / 10);
   const line = after.lines.find((l) => l.sourceId === id && (l.kind === "hit" || l.kind === "note"));
   const dmg = line && line.kind === "hit" ? line.amount : 0;
-  const base = { name, max: lv.hp, hpBefore: before.hp, hpAfter: after.hp, raw, dmg, short: Math.max(0, after.hp), over: 0, note: "" };
+  const hpBefore = hpLeft(before), hpAfter = hpLeft(after);
+  const base = { name, max: lv.hp, bonusMax: bonusMaxOf(lv.hp), hpBefore, hpAfter, raw, dmg, short: Math.max(0, hpAfter), over: 0, note: "" };
   const formula = raw ? `${minutes} min + ${fmt(cal)} cal ÷ 10 = ${raw} damage` : "Damage = minutes + cal ÷ 10, no cap";
   if (before.ko) return { ...base, state: "down", formula, line: `${name} is already down. Logging still earns +5 points.` };
-  if (!raw) return { ...base, state: "idle", formula, line: `${name} has ${before.hp} HP left. Every 10 min or 100 cal is 10 damage.` };
+  if (!raw) return { ...base, state: "idle", formula, line: `${name} has ${hpBefore} HP left${before.bonus ? `, ${before.bonus} of it bonus HP` : ""}. Every 10 min or 100 cal is 10 damage.` };
   if (!line) return { ...base, state: "outside", formula, line: `That day is outside ${name}'s fight, so it doesn't hit it. It still earns +5 points.` };
   const note = dmg !== raw ? line.text : "";
   if (after.ko) {
-    const over = Math.max(0, dmg - before.hp);
+    const over = Math.max(0, dmg - hpBefore);
     return { ...base, state: "finish", over, formula, note, line: `${name} goes down.${over ? ` Overkill by ${over}.` : ""}` };
   }
-  const s = Math.max(0, after.hp);
+  const s = Math.max(0, hpAfter);
   return {
     ...base, state: "short", formula, note,
     line: `This hits ${name} for ${dmg} · ${s} short. ${s} more min or ${fmt(s * 10)} more cal would finish it!`,
@@ -213,13 +230,19 @@ export function attackPanel(input: FightInput, a: { id?: string; what: string; d
 }
 
 export interface HealPanel {
+  /** "full": full HP and a full bonus bar, so it heals nothing */
   state: "none" | "heal" | "blocked" | "full" | "down" | "outside";
   name: string;
   max: number;
+  /** its bonus HP cap (20% of max HP) */
+  bonusMax: number;
+  /** HP before and after, bonus HP included (so either can be over `max`) */
   hpBefore: number;
   hpAfter: number;
-  /** HP it would gain */
+  /** HP it would gain (bonus HP included) */
   heal: number;
+  /** how much of `heal` goes on as bonus HP (it was full) */
+  bonus: number;
   /** "Meal +25" or "+25 ÷ 2 = +13, planned treat" */
   formula: string;
   line: string;
@@ -229,35 +252,39 @@ export interface HealPanel {
 export function healPanel(input: FightInput, s: { id?: string; what: string; day: Day; time: string; size: Size | null; planned: boolean; createdAt: string }): HealPanel {
   const lv = levelInfo(input.level);
   const name = lv.name;
-  const base = { name, max: lv.hp };
+  const base = { name, max: lv.hp, bonusMax: bonusMaxOf(lv.hp) };
   if (!s.size) {
-    const hp = preview(input, {}).before.hp;
-    return { ...base, state: "none", hpBefore: hp, hpAfter: hp, heal: 0, formula: "Snack +10 · Meal +25 · Feast +60, or the monster's own numbers", line: `Pick Snack, Meal or Feast to see how much ${name} heals.` };
+    const hp = hpLeft(preview(input, {}).before);
+    return { ...base, state: "none", hpBefore: hp, hpAfter: hp, heal: 0, bonus: 0, formula: "Snack +10 · Meal +25 · Feast +60, or the monster's own numbers", line: `Pick Snack, Meal or Feast to see how much ${name} heals.` };
   }
   const id = s.id ?? NEW_ID;
   const ev: SplurgeEv = { id, what: s.what.trim() || SIZE_LABEL[s.size], day: s.day, time: s.time, size: s.size, planned: s.planned, createdAt: s.createdAt };
   const { before, after } = preview(input, { splurge: ev });
   const line = after.lines.find((l) => l.sourceId === id && (l.kind === "heal" || l.kind === "blocked"));
   const heal = line && line.kind === "heal" ? line.amount : 0;
+  const bonus = line && line.kind === "heal" ? line.bonus ?? 0 : 0;
   const plain = { snack: 10, meal: 25, feast: 60 }[s.size];
-  const why = line ? /\(([^)]*)\)\.?$/.exec(line.text)?.[1] ?? "" : "";
-  const ability = why && !why.startsWith("a planned treat") && !why.startsWith("it was nearly full") ? why : "";
+  // the engine's sentence, without its bonus HP part, ends with the ability's name in brackets
+  const core = line ? line.text.replace(/ It (fills up|was at full HP).*$/, "") : "";
+  const why = /\(([^)]*)\)\.?$/.exec(core)?.[1] ?? "";
+  const ability = why && !why.startsWith("a planned treat") ? why : "";
   const formula = s.planned ? `${SIZE_LABEL[s.size]} heals half: a planned treat${ability ? ` (${ability})` : ""}`
     : ability ? `${SIZE_LABEL[s.size]} +${plain}, ${ability}: +${heal}` : `${SIZE_LABEL[s.size]}: +${plain}`;
-  const view = { ...base, hpBefore: before.hp, hpAfter: after.hp, heal, formula };
+  const view = { ...base, hpBefore: hpLeft(before), hpAfter: hpLeft(after), heal, bonus, formula };
   if (before.ko) return { ...view, state: "down", line: `${name} is already down. Logging still earns +5 points.` };
   if (!line) return { ...view, state: "outside", line: `That day is outside ${name}'s fight, so it doesn't heal it. It still earns +5 points.` };
   if (line.kind === "blocked") return { ...view, state: "blocked", line: "BLOCKED! Your Veggie Shield stops this heal." };
-  if (!heal) return { ...view, state: "full", line: `${name} is already at full HP, so this heals nothing.` };
-  return { ...view, state: "heal", line: `${name} heals +${heal}${s.planned ? ", planned treat, half heal" : ability ? ` (${ability})` : ""}.` };
+  if (!heal) return { ...view, state: "full", line: `${name} is at full HP with a full bonus bar, so this heals nothing.` };
+  const extra = !bonus ? "" : bonus === heal ? ` It's at full HP, so it all goes on as bonus HP.` : ` The extra ${bonus} goes on as bonus HP.`;
+  return { ...view, state: "heal", line: `${name} heals +${heal}${s.planned ? ", planned treat, half heal" : ability ? ` (${ability})` : ""}.${extra}` };
 }
 
-/** The badge under Snack / Meal / Feast: the heal each size would do right now ("+35 heal", "full HP", "blocked"), or "" when it wouldn't count. */
+/** The badge under Snack / Meal / Feast: the heal each size would do right now ("+35 heal", "+20 bonus", "maxed out", "blocked"), or "" when it wouldn't count. */
 export function sizeHeals(input: FightInput, s: { id?: string; what: string; day: Day; time: string; planned: boolean; createdAt: string }): Record<Size, string> {
   const out = { snack: "", meal: "", feast: "" } as Record<Size, string>;
   for (const size of ["snack", "meal", "feast"] as Size[]) {
     const p = healPanel(input, { ...s, size });
-    out[size] = p.state === "heal" ? `+${p.heal} heal` : p.state === "full" ? "full HP" : p.state === "blocked" ? "blocked" : "";
+    out[size] = p.state === "heal" ? (p.bonus === p.heal ? `+${p.heal} bonus` : `+${p.heal} heal`) : p.state === "full" ? "maxed out" : p.state === "blocked" ? "blocked" : "";
   }
   return out;
 }

@@ -6,12 +6,12 @@
  */
 import { useState, type ReactNode } from "react";
 import {
-  abilityFor, betDays, CRIT, HEAL, LEVELS, levelInfo, MAX_HEARTS, MAX_POWER_UPS, POINTS, POTION_DAMAGE, POTION_MINUTES, rawDamage,
+  abilityFor, betDays, BONUS_SHARE, bonusMaxOf, CRIT, HEAL, LEVELS, levelInfo, MAX_HEARTS, MAX_POWER_UPS, POINTS, POTION_DAMAGE, POTION_MINUTES, rawDamage,
   SHIELD_STREAK, START_HEARTS, WEEK_ACTIVE_DAYS, wonPoints, type Bet,
 } from "../../../shared/game";
 import { cx } from "../components/ui";
 import { Burger, Cookie, HeartEmpty, HeartFull, IconCrit, Pizza, Potion, Shield, Skull, Sword, Wind, ShieldBlue } from "./icons";
-import { GameBg, GameHeader } from "./parts";
+import { GameBg, GameHeader, HpBar } from "./parts";
 import { useGame } from "./state";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
@@ -89,6 +89,13 @@ function Fight({ example }: { example: number }) {
         <div className="mt-2 rounded-2xl border-[3px] border-g-line bg-g-soft-green px-3 py-2">
           <b className="font-game text-[17px] font-normal">Planned treat heals half</b>
           <span className="block text-[14px] font-bold text-g-mute">A planned Feast heals +{Math.ceil(HEAL.feast / 2)}, not +{HEAL.feast}. Halves round up.</span>
+        </div>
+        <div className="mt-2 rounded-2xl border-[3px] border-g-line bg-g-panel-2 px-3 py-2">
+          <div className="flex items-center justify-between gap-2">
+            <b className="font-game text-[17px] font-normal">Full? It gets bonus HP</b>
+            <HpBar label="Example: full HP plus 20 bonus HP" max={100} value={120} className="h-2.5 w-20 shrink-0" gloss={false} />
+          </div>
+          <span className="block text-[14px] font-bold text-g-mute">A splurge when it's at full HP still counts: what doesn't fit goes on as violet <b className="text-g-text">bonus HP</b>, up to {Math.round(BONUS_SHARE * 100)}% of its max ({bonusMaxOf(lv.hp)} for {lv.name}). Workouts knock the bonus off first.</span>
         </div>
         <p className="mt-2 text-[13px] font-bold text-g-mute">Abilities change these. {lv.name}'s <b className="text-g-text">{ab.name}</b>: {ab.text}</p>
         <p className="mt-1 text-[13px] font-bold text-g-mute">A splurge with no time counts as the worst time for monsters that care about the clock.</p>

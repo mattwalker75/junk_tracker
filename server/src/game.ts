@@ -15,7 +15,7 @@ import type { Day, Id } from "../../shared/types.js";
 import {
   abandonRun, addDays, badgesFor, daysBetween, BETS, buildView, dropToNormal, GameRuleError, newRun, setBet, settle, toEventView, usePowerUp,
   type ActivityEv, type Bet, type EventData, type FightData, type GameClock, type GameLog, type GameView, type HallRun, type HallView,
-  type Mode, type RunData, type RunState, type SplurgeEv, type SyncResult,
+  type AutoResult, type Mode, type RunData, type RunState, type SplurgeEv, type SyncResult,
 } from "../../shared/game/index.js";
 import type { Users } from "./users.js";
 import { newId, now, parse, realDay, UserError } from "./util.js";
@@ -176,12 +176,37 @@ export class Game {
     return this.db.transaction(() => {
       const { st: old } = this.settleAndStore(owner, c);
       if (old && !old.run.endReason) this.store(owner, abandonRun(old, c), []);
-      const fresh = newRun((old?.run.number ?? 0) + 1, v.mode, c);
-      this.store(owner, fresh.state, fresh.added, true);
-      // fight 1 counts the whole of today, so it may already be over
-      const out = settle(fresh.state, this.gameLog(owner, fresh.state.run, v.today), c);
-      this.store(owner, out.state, out.added);
-      return this.result(owner, out.state, [...fresh.added, ...out.added], v.today);
+      return this.begin(owner, (old?.run.number ?? 0) + 1, v.mode, c, false);
+    })();
+  }
+
+  /** Run N: stored, then settled at once (fight 1 counts the whole of today, so it may already be over). */
+  private begin(owner: Id, number: number, mode: Mode, c: GameClock, auto: boolean): SyncResult {
+    const fresh = newRun(number, mode, c, auto);
+    this.store(owner, fresh.state, fresh.added, true);
+    const out = settle(fresh.state, this.gameLog(owner, fresh.state.run, c.today), c);
+    this.store(owner, out.state, out.added);
+    return this.result(owner, out.state, [...fresh.added, ...out.added], c.today);
+  }
+
+  /**
+   * POST /api/game/auto — Keep the monsters coming (Matt, Nov 14 2026). The game page calls it when
+   * it first opens each day. With the setting on, the first call of the person's day (on any phone)
+   * looks at the run as stored: if none is going — never started, defeated, finished — run N+1
+   * starts by itself, in the last run's mode (Normal for a first run). A run that is still going
+   * (even one whose missed deadline is about to end it) means nothing starts today: the Defeated
+   * screen gets its moment, and the next day starts a new run. Later calls that day do nothing.
+   */
+  auto(owner: Id, body: unknown): AutoResult {
+    const v = parse(this.sc.clock, body);
+    const c = this.clock(v.today, v.now);
+    return this.db.transaction((): AutoResult => {
+      if (!this.users.settings(owner).autoStart) return { started: false, checked: false };
+      const u = this.db.prepare("UPDATE users SET game_checked_on = ? WHERE id = ? AND (game_checked_on IS NULL OR game_checked_on <> ?)").run(v.today, owner, v.today);
+      if (!u.changes) return { started: false, checked: true };
+      const last = this.latestRun(owner);
+      if (last && !last.end_reason) return { started: false, checked: true };
+      return { started: true, checked: true, ...this.begin(owner, (last?.number ?? 0) + 1, last?.mode ?? "normal", c, true) };
     })();
   }
 

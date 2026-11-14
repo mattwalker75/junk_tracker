@@ -13,10 +13,10 @@ import { cx } from "../components/ui";
 import { api } from "../lib/api";
 import type { GameScreen } from "../lib/route";
 import { Arena, Burst, Confetti, worldLook } from "./art";
-import { ClockSmall, HeartBroken, HeartEmpty, HeartFull, Hero, Home, Padlock, PlayDark, Potion, Replay, Shield, Skull, Sword, Trophy, Wind } from "./icons";
+import { ClockSmall, HeartBroken, HeartEmpty, HeartFull, Hero, Home, Padlock, PlayDark, Potion, Replay, Shield, Skull, Star, Sword, Trophy, Wind } from "./icons";
 import { worldOf } from "./layout";
-import { dayExample, daysFrom, dueText, shortDate } from "./logic";
-import { GameMenu } from "./parts";
+import { dayExample, daysFrom, dueText, hpLeft, hpText, shortDate } from "./logic";
+import { GameMenu, HpBar } from "./parts";
 import { countUp, victoryBreakdown, type Result } from "./outcomes";
 import { dropToast, markShown, nextResult, clearResults, useGame, useResults, useToasts } from "./state";
 
@@ -65,6 +65,7 @@ function Toasts() {
 function ToastIcon({ e }: { e: EventView }) {
   if (e.kind === "heart") return <HeartFull className="h-[22px] w-6 shrink-0" />;
   if (e.kind === "mode_drop") return <Skull className="size-6 shrink-0" />;
+  if (e.kind === "run_start") return <Star className="size-6 shrink-0" />;
   if (e.data.kind === "shield") return <Shield className="h-7 w-[26px] shrink-0" />;
   if (e.data.kind === "potion") return <Potion className="h-6 w-5 shrink-0" />;
   return <Wind className="size-6 shrink-0" />;
@@ -314,8 +315,8 @@ function Strike({ r, view }: { r: Extract<Result, { kind: "strike" }>; view: Gam
       </Panel>
       <Panel>
         <p className="text-[16px] leading-snug font-extrabold">{lv.name} is back to full ({lv.hp} HP){fight ? <> — new deadline {shortDate(fight.deadlineOn)}.</> : "."} <span className="text-[#2f9a2a]">You've got this.</span></p>
-        <div className="mt-2 flex justify-between text-[13px] font-black"><span>{lv.name}</span><span>{fight ? `${fight.hp} / ${fight.max}` : `${lv.hp} / ${lv.hp}`} HP</span></div>
-        <div className="mt-1 h-[18px] overflow-hidden rounded-full border-[3px] border-[#2b1d3a] bg-[#3a2238]"><div className="h-full rounded-full bg-[#ff7a2f]" style={{ width: `${fight ? (fight.hp / fight.max) * 100 : 100}%` }} /></div>
+        <div className="mt-2 flex justify-between text-[13px] font-black"><span>{lv.name}</span><span>{fight ? hpText(hpLeft(fight), fight.max) : `${lv.hp} / ${lv.hp}`} HP</span></div>
+        <HpBar label={`${lv.name} hit points`} max={fight?.max ?? lv.hp} value={fight ? hpLeft(fight) : lv.hp} fillClass="rounded-full" gloss={false} className="mt-1 h-3" />
         {fight ? <span className="mt-2 inline-block rounded-full border-2 border-[#2b1d3a] bg-[#ffe3e8] px-2.5 py-0.5 text-[13px] font-black">Due {dueText(fight.deadlineOn)}</span> : null}
         <p className="mt-2 text-[13px] font-black text-[#6b5a7a]">{days} fresh days · about {perDay} damage a day</p>
         <p className="mt-1 text-[13px] leading-snug font-bold text-[#6b5a7a]">{Number(d.hpLeft) < lv.hp

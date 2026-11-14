@@ -117,7 +117,7 @@ describe("splurges", () => {
     expect(o.last.what).toBe("Cheeseburger & fries"); // not the one dated after today
     expect(o.splurges.map((x: { day: string }) => x.day)).toEqual(["2026-10-11", "2026-10-03"]); // the 40-day window
     expect(o.recent.map((x: { what: string }) => x.what)).toEqual(["Future cake", "Cheeseburger & fries", "Pizza"]); // one "pizza", newest first
-    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker" });
+    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false });
   });
 });
 
@@ -558,7 +558,7 @@ describe("planned treat (Nov 11 2026)", () => {
     const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
     const Database = (await import("better-sqlite3")).default;
     const { MIGRATIONS, openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
-    expect(SCHEMA_VERSION).toBe(4);
+    expect(SCHEMA_VERSION).toBe(5);
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-up4-"));
     const file = path.join(dir, "junk.db");
     try {
@@ -571,7 +571,7 @@ describe("planned treat (Nov 11 2026)", () => {
       expect(db.prepare("SELECT what, planned FROM splurges").all()).toEqual([{ what: "Pizza", planned: 0 }]);
       for (const t of ["game_runs", "game_fights", "game_events"]) expect((db.prepare(`SELECT COUNT(*) AS n FROM ${t}`).get() as { n: number }).n).toBe(0);
       db.close();
-      const copy = new Database(`${file}.before-v4`, { readonly: true });
+      const copy = new Database(`${file}.before-v${SCHEMA_VERSION}`, { readonly: true });
       expect(copy.pragma("user_version", { simple: true })).toBe(3);
       copy.close();
     } finally { fs.rmSync(dir, { recursive: true, force: true }); }
@@ -627,8 +627,9 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     // a splurge logged after the KO heals the new monster; the score counts every entry since the run began
     await b.call("POST", "/api/splurges", { what: "Fries", size: "meal", day: T, time: "12:00", planned: true });
     const v = (await b.call("GET", `/api/game?today=${T}`)).body;
-    expect(v.fight.lines.map((l: { text: string }) => l.text)).toEqual(["Chiplet is already at full HP, so that heals nothing."]);
-    expect(v.fight.heals).toBe(0);
+    // Chiplet was at full HP: the planned meal's 13 goes on as bonus HP (Nov 14 2026)
+    expect(v.fight.lines.map((l: { text: string }) => l.text)).toEqual(["Fries heals Chiplet +13 (a planned treat: half). It was at full HP, so that's +13 bonus HP."]);
+    expect([v.fight.heals, v.fight.hp, v.fight.bonus, v.fight.bonusMax]).toEqual([13, 120, 13, 24]);
     expect(v.run.liveScore).toBe(v.run.score + 5); // the walk was counted at the sync; the fries since
     expect(v.run.logPoints).toBe(5);
   });
@@ -694,6 +695,58 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     // the badges are the person on screen's, from their stored fights
     expect(hall.badges.map((x: { id: string }) => x.id)).toEqual(["first-blood", "flawless", "daredevil", "world-1", "comeback"]);
     expect((await b.call("GET", "/api/game/hall")).status).toBe(400);
+  });
+
+  it("Keep the monsters coming: off by default; on, the day's first open starts a run when none is going — once a day, in the last run's mode", async () => {
+    s = await scratch({}, GAME);
+    const b = await firstPerson();
+    const auto = async (today: string) => (await b.call("POST", "/api/game/auto", { today, now: "08:00" })).body;
+    const runs = () => s.handle.db.prepare("SELECT number, mode, end_reason FROM game_runs ORDER BY number").all();
+    // off: nothing starts, and the day is not used up (turning it on later today still works)
+    expect(await auto(T)).toEqual({ started: false, checked: false });
+    expect(runs()).toEqual([]);
+    expect((await b.call("PUT", "/api/me/settings", { autoStart: "yes" })).body.error).toBe("Keep the monsters coming is on or off.");
+    expect((await b.call("PUT", "/api/me/settings", { autoStart: true })).body.autoStart).toBe(true);
+    expect((await b.call("POST", "/api/game/auto", { today: "2200-01-01" })).status).toBe(400);
+    // on, with no run yet: run 1 starts (Normal), told as started by itself
+    await b.call("POST", "/api/activities", { what: "Long walk", minutes: 150, day: T, time: "07:00" });
+    const first = await auto(T);
+    expect(first.started).toBe(true);
+    expect(first.happened[0]).toMatchObject({ kind: "run_start", data: { number: 1, mode: "normal", auto: true } });
+    expect(first.happened[0].text).toBe("Run #1 started by itself (Normal): Keep the monsters coming is on. Crumbs is first.");
+    // fight 1 counts the whole of today: this morning's walk knocks Crumbs out at once
+    expect(first.happened.map((e: { kind: string }) => e.kind)).toContain("ko");
+    expect(first.view.fight).toMatchObject({ level: 2 });
+    // once a day: the same day again does nothing, and a run going means nothing starts
+    expect(await auto(T)).toEqual({ started: false, checked: true });
+    expect(await auto("2026-11-11")).toEqual({ started: false, checked: true });
+    expect(runs()).toEqual([{ number: 1, mode: "normal", end_reason: null }]);
+    // a Hardcore run that ended: the next day's first open starts run 2, Hardcore again
+    s.handle.db.prepare("UPDATE game_runs SET mode = 'hardcore', end_reason = 'defeated', ended_on = '2026-11-11'").run();
+    expect(await auto("2026-11-11")).toEqual({ started: false, checked: true }); // today was already looked at
+    const next = await auto("2026-11-12");
+    expect(next).toMatchObject({ started: true, view: { run: { number: 2, mode: "hardcore", active: true } } });
+    expect(runs()).toEqual([{ number: 1, mode: "hardcore", end_reason: "defeated" }, { number: 2, mode: "hardcore", end_reason: null }]);
+    // off again: nothing more
+    await b.call("PUT", "/api/me/settings", { autoStart: false });
+    s.handle.db.prepare("UPDATE game_runs SET end_reason = 'finished', ended_on = '2026-11-12' WHERE number = 2").run();
+    expect(await auto("2026-11-13")).toEqual({ started: false, checked: false });
+    expect(runs()).toHaveLength(2);
+  });
+
+  it("Keep the monsters coming waits a day after a run ends: a run still stored as going (its deadline just passed) is settled by the sync, not replaced", async () => {
+    s = await scratch({}, GAME);
+    const b = await firstPerson();
+    await b.call("POST", "/api/game/run", { mode: "hardcore", today: T });
+    await b.call("PUT", "/api/me/settings", { autoStart: true });
+    s.handle.db.prepare("UPDATE game_runs SET hearts = 1").run();
+    // Crumbs' deadline was Nov 12; on Nov 13 the stored run is still going, so nothing starts…
+    expect((await b.call("POST", "/api/game/auto", { today: "2026-11-13" })).body).toEqual({ started: false, checked: true });
+    // …and the sync brings the Defeated news
+    const synced = (await b.call("POST", "/api/game/sync", { today: "2026-11-13" })).body;
+    expect(synced.happened.map((e: { kind: string }) => e.kind).filter((k: string) => k !== "powerup_earned")).toEqual(["strike", "defeat"]); // (3 clean days earned a shield on the way)
+    expect((await b.call("POST", "/api/game/auto", { today: "2026-11-13" })).body.started).toBe(false);
+    expect((await b.call("POST", "/api/game/auto", { today: "2026-11-14" })).body).toMatchObject({ started: true, view: { run: { number: 2, mode: "hardcore" } } });
   });
 
   it("one person can't touch another person's run: each sees, syncs and changes only their own", async () => {

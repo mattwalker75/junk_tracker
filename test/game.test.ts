@@ -103,14 +103,32 @@ describe("damage and heals", () => {
     expect(heal(1, [S("snack", { planned: true })])).toBe(5);
     expect(heal(1, [S("meal", { planned: true })])).toBe(13);
     expect(heal(1, [S("feast", { planned: true })])).toBe(30);
-    // Crumbs at 60/100 eats a feast: it gains only the 40 it is missing
+    // Crumbs at 60/100 eats a feast: 40 fills it up, the extra goes on as bonus HP — capped at 20 (20% of 100)
     const r = fight(1, { splurges: [S("feast")], activities: [A(40, { time: "06:00" })] });
-    expect(r.hp).toBe(100);
-    expect(r.heals).toBe(40);
-    expect(r.lines.find((l) => l.kind === "heal")?.text).toMatch(/nearly full/);
+    expect([r.hp, r.bonus, r.bonusMax, r.heals]).toEqual([100, 20, 20, 60]);
+    const line = r.lines.find((l) => l.kind === "heal")!;
+    expect([line.amount, line.bonus]).toEqual([60, 20]);
+    expect(line.text).toBe("Treat heals Crumbs +60. It fills up, and the extra 20 is bonus HP (the bonus bar is full).");
     // a heal at full HP still counts as landed (not flawless)
     expect(fight(1, { splurges: [S("snack")] }).flawless).toBe(false);
     expect(fight(1, { activities: [A(10)] }).flawless).toBe(true);
+  });
+
+  it("bonus HP: a heal past full goes on top, up to 20% of max HP; damage takes it off first (Matt, Nov 14 2026)", () => {
+    // Crumbs (100 HP) eats a Feast at full: +20 bonus HP (the cap), the rest is lost
+    const f = fight(1, { splurges: [S("feast", { time: "08:00" })] });
+    expect([f.hp, f.bonus, f.bonusMax, f.heals, f.flawless]).toEqual([100, 20, 20, 20, false]);
+    expect(f.lines[0].text).toBe("Treat heals Crumbs +20. It was at full HP, so that's +20 bonus HP (the bonus bar is full).");
+    // a 30-minute walk after it: 20 off the bonus HP, then 10 off the HP
+    expect(fight(1, { splurges: [S("feast", { time: "08:00" })], activities: [A(30, { time: "09:00" })] })).toMatchObject({ hp: 90, bonus: 0, damage: 30 });
+    // after a Snack at full, 100 minutes no longer finishes Crumbs: the 10 bonus HP has to go too
+    expect(fight(1, { splurges: [S("snack", { time: "08:00" })], activities: [A(100, { time: "09:00" })] })).toMatchObject({ hp: 10, bonus: 0, ko: null });
+    expect(fight(1, { splurges: [S("snack", { time: "08:00" })], activities: [A(110, { time: "09:00" })] }).ko).not.toBeNull();
+    // full HP and a full bonus bar: nothing more lands
+    const maxed = fight(1, { splurges: [S("feast", { id: "a", time: "08:00" }), S("snack", { id: "b", time: "09:00" })] });
+    expect(maxed.lines[1]).toMatchObject({ amount: 0, text: "Crumbs is at full HP with a full bonus bar, so that heals nothing." });
+    // the final boss's cap is 20% of 1,280
+    expect(fight(60, { splurges: [S("feast", { time: "12:00" })] })).toMatchObject({ hp: 1280, bonus: 60, bonusMax: 256 });
   });
 
   it("comeback: the first workout after a day with no activity does ×2 — the day before the fight counts too", () => {
@@ -129,8 +147,9 @@ describe("damage and heals", () => {
     // a splurge outside the fight's part-day still makes the calendar day not clean
     expect(fight(60, { today: day(1), startedAfter: `${D}T15:00:00.000Z`, splurges: [S("snack", { createdAt: `${D}T08:00:00.000Z`, time: "08:00" })] }).hp).toBe(1280);
     // the deadline's last day lands its crit once it is over
+    // (the two snacks at full HP go on as 20 bonus HP, which the crit takes off first)
     const lastDay = fight(1, { today: day(3), splurges: [S("snack"), S("snack", { day: day(1) })] });
-    expect(lastDay.hp).toBe(75);
+    expect([lastDay.hp, lastDay.bonus]).toEqual([95, 0]);
   });
 
   it("which entries count: the window only; on a part-day only what was made after the fight began; backdated ones in the window count", () => {
@@ -302,8 +321,9 @@ describe("abilities: one test each (at least)", () => {
 
   it("Fluffnado: a Feast blows away your next clean-day crit", () => {
     expect(fight(26, { splurges: [S("feast")], today: day(2) }).hp).toBe(480);
-    expect(fight(26, { splurges: [S("snack")], today: day(2) }).hp).toBe(455);
-    expect(fight(26, { splurges: [S("feast")], today: day(3) }).hp).toBe(455); // only the next one
+    // (a splurge at full HP is bonus HP: the snack's 10 and the feast's 60 soak up crit damage first)
+    expect(fight(26, { splurges: [S("snack")], today: day(2) }).hp).toBe(480 - 15);
+    expect(fight(26, { splurges: [S("feast")], today: day(3) })).toMatchObject({ hp: 480, bonus: 60 - 25 }); // only the next one
     covers(26);
   });
 
@@ -431,7 +451,7 @@ describe("abilities: one test each (at least)", () => {
   });
 
   it("Cheesecake Knight: after each splurge, the next workout does 15 less", () => {
-    expect(dmg(59, [A(30, { time: "10:00" }), A(30, { time: "11:00" })], { splurges: [S("snack", { time: "09:00" })] })).toBe(15 + 30);
+    expect(fight(59, { activities: [A(30, { time: "10:00" }), A(30, { time: "11:00" })], splurges: [S("snack", { time: "09:00" })] }).damage).toBe(15 + 30);
     covers(59);
   });
 
@@ -633,8 +653,8 @@ describe("Stage 4 review fixes", () => {
   });
 
   it("splurges of the KO day go to one fight too; a potion KO splits the day at the potion; a crit KO gives the next fight the whole next day", () => {
-    const hit = A(100, { id: "hit", time: "10:00", createdAt: `${D}T10:00:00.000Z` });
-    const before = S("meal", { id: "early", time: "09:00", createdAt: `${D}T21:00:00.000Z` }); // logged late, healed Crumbs
+    const hit = A(120, { id: "hit", time: "10:00", createdAt: `${D}T10:00:00.000Z` });
+    const before = S("meal", { id: "early", time: "09:00", createdAt: `${D}T21:00:00.000Z` }); // logged late, healed Crumbs (20 bonus HP)
     const after = S("snack", { id: "late", time: "", createdAt: `${D}T08:00:00.000Z` }); // made early, but no time: after the KO
     const log = logOf([before, after], [warm, hit, A(25, { id: "more", time: "11:00" })]);
     const out = settle(run(), log, clock(D));

@@ -1,7 +1,7 @@
 /** Craving Crusher's screen words (web/src/game/logic.ts): the countdown, "So close!", the deadline cards, the battle log rows and the live panels. */
 import { describe, expect, it } from "vitest";
 import { addDays, deadlineFor, type ActivityEv, type FightInput, type SplurgeEv } from "../shared/game/index.js";
-import { attackPanel, betPlan, countdown, dayExample, healPanel, lineRow, mixFor, previewStamp, savedText, shortDate, sizeHeals, soClose } from "../web/src/game/logic";
+import { attackPanel, betPlan, countdown, dayExample, healPanel, hpShort, hpText, lineRow, mixFor, previewStamp, savedText, shortDate, sizeHeals, soClose } from "../web/src/game/logic";
 
 const D = "2026-11-10"; // a Tuesday
 const A = (id: string, minutes: number | null, o: Partial<ActivityEv> = {}): ActivityEv =>
@@ -132,15 +132,32 @@ describe("the live heal panel (Log a splurge, game skin)", () => {
   it("no size yet asks for one; each size's badge shows its heal", () => {
     expect(healPanel(hydra(), splurge(null)).state).toBe("none");
     expect(sizeHeals(hydra(), splurge(null))).toEqual({ snack: "+10 heal", meal: "+35 heal", feast: "+60 heal" });
-    expect(sizeHeals(hydra({ activities: [] }), splurge(null)).meal).toBe("full HP");
+    // at full HP every size goes on as bonus HP, up to 50 (20% of 250)
+    expect(sizeHeals(hydra({ activities: [] }), splurge(null))).toEqual({ snack: "+10 bonus", meal: "+35 bonus", feast: "+50 bonus" });
   });
   it("a Veggie Shield that is up blocks it", () => {
     const p = healPanel(hydra({ shieldFrom: "start" }), splurge("feast"));
     expect(p.state).toBe("blocked");
     expect(p.heal).toBe(0);
   });
-  it("at full HP it heals nothing", () => {
-    expect(healPanel(hydra({ activities: [] }), splurge("snack")).state).toBe("full");
+  it("at full HP it goes on as bonus HP (Nov 14 2026); with the bonus bar full too, it heals nothing", () => {
+    const full = healPanel(hydra({ activities: [] }), splurge("meal"));
+    expect(full).toMatchObject({ state: "heal", heal: 35, bonus: 35, hpBefore: 250, hpAfter: 285, bonusMax: 50 });
+    expect(full.line).toBe("Fry Hydra heals +35 (Regrow). It's at full HP, so it all goes on as bonus HP.");
+    // at 230 / 250 a Feast fills the last 20 and puts the other 40 on as bonus HP
+    const near = healPanel(hydra({ activities: [A("warm", null, { day: addDays(D, -1) }), A("big", 20)] }), splurge("feast"));
+    expect(near).toMatchObject({ state: "heal", heal: 60, bonus: 40, hpBefore: 230, hpAfter: 290 });
+    expect(near.line).toBe("Fry Hydra heals +60. The extra 40 goes on as bonus HP.");
+    const maxed = hydra({ activities: [], splurges: [{ id: "pizza", what: "Pizza", day: D, time: "12:00", size: "feast", planned: false, createdAt: `${D}T12:00:00.000Z` }] });
+    expect(healPanel(maxed, splurge("snack"))).toMatchObject({ state: "full", heal: 0, hpBefore: 300 });
+    expect(sizeHeals(maxed, splurge(null)).snack).toBe("maxed out");
+    // a workout takes the bonus HP off first
+    const hit = attackPanel(maxed, workout(30, null));
+    expect([hit.hpBefore, hit.hpAfter, hit.dmg]).toEqual([300, 240, 60]);
+  });
+  it("HP with bonus HP on the screens", () => {
+    expect([hpText(92, 250), hpText(270, 250), hpText(270, 250, "/"), hpShort(92, 250), hpShort(270, 250), hpText(-4, 100)]).toEqual(["92 / 250", "250 / 250 +20", "250/250 +20", "92", "250+20", "0 / 100"]);
+    expect(betPlan({ bet: 1, deadlineOn: D }, { hp: 250, bonus: 50, max: 250, boss: false }, D, false).perDay).toBe(300);
   });
 });
 

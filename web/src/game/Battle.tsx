@@ -13,11 +13,11 @@ import { useActions } from "../lib/actions";
 import { nowTime } from "../lib/dates";
 import { Arena, Clock, worldLook } from "./art";
 import { Ability, HeartBroken, HeartFull, HeartPlus, IconBlock, IconCrit, IconHeal, IconHit, Potion, Shield, Skull, Star, Sword, Target, Wind } from "./icons";
-import { countdown, lineRow, soClose, type LineIcon } from "./logic";
+import { countdown, hpLeft, lineRow, soClose, type LineIcon } from "./logic";
 import { levelInfo } from "../../../shared/game";
 import { Burst, Confetti } from "./art";
 import { MapIcon } from "./icons";
-import { GameBg, GameHeader, GameNote, Hearts, Monster } from "./parts";
+import { GameBg, GameHeader, GameNote, Hearts, HpBar, HpNumbers, Monster } from "./parts";
 import { applyResult, markShown, useGame, useResults, type QueuedResult } from "./state";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
@@ -128,26 +128,26 @@ function useScene(head: QueuedResult | null): { kind: "ko" | "strike"; level: nu
 
 function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightView; today: string; head: QueuedResult | null }) {
   const act = useActions();
-  const so = soClose(fight.hp);
+  const left = hpLeft(fight);
+  const so = soClose(left);
   const look = worldLook(fight.world);
 
-  // the monster reacts when its HP changes while you watch (a save, a sync)
+  // the monster reacts when its HP (bonus HP included) changes while you watch (a save, a sync)
   const last = useRef<{ id: string; hp: number } | null>(null);
   const [fx, setFx] = useState<Fx>(null);
   useEffect(() => {
     const prev = last.current;
-    last.current = { id: fight.id, hp: fight.hp };
-    if (!prev || prev.id !== fight.id || prev.hp === fight.hp) return;
+    last.current = { id: fight.id, hp: left };
+    if (!prev || prev.id !== fight.id || prev.hp === left) return;
     const n = Date.now();
-    setFx({ kind: fight.hp < prev.hp ? "hit" : "heal", amount: Math.abs(fight.hp - prev.hp), n });
+    setFx({ kind: left < prev.hp ? "hit" : "heal", amount: Math.abs(left - prev.hp), n });
     const t = window.setTimeout(() => setFx((f) => (f?.n === n ? null : f)), 1200);
     return () => window.clearTimeout(t);
-  }, [fight.id, fight.hp]);
+  }, [fight.id, left]);
   const scene = useScene(head);
   const struck = scene?.kind === "strike";
   const ko = scene?.kind === "ko" ? levelInfo(scene.level) : null;
   const strikeBy = struck ? levelInfo(scene.level) : null;
-  const pct = ko ? 0 : Math.max(0, Math.min(100, (fight.hp / fight.max) * 100));
 
   return (
     <main className="relative min-h-dvh pb-2">
@@ -178,13 +178,10 @@ function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightVie
         <div className="absolute inset-x-2.5 top-2 flex flex-col gap-1">
           <div className="flex items-end justify-between gap-2">
             <span className="g-stroke truncate font-game text-2xl leading-none" style={{ textShadow: "0 2px 0 #2b1d3a" }}>{ko?.name ?? strikeBy?.name ?? fight.name}</span>
-            <span className="g-stroke-thin shrink-0 text-base font-black">{ko ? `HP 0 / ${ko.hp}` : strikeBy ? `HP ${strikeBy.hp} / ${strikeBy.hp}` : `HP ${fight.hp} / ${fight.max}`}</span>
+            <span className="g-stroke-thin shrink-0 text-base font-black">{ko ? `HP 0 / ${ko.hp}` : strikeBy ? `HP ${strikeBy.hp} / ${strikeBy.hp}` : <>HP <HpNumbers hp={fight.hp} max={fight.max} bonus={fight.bonus} /></>}</span>
           </div>
-          <div role="progressbar" aria-label={`${fight.name} hit points`} aria-valuemin={0} aria-valuemax={fight.max} aria-valuenow={fight.hp}
-            className="relative box-content h-[18px] overflow-hidden rounded-full border-[3px] border-[#2b1d3a] bg-[#3a2238]">
-            <div className="h-full rounded-full shadow-[inset_0_-4px_0_rgba(0,0,0,.18)] transition-[width,background] duration-500" style={{ width: `${pct}%`, background: fx?.kind === "heal" ? "#ff4d6d" : "#ff7a2f" }} />
-            <div className="absolute inset-x-1.5 top-[3px] h-1 rounded bg-white opacity-35" />
-          </div>
+          <HpBar label={`${fight.name} hit points`} max={fight.max} value={ko ? 0 : left}
+            fill={fx?.kind === "heal" ? "#ff4d6d" : "#ff7a2f"} fillClass="rounded-full shadow-[inset_0_-4px_0_rgba(0,0,0,.18)]" />
           <div className="mt-0.5 flex items-center justify-between gap-2">
 {scene ? <span /> : <span className="inline-flex max-w-[80%] -rotate-2 items-center gap-1.5 rounded-full bg-[#2b1d3a] py-[3px] pr-2.5 pl-1 text-xs font-black text-g-yellow shadow-[0_3px_0_rgba(43,29,58,.35)]">
               <Ability className="size-[22px] shrink-0" />
@@ -235,7 +232,7 @@ function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightVie
       <section aria-label="Battle log" className="g-panel mx-3 mt-2.5 mb-2 px-2.5 pt-1 pb-1">
         <div className="flex items-baseline justify-between">
           <h2 className="font-game text-[17px] font-normal">Battle log</h2>
-          <span className="text-xs font-black text-g-mute">{fight.hp} / {fight.max} HP</span>
+          <span className="text-xs font-black text-g-mute"><HpNumbers hp={fight.hp} max={fight.max} bonus={fight.bonus} /> HP</span>
         </div>
         {fight.lines.length ? (
           <ul className="mt-0.5 flex flex-col">

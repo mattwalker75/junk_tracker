@@ -4,8 +4,8 @@
  * numbers come from logic.ts, which runs the shared engine's preview().
  */
 import { cx } from "../components/ui";
-import type { AttackPanel, HealPanel } from "./logic";
-import { Monster } from "./parts";
+import { hpShort, hpText, type AttackPanel, type HealPanel } from "./logic";
+import { HpBar, Monster } from "./parts";
 
 function Thumb({ slug, name, pose, motion }: { slug: string; name: string; pose: "normal" | "hurt"; motion: "idle" | "still" | "heal" }) {
   return (
@@ -16,27 +16,13 @@ function Thumb({ slug, name, pose, motion }: { slug: string; name: string; pose:
   );
 }
 
-function Bar({ label, max, rest, change, kind }: { label: string; max: number; rest: number; change: number; kind: "hit" | "heal" }) {
-  const pct = (v: number) => `${Math.max(0, Math.min(100, (v / max) * 100))}%`;
-  return (
-    <div role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={max} aria-valuenow={kind === "hit" ? rest : rest + change}
-      className="relative box-content h-[18px] overflow-hidden rounded-full border-[3px] border-[#2b1d3a] bg-[#3a2238]">
-      <div className="absolute inset-y-0 left-0 bg-g-orange transition-[width] duration-500" style={{ width: pct(rest) }} />
-      {change > 0 ? (
-        <div className="g-anim-blink absolute inset-y-0 transition-[left,width] duration-200"
-          style={{ left: pct(rest), width: pct(change), background: kind === "hit" ? "repeating-linear-gradient(135deg, #ffffff 0 4px, #ffc93c 4px 8px)" : "repeating-linear-gradient(135deg, #ff7a95 0 4px, #ff4d6d 4px 8px)" }} />
-      ) : null}
-      <div className="absolute inset-x-1.5 top-[3px] h-1 rounded bg-white opacity-30" />
-    </div>
-  );
-}
-
 const panelBox = "flex flex-col gap-2 rounded-[20px] border-[3px] border-[#2b1d3a] p-2.5 text-[#2b1d3a] shadow-[0_4px_0_var(--g-line)]";
 const panelBg = { background: "linear-gradient(180deg, #ffb877 0%, #ffd9a0 100%)" };
 const lineBox = "rounded-[13px] border-[2.5px] border-[#2b1d3a] px-2.5 py-2 text-sm leading-snug font-extrabold text-[#2b1d3a]";
 
 export function AttackPreview({ p, slug }: { p: AttackPanel; slug: string }) {
-  const hpLabel = p.state === "short" || p.state === "finish" ? `${p.hpBefore} → ${Math.max(0, p.hpAfter)}` : `${p.hpBefore} / ${p.max}`;
+  const hit = p.state === "short" || p.state === "finish";
+  const hpLabel = hit ? `${hpShort(p.hpBefore, p.max)} → ${hpShort(p.hpAfter, p.max)}` : hpText(p.hpBefore, p.max);
   return (
     <section aria-label="Damage preview" className={panelBox} style={panelBg}>
       <div className="flex items-center gap-2.5">
@@ -46,7 +32,7 @@ export function AttackPreview({ p, slug }: { p: AttackPanel; slug: string }) {
             <span className="g-stroke truncate font-game text-[22px] leading-none">{p.name}</span>
             <span className="shrink-0 text-sm font-black">{hpLabel}</span>
           </div>
-          <Bar label={`${p.name} hit points after this workout`} max={p.max} rest={Math.max(0, p.hpAfter)} change={p.state === "short" || p.state === "finish" ? Math.min(p.hpBefore, p.dmg) : 0} kind="hit" />
+          <HpBar label={`${p.name} hit points after this workout`} max={p.max} value={Math.max(0, p.hpAfter)} change={hit ? Math.min(p.hpBefore, p.dmg) : 0} kind="hit" fill="var(--g-orange)" />
           <span className="text-xs leading-tight font-extrabold text-[#5b2a10]">{p.formula}</span>
         </div>
       </div>
@@ -71,9 +57,9 @@ export function HealPreview({ p, slug }: { p: HealPanel; slug: string }) {
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <div className="flex items-baseline justify-between gap-1.5">
             <span className="g-stroke truncate font-game text-[22px] leading-none">{p.name}</span>
-            <span className="shrink-0 text-sm font-black">{healing ? `${p.hpBefore} → ${p.hpAfter}` : `${p.hpBefore} / ${p.max}`}</span>
+            <span className="shrink-0 text-sm font-black">{healing ? `${hpShort(p.hpBefore, p.max)} → ${hpShort(p.hpAfter, p.max)}` : hpText(p.hpBefore, p.max)}</span>
           </div>
-          <Bar label={`${p.name} hit points after this splurge`} max={p.max} rest={p.hpBefore} change={healing ? p.heal : 0} kind="heal" />
+          <HpBar label={`${p.name} hit points after this splurge`} max={p.max} value={p.hpBefore} change={healing ? p.heal : 0} kind="heal" fill="var(--g-orange)" />
           <span className="text-xs leading-tight font-extrabold text-[#5b2a10]">{p.formula}</span>
         </div>
       </div>

@@ -4,6 +4,27 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-11-14
+Craving Crusher: splurging at full HP now costs something, and a run can start by itself each day.
+
+### Added
+- 2026-11-14: **Bonus HP.** A splurge when the monster is already at full HP is no longer free:
+  what doesn't fit goes on as **bonus HP**, a violet bar laid over its HP bar, up to **20% of its
+  max HP** (20 for Crumbs). Workouts knock the bonus off first, and "So close!", the map, the
+  Monster Book and the live panels count it in the HP left. The size buttons show "+20 bonus", or
+  "maxed out" once the bonus bar is full. How to crush explains it.
+- 2026-11-14: **Keep the monsters coming** (Settings → You, off unless you turn it on). The first
+  time you open game mode each day, if your last run is over (or you never started one), a new run
+  starts by itself with Crumbs, in the same mode as your last one, and a note at the top says so.
+  When a run ends you still see how it went first; the new one starts the next day. (Inside a run
+  the next monster already started by itself the moment you beat one.)
+
+### Changed
+- 2026-11-14: The database goes to version 5 (one new column, for Keep the monsters coming). Your
+  first start after updating saves a copy first, as `junk.db.before-v5`.
+- 2026-11-14: The fight you are in now is worked out again with bonus HP, so a splurge you logged
+  at full HP during it now shows up as bonus HP. Fights already won or struck stay as they were.
+
 ## [1.0.0] — 2026-11-12
 Version 1.0.0: the tracker (splurges, activity, weight, goals) and Craving Crusher.
 

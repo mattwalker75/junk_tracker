@@ -10,8 +10,8 @@ import { abilityFor, bioFor, LEVELS, LEVELS_PER_WORLD, WORLDS, type FightView, t
 import { Sheet } from "../components/ui";
 import { worldMap } from "./art";
 import { Crown } from "./icons";
-import { countdown, shortDate } from "./logic";
-import { GameBg, GameHeader, GameNote } from "./parts";
+import { countdown, hpLeft, hpText, shortDate } from "./logic";
+import { GameBg, GameHeader, GameNote, HpBar } from "./parts";
 import { useGame } from "./state";
 
 const portrait = (slug: string) => `/monsters/${slug}.svg`;
@@ -97,8 +97,8 @@ function Card({ lv, status, fight, onOpen }: { lv: Level; status: MapStatus; fig
           <span className="text-[13px] leading-snug font-extrabold"><b className="font-black">{ab.name}:</b> {ab.text}</span>
           {fight ? (
             <>
-              <span className="text-[13px] font-black text-[#c2410c]">Fighting now: {fight.hp}/{fight.max} · {countdown(fight.deadlineOn, new Date()).big}</span>
-              <span className="mt-0.5 h-3 overflow-hidden rounded-full border-2 border-[#2b1d3a] bg-[#3a2238]"><span className="block h-full rounded-full bg-g-orange" style={{ width: `${(fight.hp / fight.max) * 100}%` }} /></span>
+              <span className="text-[13px] font-black text-[#c2410c]">Fighting now: {hpText(hpLeft(fight), fight.max, "/")} · {countdown(fight.deadlineOn, new Date()).big}</span>
+              <HpBar label={`${fight.name} hit points`} max={fight.max} value={hpLeft(fight)} fill="var(--g-orange)" className="mt-0.5 h-2 !border-2" gloss={false} />
             </>
           ) : null}
         </span>
@@ -124,7 +124,7 @@ function MonsterSheet({ lv, view, onClose }: { lv: Level | null; view: GameView 
           <p className="mt-1.5 text-[12px] font-black tracking-[0.06em]" style={{ color: worldMap(lv.world).ink }}>WORLD {lv.world} · {lv.worldName.toUpperCase()}{lv.boss ? " · BOSS" : ""}</p>
           <p className="mt-1 text-[17px] leading-snug font-extrabold italic">"{bioFor(lv.level)}"</p>
           <div className="mt-2.5 grid grid-cols-2 gap-2">
-            <div className="rounded-2xl border-[3px] border-g-line bg-g-panel-2 px-3 py-2"><span className="block text-[11px] font-black tracking-[0.06em] text-g-mute">HP</span><span className="font-game text-[24px]">{fight ? `${fight.hp} / ${fight.max}` : lv.hp}</span></div>
+            <div className="rounded-2xl border-[3px] border-g-line bg-g-panel-2 px-3 py-2"><span className="block text-[11px] font-black tracking-[0.06em] text-g-mute">HP</span><span className="font-game text-[24px]">{fight ? hpText(hpLeft(fight), fight.max) : lv.hp}</span></div>
             <div className="rounded-2xl border-[3px] border-g-line bg-g-panel-2 px-3 py-2"><span className="block text-[11px] font-black tracking-[0.06em] text-g-mute">DEADLINE</span><span className="font-game text-[24px]">{lv.days} days</span></div>
           </div>
           <div className="mt-2 rounded-2xl border-[3px] border-g-line bg-g-soft-yellow px-3 py-2">
@@ -132,7 +132,7 @@ function MonsterSheet({ lv, view, onClose }: { lv: Level | null; view: GameView 
             <span className="text-[15px] leading-snug font-bold">{ab.text}</span>
           </div>
           <p className="mt-2 rounded-xl border-2 border-g-line px-3 py-1.5 text-[14px] font-extrabold" style={{ background: status === "beaten" ? "var(--g-soft-green)" : status === "current" ? "var(--g-soft-yellow)" : "var(--g-panel-2)" }}>
-            {fight ? `Fighting now: ${fight.hp} HP to go, due ${shortDate(fight.deadlineOn)}.`
+            {fight ? `Fighting now: ${hpLeft(fight)} HP to go${fight.bonus ? ` (${fight.bonus} of it bonus HP)` : ""}, due ${shortDate(fight.deadlineOn)}.`
               : status === "beaten" ? `Beaten in Run #${view?.run?.number}${m?.bestPoints ? ` for ${m.bestPoints.toLocaleString("en-US")} points` : ""}.`
               : `Up ahead · Level ${lv.level}. You'll meet it after ${lv.level > 1 ? LEVELS[lv.level - 2].name : "starting a run"}.`}
           </p>

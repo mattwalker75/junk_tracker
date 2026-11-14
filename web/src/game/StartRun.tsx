@@ -10,7 +10,7 @@ import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
 import { go } from "../lib/route";
 import { Check, HeartFull, Info, PlayDark, ShieldBlue, Skull } from "./icons";
-import { dueText } from "./logic";
+import { dueText, hpLeft, hpText } from "./logic";
 import { GameBg, GameHeader } from "./parts";
 import { applyResult, startedRun, useGame } from "./state";
 
@@ -155,7 +155,7 @@ function Begins({ begun }: { begun: { number: number; mode: Mode; fight: FightVi
         </span>
         <span className="flex gap-1.5">{[0, 1, 2].map((i) => <HeartFull key={i} className="h-8 w-9" />)}</span>
         <img src={`/monsters/${lv.slug}.svg`} alt="" className="g-anim-bob w-[140px]" />
-        <span className="rounded-full border-[3px] border-g-line bg-[#fff7e6] px-3.5 py-1.5 text-sm font-black">{lv.name} · {f ? `${f.hp} / ${f.max} HP · due ${dueText(f.deadlineOn)}` : `${lv.hp} HP · ${lv.days}-day deadline`}</span>
+        <span className="rounded-full border-[3px] border-g-line bg-[#fff7e6] px-3.5 py-1.5 text-sm font-black">{lv.name} · {f ? `${hpText(hpLeft(f), f.max)} HP · due ${dueText(f.deadlineOn)}` : `${lv.hp} HP · ${lv.days}-day deadline`}</span>
         <span className="text-[13px] font-extrabold text-[#1a3d1f]">{begun.mode === "hardcore" ? "All points ×1.25 · no checkpoints · tap to go" : "A checkpoint at every world · tap to go"}</span>
       </button>
     </div>

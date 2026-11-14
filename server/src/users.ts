@@ -265,6 +265,7 @@ export class Users {
       // always six, whatever an older (or hand-edited) settings_json holds
       quickPicks: DEFAULT_QUICK_PICKS.map((_, i) => (Array.isArray(saved.quickPicks) ? String(saved.quickPicks[i] ?? "") : "")),
       openIn: saved.openIn === "game" ? "game" : "tracker",
+      autoStart: saved.autoStart === true,
     };
   }
 

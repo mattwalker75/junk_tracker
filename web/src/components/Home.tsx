@@ -31,7 +31,7 @@ export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean
       <header className="flex items-center justify-between px-5 pt-4 pb-2">
         <a href="#/" className="flex items-center gap-2.5">
           <img src="/icon.svg" alt="" className="size-8 rounded-lg" />
-          <span className="text-[17px] font-extrabold tracking-tight">Calorie Crusher</span>
+          <span className="text-[17px] font-extrabold tracking-tight">Craving Crusher</span>
         </a>
         {/* Goals, Settings and (with sign-in on) Sign out */}
         <UserMenu who={who} loginEnabled={loginEnabled} goals={q.data?.goals} />

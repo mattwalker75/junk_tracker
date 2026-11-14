@@ -33,7 +33,7 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 - Every log earns points.
 - A death restarts only the game. The tracker log is never touched.
 
-**Name:** Matt named the game **Craving Crusher** (Nov 11 2026); on Nov 14 2026 he renamed the whole app (it was Junk Tracker) and the game to **Calorie Crusher**. The other options were Snack Smackdown, Junk Monsters and Belly Brawl.
+**Name:** Matt named the game **Craving Crusher** (Nov 11 2026). On Nov 14 2026 the app (it was Junk Tracker) took the name **Craving Crusher** and the game became **Calorie Crusher**. The other options were Snack Smackdown, Junk Monsters and Belly Brawl.
 
 ## Later decisions (Nov 11 2026) — these override the older numbers below
 - **60 levels, 6 worlds × 10** (Matt: "push it to 60 levels", "more levels per world and increase the

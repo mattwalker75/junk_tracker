@@ -58,9 +58,9 @@ export function YouSettings() {
 
       <Card className="space-y-3 p-4">
         <h2 className="text-[15px] font-extrabold">When the app opens</h2>
-        <p className="text-sm text-mute">Where you land each time you open Calorie Crusher. You can still switch any time from the menu under your initials.</p>
+        <p className="text-sm text-mute">Where you land each time you open Craving Crusher. You can still switch any time from the menu under your initials.</p>
         {s ? (
-          <Segmented label="When the app opens" value={s.openIn} options={[["tracker", "Tracker"], ["game", "Game mode"]]} onChange={(v) => void save({ openIn: v })} />
+          <Segmented label="When the app opens" value={s.openIn} options={[["tracker", "Tracker"], ["game", "Calorie Crusher"]]} onChange={(v) => void save({ openIn: v })} />
         ) : <div className="h-11 animate-pulse rounded-xl bg-surface-2" />}
       </Card>
       <Card className="space-y-2 p-4">
@@ -69,7 +69,7 @@ export function YouSettings() {
           {s ? <Toggle label="Keep the monsters coming" checked={s.autoStart} onChange={(v) => void save({ autoStart: v })} /> : null}
         </div>
         <p className="text-sm text-mute">
-          With this on, the first time you open game mode each day, if no monster is going, the next one starts by itself — never on the same day you beat one (start it yourself if you want it sooner). If your last run is over (or you never started one), a new run starts with Crumbs, in the same mode as the last one; when a run ends, you see how it went first, and the new one starts the next day.
+          With this on, the first time you open Calorie Crusher each day, if no monster is going, the next one starts by itself — never on the same day you beat one (start it yourself if you want it sooner). If your last run is over (or you never started one), a new run starts with Crumbs, in the same mode as the last one; when a run ends, you see how it went first, and the new one starts the next day.
         </p>
       </Card>
       <Card className="space-y-3.5 p-4">

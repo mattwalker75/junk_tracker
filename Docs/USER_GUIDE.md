@@ -1,4 +1,4 @@
-# Calorie Crusher — user guide
+# Craving Crusher — user guide
 
 ## The first time
 Open the app (`./TRACKER.sh` opens http://localhost:8420). There is nothing to set up: it opens
@@ -46,7 +46,7 @@ Want other people on it, or a password? Settings → **Users and sign-in** (belo
    month (arrows for earlier months; days after today can't be picked).
 5. Optional: **Time** — empty to start; tap **Now** for the time right now, or pick one; **Clear**
    takes it off again. The tracker doesn't need it; in game mode a few monsters care about the time
-   of day (see *Game mode* below), and with no time they assume the worst.
+   of day (see *Calorie Crusher* below), and with no time they assume the worst.
 6. Optional: **Planned treat** — switch it on for a treat you planned ahead (a birthday dinner, a
    night out). It is still a splurge and counts on Home like any other; in game mode it heals the
    monster only half as much.
@@ -103,7 +103,7 @@ days with a weigh-in, then the month's
 splurge count, clean days and weight change, and the list of that month's splurges. Arrows move
 between months. Tap a day to open it.
 
-## Game mode
+## Calorie Crusher (game mode)
 A monster battle made from your own log. Workouts hit the monster, splurges feed it, and each
 monster has a deadline. It is just for fun: **the game never changes your log.** Everything you
 log in the game is a normal entry in the tracker, and the tracker looks and works the same whether
@@ -205,7 +205,7 @@ time, This month, My runs, Hardcore) and your badges. **How to crush** has every
 The **Monster Book** has all 60 monsters and their tricks.
 
 **If the game says "Your phone's date looks wrong"**, the phone's date is more than two days away
-from the computer running Calorie Crusher. Fix the date on the phone and try again.
+from the computer running Craving Crusher. Fix the date on the phone and try again.
 
 ## Settings
 Tap your initials at the top right of Home, then **Settings**. The same menu has **Goals**, and
@@ -219,7 +219,7 @@ usual example.
 things you do most (Hike, Peloton, Tennis…). Leave a box empty for the usual one (Walk, Run,
 Bike, Gym, Swim, Yoga).
 
-**When the app opens** — **Tracker** (Home) or **Game mode**. It only decides
+**When the app opens** — **Tracker** (Home) or **Calorie Crusher** (the game). It only decides
 where you land when you open the app; the menu under your initials still switches any time, and a
 bookmarked page opens where it points.
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# INSTALL_APP.sh — set up Calorie Crusher on this computer.
+# INSTALL_APP.sh — set up Craving Crusher on this computer.
 #
 # What it needs:
 #   REQUIRED  Node.js 22.12 or newer (npm comes with it) — installed with Homebrew if missing.
@@ -46,7 +46,7 @@ have() { command -v "$1" >/dev/null 2>&1; }
 # 22.12 or newer: the page builder (Vite) needs at least that
 node_new_enough() { node -e 'const [a,b]=process.versions.node.split(".").map(Number); process.exit(a>22||(a===22&&b>=12)?0:1)' 2>/dev/null; }
 
-echo "Calorie Crusher — install"; echo
+echo "Craving Crusher — install"; echo
 # ---- Node.js
 if have node && node_new_enough; then ok "Node.js $(node -v)"
 else
@@ -87,7 +87,7 @@ fi
 echo
 # a running copy keeps its old code until restarted
 if curl -fsS --max-time 2 "http://localhost:$(node -e "try{console.log(require('./config.json').server.port||8420)}catch{console.log(8420)}")/api/health" 2>/dev/null | grep -q '"app":"junk-tracker"'; then
-  warn "Calorie Crusher is running with the old version. Restart it to use the new one:  ./TRACKER.sh --restart"; exit 0
+  warn "Craving Crusher is running with the old version. Restart it to use the new one:  ./TRACKER.sh --restart"; exit 0
 fi
 echo "Next:  ./TRACKER.sh --start      (opens http://localhost:$(node -e "try{console.log(require('./config.json').server.port||8420)}catch{console.log(8420)}"))"
 exit 0

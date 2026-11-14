@@ -73,7 +73,7 @@ export interface UserSettings {
   examples: Record<Size, string>;
   /** the six quick picks on Log activity, in order; "" = the default (Walk, Run, Bike, Gym, Swim, Yoga) */
   quickPicks: string[];
-  /** where the app opens: the tracker (Home) or game mode (Matt, Nov 12 2026) */
+  /** where the app opens: the tracker (Home) or Calorie Crusher (Matt, Nov 12 2026) */
   openIn: "tracker" | "game";
   /**
    * Keep the monsters coming (Matt, Nov 14 2026): the first time game mode opens each day, if no run

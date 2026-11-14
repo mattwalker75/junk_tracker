@@ -150,7 +150,7 @@ export function openDatabase(file: string): Database.Database {
   const at = db.pragma("user_version", { simple: true }) as number;
   if (at > SCHEMA_VERSION) {
     db.close();
-    throw new Error(`${file} was made by a newer Calorie Crusher (database version ${at}; this copy knows ${SCHEMA_VERSION}). Update the app.`);
+    throw new Error(`${file} was made by a newer Craving Crusher (database version ${at}; this copy knows ${SCHEMA_VERSION}). Update the app.`);
   }
   // an upgrade (after a git pull, say) first keeps a copy of the file as it was, so going back to the
   // older app — which refuses a newer database — never strands anyone's log

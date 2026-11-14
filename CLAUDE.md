@@ -1,9 +1,9 @@
-# CLAUDE.md — working on Calorie Crusher
+# CLAUDE.md — working on Craving Crusher
 
-**Name** (Matt, Nov 14 2026): the app and its game mode are both **Calorie Crusher** (they were Junk
-Tracker and Craving Crusher). Only the names people see changed: the folder, `TRACKER.sh`,
-`INSTALL_APP.sh`, `JT_*` variables, `junk.db`, the package name and the health route's
-`"app":"junk-tracker"` stay as they are, so stop → git pull → start keeps working.
+**Names** (Matt, Nov 14 2026): the app is **Craving Crusher** (it was Junk Tracker) and its game mode
+is **Calorie Crusher** (it was Craving Crusher until then). Only the names people see changed: the
+folder, `TRACKER.sh`, `INSTALL_APP.sh`, `JT_*` variables, `junk.db`, the package name and the health
+route's `"app":"junk-tracker"` stay as they are, so stop → git pull → start keeps working.
 
 Read this before changing anything. `Docs/DEVELOPMENT.md` has the detail.
 
@@ -86,7 +86,7 @@ The person using it is not a developer — every message the page shows is a pla
     Delete) after the splurges, with **+ Splurge / + Activity**; the Splurges / Activity headings
     show the day's calories eaten / burned when any entry has them. Colours: the `active*` tokens.
     Not yet: goals that count activity (Matt: later).
-11. **Game mode — built** (Matt, Nov 11 2026; named Craving Crusher until Nov 14): a monster battle made from the
+11. **Game mode — built** (Matt, Nov 11 2026): **Calorie Crusher** (named Craving Crusher until Nov 14), a monster battle made from the
     person's own log, opened from the initials menu (**Game mode** / **Back to tracker**). What it does:
     `Docs/GAME_MODE.md`; how it is built and every reading taken: `Docs/game/ARCHITECTURE.md`; mockups
     are canvas rounds 5–7. Keep these:

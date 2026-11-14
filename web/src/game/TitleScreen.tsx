@@ -1,5 +1,5 @@
 /**
- * The title screen (mockup MonTitle, without the name picker: Matt named it Craving Crusher on Nov 11 2026; the whole app became Calorie Crusher on Nov 14).
+ * The title screen (mockup MonTitle, without the name picker: Matt named it Craving Crusher on Nov 11 2026, then Calorie Crusher on Nov 14 when the app took the name Craving Crusher).
  * Continue Run #N while a run is going, or Start a run; Monster Book, Hall of Heroes and How to
  * crush; the adventure map; the monsters peeking over the hill.
  */

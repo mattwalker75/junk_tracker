@@ -104,7 +104,7 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   const passwordLimiter = limit();
 
   // ---------------------------------------------------------------- open routes
-  // "app" lets the scripts tell Calorie Crusher from another program answering on the same port
+  // "app" lets the scripts tell Craving Crusher from another program answering on the same port
   app.get("/api/health", (_req, res) => { res.json({ ok: true, app: "junk-tracker", version: VERSION }); });
   app.get("/api/auth/me", h((req) => users.state(req)));
   // the look is needed before signing in, so the sign-in screen wears the same theme
@@ -205,7 +205,7 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
     app.use(express.static(web, { index: false, maxAge: "1h", setHeaders: (res, f) => { if (f.endsWith(".html")) res.setHeader("cache-control", "no-cache"); } }));
     app.get(/.*/, (_req, res) => { res.setHeader("cache-control", "no-cache"); res.sendFile(path.join(web, "index.html")); });
   } else {
-    app.get("/", (_req, res) => { res.type("text").send("Calorie Crusher's page is not built yet. Run ./TRACKER.sh --start (it builds it), or npm run build."); });
+    app.get("/", (_req, res) => { res.type("text").send("Craving Crusher's page is not built yet. Run ./TRACKER.sh --start (it builds it), or npm run build."); });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

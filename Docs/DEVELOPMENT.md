@@ -1,4 +1,4 @@
-# Calorie Crusher — development
+# Craving Crusher — development
 
 ## Layout
 ```

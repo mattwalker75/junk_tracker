@@ -1,4 +1,4 @@
-/** A scratch Calorie Crusher per test: its own config.json and database in a temp folder, on a spare port. */
+/** A scratch Craving Crusher per test: its own config.json and database in a temp folder, on a spare port. */
 import fs from "node:fs";
 import http from "node:http";
 import os from "node:os";

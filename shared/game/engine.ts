@@ -1,5 +1,5 @@
 /**
- * Craving Crusher's engine: works out a fight from the log, settles a run (KO → next fight, strike →
+ * Calorie Crusher's engine: works out a fight from the log, settles a run (KO → next fight, strike →
  * rematch, knock-back or defeat, weekly hearts, power-ups) and builds what the game screens show.
  * Pure: it never reads a clock or a database. The server (server/src/game.ts) loads a run, calls
  * these and stores what comes back; the page uses the same functions for its live previews.

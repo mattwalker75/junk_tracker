@@ -1,5 +1,5 @@
 /**
- * Craving Crusher's data model, used by the engine (pure), the server (which stores it) and the page.
+ * Calorie Crusher's data model, used by the engine (pure), the server (which stores it) and the page.
  * Days are the phone's days ("2026-11-11"); `at` times are the server's ISO clock, the same clock
  * as a log entry's `createdAt`, so the two can be compared.
  */

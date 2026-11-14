@@ -1,7 +1,7 @@
 /**
  * People, passwords and who a request is acting for.
  *
- * Like People Manager and the trading desk, Junk Tracker starts as ONE person with no sign-in:
+ * Like People Manager and the trading desk, Calorie Crusher starts as ONE person with no sign-in:
  *
  *  - Login OFF (the default): nobody signs in and there is one log. The first time the app is
  *    opened that person is made for you ("Me", no password; rename them in Settings).
@@ -117,10 +117,10 @@ export class Users {
 
   /** The login is on and nobody has a password: the first person gets a name and password, and this browser is them. */
   async setup(req: Request, name: unknown, password: unknown): Promise<AuthState> {
-    if (!this.loginOn() || this.anyPassword()) throw new UserError("Junk Tracker is already set up. Sign in, or add people in Settings → Users.", 409);
+    if (!this.loginOn() || this.anyPassword()) throw new UserError("Calorie Crusher is already set up. Sign in, or add people in Settings → Users.", 409);
     const u = this.all()[0] ?? this.first();
     this.signInAs(req, await this.nameAndPassword(u, name, password, () => {
-      if (this.anyPassword()) throw new UserError("Junk Tracker is already set up. Sign in, or add people in Settings → Users.", 409);
+      if (this.anyPassword()) throw new UserError("Calorie Crusher is already set up. Sign in, or add people in Settings → Users.", 409);
     }));
     return this.state(req);
   }
@@ -248,7 +248,7 @@ export class Users {
     const me = this.me(req);
     if (me?.id === id) throw new UserError("You cannot remove yourself. Switch to another person's sign-in to remove this one.", 409);
     if (!this.byId(id)) throw new UserError("That person no longer exists.", 404);
-    if (this.count() <= 1) throw new UserError("Junk Tracker needs at least one person.", 409);
+    if (this.count() <= 1) throw new UserError("Calorie Crusher needs at least one person.", 409);
     this.db.prepare("DELETE FROM users WHERE id = ?").run(id);
     if (session(req).actingAs === id) this.switchBack(req);
   }

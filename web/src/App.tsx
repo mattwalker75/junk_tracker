@@ -1,6 +1,6 @@
 /**
  * Which screen: create the first person, sign in, or the app (home, calendar, goals, settings, and
- * Craving Crusher's game pages) with its sheets. On game pages the log sheets wear the game skin.
+ * Calorie Crusher's game pages) with its sheets. On game pages the log sheets wear the game skin.
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";

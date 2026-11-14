@@ -1,4 +1,4 @@
-/** Craving Crusher stage 3's pure parts: bios, badges, the map's layout, the result queue and the Victory breakdown, the routes. */
+/** Calorie Crusher stage 3's pure parts: bios, badges, the map's layout, the result queue and the Victory breakdown, the routes. */
 import { describe, expect, it } from "vitest";
 import { badgesFor, BIOS, bioFor, LEVELS, wonPoints, type BadgeFight, type EventView, type MapLevel } from "../shared/game/index.js";
 import { bandTop, cardBox, mapNode, MAP_START, pathThrough, paths, trailEnd, worldLevels, worldNode, ALL_LEVELS } from "../web/src/game/layout";

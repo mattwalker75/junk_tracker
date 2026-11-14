@@ -1,4 +1,4 @@
-/** Craving Crusher's engine (shared/game): fights, abilities, settling a run, power-ups and points. Pure — no server. */
+/** Calorie Crusher's engine (shared/game): fights, abilities, settling a run, power-ups and points. Pure — no server. */
 import fs from "node:fs";
 import path from "node:path";
 import { afterAll, describe, expect, it } from "vitest";

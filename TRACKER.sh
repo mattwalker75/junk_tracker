@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# TRACKER.sh — run Junk Tracker.
+# TRACKER.sh — run Calorie Crusher.
 #
 # Usage:  ./TRACKER.sh [options…]     options run in the order given, e.g.  ./TRACKER.sh -x -s
 #
@@ -51,9 +51,9 @@ cfg() { node -e "try{const c=JSON.parse(require('fs').readFileSync(process.argv[
 port() { cfg server.port 8420; }
 url() { echo "http://localhost:$(port)"; }
 ENTRY="dist/node/server/src/index.js"
-# "is Junk Tracker answering?" — the health route says which app it is, so another program on the port is not mistaken for it
+# "is Calorie Crusher answering?" — the health route says which app it is, so another program on the port is not mistaken for it
 answering() { curl -fsS --max-time 2 "$(url)/api/health" 2>/dev/null | grep -q '"app":"junk-tracker"'; }
-# The copy this script knows about: its process must be alive AND be Junk Tracker. After a restart of
+# The copy this script knows about: its process must be alive AND be Calorie Crusher. After a restart of
 # the computer the number in the pid file can belong to some other program — never touch that.
 running() {
   [[ -f "$PIDFILE" ]] || return 1
@@ -61,7 +61,7 @@ running() {
   [[ "$pid" =~ ^[0-9]+$ ]] && kill -0 "$pid" 2>/dev/null && ps -p "$pid" -o command= 2>/dev/null | grep -qF "$ENTRY" && return 0
   rm -f "$PIDFILE"; return 1
 }
-# A copy started some other way (`npm start`): the process listening on the port, only when it really is Junk Tracker.
+# A copy started some other way (`npm start`): the process listening on the port, only when it really is Calorie Crusher.
 found_pid() {
   answering || return 1
   local pid; pid="$(lsof -nP -t -iTCP:"$(port)" -sTCP:LISTEN 2>/dev/null | head -n 1)"
@@ -77,7 +77,7 @@ needs_build() {
   [[ -n "$(find web/src web/index.html web/public server/src shared package.json package-lock.json vite.config.ts tsconfig.server.json web/tsconfig.json -newer dist/.built -print -quit 2>/dev/null)" ]]
 }
 build() {
-  info "Building Junk Tracker…"
+  info "Building Calorie Crusher…"
   if npm run build >"$HERE/data/build.log" 2>&1; then touch dist/.built; ok "Built."; else err "The build failed — see data/build.log"; tail -n 25 "$HERE/data/build.log"; return 1; fi
 }
 # After a git pull that changed the package list, install the packages again (npm keeps its own copy
@@ -104,7 +104,7 @@ cmd_check() {
   local db; db="$(cfg database.path ./data/junk.db)"
   [[ "$db" = /* ]] || db="$(dirname "$CONFIG")/${db#./}"   # relative paths are from the config file's folder, as the server reads them
   if [[ -f "$db" ]]; then ok "Database $db ($(du -h "$db" | cut -f1))"; else info "Database $db will be created on first start"; fi
-  if running; then ok "Junk Tracker is running — $(url)"; elif answering; then ok "Junk Tracker is running — $(url)   (not started by this script)"; else info "Junk Tracker is not running"; fi
+  if running; then ok "Calorie Crusher is running — $(url)"; elif answering; then ok "Calorie Crusher is running — $(url)   (not started by this script)"; else info "Calorie Crusher is not running"; fi
   return $rc
 }
 cmd_start() {
@@ -115,11 +115,11 @@ cmd_start() {
     return 0
   fi
   prereqs || return 1
-  if answering; then ok "Junk Tracker is already running at $(url) (not started by this script)."; return 0; fi
+  if answering; then ok "Calorie Crusher is already running at $(url) (not started by this script)."; return 0; fi
   nohup node "$ENTRY" >> "$LOG" 2>&1 & echo $! > "$PIDFILE"
   for _ in $(seq 1 40); do answering && break; kill -0 "$(cat "$PIDFILE")" 2>/dev/null || break; sleep 0.25; done
   if answering; then
-    ok "Junk Tracker is running — $(url)   (log: data/tracker.log)"
+    ok "Calorie Crusher is running — $(url)   (log: data/tracker.log)"
     [[ "$(cfg server.allowNetwork false)" == "true" ]] && info "Other devices: Settings → Network access lists the addresses."
     if [[ -z "${JT_NO_OPEN:-}" ]] && command -v open >/dev/null 2>&1; then open "$(url)"; fi
     return 0
@@ -147,7 +147,7 @@ cmd_logs() { touch "$LOG"; tail -n 60 -f "$LOG"; }
 cmd_fg() {
   running && { err "Already running (pid $(cat "$PIDFILE")); stop it first: ./TRACKER.sh -x"; return 1; }
   prereqs || return 1
-  answering && { err "Junk Tracker is already running at $(url); stop it first: ./TRACKER.sh -x"; return 1; }
+  answering && { err "Calorie Crusher is already running at $(url); stop it first: ./TRACKER.sh -x"; return 1; }
   # node takes over this very process, so --status, --stop and --restart know about it too
   echo $$ > "$PIDFILE"
   exec node "$ENTRY"

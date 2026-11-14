@@ -39,11 +39,11 @@ export function hostGuard(config: Config) {
 export function sameOriginWrites(req: Request, res: Response, next: NextFunction) {
   if (["GET", "HEAD", "OPTIONS"].includes(req.method)) return next();
   const site = req.headers["sec-fetch-site"];
-  if (site && site !== "same-origin" && site !== "none") { res.status(403).json({ error: "Changes must come from the Junk Tracker page itself." }); return; }
+  if (site && site !== "same-origin" && site !== "none") { res.status(403).json({ error: "Changes must come from the Calorie Crusher page itself." }); return; }
   const origin = req.headers.origin;
   if (origin) {
     let o: string; try { o = new URL(origin).host.toLowerCase(); } catch { o = ""; }
-    if (o !== String(req.headers.host || "").toLowerCase()) { res.status(403).json({ error: "Changes must come from the Junk Tracker page itself." }); return; }
+    if (o !== String(req.headers.host || "").toLowerCase()) { res.status(403).json({ error: "Changes must come from the Calorie Crusher page itself." }); return; }
   }
   next();
 }

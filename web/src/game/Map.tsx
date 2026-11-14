@@ -343,7 +343,7 @@ export function MapPage() {
         {selM && selBox ? <NodeCard m={selM} view={view} box={selBox} onClose={() => setSel(null)} /> : null}
       </div>
 
-      <Hud kicker={`CRAVING CRUSHER${run ? ` · RUN #${run.number}` : ""}`} title="Adventure map" back="#/game" run={run} today={today}>
+      <Hud kicker={`CALORIE CRUSHER${run ? ` · RUN #${run.number}` : ""}`} title="Adventure map" back="#/game" run={run} today={today}>
         <LevelBar map={map} />
       </Hud>
       <RunNote view={view} />

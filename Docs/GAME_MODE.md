@@ -1,4 +1,4 @@
-# Game mode — "Craving Crusher" (built Nov 11 2026)
+# Game mode — "Calorie Crusher" (built Nov 11 2026 as Craving Crusher)
 
 Notes from the Nov 11 2026 brainstorm with Matt. **It is built** (stages 1–4, Nov 11 2026): how is in
 [game/ARCHITECTURE.md](game/ARCHITECTURE.md), how to play is in [USER_GUIDE.md](USER_GUIDE.md). This
@@ -33,7 +33,7 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 - Every log earns points.
 - A death restarts only the game. The tracker log is never touched.
 
-**Name:** Matt named the game **Craving Crusher** (Nov 11 2026). The other options were Snack Smackdown, Junk Monsters and Belly Brawl.
+**Name:** Matt named the game **Craving Crusher** (Nov 11 2026); on Nov 14 2026 he renamed the whole app (it was Junk Tracker) and the game to **Calorie Crusher**. The other options were Snack Smackdown, Junk Monsters and Belly Brawl.
 
 ## Later decisions (Nov 11 2026) — these override the older numbers below
 - **60 levels, 6 worlds × 10** (Matt: "push it to 60 levels", "more levels per world and increase the

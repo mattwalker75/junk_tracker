@@ -4,6 +4,17 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-11-14
+### Changed
+- 2026-11-14: **New name: Calorie Crusher.** The app (was Junk Tracker) and its game mode (was
+  Craving Crusher) now share one name: the page title, the home screen, the sign-in screen,
+  Settings, the game's title logo and the small heading on every game screen. In Settings → You,
+  *When the app opens* now reads **Tracker / Game mode**. Your data, the scripts (`TRACKER.sh`) and
+  the folder are unchanged. A phone that added the app to its home screen keeps the old name until
+  you add it again.
+- 2026-11-14: *Keep the monsters coming* in Settings → You no longer says the next monster starts
+  the moment you beat one (it hasn't since 1.1.0).
+
 ## [1.2.0] — 2026-11-14
 Small tweaks: easier taps on Home, the week's activity in detail, and a battle log that reads
 newest first.

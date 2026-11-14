@@ -240,7 +240,7 @@ function Victory({ r, view }: { r: Extract<Result, { kind: "victory" }>; view: G
   const daysLeft = Number(d.daysLeft ?? 0);
   return (
     <>
-      <Top kicker={`CRAVING CRUSHER · RUN #${view.run?.number ?? ""}`} sub={`World ${lv.world} · ${lv.worldName} · Level ${lv.level} of 60`} />
+      <Top kicker={`CALORIE CRUSHER · RUN #${view.run?.number ?? ""}`} sub={`World ${lv.world} · ${lv.worldName} · Level ${lv.level} of 60`} />
       <KoScene level={lv.level} title={`${lv.name} defeated!`} replayKey={0}
         caption={`${fmt(Number(d.damage ?? 0))} damage in all${daysLeft ? `, with ${daysLeft} ${daysLeft === 1 ? "day" : "days"} to spare` : ", right on the deadline"}. Down it goes!`} />
       <Breakdown ko={r.ko} score={view.run?.liveScore ?? 0} />
@@ -299,7 +299,7 @@ function Strike({ r, view }: { r: Extract<Result, { kind: "strike" }>; view: Gam
   const slots = Math.max(START_HEARTS, before);
   return (
     <>
-      <Top kicker={`CRAVING CRUSHER · RUN #${run?.number ?? ""}`} sub={<><ClockSmall className="size-4" />Deadline passed · {dueText(r.strike.day)}</>} />
+      <Top kicker={`CALORIE CRUSHER · RUN #${run?.number ?? ""}`} sub={<><ClockSmall className="size-4" />Deadline passed · {dueText(r.strike.day)}</>} />
       <section className="relative mx-4 mt-3 h-[260px] overflow-hidden rounded-[24px] border-[3px] border-[#1a1024] shadow-[0_5px_0_#1a1024]">
         <Arena world={lv.world} className="g-art absolute inset-0 size-full" />
         <div aria-hidden className="absolute inset-0 bg-[#ff4d6d]/25" />
@@ -382,7 +382,7 @@ function Knockback({ r, view }: { r: Extract<Result, { kind: "knockback" }>; vie
     <>
       <header className="flex items-center gap-2 px-4 pt-3.5">
         <div className="flex min-w-0 flex-1 flex-col">
-          <span className="truncate font-game text-[12px] tracking-[0.08em] text-[#5a2a10]">CRAVING CRUSHER · RUN #{view.run?.number ?? ""}</span>
+          <span className="truncate font-game text-[12px] tracking-[0.08em] text-[#5a2a10]">CALORIE CRUSHER · RUN #{view.run?.number ?? ""}</span>
           <span className="flex items-center gap-1 text-[14px] font-black text-[#2b1d3a]"><HeartEmpty className="h-4 w-[18px]" /><HeartEmpty className="h-4 w-[18px]" /><HeartEmpty className="h-4 w-[18px]" /> 0 hearts left</span>
         </div>
         <span className="inline-flex h-[30px] items-center gap-1 rounded-full border-[3px] border-[#1a1024] bg-[#6ec6ff] px-2.5 font-game text-[13px] text-[#1a1024]">NORMAL</span>
@@ -519,7 +519,7 @@ function Defeat({ r, view, today }: { r: Extract<Result, { kind: "defeat" }>; vi
   const party = [levelInfo(2), levelInfo(5)].filter((p) => p.level !== lv.level);
   return (
     <>
-      <Top kicker="CRAVING CRUSHER · GAME OVER" sub={<><HeartEmpty className="h-4 w-[18px]" /><HeartEmpty className="h-4 w-[18px]" /><HeartEmpty className="h-4 w-[18px]" /> 0 hearts · {lv.name} took the last one</>} />
+      <Top kicker="CALORIE CRUSHER · GAME OVER" sub={<><HeartEmpty className="h-4 w-[18px]" /><HeartEmpty className="h-4 w-[18px]" /><HeartEmpty className="h-4 w-[18px]" /> 0 hearts · {lv.name} took the last one</>} />
       <h2 className="g-anim-pop mt-3 text-center font-game text-[56px] leading-none font-normal text-[#ff4d6d]" style={{ WebkitTextStroke: "7px #2b1d3a", paintOrder: "stroke fill", textShadow: "0 6px 0 #1a1024" }}>DEFEATED<span className="text-[#ffc93c]">!</span></h2>
       <p className="mx-5 mt-2 text-center text-[15px] leading-snug font-extrabold text-[#fff7e6]">The snacks win this round. {lv.name} kept your helmet, and honestly? It looks great on it.</p>
       <section className="relative mx-4 mt-3 h-[210px] overflow-hidden rounded-[24px] border-[3px] border-[#1a1024] shadow-[0_5px_0_#1a1024]" style={{ background: "linear-gradient(180deg, #ffb877, #ff9a5c 70%, #e8a66a 70%)" }}>
@@ -559,7 +559,7 @@ function Finish({ r, view, today }: { r: Extract<Result, { kind: "finish" }>; vi
   const ko = r.ko.kind === "ko" ? r.ko : null;
   return (
     <>
-      <Top kicker={`CRAVING CRUSHER · RUN #${run?.number ?? ""} · COMPLETE`} sub="All 60 levels, all 6 worlds" right={<Trophy className="h-8 w-9" />} />
+      <Top kicker={`CALORIE CRUSHER · RUN #${run?.number ?? ""} · COMPLETE`} sub="All 60 levels, all 6 worlds" right={<Trophy className="h-8 w-9" />} />
       {ko ? <KoScene level={LEVEL_COUNT} title="ALL 60 CRUSHED!" replayKey={0} caption="The Midnight Snacker shuffles back to bed. The fridge is safe. You did it!" /> : (
         <h2 className="mt-4 text-center font-game text-[44px] leading-none text-[#ffc93c]" style={{ WebkitTextStroke: "6px #2b1d3a", paintOrder: "stroke fill" }}>ALL 60 CRUSHED!</h2>
       )}

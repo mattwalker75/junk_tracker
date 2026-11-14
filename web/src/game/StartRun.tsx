@@ -54,7 +54,7 @@ export function StartRun() {
   return (
     <main className="relative flex min-h-dvh flex-col gap-3 pb-5">
       <GameBg background="radial-gradient(120% 50% at 50% 12%, #9be37f 0%, #4fae4a 42%, #2b6a3a 75%, #2b1d3a 100%)" />
-      <GameHeader kicker="CRAVING CRUSHER · NEW RUN" title={<span className="text-g-yellow">Start Run #{next}</span>} back={{ href: "#/game", label: "Back to the title screen" }} />
+      <GameHeader kicker="CALORIE CRUSHER · NEW RUN" title={<span className="text-g-yellow">Start Run #{next}</span>} back={{ href: "#/game", label: "Back to the title screen" }} />
 
       <section aria-label="Crumbs says hi" className="relative z-[2] flex h-32 items-end gap-1 px-4">
         <div className="relative h-[124px] w-[124px] shrink-0"><div className="g-anim-sway"><img src={`/monsters/${crumbs.slug}.svg`} alt="Crumbs" className="w-[124px]" /></div></div>

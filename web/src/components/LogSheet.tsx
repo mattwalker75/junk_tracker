@@ -4,7 +4,7 @@
  * Planned treat switch (Nov 11 2026: a treat you planned; in game mode it heals the monster half). Under each size: the person's own examples from
  * Settings, or the default ones. The same sheet edits a splurge (with Delete).
  *
- * Two skins, one form (Craving Crusher, Nov 11 2026): `skin="game"` on game pages restyles the same
+ * Two skins, one form (Calorie Crusher, Nov 11 2026): `skin="game"` on game pages restyles the same
  * fields in the same order with the same labels, and adds the live heal panel (the shared engine's
  * preview, so it matches the server: "Fry Hydra heals +35", a planned treat heals half) and the
  * heal each size would do. After a save or delete in game mode the game is synced.

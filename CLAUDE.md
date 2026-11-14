@@ -1,4 +1,9 @@
-# CLAUDE.md — working on Junk Tracker
+# CLAUDE.md — working on Calorie Crusher
+
+**Name** (Matt, Nov 14 2026): the app and its game mode are both **Calorie Crusher** (they were Junk
+Tracker and Craving Crusher). Only the names people see changed: the folder, `TRACKER.sh`,
+`INSTALL_APP.sh`, `JT_*` variables, `junk.db`, the package name and the health route's
+`"app":"junk-tracker"` stay as they are, so stop → git pull → start keeps working.
 
 Read this before changing anything. `Docs/DEVELOPMENT.md` has the detail.
 
@@ -14,7 +19,7 @@ The person using it is not a developer — every message the page shows is a pla
   passwords, sessions, Switch to, per-person settings; `app.ts` — routes and guards;
   `config.ts` — config.json; `security.ts` — Host guard, same-origin writes; `db.ts` — tables
   and migrations (`PRAGMA user_version`).
-- `shared/types.ts` — the data model used by both sides. `shared/game/` — Craving Crusher's pure engine
+- `shared/types.ts` — the data model used by both sides. `shared/game/` — Calorie Crusher's pure engine
   (levels, abilities, fights, points; tested in `test/game.test.ts`); `server/src/game.ts` stores runs.
 - `web/src/components/Home.tsx` (home), `GoalNote.tsx` (the sticky note on Home), `UserMenu.tsx`
   (the initials menu), `GoalsPage.tsx`, `GoalSheet.tsx`, `LogSheet.tsx`, `ActivitySheet.tsx` (Log activity), `WeighSheet.tsx`,
@@ -81,7 +86,7 @@ The person using it is not a developer — every message the page shows is a pla
     Delete) after the splurges, with **+ Splurge / + Activity**; the Splurges / Activity headings
     show the day's calories eaten / burned when any entry has them. Colours: the `active*` tokens.
     Not yet: goals that count activity (Matt: later).
-11. **Game mode — built** (Matt, Nov 11 2026): **Craving Crusher**, a monster battle made from the
+11. **Game mode — built** (Matt, Nov 11 2026; named Craving Crusher until Nov 14): a monster battle made from the
     person's own log, opened from the initials menu (**Game mode** / **Back to tracker**). What it does:
     `Docs/GAME_MODE.md`; how it is built and every reading taken: `Docs/game/ARCHITECTURE.md`; mockups
     are canvas rounds 5–7. Keep these:

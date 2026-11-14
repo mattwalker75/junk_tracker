@@ -17,7 +17,7 @@ export const ActionsContext = createContext<Actions>({ log: () => {}, activity: 
 export const useActions = () => useContext(ActionsContext);
 
 /**
- * Everything that reads the log, so one change refreshes every screen — Craving Crusher's view and
+ * Everything that reads the log, so one change refreshes every screen — Calorie Crusher's view and
  * the Hall of Heroes too: a workout logged on the tracker can KO the monster, and the game screens
  * read again (and sync) the next time they show.
  */

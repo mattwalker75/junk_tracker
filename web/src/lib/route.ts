@@ -1,6 +1,6 @@
 /**
  * A tiny hash router: #/ (home), #/calendar, #/calendar/2026-09, #/goals, #/settings, #/settings/users…
- * and Craving Crusher's #/game (title), #/game/start, #/game/battle, #/game/choose, #/game/map,
+ * and Calorie Crusher's #/game (title), #/game/start, #/game/battle, #/game/choose, #/game/map,
  * #/game/world/2, #/game/book, #/game/hall, #/game/how. The phone's back button works.
  */
 import { useEffect, useState } from "react";

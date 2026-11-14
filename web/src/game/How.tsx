@@ -25,7 +25,7 @@ export function How() {
   return (
     <main className="relative min-h-dvh pb-8">
       <GameBg background="linear-gradient(180deg, #6ec6ff 0%, #8fd3ff 40%, #bfe8c8 100%)" />
-      <GameHeader kicker="CRAVING CRUSHER · RULES" title="How to crush" back={{ href: "#/game", label: "Back to the title screen" }} />
+      <GameHeader kicker="CALORIE CRUSHER · RULES" title="How to crush" back={{ href: "#/game", label: "Back to the title screen" }} />
       <div role="tablist" aria-label="Rules" className="mx-4 mt-3 grid grid-cols-2 gap-1 rounded-[18px] bg-[#2b1d3a] p-1.5">
         {([["fight", "The fight"], ["points", "Points & power-ups"]] as const).map(([id, label]) => (
           <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)}

@@ -24,7 +24,7 @@ export function Book() {
   return (
     <main className="relative min-h-dvh pb-8">
       <GameBg background="linear-gradient(180deg, #6ec6ff 0%, #bfe8ff 18%, #fff3dc 40%, #ffe7bd 100%)" />
-      <GameHeader kicker="CRAVING CRUSHER" title="Monster Book" back={{ href: "#/game", label: "Back to the title screen" }} />
+      <GameHeader kicker="CALORIE CRUSHER" title="Monster Book" back={{ href: "#/game", label: "Back to the title screen" }} />
       {error ? <GameNote title="Hmm, that didn't load">{error.message}</GameNote> : null}
       <div className="g-panel mx-4 mt-2.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-2xl px-3.5 py-2 text-[14px] font-extrabold">
         <span><b className="font-black">{beaten} of 60</b> beaten{view?.run ? <> · <b className="font-black">Run #{view.run.number}</b></> : null}</span>

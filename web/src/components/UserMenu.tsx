@@ -1,7 +1,7 @@
 /**
  * The round button with your initials, top right of Home: a menu with Goals, Settings and — with
  * users and sign-in on — Sign out (Matt's pick, Oct 26 2026: Goals sits where people look for it).
- * Craving Crusher (mockup GameMenuSwitch, Nov 11 2026): on tracker pages **Game mode** (a gamepad)
+ * Calorie Crusher (mockup GameMenuSwitch, Nov 11 2026): on tracker pages **Game mode** (a gamepad)
  * sits above them all; on game pages the same menu wears the game's look and starts with **Back to
  * tracker**. There is no setting: the item is always there and the run waits until you start one.
  */

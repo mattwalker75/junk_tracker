@@ -1,5 +1,5 @@
 /**
- * Craving Crusher's pages under #/game, inside the `.game` root that carries the game's look: the
+ * Calorie Crusher's pages under #/game, inside the `.game` root that carries the game's look: the
  * title, Start a run, the battle, Choose your fight, the adventure map, a world up close, the
  * Monster Book, the Hall of Heroes and How to crush. What a sync settles (a KO, a strike…) comes up
  * over any of them (Results.tsx).

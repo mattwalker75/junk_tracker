@@ -7,7 +7,7 @@ import { SIZE_LABEL, type Size } from "../../../shared/types";
 export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
 
 /**
- * The look of a sheet's parts: "tracker" (the app as always) or "game" (Craving Crusher's chunky
+ * The look of a sheet's parts: "tracker" (the app as always) or "game" (Calorie Crusher's chunky
  * skin, the `.g-*` classes in index.css). One form, two skins: LogSheet and ActivitySheet set it,
  * and the pieces below (and DayPicker) read it, so the fields, their order and labels never differ.
  */
@@ -174,7 +174,7 @@ export function ActiveNotch({ size, on }: { size: Size | null; on: boolean }) {
  */
 export function Sheet({ open, onOpenChange, title, subtitle, children, actions, skin = "tracker", lead, titleNode }: {
   open: boolean; onOpenChange: (o: boolean) => void; title: string; subtitle?: ReactNode; children: ReactNode; actions?: ReactNode;
-  /** "game": Craving Crusher's chunky sheet; its children see the skin too */
+  /** "game": Calorie Crusher's chunky sheet; its children see the skin too */
   skin?: Skin;
   /** game skin: a badge before the title (the monster, a sword) */
   lead?: ReactNode;

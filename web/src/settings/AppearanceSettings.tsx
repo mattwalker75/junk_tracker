@@ -40,7 +40,7 @@ export function AppearanceSettings() {
   return (
     <>
       <Card className="px-4 py-1">
-        <p className="pt-3 pb-1 text-[13px] text-mute">The look is the same for everyone who uses Junk Tracker. System follows the phone or computer, including dark mode at night.</p>
+        <p className="pt-3 pb-1 text-[13px] text-mute">The look is the same for everyone who uses Calorie Crusher. System follows the phone or computer, including dark mode at night.</p>
         {BUILT_IN.map(([id, name, colors]) => (
           <button key={id} onClick={() => void save(id)} className="flex min-h-14 w-full items-center gap-3 border-b border-line py-2.5 text-left" aria-pressed={a.theme === id}>
             <Swatch colors={colors} /><span className="flex-1 font-semibold">{name}</span>

@@ -1,5 +1,5 @@
 /**
- * Craving Crusher's small drawings, from the approved mockups (thick #2b1d3a outlines, flat fills).
+ * Calorie Crusher's small drawings, from the approved mockups (thick #2b1d3a outlines, flat fills).
  * Each takes the usual SVG props (className for the size). The monsters themselves are files:
  * web/public/monsters/<slug>.svg, shown with <img> (see Monster in parts.tsx).
  */

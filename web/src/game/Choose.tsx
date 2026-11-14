@@ -39,7 +39,7 @@ export function Choose() {
         <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M15 6l-6 6 6 6" /></svg>
       </a>
       <div className="flex min-w-0 flex-1 flex-col">
-        <span className="font-game text-[10px] tracking-[0.1em] whitespace-nowrap text-[#c8b6e6]">CRAVING CRUSHER</span>
+        <span className="font-game text-[10px] tracking-[0.1em] whitespace-nowrap text-[#c8b6e6]">CALORIE CRUSHER</span>
         <h1 className="g-stroke truncate font-game text-xl leading-none font-normal">Choose your fight</h1>
       </div>
       {run ? (

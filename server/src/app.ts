@@ -104,7 +104,7 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   const passwordLimiter = limit();
 
   // ---------------------------------------------------------------- open routes
-  // "app" lets the scripts tell Junk Tracker from another program answering on the same port
+  // "app" lets the scripts tell Calorie Crusher from another program answering on the same port
   app.get("/api/health", (_req, res) => { res.json({ ok: true, app: "junk-tracker", version: VERSION }); });
   app.get("/api/auth/me", h((req) => users.state(req)));
   // the look is needed before signing in, so the sign-in screen wears the same theme
@@ -145,7 +145,7 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.post("/api/goals/:id/done", h((req) => goals.done(owner(req), param(req, "id"), req.body?.today)));
   app.post("/api/goals/:id/reopen", h((req) => goals.reopen(owner(req), param(req, "id"), req.body?.today)));
   app.delete("/api/goals/:id", h((req) => { goals.remove(owner(req), param(req, "id"), req.body?.today); }));
-  // Craving Crusher (game mode): the person on screen's run. GET never writes — it says needsSync,
+  // Calorie Crusher (game mode): the person on screen's run. GET never writes — it says needsSync,
   // and the page calls /sync, which settles KOs, strikes, hearts and power-ups up to the phone's today
   app.get("/api/game", h((req) => game.view(owner(req), req.query)));
   app.get("/api/game/hall", h((req) => game.hall(owner(req), req.query)));
@@ -205,7 +205,7 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
     app.use(express.static(web, { index: false, maxAge: "1h", setHeaders: (res, f) => { if (f.endsWith(".html")) res.setHeader("cache-control", "no-cache"); } }));
     app.get(/.*/, (_req, res) => { res.setHeader("cache-control", "no-cache"); res.sendFile(path.join(web, "index.html")); });
   } else {
-    app.get("/", (_req, res) => { res.type("text").send("Junk Tracker's page is not built yet. Run ./TRACKER.sh --start (it builds it), or npm run build."); });
+    app.get("/", (_req, res) => { res.type("text").send("Calorie Crusher's page is not built yet. Run ./TRACKER.sh --start (it builds it), or npm run build."); });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

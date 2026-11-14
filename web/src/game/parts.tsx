@@ -18,7 +18,7 @@ export function GameMenu() {
   return <UserMenu who={p.who} loginEnabled={p.loginEnabled} goals={undefined} place="game" />;
 }
 
-/** "CRAVING CRUSHER · WORLD 2 · LEVEL 11 OF 60" over a big outlined title, the menu on the right. */
+/** "CALORIE CRUSHER · WORLD 2 · LEVEL 11 OF 60" over a big outlined title, the menu on the right. */
 export function GameHeader({ kicker, title, back, children }: { kicker: string; title: ReactNode; back?: { href: string; label: string }; children?: ReactNode }) {
   return (
     <header className="relative z-30 flex items-center gap-2.5 px-4 pt-3">

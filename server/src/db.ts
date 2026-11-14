@@ -76,7 +76,7 @@ export const MIGRATIONS: readonly string[] = [
   );
   CREATE INDEX activities_user_day ON activities (user_id, day DESC, time DESC);
   `,
-  // 4 — Craving Crusher (Nov 11 2026): a planned treat on a splurge, and each person's game runs,
+  // 4 — Calorie Crusher (Nov 11 2026): a planned treat on a splurge, and each person's game runs,
   // their fights and what happened in them (Docs/game/ARCHITECTURE.md)
   `
   ALTER TABLE splurges ADD COLUMN planned INTEGER NOT NULL DEFAULT 0;
@@ -150,7 +150,7 @@ export function openDatabase(file: string): Database.Database {
   const at = db.pragma("user_version", { simple: true }) as number;
   if (at > SCHEMA_VERSION) {
     db.close();
-    throw new Error(`${file} was made by a newer Junk Tracker (database version ${at}; this copy knows ${SCHEMA_VERSION}). Update the app.`);
+    throw new Error(`${file} was made by a newer Calorie Crusher (database version ${at}; this copy knows ${SCHEMA_VERSION}). Update the app.`);
   }
   // an upgrade (after a git pull, say) first keeps a copy of the file as it was, so going back to the
   // older app — which refuses a newer database — never strands anyone's log

@@ -1,13 +1,13 @@
-# Junk Tracker — development
+# Calorie Crusher — development
 
 ## Layout
 ```
 server/src/   index.ts (listen) · app.ts (routes, guards) · config.ts · security.ts
               db.ts (tables, migrations) · users.ts (people, sessions, settings) · log.ts (splurges, activities, weigh-ins)
               goals.ts (each person's goal list)
-              game.ts (Craving Crusher: loads a run, calls the engine, stores what it settled)
+              game.ts (Calorie Crusher: loads a run, calls the engine, stores what it settled)
 shared/       types.ts — the data model both sides use
-              game/ — Craving Crusher's pure engine: levels, abilities, engine (fights, settling a run,
+              game/ — Calorie Crusher's pure engine: levels, abilities, engine (fights, settling a run,
               the view), score, badges, bios, days
 web/src/      App.tsx · components/ (Home, GoalNote, UserMenu, GoalsPage, GoalSheet, LogSheet, ActivitySheet, WeighSheet,
               DaySheet, CalendarPage, AuthScreen, ui) · fonts/ (Caveat, the goal note's handwriting)

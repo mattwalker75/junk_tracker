@@ -10,7 +10,7 @@
   src: url("./fonts/caveat-latin-700-normal.woff2") format("woff2");
 }
 
-/* Craving Crusher (game mode): Lilita One for the titles and Nunito for the words (both SIL Open Font
+/* Calorie Crusher (game mode): Lilita One for the titles and Nunito for the words (both SIL Open Font
    License — fonts/LilitaOne-OFL.txt, fonts/Nunito-OFL.txt), bundled like Caveat so nothing is fetched */
 @font-face { font-family: "Lilita One"; font-style: normal; font-weight: 400; font-display: swap; src: url("./fonts/lilita-one-latin-400-normal.woff2") format("woff2"); }
 @font-face { font-family: "Nunito"; font-style: normal; font-weight: 600; font-display: swap; src: url("./fonts/nunito-latin-600-normal.woff2") format("woff2"); }
@@ -206,7 +206,7 @@
 }
 
 /*
- * Craving Crusher (game mode). Everything below only applies inside a `.game` root — the game
+ * Calorie Crusher (game mode). Everything below only applies inside a `.game` root — the game
  * pages and the game-skinned sheets — so the tracker looks exactly as before. The palette is the
  * approved mockups' (rounds 6–7): thick dark outlines, flat bright fills, hard bottom shadows. Its
  * own light and dark: in dark the outlines get darker, the panels turn night purple, the bright

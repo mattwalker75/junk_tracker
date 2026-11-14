@@ -578,7 +578,7 @@ describe("planned treat (Nov 11 2026)", () => {
   });
 });
 
-describe("Craving Crusher (game mode, Nov 11 2026)", () => {
+describe("Calorie Crusher (game mode, Nov 11 2026)", () => {
   const T = "2026-11-10";
   /** this computer's date for the game's sanity check on the phone's day: the tests' days are near it */
   const GAME = { serverDay: () => "2026-11-12" };

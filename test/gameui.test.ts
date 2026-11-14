@@ -1,4 +1,4 @@
-/** Craving Crusher's screen words (web/src/game/logic.ts): the countdown, "So close!", the deadline cards, the battle log rows and the live panels. */
+/** Calorie Crusher's screen words (web/src/game/logic.ts): the countdown, "So close!", the deadline cards, the battle log rows and the live panels. */
 import { describe, expect, it } from "vitest";
 import { addDays, deadlineFor, simulateFight, type ActivityEv, type BattleLine, type FightInput, type SplurgeEv } from "../shared/game/index.js";
 import { attackPanel, battleLog, betPlan, countdown, dayExample, healPanel, hpShort, hpText, lineRow, mixFor, previewStamp, savedText, shortDate, sizeHeals, soClose } from "../web/src/game/logic";

@@ -18,7 +18,7 @@ export function DayPicker({ value, onChange, today, weekStart }: { value: Day; o
   // and a sheet reset to Today (it can open still holding last time's older day) closes it again
   useEffect(() => { setYm(monthOf(value)); setOpen(value !== today && value !== yesterday); }, [value, today, yesterday]);
 
-  // the game skin (Craving Crusher's sheets): the same choices, chunky
+  // the game skin (Calorie Crusher's sheets): the same choices, chunky
   const game = useSkin() === "game";
   const chip = (on: boolean) => game
     ? cx("g-btn min-h-[50px] flex-1 rounded-2xl px-1 text-base font-black", on ? "g-sunk bg-g-blue" : "bg-g-panel-2 text-g-text")

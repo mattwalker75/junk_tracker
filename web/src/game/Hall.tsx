@@ -36,7 +36,7 @@ export function Hall() {
           <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M15 6l-6 6 6 6" /></svg>
         </a>
         <div className="flex min-w-0 flex-1 flex-col">
-          <span className="font-game text-[12px] tracking-[0.08em] text-[#c8b6e6]">CRAVING CRUSHER</span>
+          <span className="font-game text-[12px] tracking-[0.08em] text-[#c8b6e6]">CALORIE CRUSHER</span>
           <h1 className="truncate font-game text-[30px] leading-none font-normal text-[#ffc93c]" style={{ WebkitTextStroke: "2.5px #1a1024", paintOrder: "stroke fill", textShadow: "0 3px 0 #1a1024" }}>Hall of Heroes</h1>
         </div>
         <GameMenu />

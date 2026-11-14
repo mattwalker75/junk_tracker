@@ -1,5 +1,5 @@
 /**
- * The title screen (mockup MonTitle, without the name picker: Matt named it Craving Crusher).
+ * The title screen (mockup MonTitle, without the name picker: Matt named it Craving Crusher on Nov 11 2026; the whole app became Calorie Crusher on Nov 14).
  * Continue Run #N while a run is going, or Start a run; Monster Book, Hall of Heroes and How to
  * crush; the adventure map; the monsters peeking over the hill.
  */
@@ -44,8 +44,8 @@ export function TitleScreen() {
       {/* the logo */}
       <div className="relative z-[3] mt-3.5 flex h-[200px] flex-col items-center justify-center">
         <LogoBurst className="absolute top-1.5 left-1/2 h-[190px] w-[330px] -translate-x-1/2" />
-        <h1 aria-label="Craving Crusher" className="relative m-0 flex -rotate-[4deg] flex-col items-center font-game leading-[0.92] font-normal">
-          <span className="block text-[50px] whitespace-nowrap text-g-yellow" style={{ WebkitTextStroke: "7px #2b1d3a", paintOrder: "stroke fill", textShadow: "0 5px 0 #2b1d3a, 0 7px 0 rgb(43 29 58 / .25)" }}>CRAVING</span>
+        <h1 aria-label="Calorie Crusher" className="relative m-0 flex -rotate-[4deg] flex-col items-center font-game leading-[0.92] font-normal">
+          <span className="block text-[50px] whitespace-nowrap text-g-yellow" style={{ WebkitTextStroke: "7px #2b1d3a", paintOrder: "stroke fill", textShadow: "0 5px 0 #2b1d3a, 0 7px 0 rgb(43 29 58 / .25)" }}>CALORIE</span>
           <span className="block text-[60px] whitespace-nowrap text-g-red" style={{ WebkitTextStroke: "9px #2b1d3a", paintOrder: "stroke fill", textShadow: "0 5px 0 #2b1d3a, 0 7px 0 rgb(43 29 58 / .25)" }}>CRUSHER</span>
         </h1>
         <span className="relative mt-2.5 -rotate-2 rounded-lg border-[3px] border-g-line bg-g-red px-3.5 py-1 text-[13px] font-black tracking-[0.03em] text-white shadow-[0_4px_0_var(--g-line)]">Every workout is a hit!</span>

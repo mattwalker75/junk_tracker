@@ -27,7 +27,7 @@ export function NetworkSettings() {
             <div className="font-bold">Allow other devices on my network</div>
             <p className="mt-0.5 text-[13px] leading-snug text-mute">{c.server.allowNetwork ? "On — phones and other computers on your network can open it." : "Off — only this computer can open it (127.0.0.1)."} Applies after a restart.</p>
           </div>
-          <Toggle label="Allow other devices on my network" checked={c.server.allowNetwork} onChange={(v) => void save({ server: { allowNetwork: v } }, "Saved. Restart Junk Tracker to apply it.")} />
+          <Toggle label="Allow other devices on my network" checked={c.server.allowNetwork} onChange={(v) => void save({ server: { allowNetwork: v } }, "Saved. Restart Calorie Crusher to apply it.")} />
         </div>
         {c.server.allowNetwork && !c.security.loginEnabled ? <p className="rounded-xl bg-warn-soft px-3 py-2 text-sm text-warn">Nobody is asked to sign in. Consider Settings → Users and sign-in.</p> : null}
         {q.data.networkUrls.length ? (
@@ -47,7 +47,7 @@ export function NetworkSettings() {
         <Field label="Port" hint="Applies after a restart; the address becomes http://localhost:<port>.">
           {(id) => <Input id={id} value={port} onChange={(e) => setPort(e.target.value.replace(/\D/g, ""))} inputMode="numeric" className="tabular w-32" />}
         </Field>
-        <Button className="w-full" onClick={() => void save({ server: { port: Number(port) } }, "Saved. Restart Junk Tracker to apply it.")}>Save port</Button>
+        <Button className="w-full" onClick={() => void save({ server: { port: Number(port) } }, "Saved. Restart Calorie Crusher to apply it.")}>Save port</Button>
       </Card>
     </>
   );

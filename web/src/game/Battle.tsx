@@ -91,7 +91,7 @@ function Shell({ children }: { children: ReactNode }) {
   return (
     <main className="relative min-h-dvh pb-6">
       <GameBg background={worldLook(2).page} />
-      <GameHeader kicker="CRAVING CRUSHER" title="Battle" back={{ href: "#/game", label: "Back to the title screen" }}><MapLink /></GameHeader>
+      <GameHeader kicker="CALORIE CRUSHER" title="Battle" back={{ href: "#/game", label: "Back to the title screen" }}><MapLink /></GameHeader>
       {children}
     </main>
   );

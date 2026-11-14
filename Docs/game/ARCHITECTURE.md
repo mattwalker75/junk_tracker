@@ -1,4 +1,4 @@
-# Craving Crusher: how it is built
+# Calorie Crusher: how it is built
 
 This file is the build plan. The rules and numbers come from `../GAME_MODE.md`, `LEVELS_60.md`,
 `MONSTERS.md` and `levels60.json`. The mockups are canvas rounds 6 and 7. Where this plan and those
@@ -269,7 +269,7 @@ Where this plan left the flow open, Stage 1 took these readings. All of them are
 - **Monster Book:** monsters up ahead show their full drawing with "Up ahead · Level N" (Matt wants
   to see the art). Their HP, deadline and ability are shown too, rather than the old "???".
 - **Map links:** the title screen has an **Adventure map** button, and the battle screen's header has
-  a map button. The battle header's kicker drops "CRAVING CRUSHER ·" to make room.
+  a map button. The battle header's kicker drops "CALORIE CRUSHER ·" to make room.
 - **Finish and Defeated** have a plain **Close** as well as "Start Run #N", so you can look at the
   map or the Hall first.
 

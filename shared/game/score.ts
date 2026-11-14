@@ -1,4 +1,4 @@
-/** Craving Crusher's points (Docs/game/ARCHITECTURE.md, "Points"). Pure. */
+/** Calorie Crusher's points (Docs/game/ARCHITECTURE.md, "Points"). Pure. */
 import type { Day } from "../types.js";
 import { daysBetween } from "./days.js";
 import type { Bet } from "./types.js";

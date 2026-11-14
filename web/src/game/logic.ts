@@ -1,5 +1,5 @@
 /**
- * Craving Crusher's words and numbers for the screens: the deadline countdown, the "So close!"
+ * Calorie Crusher's words and numbers for the screens: the deadline countdown, the "So close!"
  * nudge, the deadline cards on Choose your fight, the battle log rows and the live damage or heal
  * panel in the game-skinned sheets. Pure (tested in test/gameui.test.ts). The panel numbers come
  * from the shared engine's `preview()`, so they are what the server will do.

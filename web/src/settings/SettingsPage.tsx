@@ -31,7 +31,7 @@ export function SettingsPage({ section, state }: { section: string | null; state
       <div className="space-y-3 px-4 pb-8">
         {app.data?.restartRequired.length ? (
           <p role="status" className="rounded-xl bg-warn-soft px-3.5 py-2.5 text-sm text-warn">
-            Saved. Restart Junk Tracker for the change to take effect: <code className="font-mono font-semibold">./TRACKER.sh --restart</code>
+            Saved. Restart Calorie Crusher for the change to take effect: <code className="font-mono font-semibold">./TRACKER.sh --restart</code>
           </p>
         ) : null}
         {sub === "appearance" ? <AppearanceSettings /> : null}
@@ -111,7 +111,7 @@ function About() {
   if (!app.data) return null;
   return (
     <Card className="space-y-3 p-4 text-sm">
-      <div><div className="font-bold">Junk Tracker {app.data.version}</div><div className="text-mute">Track only your junk food and your weight.</div></div>
+      <div><div className="font-bold">Calorie Crusher {app.data.version}</div><div className="text-mute">Track your junk food, activity and weight.</div></div>
       <div><div className="text-xs font-bold text-mute">Settings file</div><div className="font-mono text-[13px] [overflow-wrap:anywhere]">{app.data.configFile}</div></div>
       <div><div className="text-xs font-bold text-mute">Database</div><div className="font-mono text-[13px] [overflow-wrap:anywhere]">{app.data.databaseFile}</div>
         <div className="mt-1 text-mute">One SQLite file holds every person's log. To back it up, copy it (with the app stopped: <code className="font-mono">./TRACKER.sh --stop</code>).</div></div>

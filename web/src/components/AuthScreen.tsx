@@ -31,7 +31,7 @@ export function AuthScreen({ mode }: { mode: "setup" | "signin" }) {
       <div className="mb-6 flex items-center gap-3">
         <img src="/icon.svg" alt="" className="size-11 rounded-xl" />
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight">Junk Tracker</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight">Calorie Crusher</h1>
           <p className="text-sm text-mute">{setup ? "Let's set you up." : "Sign in to your log."}</p>
         </div>
       </div>

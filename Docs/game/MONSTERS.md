@@ -1,4 +1,4 @@
-# Craving Crusher — the 44 newer monsters' abilities
+# Calorie Crusher — the 44 newer monsters' abilities
 
 The first 16 monsters' abilities are in `../GAME_MODE.md`. Levels, HP and deadlines for all 60 are
 in `LEVELS_60.md` and `levels60.json`. The art is in `monsters/*.svg`: viewBox 0 0 200 200,

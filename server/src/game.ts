@@ -1,5 +1,5 @@
 /**
- * Craving Crusher on the server: loads a person's run from the database, hands it to the pure
+ * Calorie Crusher on the server: loads a person's run from the database, hands it to the pure
  * engine (shared/game) and stores what comes back. Every call names the owner and every query
  * filters by it, as in log.ts — one person never reads or changes another's run (the Hall of
  * Heroes, which lists everyone's, only reads).

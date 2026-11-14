@@ -1,5 +1,5 @@
 /**
- * Craving Crusher's 60 levels: 6 worlds of 10, each level its own monster, the boss at level 10 of
+ * Calorie Crusher's 60 levels: 6 worlds of 10, each level its own monster, the boss at level 10 of
  * each world. The numbers are `Docs/game/levels60.json` (test/game.test.ts checks they match):
  * HP = 100 + 15 x (level - 1) rounded to 10, a boss x 1.3; deadline days 3, 4, 5, 5, 6, 7 by world,
  * a boss +1. Pure data, no I/O.

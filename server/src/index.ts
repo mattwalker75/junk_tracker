@@ -1,5 +1,5 @@
 /**
- * Start Junk Tracker: read config.json, open the database, listen.
+ * Start Calorie Crusher: read config.json, open the database, listen.
  * By default only this computer can connect (127.0.0.1); Settings → Network → "Allow other devices
  * on my network" listens on every interface instead (after a restart).
  */
@@ -14,14 +14,14 @@ const port = c.server.port; // only config.json sets it, so TRACKER.sh and the p
 const host = c.server.allowNetwork ? "0.0.0.0" : "127.0.0.1";
 
 const server = app.listen(port, host, () => {
-  console.log(`Junk Tracker ${VERSION} — http://localhost:${port}`);
+  console.log(`Calorie Crusher ${VERSION} — http://localhost:${port}`);
   if (c.server.allowNetwork) for (const u of networkUrls(port)) console.log(`  on your network: ${u}`);
   console.log(`  config:   ${config.file}`);
   console.log(`  database: ${config.resolve(c.database.path)}`);
   console.log(`  login:    ${c.security.loginEnabled ? "on" : "off"}`);
 });
 server.on("error", (e: NodeJS.ErrnoException) => {
-  console.error(e.code === "EADDRINUSE" ? `Port ${port} is already in use — is Junk Tracker already running? (./TRACKER.sh --status)` : e.message);
+  console.error(e.code === "EADDRINUSE" ? `Port ${port} is already in use — is Calorie Crusher already running? (./TRACKER.sh --status)` : e.message);
   process.exit(1);
 });
 

@@ -11,7 +11,7 @@ async function call<T>(method: string, url: string, body?: unknown): Promise<T> 
   try {
     res = await fetch(url, { method, headers: body !== undefined ? { "content-type": "application/json" } : undefined, body: body !== undefined ? JSON.stringify(body) : undefined, cache: "no-store" });
   } catch {
-    throw new ApiError("Junk Tracker is not answering. Is it running, and is this device on the same network?", 0);
+    throw new ApiError("Calorie Crusher is not answering. Is it running, and is this device on the same network?", 0);
   }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
@@ -64,7 +64,7 @@ export const api = {
   goalDone: (id: Id, today: Day) => call<Goal>("POST", `/api/goals/${id}/done`, { today }),
   reopenGoal: (id: Id, today: Day) => call<Goal>("POST", `/api/goals/${id}/reopen`, { today }),
   deleteGoal: (id: Id, today: Day) => call<{ ok: true }>("DELETE", `/api/goals/${id}`, { today }),
-  // Craving Crusher (game mode). Reads never settle; the page calls gameSync when the view says needsSync, and after every log change
+  // Calorie Crusher (game mode). Reads never settle; the page calls gameSync when the view says needsSync, and after every log change
   game: (today: Day, now: string) => call<GameView>("GET", `/api/game?today=${today}&now=${encodeURIComponent(now)}`),
   gameSync: (today: Day, now: string) => call<SyncResult>("POST", "/api/game/sync", { today, now }),
   gameStart: (mode: Mode, today: Day, now: string) => call<SyncResult>("POST", "/api/game/run", { mode, today, now }),

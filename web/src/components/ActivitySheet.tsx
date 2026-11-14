@@ -5,7 +5,7 @@
  * Calories burned (optional; How long takes minutes "90" or hours:minutes "1:30"), the Day (the same picker as a splurge) with a time that
  * starts at now, and Notes. The same sheet edits an activity (with Delete).
  *
- * Two skins, one form (Craving Crusher, Nov 11 2026): `skin="game"` on game pages ("Attack! Log
+ * Two skins, one form (Calorie Crusher, Nov 11 2026): `skin="game"` on game pages ("Attack! Log
  * activity") restyles the same fields in the same order with the same labels, and adds the live
  * damage panel from the shared engine's preview, so the numbers match the server: "This hits Fry
  * Hydra for 66 · 26 short…", "FINISHING BLOW!". After a save or delete in game mode the game is synced.

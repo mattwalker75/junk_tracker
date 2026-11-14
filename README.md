@@ -8,7 +8,7 @@ active you were this week, and watch your weight trend. It runs on your own comp
   the top sits on Home as a sticky note, every time you open the app; check it off and the next
   one moves up.
 - **Home**: *Days clean* in big type, splurges *this week* and in the *last 30 days*, the last
-  14 days as coloured squares (tap one to see that day), *Active this week*, and your weight with
+  14 days as coloured squares (tap one to see that day, or the card for the Calendar), *Activity this week* (tap it for the week in detail), and your weight with
   its trend.
 - **+ Splurge**: what you had and how big — **Snack**, **Meal** or **Feast** — plus, if you
   like, where, calories, when and notes. Things you had before are one tap away.

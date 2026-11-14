@@ -1,7 +1,7 @@
 /** Craving Crusher's screen words (web/src/game/logic.ts): the countdown, "So close!", the deadline cards, the battle log rows and the live panels. */
 import { describe, expect, it } from "vitest";
-import { addDays, deadlineFor, type ActivityEv, type FightInput, type SplurgeEv } from "../shared/game/index.js";
-import { attackPanel, betPlan, countdown, dayExample, healPanel, hpShort, hpText, lineRow, mixFor, previewStamp, savedText, shortDate, sizeHeals, soClose } from "../web/src/game/logic";
+import { addDays, deadlineFor, simulateFight, type ActivityEv, type BattleLine, type FightInput, type SplurgeEv } from "../shared/game/index.js";
+import { attackPanel, battleLog, betPlan, countdown, dayExample, healPanel, hpShort, hpText, lineRow, mixFor, previewStamp, savedText, shortDate, sizeHeals, soClose } from "../web/src/game/logic";
 
 const D = "2026-11-10"; // a Tuesday
 const A = (id: string, minutes: number | null, o: Partial<ActivityEv> = {}): ActivityEv =>
@@ -81,6 +81,41 @@ describe("the battle log rows", () => {
     expect(lineRow({ day: D, time: "", kind: "crit", amount: 25, text: "x" }, D, 2)).toMatchObject({ icon: "crit", value: "−25" });
     expect(lineRow({ day: D, time: "", kind: "blocked", amount: 25, text: "x" }, D, 3)).toMatchObject({ icon: "block", value: "0" });
     expect(lineRow({ day: D, time: "", kind: "note", amount: 0, text: "x" }, D, 4)).toMatchObject({ icon: "note", value: "" });
+  });
+});
+
+describe("the battle log's order (Matt, Nov 14 2026: newest at the top, in the order things happened)", () => {
+  // read the logged time as the phone's own, whatever time zone the tests run in
+  const local = (iso: string) => ({ day: iso.slice(0, 10), time: iso.slice(11, 19) });
+  const S = (id: string, createdAt: string, time = ""): SplurgeEv => ({ id, what: id, day: D, time, size: "snack", planned: false, createdAt });
+
+  it("a splurge, a workout, then a second splurge read in that order, newest first — untimed ones by when they were logged", () => {
+    const sim = simulateFight(hydra({
+      activities: [A("warm", null, { day: addDays(D, -1) }), A("Walk", 30, { time: "12:00", createdAt: `${D}T12:05:00.000Z` })],
+      splurges: [S("Donut", `${D}T10:00:00.000Z`), S("Chips", `${D}T15:00:00.000Z`)],
+    }));
+    // the engine works untimed entries after the timed ones; the log shows them when they happened
+    expect(sim.lines.map((l) => l.sourceId)).toEqual(["Walk", "Donut", "Chips"]);
+    expect(battleLog(sim.lines, local).map((l) => l.sourceId)).toEqual(["Chips", "Walk", "Donut"]);
+  });
+  it("an entry's own time wins over when it was logged", () => {
+    const sim = simulateFight(hydra({
+      activities: [A("warm", null, { day: addDays(D, -1) }), A("Walk", 30, { time: "12:00", createdAt: `${D}T12:05:00.000Z` })],
+      splurges: [S("Lunch", `${D}T20:00:00.000Z`, "11:30")],
+    }));
+    expect(battleLog(sim.lines, local).map((l) => l.sourceId)).toEqual(["Walk", "Lunch"]);
+  });
+  it("a knockout stays above the hit that did it; a day's start and end stay at its ends; older days below", () => {
+    const Y = addDays(D, -1);
+    const lines: BattleLine[] = [
+      { day: Y, time: "", kind: "heal", amount: 5, text: "leftover", sourceId: "x:later" },
+      { day: Y, time: "08:00", at: `${Y}T08:01:00`, kind: "hit", amount: 10, text: "walk" },
+      { day: Y, time: "", kind: "crit", amount: 25, text: "clean day" },
+      { day: D, time: "", at: `${addDays(D, 1)}T07:00:00`, kind: "heal", amount: 20, text: "logged the next morning" },
+      { day: D, time: "09:00", at: `${D}T09:01:00`, kind: "hit", amount: 50, text: "run" },
+      { day: D, time: "09:00", at: `${D}T09:01:00`, kind: "ko", amount: 0, text: "goes down" },
+    ];
+    expect(battleLog(lines, local).map((l) => l.text)).toEqual(["logged the next morning", "goes down", "run", "clean day", "walk", "leftover"]);
   });
 });
 

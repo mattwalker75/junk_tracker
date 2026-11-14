@@ -150,10 +150,11 @@ export function simulateFight(inp: FightInput): FightResult {
 
     const heal = (amount: number, sourceId: string, where: Where, time: string, text: (gain: number) => string, blockedText: string) => {
       if (amount <= 0) return;
-      if (blocked.has(sourceId)) { lines.push({ day: d, time, kind: "blocked", amount, text: blockedText, sourceId }); return; }
+      const at = where.phase === "item" ? { at: where.stamp } : {};
+      if (blocked.has(sourceId)) { lines.push({ day: d, time, ...at, kind: "blocked", amount, text: blockedText, sourceId }); return; }
       if (shield && afterArm(shield, d, where)) {
         shield = null; shieldBlocked = sourceId;
-        lines.push({ day: d, time, kind: "blocked", amount, text: blockedText, sourceId });
+        lines.push({ day: d, time, ...at, kind: "blocked", amount, text: blockedText, sourceId });
         return;
       }
       // a heal fills the HP bar first; past full it goes on as bonus HP, up to 20% of max HP
@@ -162,7 +163,7 @@ export function simulateFight(inp: FightInput): FightResult {
       const total = gain + extra;
       hp += gain; bonus += extra; heals += total; healToday += total; landed += 1;
       lines.push({
-        day: d, time, kind: "heal", amount: total, ...(extra ? { bonus: extra } : {}), sourceId,
+        day: d, time, ...at, kind: "heal", amount: total, ...(extra ? { bonus: extra } : {}), sourceId,
         text: !total ? `${name} is at full HP with a full bonus bar, so that heals nothing.`
           : extra ? `${text(total)} ${bonusNote(extra, gain, bonus >= bonusMax)}`
           : text(total),
@@ -170,27 +171,29 @@ export function simulateFight(inp: FightInput): FightResult {
     };
 
     const hit = (amount: number, by: "workout" | "potion" | "crit", at: string | null, time: string, text: string, sourceId?: string) => {
-      if (amount <= 0) { lines.push({ day: d, time, kind: "note", amount: 0, text, sourceId }); return; }
+      // the line's time: the entry's own, and when it was logged (a clean-day crit has neither)
+      const when = at ? { time, at } : { time };
+      if (amount <= 0) { lines.push({ day: d, ...when, kind: "note", amount: 0, text, sourceId }); return; }
       if (by !== "crit") attacked = true;
       damage += amount; dmgToday += amount;
       // bonus HP goes first
       const off = Math.min(bonus, amount);
       bonus -= off; hp -= amount - off;
-      lines.push({ day: d, time, kind: by === "workout" ? "hit" : by, amount, text, sourceId });
+      lines.push({ day: d, ...when, kind: by === "workout" ? "hit" : by, amount, text, sourceId });
       refresh();
       if (hp <= 0) {
         cx.hp = 0;
         if (ab.canFinish && !ab.canFinish(d, cx)) {
           hp = 1;
-          lines.push({ day: d, time, kind: "ability", amount: 0, text: `${ab.name}: ${name} hangs on at 1 HP — it can't go down on a day you splurged.` });
+          lines.push({ day: d, ...when, kind: "ability", amount: 0, text: `${ab.name}: ${name} hangs on at 1 HP — it can't go down on a day you splurged.` });
         } else if (ab.revive && !revived && (ab.revive(cx) ?? 0) > 0) {
           revived = true;
           hp = Math.min(max, ab.revive(cx) ?? 0);
-          lines.push({ day: d, time, kind: "revive", amount: hp, text: `${ab.name}: ${name} gets back up with ${hp} HP!` });
+          lines.push({ day: d, ...when, kind: "revive", amount: hp, text: `${ab.name}: ${name} gets back up with ${hp} HP!` });
         } else {
           hp = 0;
           ko = { day: d, at, by };
-          lines.push({ day: d, time, kind: "ko", amount: 0, text: `${name} goes down!` });
+          lines.push({ day: d, ...when, kind: "ko", amount: 0, text: `${name} goes down!` });
         }
       } else if (ab.threshold && !thresholdDone) {
         const t = ab.threshold(cx);
@@ -198,7 +201,7 @@ export function simulateFight(inp: FightInput): FightResult {
           thresholdDone = true;
           const gain = Math.min(t.heal, max - hp);
           hp += gain;
-          lines.push({ day: d, time, kind: "ability", amount: gain, text: t.note });
+          lines.push({ day: d, ...when, kind: "ability", amount: gain, text: t.note });
         }
       }
       refresh();

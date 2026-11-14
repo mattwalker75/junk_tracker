@@ -4,6 +4,25 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-11-14
+Small tweaks: easier taps on Home, the week's activity in detail, and a battle log that reads
+newest first.
+
+### Added
+- 2026-11-14: **The week in detail.** Tap the *Activity this week* card on Home: days active, time
+  and calories burned, each kind of activity (how many times, how long, calories), and the seven
+  days one by one with every activity and its time. Tap a day to open it; the arrows step back to
+  earlier weeks.
+
+### Changed
+- 2026-11-14: *Active this week* is now called **Activity this week**.
+- 2026-11-14: The **Calendar** button on *Last 14 days* is gone: tap anywhere on that card (outside
+  the days) to open the Calendar. Tapping a day still opens that day.
+- 2026-11-14: Craving Crusher's **battle log** is newest at the top, in the order things happened:
+  an entry's own time, or — with no time — when it was logged. A splurge, a workout and a second
+  splurge now read in that order (before, splurges with no time were listed after every timed
+  workout). How the fight is worked out is unchanged.
+
 ## [1.1.0] — 2026-11-14
 Craving Crusher: splurging at full HP now costs something; you choose when the next monster starts,
 or let it start by itself each morning.

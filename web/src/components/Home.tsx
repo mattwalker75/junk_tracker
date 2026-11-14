@@ -3,12 +3,14 @@
  * Days clean with This week and 30 days beside it, the last 14 days
  * coloured by the biggest splurge of each day (tap a day to open it; Calendar for older days), the
  * weight card with the trend over the person's chosen period, and the big buttons. Activity (mockup
- * H1, Nov 9 2026): an "Active this week" card above the 14 days, a green mark under each active
- * day, and + Activity between + Splurge and Weigh in.
+ * H1, Nov 9 2026): an "Activity this week" card above the 14 days, a green mark under each active
+ * day, and + Activity between + Splurge and Weigh in. Matt, Nov 14 2026: the whole 14-days card is
+ * the Calendar button (a day still opens that day), and the activity card opens the week in detail.
  */
 import { useQuery } from "@tanstack/react-query";
-import { CalendarDays } from "lucide-react";
-import { SIZE_LABEL, type Activity, type Overview, type WeighIn } from "../../../shared/types";
+import { ChevronRight } from "lucide-react";
+import { useState, type KeyboardEvent, type ReactNode } from "react";
+import { SIZE_LABEL, type Activity, type Day, type Overview, type WeighIn } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
@@ -17,6 +19,7 @@ import { activeDays, activeWeek, activityLabel, byDay, countBetween, daysClean, 
 import { GoalNote } from "./GoalNote";
 import { ActiveNotch, Button, Card, cx, SIZE_FILL, SizeLegend } from "./ui";
 import { UserMenu } from "./UserMenu";
+import { WeekSheet } from "./WeekSheet";
 
 export function Home({ who, loginEnabled }: { who: string; loginEnabled: boolean }) {
   const today = useToday();
@@ -93,12 +96,11 @@ function Body({ o, today }: { o: Overview; today: string }) {
 
       <ActiveCard o={o} today={today} />
 
-      <Card className="px-3.5 pt-3.5 pb-3">
+      {/* the whole card is the Calendar button; a day opens that day */}
+      <TapCard label="Last 14 days: open the calendar" onOpen={() => { window.location.hash = "#/calendar"; }} className="px-3.5 pt-3.5 pb-3">
         <div className="flex items-center justify-between">
           <h2 className="text-[15px] font-bold">Last 14 days</h2>
-          <a href="#/calendar" className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-accent-soft px-3 text-[13px] font-bold text-accent-text">
-            <CalendarDays className="size-4" /> Calendar
-          </a>
+          <span className="flex items-center gap-0.5 text-xs font-semibold text-mute">Calendar<ChevronRight className="size-4" /></span>
         </div>
         <div className="mt-2.5 grid grid-cols-7 gap-1.5 text-center">
           {strip.slice(0, 7).map((d) => <span key={d} className="text-[11px] font-semibold text-faint">{WEEKDAY_TINY[weekday(d)]}</span>)}
@@ -107,7 +109,7 @@ function Body({ o, today }: { o: Overview; today: string }) {
             const size = worstSize(list);
             const on = active.has(d);
             return (
-              <button key={d} onClick={() => act.day(d)}
+              <button key={d} onClick={(e) => { e.stopPropagation(); act.day(d); }}
                 aria-label={`${shortDay(d, today)}: ${list.length ? list.map((s) => `${SIZE_LABEL[s.size]}, ${s.what}`).join("; ") : "no splurge"}${on ? "; active" : ""}`}
                 className={cx("tabular flex h-11 flex-col items-center justify-center gap-[3px] rounded-[10px] text-sm",
                   size ? cx(SIZE_FILL[size], "font-bold") : "bg-surface-2 text-mute",
@@ -119,32 +121,49 @@ function Body({ o, today }: { o: Overview; today: string }) {
           })}
         </div>
         <div className="mt-2.5 flex items-center justify-between gap-2"><SizeLegend active /><span className="shrink-0 text-xs text-faint">tap a day</span></div>
-      </Card>
+      </TapCard>
 
       <WeightCard t={t} unit={unit} days={o.settings.trendDays} today={today} />
     </div>
   );
 }
 
-/** "Active this week" (mockup H1): days active of 7 since the week started, minutes and calories burned, the last activity, a dot a day. */
+/**
+ * A card that opens something when tapped anywhere (Matt, Nov 14 2026); the buttons inside it (a day,
+ * the last activity) keep their own job. Enter or Space opens it from the keyboard.
+ */
+function TapCard({ label, onOpen, className, children }: { label: string; onOpen: () => void; className?: string; children: ReactNode }) {
+  const key = (e: KeyboardEvent) => { if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onOpen(); } };
+  return (
+    <section role="button" tabIndex={0} aria-label={label} onClick={onOpen} onKeyDown={key}
+      className={cx("cursor-pointer rounded-2xl border border-line bg-surface shadow-soft transition-colors hover:border-line-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent", className)}>
+      {children}
+    </section>
+  );
+}
+
+/** "Activity this week" (mockup H1; renamed Nov 14 2026): days active of 7 since the week started, minutes and calories burned, the last activity, a dot a day. Tap it for the week in detail. */
 function ActiveCard({ o, today }: { o: Overview; today: string }) {
   const act = useActions();
+  const [week, setWeek] = useState<Day | null>(null);
   const w = activeWeek(o.activities, today, o.settings.weekStart);
   const totals = [w.minutes ? minutesLabel(w.minutes) : "", w.calories !== null ? `${w.calories.toLocaleString()} cal burned` : ""].filter(Boolean).join(" · ")
     || `${w.count} ${w.count === 1 ? "activity" : "activities"}`;
   const activeNames = w.week.filter((x) => x.active).map((x) => WEEKDAY_LONG[weekday(x.day)]);
+  const openDay = (d: Day) => act.day(d);
   return (
-    <Card className="p-4">
+    <>
+    <TapCard label="Activity this week: see the week in detail" onOpen={() => setWeek(w.from)} className="p-4">
       <div className="flex items-baseline justify-between">
-        <h2 className="text-[15px] font-bold">Active this week</h2>
-        <span className="text-xs text-mute">since {WEEKDAY_LONG[o.settings.weekStart]}</span>
+        <h2 className="text-[15px] font-bold">Activity this week</h2>
+        <span className="flex items-center gap-0.5 self-center text-xs text-mute">since {WEEKDAY_LONG[o.settings.weekStart]}<ChevronRight className="size-4" /></span>
       </div>
       {w.days ? (
         <div className="mt-1.5 flex items-end justify-between gap-3">
           <div className="min-w-0">
             <div className="tabular text-[30px] leading-tight font-extrabold tracking-tight text-active-text">{w.days} <span className="text-[15px] font-semibold text-mute">of 7 days</span></div>
             <div className="tabular text-[13px] font-semibold text-ink-2">{totals}</div>
-            {o.lastActivity ? <LastActivity a={o.lastActivity} today={today} onOpen={() => act.day(o.lastActivity!.day)} /> : null}
+            {o.lastActivity ? <LastActivity a={o.lastActivity} today={today} onOpen={() => openDay(o.lastActivity!.day)} /> : null}
           </div>
           <div role="img" aria-label={`Active on ${activeNames.join(", ")}`} className="grid shrink-0 grid-cols-[repeat(7,18px)] gap-[5px] text-center">
             {w.week.map((x) => (
@@ -159,16 +178,18 @@ function ActiveCard({ o, today }: { o: Overview; today: string }) {
         // nothing yet this week: a plain sentence (and the last one, when there is an older one)
         <div className="mt-1">
           <p className="text-sm leading-snug text-mute">Nothing active yet this week. Tap <b className="font-bold text-ink-2">+ Activity</b> after a walk, a workout — anything that gets you moving.</p>
-          {o.lastActivity ? <LastActivity a={o.lastActivity} today={today} onOpen={() => act.day(o.lastActivity!.day)} /> : null}
+          {o.lastActivity ? <LastActivity a={o.lastActivity} today={today} onOpen={() => openDay(o.lastActivity!.day)} /> : null}
         </div>
       )}
-    </Card>
+    </TapCard>
+    <WeekSheet from={week} weekStart={o.settings.weekStart} onFrom={setWeek} onClose={() => setWeek(null)} />
+    </>
   );
 }
 
 function LastActivity({ a, today, onOpen }: { a: Activity; today: string; onOpen: () => void }) {
   return (
-    <button onClick={onOpen} className="mt-0.5 block max-w-full truncate text-left text-xs text-mute hover:underline">
+    <button onClick={(e) => { e.stopPropagation(); onOpen(); }} className="mt-0.5 block max-w-full truncate text-left text-xs text-mute hover:underline">
       Last: {activityLabel(a)} · {ago(a.day, today)}
     </button>
   );

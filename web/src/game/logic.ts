@@ -141,6 +141,35 @@ export function betPlan(o: { bet: Bet; deadlineOn: Day }, f: { hp: number; bonus
 export type LineIcon = "hit" | "crit" | "heal" | "block" | "ko" | "note";
 export interface LineRow { key: string; day: string; icon: LineIcon; text: string; value: string; tone: "hit" | "heal" | "crit" | "block" | "plain" }
 
+/**
+ * The battle log, newest at the top (Matt, Nov 14 2026), in the order things happened: an entry's
+ * own time, or — with no time — when it was logged that day (a splurge, a workout and a second
+ * splurge read in that order). One logged on a later day goes at the end of its day. The start of a
+ * day (yesterday's leftover heals) comes before its entries and the end (a clean-day crit, a
+ * monster's day-end trick) after them; a knockout or a monster's comeback stays with the hit that
+ * caused it. `stamp` turns a logged time into the phone's own day and clock.
+ */
+export function battleLog(lines: BattleLine[], stamp: (iso: string) => { day: Day; time: string } = localStamp): BattleLine[] {
+  const seen = new Set<Day>();
+  const keyed = lines.map((l, i) => {
+    let rank = 1, clock = "";
+    if (l.at) {
+      seen.add(l.day);
+      const logged = stamp(l.at);
+      clock = l.time || (logged.day === l.day ? logged.time : "24:00");
+    } else rank = seen.has(l.day) ? 2 : 0;
+    return { l, i, key: `${l.day} ${rank} ${clock}` };
+  });
+  keyed.sort((x, y) => (x.key < y.key ? 1 : x.key > y.key ? -1 : y.i - x.i));
+  return keyed.map((k) => k.l);
+}
+
+const pad2 = (n: number) => String(n).padStart(2, "0");
+function localStamp(iso: string): { day: Day; time: string } {
+  const t = new Date(iso);
+  return { day: `${t.getFullYear()}-${pad2(t.getMonth() + 1)}-${pad2(t.getDate())}`, time: `${pad2(t.getHours())}:${pad2(t.getMinutes())}:${pad2(t.getSeconds())}` };
+}
+
 export function lineRow(l: BattleLine, today: Day, i: number): LineRow {
   const day = l.day === today ? "Today" : WEEKDAY_SHORT[utcDay(l.day).getUTCDay()];
   const key = `${i}-${l.sourceId ?? l.kind}`;

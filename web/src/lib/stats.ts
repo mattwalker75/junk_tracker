@@ -168,3 +168,31 @@ export function activeWeek(list: Activity[], today: Day, weekStart: 0 | 1): Acti
 
 /** "Walk, 45 min" — the name, and how long when it says */
 export const activityLabel = (a: Pick<Activity, "what" | "minutes">) => (a.minutes ? `${a.what}, ${minutesLabel(a.minutes)}` : a.what);
+
+export interface WeekDetail {
+  /** the seven days from the week's first: its activities by time, the minutes and calories, and whether it is still to come */
+  days: { day: Day; list: Activity[]; minutes: number; calories: number | null; later: boolean }[];
+  /** each kind of activity this week ("Walk" and "walk" are one, named as it was last written), most often first */
+  kinds: { what: string; count: number; minutes: number; calories: number | null }[];
+}
+
+/** The week opened from "Activity this week" (Matt, Nov 14 2026): day by day, and by kind of activity. */
+export function weekDetail(list: Activity[], from: Day, today: Day): WeekDetail {
+  const to = addDays(from, 6);
+  const mine = list.filter((a) => a.day >= from && a.day <= to && a.day <= today);
+  const byTime = (a: Activity, b: Activity) => (a.time || "99").localeCompare(b.time || "99") || a.createdAt.localeCompare(b.createdAt);
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const day = addDays(from, i);
+    const l = mine.filter((a) => a.day === day).sort(byTime);
+    return { day, list: l, minutes: l.reduce((n, a) => n + (a.minutes ?? 0), 0), calories: caloriesTotal(l), later: day > today };
+  });
+  const groups = new Map<string, Activity[]>();
+  for (const a of [...mine].sort((x, y) => x.day.localeCompare(y.day) || byTime(x, y))) {
+    const k = a.what.trim().toLowerCase();
+    groups.set(k, [...(groups.get(k) ?? []), a]);
+  }
+  const kinds = [...groups.values()].map((g) => ({
+    what: g[g.length - 1].what.trim(), count: g.length, minutes: g.reduce((n, a) => n + (a.minutes ?? 0), 0), calories: caloriesTotal(g),
+  })).sort((a, b) => b.count - a.count || b.minutes - a.minutes || a.what.localeCompare(b.what));
+  return { days, kinds };
+}

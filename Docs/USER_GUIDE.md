@@ -19,16 +19,19 @@ Want other people on it, or a password? Settings → **Users and sign-in** (belo
 - **This week** — splurges since the start of the week (Sunday or Monday, your choice in Settings).
 - **30 days** — splurges in the last 30 days, and how many were feasts.
 - **The last splurge** — its size, what it was and how long ago. Tap it to open that day.
-- **Active this week** — how many of this week's 7 days you were active (the week starts on
+- **Activity this week** — how many of this week's 7 days you were active (the week starts on
   Sunday or Monday, your choice in Settings), the minutes and calories burned this week (the
   calories only from activities where you filled them in), your last activity (tap it to open
-  that day), and a dot for each day of the week — green when you were active.
+  that day), and a dot for each day of the week — green when you were active. Tap the card for
+  the week in detail: days active, time and calories burned, each kind of activity (how many
+  times, how long), and the seven days one by one with every activity and its time. Tap a day there
+  to open it (that is where you change or delete an activity); the arrows go to earlier weeks.
 - **Last 14 days** — one square a day, coloured by the biggest splurge that day:
   pale = Snack, orange = Meal, red = Feast, grey = clean. A short green bar under the date means
   you were active that day (on the orange and red squares the bar is white, or dark in a dark
   theme, so it still shows). Today has an outline. Tap any day to see what you had, what you did
-  and your weigh-in, to change or delete them, or to add something to that day.
-  **Calendar** goes further back.
+  and your weigh-in, to change or delete them, or to add something to that day. Tap anywhere
+  else on the card to open the **Calendar**, which goes further back.
 - **Weight** — your latest weigh-in, how much it went up or down over your trend period
   (green when down), the average of the last 7 days, and a small line of the period.
 - **+ Splurge**, **+ Activity** and **Weigh in** — the three big buttons at the bottom.
@@ -120,7 +123,8 @@ morning, turn on **Keep the monsters coming** in Settings → You.
 
 **The battle screen** shows your hearts, the run number, your score, the deadline counting down,
 the monster with its HP bar and its special trick, a **So close!** line (how many minutes or
-calories would finish it), your power-ups and the battle log. The two big buttons at the bottom are
+calories would finish it), your power-ups and the battle log — newest at the top, in the order
+things happened (an entry's time, or, with no time, when you logged it). The two big buttons at the bottom are
 **+ Activity (attack)** and **+ Splurge** — the same forms as in the tracker, with the same fields,
 plus a live panel that shows what the entry will do before you save it. There is no Weigh in
 button in the game; weigh in from the tracker as usual.

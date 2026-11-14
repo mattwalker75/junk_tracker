@@ -24,7 +24,7 @@ The person using it is not a developer — every message the page shows is a pla
 ## Rules that exist for a reason
 1. **Matt's chosen design** (mockups artifact JaQKDBbcdYyzDybDBx2eXS, round 2 "E/F"): home =
    big *Days clean* tile + *This week* + *30 days*, the *Last 14 days* strip coloured by size with
-   a Calendar button, the weight card (current, change over the trend period, 7-day average,
+   a Calendar button (Matt, Nov 14 2026: the whole card is it; a day still opens that day), the weight card (current, change over the trend period, 7-day average,
    sparkline), the big buttons at the bottom (**+ Splurge**, **Weigh in** — and since rule 10,
    **+ Activity** between them). The *Log a splurge*
    sheet was approved as mocked. Keep it. Phone first: check every change at 390px wide.
@@ -72,7 +72,8 @@ The person using it is not a developer — every message the page shows is a pla
     Day picker is the splurge one, plus a time that starts at now; **any number a day** (only
     weigh-ins are one a day). Six quick picks (default Walk, Run, Bike, Gym, Swim, Yoga) are
     per person in Settings → You (`quickPicks`, six strings, `""` = default). Home keeps
-    everything and adds the **Active this week** card above the 14 days (days active of 7 from the
+    everything and adds the **Activity this week** card (renamed Nov 14 2026; tapping it opens the week
+    in detail, `WeekSheet.tsx`) above the 14 days (days active of 7 from the
     person's week start — a day counts once; minutes and calories add up every activity, calories
     only from those that say; last activity; seven dots); active days get a green notch under the
     date on the strip and in the Calendar (the day's text colour on Meal/Feast); THREE buttons at
@@ -91,6 +92,9 @@ The person using it is not a developer — every message the page shows is a pla
       You) sends a front-door open to `#/game`; a `#/…` address always wins.
     - **GET never writes:** `GET /api/game` says `needsSync`; only `POST /api/game/sync` (and the
       action routes) settle and store.
+    - **The battle log** is newest first, in the order things happened (Matt, Nov 14 2026): an entry's
+      time, or when it was logged (`BattleLine.at`); `battleLog()` in `logic.ts` orders it — the engine's
+      own order (untimed entries after timed ones) is unchanged.
     - **Settled fights are frozen:** editing old entries never rewrites a won or struck fight; only
       the open fight is worked out from the log. On a KO day each entry counts for exactly one fight.
     - **Today comes from the phone** (rule 3); the server only refuses a day more than 2 days from

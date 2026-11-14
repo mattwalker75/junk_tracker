@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { Activity, Splurge } from "../shared/types";
 import { goalFontPx } from "../shared/types";
 import { addDays, daysBetween } from "../web/src/lib/dates";
-import { activeWeek, activityLabel, caloriesTotal, countBetween, daysClean, durationInput, minutesLabel, parseDuration, goalLine, goalProgress, inUnit, startOfWeek, trend, worstSize } from "../web/src/lib/stats";
+import { activeWeek, activityLabel, weekDetail, caloriesTotal, countBetween, daysClean, durationInput, minutesLabel, parseDuration, goalLine, goalProgress, inUnit, startOfWeek, trend, worstSize } from "../web/src/lib/stats";
 
 const s = (day: string, size: Splurge["size"]): Splurge =>
   ({ id: day + size, what: "x", size, where: null, calories: null, day, time: null, notes: null, createdAt: "", updatedAt: "" });
@@ -129,6 +129,23 @@ describe("activity", () => {
     expect(w.calories).toBe(910);
     expect(w.week.map((x) => x.active)).toEqual([true, true, false, false, false, false, false]);
     expect(w.week[6].day).toBe("2026-11-14");
+  });
+
+  it("the week in detail: day by day by time, and each kind of activity, most often first", () => {
+    const at = (day: string, what: string, time: string, minutes: number | null, calories: number | null = null): Activity =>
+      ({ id: day + what + time, what, minutes, calories, day, time, notes: "", createdAt: `${day}T${time || "23:00"}:00Z`, updatedAt: "" });
+    const list = [
+      at("2026-11-09", "Walk", "18:00", 30, 120), at("2026-11-09", "gym", "07:00", 60), at("2026-11-10", "walk ", "", 20),
+      at("2026-11-12", "Walk", "08:00", 45), at("2026-11-07", "Swim", "09:00", 40), at("2026-11-13", "Run", "09:00", 30),
+    ];
+    const w = weekDetail(list, "2026-11-08", "2026-11-12");
+    expect(w.days.map((d) => d.list.map((a) => a.what))).toEqual([[], ["gym", "Walk"], ["walk "], [], ["Walk"], [], []]);
+    expect(w.days[1]).toMatchObject({ minutes: 90, calories: 120, later: false });
+    expect(w.days.map((d) => d.later)).toEqual([false, false, false, false, false, true, true]); // Run on Friday is after today
+    expect(w.kinds).toEqual([
+      { what: "Walk", count: 3, minutes: 95, calories: 120 },
+      { what: "gym", count: 1, minutes: 60, calories: null },
+    ]);
   });
 
   it("follows the person's week start", () => {

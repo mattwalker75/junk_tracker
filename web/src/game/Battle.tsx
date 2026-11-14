@@ -13,7 +13,7 @@ import { useActions } from "../lib/actions";
 import { nowTime } from "../lib/dates";
 import { Arena, Clock, worldLook } from "./art";
 import { Ability, HeartBroken, HeartFull, HeartPlus, IconBlock, IconCrit, IconHeal, IconHit, Potion, Shield, Skull, Star, Sword, Target, Wind } from "./icons";
-import { countdown, hpLeft, lineRow, soClose, type LineIcon } from "./logic";
+import { battleLog, countdown, hpLeft, lineRow, soClose, type LineIcon } from "./logic";
 import { levelInfo } from "../../../shared/game";
 import { Burst, Confetti } from "./art";
 import { MapIcon } from "./icons";
@@ -307,7 +307,7 @@ function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightVie
         </div>
         {fight.lines.length ? (
           <ul className="mt-0.5 flex flex-col">
-            {fight.lines.map((l, i) => lineRow(l, today, i)).map((r) => (
+            {battleLog(fight.lines).map((l, i) => lineRow(l, today, i)).map((r) => (
               <li key={r.key} className="g-dashed flex min-h-[27px] items-center gap-2 py-1">
                 <span className="w-10 shrink-0 text-xs font-black text-[#8a6a3a]">{r.day}</span>
                 <span className="grid size-[22px] shrink-0 place-items-center"><LineIconView icon={r.icon} /></span>

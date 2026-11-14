@@ -134,6 +134,8 @@ export interface BattleLine {
   day: Day;
   /** "HH:MM", or "" (no time, or the start / end of the day) */
   time: string;
+  /** when the entry behind it was logged (ISO); none for the start or end of a day (a clean-day crit) */
+  at?: string;
   kind: "hit" | "heal" | "crit" | "potion" | "blocked" | "ability" | "revive" | "ko" | "note";
   /** damage (a hit, crit or potion) or HP healed (bonus HP included); 0 for a note */
   amount: number;

@@ -16,7 +16,7 @@ files disagree, this plan wins on *how* the game is built and they win on *what*
    - When a fight ends (KO, or a strike when the deadline passes) the server writes its result.
    - Editing an old log entry later does not rewrite a finished fight. This is said in the guide.
    - Editing an entry that falls inside the open fight changes it right away.
-3. **Reads never write** (CLAUDE.md rule 7). `GET /api/game?today=&now=` returns the view. If it finds a KO or a missed deadline that hasn't been settled yet, it says `needsSync: true`. The page then calls `POST /api/game/sync {today, now}`, which settles everything in a loop: KO → next fight, strike → rematch, … up to today. The page also calls sync after every log save, edit or delete while game mode is open.
+3. **Reads never write** (CLAUDE.md rule 7). `GET /api/game?today=&now=` returns the view. If it finds a KO or a missed deadline that hasn't been settled yet, it says `needsSync: true`. The page then calls `POST /api/game/sync {today, now}`, which settles everything up to today: the open fight's KO or missed deadline (then the run waits between fights, below), weekly hearts and power-ups. The page also calls sync after every log save, edit or delete while game mode is open.
 4. **Days and times always come from the phone** (CLAUDE.md rule 3). The server never works out "today".
 5. **Each person has their own run.** Several users means separation, not privacy (rule 5), so the Hall of Heroes lists everyone's runs.
 
@@ -104,16 +104,17 @@ interface Ability {
 
 ## Run flow (all of it in `POST /api/game/sync` and the action routes)
 - `POST /api/game/run {mode, today, now}` starts run N+1 and opens fight 1: Crumbs, Steady bet, started today. If a run is still going, starting a new one ends it as 'abandoned'.
-- `POST /api/game/auto {today, now}` (Keep the monsters coming, Nov 14 2026) can start run N+1 by itself; see the Nov 14 decisions.
+- `POST /api/game/auto {today, now}` (Keep the monsters coming, Nov 14 2026) can start the next fight or run N+1 by itself; see the Nov 14 decisions.
+- `POST /api/game/next {bet?, today, now}` starts the fight that is up next (between fights); see the Nov 14 decisions.
 - **KO:**
   1. Settle the fight (won, with points).
   2. A boss kill gives +1 heart (max 5) and +1 Second Wind (max 3).
-  3. Open the next level at once: same day, `started_after` = the knockout's moment, Steady bet. The KO event keeps `used`, the day's entries the fights so far used (Stage 4). The player can change the bet on **Choose your fight** until the first attack lands or the start day ends.
+  3. Until Nov 14 2026 the next level opened at once. Now the run waits **between fights**: nothing is open until `startNextFight` (by hand, or Keep the monsters coming on a later day). Started the same day, the next fight gets `started_after` = the knockout's moment, and the KO event's `used` (the day's entries the fights so far used, Stage 4) keeps each entry in one fight.
   4. After level 60: the run is 'finished'.
 - **Strike** (today > deadline_on and HP > 0):
   1. Hearts −1 and the fight is 'struck'.
   2. At 0 hearts: **Normal** is a knock-back (−250, hearts back to 3, the current level goes back to the first level of its world). **Hardcore** is defeat: the run ends and its score is final.
-  3. Otherwise there is a rematch of the same level, attempt + 1, starting the day after the deadline, Steady bet.
+  3. Otherwise the rematch of the same level (attempt + 1) is up next — between fights, like a KO (until Nov 14 2026 it opened the day after the deadline). A knock-back makes the world's first level the one up next.
 - **Weekly heart:** a week (the person's own week start) with 5+ active days inside the run gives +1 heart (max 5) when the week ends.
 - **Power-ups earned:**
   - Veggie Shield: each time clean days in a row reach 3. The count then resets.
@@ -128,7 +129,8 @@ interface Ability {
 | `GET /api/game?today=&now=` | everything the game screens need: run, open fight (computed: hp, max, battle log lines, deadline, ability, so-close numbers), map statuses for all 60 levels, power-ups, hearts, score, `needsSync` |
 | `POST /api/game/sync` | settle KOs, strikes, weekly hearts and power-ups up to today; returns what happened (for the Victory / Strike / Knocked back / Defeated screens) |
 | `POST /api/game/run` | start a run `{mode}` |
-| `POST /api/game/auto` | Keep the monsters coming: the day's first look starts run N+1 when none is going (`{started, checked}`, plus the SyncResult when it started) |
+| `POST /api/game/auto` | Keep the monsters coming: the day's first look settles, then starts the next fight or run N+1 (`started`: false, "fight" or "run"; `checked`; plus the SyncResult once checked) |
+| `POST /api/game/next` | between fights: start the one up next now `{bet?}` |
 | `POST /api/game/bet` | `{bet}` for the open fight, while it isn't locked |
 | `POST /api/game/powerup` | `{kind: 'shield'|'potion'|'wind'}`: arm or use one |
 | `POST /api/game/mode` | Hardcore → Normal |
@@ -356,21 +358,39 @@ keeps a monster going every day without tapping Start a run.
   bar laid over it from the left (20 bonus on 100 HP covers a fifth). A preview stripes the part of
   either bar that would change. `hpText` gives "250 / 250 +20"; `hpShort` gives "250+20" for "before → after".
 
+**Between fights** (Matt, Nov 14 2026, the same day: "I do NOT want a new monster to automatically
+start the exact same day you just defeated one")
+- `settle()` no longer opens a fight after a KO or a strike. `pendingLevel(st)` is the level up next
+  (KO → level + 1; strike → the same; knock-back → the world's first); `GameView.next` describes it
+  (with its three deadline cards for a start now), and `fight` is null.
+- **`startNextFight(st, log, clock, bet, auto)`** opens it today and settles at once (today's
+  unused entries may knock it out). After a KO **today** with a moment (`ko.data.used`), it gets the
+  rest of the day: `started_after` = the KO's `at`, so `usedBeforeOf` and the KO-day rule still
+  give each entry to one fight, and the deadline counts from tomorrow. Otherwise the whole of today,
+  day 1 = today (like fight 1 of a new run). A `fight_start` event (`data.auto` when started by
+  itself) records it.
+- Between fights nothing hits or heals anything. Weekly hearts, Veggie Shields and log points still
+  accrue. A strike happens only to an open fight, so a long time away costs one heart at most.
+- The page: the battle screen's `Between` view (plays the KO / strike scene first), Choose your
+  fight's "Start the fight!", the title's "Up next", the map's and the book's Start buttons, and a
+  *No monster right now* note in place of the live panel in the game-skinned sheets.
+
 **Keep the monsters coming** (`UserSettings.autoStart`, `Game.auto`, `dailyCheck` in state.ts)
-- **What was already true:** inside a run a fight is always open. A KO opens the next level at once
-  and a strike opens the rematch. Only before the first run, or after a run ends (defeated,
-  finished), is there no monster. So the setting starts a **run**.
+- **What it starts:** the next fight when the run is between fights, or run N+1 when no run is going.
 - **Once a day per person, on the server.** `users.game_checked_on` (database version 5) is the
   phone day the look was last taken. The first `POST /api/game/auto` of a day takes it (whichever
   phone sends it); later ones that day do nothing. With the setting off, nothing is stamped
   (`checked: false`), so turning it on later the same day still works.
-- **It reads the run as stored, before any sync.** If the stored run is still going, nothing starts
-  that day, even when its missed deadline is about to end it. The sync then brings the Defeated
-  screen, and the new run starts the next day. That way the auto start never replaces the result
-  screen.
+- **It settles first, then decides.** Between fights, the next fight starts only if the last fight
+  ended **before today** (`lastEndedBefore`): a KO logged this morning from the tracker, found by
+  this very look, means nothing starts until tomorrow. A new run starts only if the run had already
+  ended before this look (as stored); a run that ends in this look gets its Defeated or finish
+  screen, and the new run starts the next day. What the look settled comes back in `happened`
+  and is told as usual (the page pushes it), so the auto start never hides a result.
 - **Mode:** the latest run's mode. A run dropped from Hardcore is Normal; the first run is Normal.
 - **The page asks before the first game read of each day.** `useGame`'s query runs `dailyCheck`
   first, once per person and day per page load, forgotten when `checked` is false or the call fails.
   So the first view already shows the new run and the sync never races it. A started run is told
-  like Start a run (`startedRun`), plus the `run_start` event (`data.auto`) as a toast. Tracker
+  like Start a run (`startedRun`), plus the `run_start` event (`data.auto`) as a toast; a started
+  fight's `fight_start` (`data.auto`) is a toast too (`planResults`). Tracker
   pages (`useGame(false)`) never ask.

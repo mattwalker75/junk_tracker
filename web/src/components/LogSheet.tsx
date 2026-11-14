@@ -13,7 +13,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
 import { healPanel, previewStamp, savedText, sizeHeals } from "../game/logic";
 import { ClockSmall, Burger, Cookie, Pizza, Points } from "../game/icons";
-import { HealPreview } from "../game/Panels";
+import { HealPreview, NoFightNote } from "../game/Panels";
 import { syncAfterLog, useGame } from "../game/state";
 import { toast } from "sonner";
 import { DEFAULT_EXAMPLES, SIZE_LABEL, SIZES, type Day, type Size, type Splurge } from "../../../shared/types";
@@ -106,7 +106,7 @@ export function LogSheet({ open, onOpenChange, day, edit, skin = "tracker" }: { 
       lead={game ? <span aria-hidden className="grid size-[46px] shrink-0 -rotate-[4deg] place-items-center overflow-hidden rounded-[14px] border-[3px] border-g-line bg-[#ff9a5c] shadow-[0_4px_0_var(--g-line)]">
         {fight ? <img src={`/monsters/${fight.slug}.svg`} alt="" className="mt-1 w-11" /> : <Burger className="size-8" />}</span> : undefined}>
       <form onSubmit={save} className={game ? "space-y-3 pb-2" : "space-y-4 pb-2"}>
-        {panel && fight ? <HealPreview p={panel} slug={fight.slug} /> : null}
+        {panel && fight ? <HealPreview p={panel} slug={fight.slug} /> : game && !fight && gameView?.next ? <NoFightNote name={gameView.next.name} kind="heal" /> : null}
         {recent.length ? (
           <div>
             <Label>Again?</Label>

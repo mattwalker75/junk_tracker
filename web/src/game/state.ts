@@ -163,9 +163,11 @@ let autoSyncedFor: GameView | null = null;
 
 /**
  * Keep the monsters coming (Settings → You, Matt Nov 14 2026): before the first game view of the
- * day, ask the server whether a run should start by itself. It decides (the setting, once a day per
- * person on any phone, only when no run is going); this page asks once per person and day. A run
- * that started is told like one started from Start a run, plus a toast that says it started by itself.
+ * day, ask the server whether the next fight (or a new run) should start by itself. It decides (the
+ * setting, once a day per person on any phone, only when nothing is going and nothing went down
+ * today); this page asks once per person and day. A new run is told like one started from Start a
+ * run; anything else the look settled (a KO from yesterday, a missed deadline) is told as usual, and
+ * a fight or run that started by itself gets a toast.
  */
 const checked = new Map<string, Promise<void>>();
 function dailyCheck(today: Day): Promise<void> {
@@ -176,7 +178,8 @@ function dailyCheck(today: Day): Promise<void> {
     p = api.gameAuto(today, nowTime()).then((r) => {
       // the setting is off: ask again next time (it may be turned on later today)
       if (!r.checked) checked.delete(key);
-      if (!r.started) return;
+      if (!r.checked) return;
+      if (r.started !== "run") { pushHappened(r.happened); return; }
       const rest = startedRun(r);
       const start = r.happened.find((e) => e.kind === "run_start");
       if (start) { toasts = [...toasts, start]; emit(); }

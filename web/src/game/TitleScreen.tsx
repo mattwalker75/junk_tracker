@@ -18,7 +18,9 @@ export function TitleScreen() {
   const { today, view, error } = useGame();
   const hall = useQuery({ queryKey: ["game-hall", today], queryFn: () => api.gameHall(today) });
   const run = view?.run ?? null;
-  const fight = view?.fight ?? null;
+  // the open fight, or between fights the monster up next (Matt, Nov 14 2026)
+  const fight = view?.fight ?? view?.next ?? null;
+  const waiting = !view?.fight && !!view?.next;
   const going = !!(run?.active && fight);
   const best = hall.data?.mine[0];
   const leader = hall.data?.allTime[0];
@@ -59,7 +61,7 @@ export function TitleScreen() {
             <span className="flex min-w-0 flex-1 flex-col gap-px">
               <span className="font-game text-[26px] leading-none" style={{ color: "#fff", WebkitTextStroke: "2.5px #2b1d3a", paintOrder: "stroke fill" }}>Continue Run #{run.number}</span>
               <span className="flex flex-wrap items-center gap-1 text-xs font-black text-[#4a2f00]">
-                World {fight.world} · {fight.name} · {Array.from({ length: run.hearts }, (_, i) => <HeartFull key={i} className="h-3 w-[13px]" />)}
+                World {fight.world} · {waiting ? `Up next: ${fight.name}` : fight.name} · {Array.from({ length: run.hearts }, (_, i) => <HeartFull key={i} className="h-3 w-[13px]" />)}
               </span>
               <span className="text-xs font-black text-[#4a2f00]">{run.hearts} {run.hearts === 1 ? "heart" : "hearts"} · {fmt(run.liveScore)} pts{run.hardcore ? " · Hardcore" : ""}</span>
             </span>

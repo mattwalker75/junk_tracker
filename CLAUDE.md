@@ -99,9 +99,12 @@ The person using it is not a developer — every message the page shows is a pla
       never changed by the game.
     - **Bonus HP** (Matt, Nov 14 2026): a heal past full HP goes on as bonus HP (a violet bar over the
       HP bar), capped at 20% of max HP; damage takes it off first. "HP left" counts it.
+    - **Between fights** (Matt, Nov 14 2026): a KO or a strike never opens the next fight by itself; it
+      waits for **Start the next fight** (`POST /api/game/next`) or Keep the monsters coming. With no
+      fight open, entries hit and heal nothing.
     - **Keep the monsters coming** (`autoStart`, Settings → You, off by default): the first game open of
-      a day starts a new run when none is going (once a day per person, on the server, from the run as
-      stored, so a run that just ended gets its result screen first).
+      a day (once a day per person, on the server) starts the next fight — never on a day one went
+      down — or a new run when the last one had already ended.
 
 ## Working rules
 - Commit locally per feature with a dated CHANGELOG entry; `git add` explicit paths.

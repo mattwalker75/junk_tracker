@@ -198,6 +198,8 @@ function labelAnchor(x: number): React.CSSProperties {
 function NodeCard({ m, view, box, onClose }: { m: MapLevel; view: GameView; box: { left: number; top: number; width: number }; onClose: () => void }) {
   const lv = levelInfo(m.level);
   const fight = view.fight && view.fight.level === m.level ? view.fight : null;
+  // between fights: the monster up next, waiting to be started (Matt, Nov 14 2026)
+  const waiting = !view.fight && view.next?.level === m.level && m.status === "current" ? view.next : null;
   const ink = worldMap(lv.world).ink;
   const kicker = `LEVEL ${lv.level} · WORLD ${lv.world} · ${lv.worldName.toUpperCase()}${lv.boss ? (lv.level === LEVEL_COUNT ? " · FINAL BOSS" : " · BOSS") : ""}`;
   const prev = lv.level > 1 ? levelInfo(lv.level - 1) : null;
@@ -206,6 +208,8 @@ function NodeCard({ m, view, box, onClose }: { m: MapLevel; view: GameView; box:
   if (fight) {
     const so = soClose(hpLeft(fight));
     status = `Fighting now · ${hpLeft(fight)} HP to go. ${so.minutes} more minutes, or ${so.calories} calories, or mix.`;
+  } else if (waiting) {
+    status = `Up next${waiting.rematch ? " · rematch" : ""} · it waits until you start it${view.autoStart ? ", or starts by itself the first time you open game mode on a new day" : ""}.`;
   } else if (m.status === "beaten") {
     status = m.wins ? `Beaten${m.wins > 1 ? ` ${m.wins} times` : ""} in Run #${view.run?.number}${m.attempts > m.wins ? ` · it struck ${m.attempts - m.wins} ${m.attempts - m.wins === 1 ? "time" : "times"}` : ""} · best ${fmt(m.bestPoints)} points` : `Beaten in Run #${view.run?.number}`;
   } else if (!view.run) {
@@ -233,12 +237,16 @@ function NodeCard({ m, view, box, onClose }: { m: MapLevel; view: GameView; box:
         <span className="rounded-full bg-[#2b1d3a] px-2 py-0.5 text-xs font-black text-white">{fight ? `${hpText(hpLeft(fight), fight.max)} HP` : `${lv.hp} HP`}</span>
         <span className="rounded-full border-2 border-[#2b1d3a] bg-white px-2 py-0.5 text-xs font-black">{fight ? `Due ${dueText(fight.deadlineOn)} · ${countdown(fight.deadlineOn, new Date()).big}` : `${lv.days}-day deadline`}</span>
       </div>
-      <div className="flex items-center gap-2 rounded-xl border-2 border-[#2b1d3a] px-2.5 py-[7px]" style={{ background: fight ? "#ffe3a1" : m.status === "beaten" ? "#d7f5c8" : "#ece6f0" }}>
+      <div className="flex items-center gap-2 rounded-xl border-2 border-[#2b1d3a] px-2.5 py-[7px]" style={{ background: fight || waiting ? "#ffe3a1" : m.status === "beaten" ? "#d7f5c8" : "#ece6f0" }}>
         <span className="text-[13px] leading-[1.25] font-black">{status}</span>
       </div>
       {fight ? (
         <a href="#/game/battle" className="g-btn flex min-h-11 items-center justify-center gap-2 rounded-[14px] bg-[#ffc93c] font-game text-lg text-[#2b1d3a]" style={{ borderColor: "#2b1d3a", boxShadow: "0 4px 0 #1a1024" }}>
           <Play className="h-4 w-3.5" />Fight {lv.name}
+        </a>
+      ) : waiting ? (
+        <a href="#/game/choose" className="g-btn flex min-h-11 items-center justify-center gap-2 rounded-[14px] bg-[#7bd36b] font-game text-lg text-[#2b1d3a]" style={{ borderColor: "#2b1d3a", boxShadow: "0 4px 0 #1a1024" }}>
+          <Play className="h-4 w-3.5" />Start {lv.name}
         </a>
       ) : (
         <a href={`#/game/world/${lv.world}`} className="self-start text-[13px] font-black text-[#5b3fd0] underline decoration-2 underline-offset-2">See {lv.worldName} up close</a>

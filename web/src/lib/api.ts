@@ -69,6 +69,7 @@ export const api = {
   gameSync: (today: Day, now: string) => call<SyncResult>("POST", "/api/game/sync", { today, now }),
   gameStart: (mode: Mode, today: Day, now: string) => call<SyncResult>("POST", "/api/game/run", { mode, today, now }),
   gameAuto: (today: Day, now: string) => call<AutoResult>("POST", "/api/game/auto", { today, now }),
+  gameNext: (bet: Bet, today: Day, now: string) => call<SyncResult>("POST", "/api/game/next", { bet, today, now }),
   gameBet: (bet: Bet, today: Day, now: string) => call<SyncResult>("POST", "/api/game/bet", { bet, today, now }),
   gamePowerUp: (kind: PowerUp, today: Day, now: string) => call<SyncResult>("POST", "/api/game/powerup", { kind, today, now }),
   gameToNormal: (today: Day, now: string) => call<SyncResult>("POST", "/api/game/mode", { to: "normal", today, now }),

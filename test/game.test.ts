@@ -4,7 +4,7 @@ import path from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 import {
   ABILITIES, abandonRun, addDays, buildView, deadlineFor, dropToNormal, eventText, fightInputFor, firstLevelOfWorld, GameRuleError, LEVELS, levelInfo, newRun, preview,
-  runScore, setBet, settle, simulateFight, struckPoints, usePowerUp, wonPoints,
+  lastEndedBefore, pendingLevel, runScore, setBet, settle, simulateFight, startNextFight, struckPoints, usePowerUp, wonPoints,
   type ActivityEv, type FightInput, type GameClock, type GameLog, type RunState, type SplurgeEv,
 } from "../shared/game/index.js";
 
@@ -49,6 +49,8 @@ function run(on = D, o: { mode?: "normal" | "hardcore"; level?: number; hearts?:
 }
 const open = (st: RunState) => st.fights.find((f) => f.status === "open")!;
 const kinds = (st: { added: { kind: string }[] }) => st.added.map((e) => e.kind);
+/** Between fights, start the next one (as Choose your fight → Start the fight does) on `today`. */
+const startNext = (st: RunState, log: GameLog, today = D, at = `${today}T20:00:00.000Z`) => startNextFight(st, log, clock(today, "", at));
 
 /** every ability with a test of its own: checked at the end */
 const tested = new Set<string>();
@@ -462,49 +464,81 @@ describe("abilities: one test each (at least)", () => {
 });
 
 describe("a run: settling, hearts, power-ups", () => {
-  it("KO → the next fight at once, the same day, counting only what was logged after the knockout", () => {
+  it("KO → nothing opens by itself (Matt, Nov 14 2026); started the same day, the next fight counts only what the KO'd one didn't use", () => {
     const st = run();
     const ko = A(120, { time: "07:00", createdAt: `${D}T07:05:00.000Z` });
     const later = A(30, { time: "18:00", createdAt: `${D}T18:05:00.000Z` });
-    const out = settle(st, logOf([], [A(null, { day: day(-1) }), ko, later]), clock(D));
-    const [f1, f2] = out.state.fights;
-    expect(f1).toMatchObject({ status: "won", endedOn: D, damage: 120, flawless: true, points: 120 + 100 + 100 + 100 });
-    expect(f2).toMatchObject({ level: 2, status: "open", startedOn: D, startedAfter: `${D}T07:05:00.000Z`, deadlineOn: day(3), bet: 1, attempt: 1 });
-    expect(buildView(out.state, logOf([], [A(null, { day: day(-1) }), ko, later]), D, false).fight).toMatchObject({ name: "Chiplet", hp: 90 });
+    const log = logOf([], [A(null, { day: day(-1) }), ko, later]);
+    const out = settle(st, log, clock(D));
+    expect(out.state.fights).toHaveLength(1);
+    expect(out.state.fights[0]).toMatchObject({ status: "won", endedOn: D, damage: 120, flawless: true, points: 120 + 100 + 100 + 100 });
     expect(kinds(out)).toEqual(["powerup_earned", "ko"]); // a 2-hour walk earns a Water Potion
-    expect(out.state.run.potions).toBe(1);
-    expect(out.state.run.score).toBe(420);
+    expect([out.state.run.potions, out.state.run.score, pendingLevel(out.state), lastEndedBefore(out.state, D), lastEndedBefore(out.state, day(1))]).toEqual([1, 420, 2, false, true]);
+    // between fights: no fight, the next one up (a part-day: its deadline counts from tomorrow)
+    const between = buildView(out.state, log, D, false);
+    expect(between.fight).toBeNull();
+    expect(between.next).toMatchObject({ level: 2, name: "Chiplet", hp: 120, rematch: false, partDay: true, attempt: 1 });
+    expect(between.next?.betOptions.map((o) => o.deadlineOn)).toEqual([day(3), day(2), day(1)]);
+    expect(between.map[1].status).toBe("current");
     // settling again changes nothing
-    expect(settle(out.state, logOf([], [A(null, { day: day(-1) }), ko, later]), clock(D)).added).toEqual([]);
+    expect(settle(out.state, log, clock(D)).added).toEqual([]);
+    // started by hand that evening: the rest of the day after the KO (the 18:00 walk counts)
+    const go = startNext(out.state, log);
+    expect(kinds(go)).toEqual(["fight_start"]);
+    expect(go.added[0].data).toEqual({ level: 2, name: "Chiplet", attempt: 1 });
+    expect(eventText(go.added[0])).toBe("Chiplet: the fight is on!");
+    expect(go.state.fights[1]).toMatchObject({ level: 2, status: "open", startedOn: D, startedAfter: `${D}T07:05:00.000Z`, deadlineOn: day(3), bet: 1, attempt: 1 });
+    expect(buildView(go.state, log, D, false)).toMatchObject({ fight: { name: "Chiplet", hp: 90 }, next: null });
+    expect(() => startNext(go.state, log)).toThrow(/already going/);
+    // at a bet: Daredevil takes two days off
+    expect(startNextFight(out.state, log, clock(D), 2).state.fights[1]).toMatchObject({ bet: 2, deadlineOn: day(1) });
+    // started by Keep the monsters coming the next day: the whole of that day, today is day 1
+    const auto = startNextFight(out.state, log, clock(day(1)), 1, true);
+    expect(auto.state.fights[1]).toMatchObject({ startedOn: day(1), startedAfter: null, deadlineOn: day(3) });
+    expect(eventText(auto.added[0])).toBe("Chiplet showed up by itself: Keep the monsters coming is on. The fight is on!");
   });
 
-  it("a KO by a clean-day crit lands at midnight: the next fight starts the next morning", () => {
+  it("nothing logged between fights counts for a monster; a fight started later counts from its own day", () => {
     const st = run();
-    const out = settle(st, logOf([], [A(null, { day: day(-1) }), A(80, { createdAt: `${D}T09:00:00.000Z` })]), clock(day(1)));
+    const log = logOf([S("feast", { day: day(1) })], [A(null, { day: day(-1) }), A(120, { time: "07:00" }), A(500, { day: day(1), time: "09:00" })]);
+    const out = settle(st, log, clock(day(2)));
+    expect(out.state.fights).toHaveLength(1); // the day-1 workout and pizza went to no monster
+    const go = startNext(out.state, log, day(2));
+    expect(buildView(go.state, log, day(2), false).fight).toMatchObject({ level: 2, hp: 120, startedOn: day(2), lines: [] });
+  });
+
+  it("a KO by a clean-day crit lands at midnight: the next fight, started later, gets its whole start day", () => {
+    const st = run();
+    const log = logOf([], [A(null, { day: day(-1) }), A(80, { createdAt: `${D}T09:00:00.000Z` })]);
+    const out = settle(st, log, clock(day(1)));
     expect(out.state.fights[0]).toMatchObject({ status: "won", endedOn: D });
-    expect(out.state.fights[1]).toMatchObject({ level: 2, startedOn: day(1), startedAfter: null, deadlineOn: day(3) });
+    expect(buildView(out.state, log, day(1), false).next).toMatchObject({ level: 2, partDay: false });
+    expect(startNext(out.state, log, day(1)).state.fights[1]).toMatchObject({ level: 2, startedOn: day(1), startedAfter: null, deadlineOn: day(3) });
   });
 
-  it("strike → a heart lost and a rematch of the same level, the day after the deadline", () => {
+  it("strike → a heart lost; the rematch of the same level waits to be started", () => {
     const st = run();
-    const out = settle(st, logOf([S("snack", { day: D }), S("snack", { day: day(1) }), S("snack", { day: day(2) })]), clock(day(3)));
-    const [f1, f2] = out.state.fights;
-    expect(f1).toMatchObject({ status: "struck", endedOn: day(2), points: 0 });
-    expect(f2).toMatchObject({ level: 1, attempt: 2, startedOn: day(3), deadlineOn: day(5), status: "open" });
+    const log = logOf([S("snack", { day: D }), S("snack", { day: day(1) }), S("snack", { day: day(2) })]);
+    const out = settle(st, log, clock(day(3)));
+    expect(out.state.fights).toHaveLength(1);
+    expect(out.state.fights[0]).toMatchObject({ status: "struck", endedOn: day(2), points: 0 });
     expect(out.state.run.hearts).toBe(2);
     expect(kinds(out)).toEqual(["strike"]);
-    // a long time away settles every missed deadline in a loop
+    expect(buildView(out.state, log, day(3), false).next).toMatchObject({ level: 1, attempt: 2, rematch: true, partDay: false });
+    expect(startNext(out.state, log, day(3)).state.fights[1]).toMatchObject({ level: 1, attempt: 2, startedOn: day(3), deadlineOn: day(5), status: "open" });
+    // a long time away: one strike, then nothing more happens until the rematch is started
     const away = settle(st, logOf(), clock(day(9)));
-    // three clean days of crits (75) are not enough for Crumbs: three strikes, then a knock-back to level 1
-    expect(away.state.fights.map((f) => [f.level, f.status, f.startedOn])).toEqual([[1, "struck", D], [1, "struck", day(3)], [1, "struck", day(6)], [1, "open", day(9)]]);
-    expect(away.state.run).toMatchObject({ hearts: 3, knockbacks: 1 });
+    expect(away.state.fights.map((f) => [f.level, f.status])).toEqual([[1, "struck"]]);
+    expect(away.state.run).toMatchObject({ hearts: 2, knockbacks: 0 });
   });
 
   it("at 0 hearts: Normal is knocked back to the world's first level (−250, 3 hearts); Hardcore is defeated", () => {
     const busy = logOf([0, 1, 2, 3].map((i) => S("snack", { day: day(i) })), [A(null, { day: day(-1) }), A(50)]);
     const normal = settle(run(D, { level: 13, hearts: 1 }), busy, clock(day(4)));
     expect(normal.state.fights[0]).toMatchObject({ status: "struck", points: 50 });
-    expect(normal.state.fights[1]).toMatchObject({ level: 11, status: "open", startedOn: day(4) });
+    expect(pendingLevel(normal.state)).toBe(11);
+    expect(buildView(normal.state, busy, day(4), false).next).toMatchObject({ level: 11, rematch: true });
+    expect(startNext(normal.state, busy, day(4)).state.fights[1]).toMatchObject({ level: 11, status: "open", startedOn: day(4) });
     expect(normal.state.run).toMatchObject({ hearts: 3, knockbacks: 1, score: 50 - 250, endReason: null });
     expect(kinds(normal)).toEqual(["strike", "knockback"]);
     const hard = settle(run(D, { level: 13, hearts: 1, mode: "hardcore" }), busy, clock(day(4)));
@@ -518,8 +552,9 @@ describe("a run: settling, hearts, power-ups", () => {
     const boss = settle(run(D, { level: 10, hearts: 2 }), logOf([], [A(null, { day: day(-1) }), A(400)]), clock(D));
     expect(boss.state.run).toMatchObject({ hearts: 3, winds: 1 });
     expect(boss.state.fights[0].points).toBe(393 + 310 + 50 * 3 + 100 + 500); // Fizz Shield takes 7 off the first 15 minutes
-    expect(boss.state.fights[1]).toMatchObject({ level: 11 });
+    expect(pendingLevel(boss.state)).toBe(11);
     const last = settle(run(D, { level: 60, hearts: 5 }), logOf([], [A(1300)]), clock(D));
+    expect(pendingLevel(last.state)).toBeNull();
     expect(last.state.run).toMatchObject({ endReason: "finished", endedOn: D, hearts: 5 });
     expect(last.added.find((e) => e.kind === "heart")?.data.gained).toBe(false);
     expect(kinds(last)).toContain("finish");
@@ -530,11 +565,11 @@ describe("a run: settling, hearts, power-ups", () => {
     const sun = "2026-11-08";
     const acts = [0, 1, 2, 3, 4].map((i) => A(null, { day: addDays(sun, i) }));
     const spl = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => S("snack", { day: addDays(sun, i) })); // no crits, so Crumbs just waits
-    // Crumbs strikes on the 10th and the 13th; the week is not over until the end of the 14th
-    expect(settle(run(sun), logOf(spl, acts), clock("2026-11-14")).state.run.hearts).toBe(1);
+    // Crumbs strikes on the 10th (no rematch is started); the week is not over until the end of the 14th
+    expect(settle(run(sun), logOf(spl, acts), clock("2026-11-14")).state.run.hearts).toBe(2);
     const out = settle(run(sun), logOf(spl, acts), clock("2026-11-15"));
     expect(out.added.filter((e) => e.kind === "heart").map((e) => e.data)).toEqual([{ reason: "week", week: sun, activeDays: 5, gained: true }]);
-    expect(out.state.run.hearts).toBe(2);
+    expect(out.state.run.hearts).toBe(3); // between fights too
     // with Monday weeks, the same five days fall in two weeks: no heart
     expect(settle(run(sun), logOf(spl, acts, { weekStart: 1 }), clock("2026-11-17")).added.some((e) => e.kind === "heart")).toBe(false);
     const full = run(sun, { hearts: 5, level: 60 });
@@ -565,11 +600,12 @@ describe("a run: settling, hearts, power-ups", () => {
     expect(open(w.state).deadlineOn).toBe(day(8));
     expect(w.state.run.winds).toBe(0);
     expect(() => usePowerUp(w.state, logOf(), clock(D), "potion")).toThrow(/no Water Potion/);
-    // a potion can land the knockout: the next fight begins after it
+    // a potion can land the knockout: the next fight, started that day, begins after it
     const crumbs = run(); crumbs.run.potions = 1;
-    const k = usePowerUp(crumbs, logOf([], [A(null, { day: day(-1) }), A(50)]), clock(D, "12:00", `${D}T12:00:00.000Z`), "potion");
+    const plog = logOf([], [A(null, { day: day(-1) }), A(50)]);
+    const k = usePowerUp(crumbs, plog, clock(D, "12:00", `${D}T12:00:00.000Z`), "potion");
     expect(k.state.fights[0].status).toBe("won");
-    expect(k.state.fights[1]).toMatchObject({ level: 2, startedAfter: `${D}T12:00:00.000Z` });
+    expect(startNext(k.state, plog).state.fights[1]).toMatchObject({ level: 2, startedAfter: `${D}T12:00:00.000Z` });
   });
 
   it("a Veggie Shield blocks the next heal after it goes up, once, and stays used up", () => {
@@ -620,12 +656,15 @@ describe("Stage 4 review fixes", () => {
     const log = logOf([], [warm, walk, run8]);
     const out = settle(run(), log, clock(D));
     expect(out.state.fights[0].status).toBe("won");
-    expect(usedBy(out.state, log)).toEqual({ 1: ["run", "walk"], 2: [] });
+    expect(usedBy(out.state, log)).toEqual({ 1: ["run", "walk"] });
+    // Chiplet started that day (by hand) gets nothing of it
+    expect(usedBy(startNext(out.state, log).state, log)).toEqual({ 1: ["run", "walk"], 2: [] });
     // synced after the Walk, then the Run is logged: Crumbs is frozen, so the Run hits Chiplet
     const early = settle(run(), logOf([], [warm, walk]), clock(D));
     expect(early.added.find((e) => e.kind === "ko")?.data.used).toEqual(["walk"]);
-    expect(usedBy(early.state, log)[2]).toEqual(["run"]);
-    expect(buildView(early.state, log, D, false).fight).toMatchObject({ name: "Chiplet", hp: 120 - 30 });
+    const chiplet = startNext(early.state, log).state;
+    expect(usedBy(chiplet, log)[2]).toEqual(["run"]);
+    expect(buildView(chiplet, log, D, false).fight).toMatchObject({ name: "Chiplet", hp: 120 - 30 });
   });
 
   it("example B: a 12:00 Bike made at 12:30 still counts when a 07:30 Run made at 20:00 KOs alone", () => {
@@ -633,23 +672,26 @@ describe("Stage 4 review fixes", () => {
     const run7 = A(120, { id: "run", time: "07:30", createdAt: `${D}T20:00:00.000Z` });
     const log = logOf([], [warm, bike, run7]);
     const out = settle(run(), log, clock(D));
-    expect(out.state.fights[1]).toMatchObject({ level: 2, startedAfter: `${D}T20:00:00.000Z` });
     expect(out.added.find((e) => e.kind === "ko")?.data.used).toEqual(["run"]);
-    expect(usedBy(out.state, log)).toEqual({ 1: ["run"], 2: ["bike"] });
-    expect(buildView(out.state, log, D, false).fight?.hp).toBe(120 - 20);
+    const go = startNext(out.state, log, D, `${D}T21:00:00.000Z`).state;
+    expect(go.fights[1]).toMatchObject({ level: 2, startedAfter: `${D}T20:00:00.000Z` });
+    expect(usedBy(go, log)).toEqual({ 1: ["run"], 2: ["bike"] });
+    expect(buildView(go, log, D, false).fight?.hp).toBe(120 - 20);
   });
 
-  it("two big workouts on one day KO two monsters, not a chain: what one fight used stays used for the rest of the day", () => {
+  it("two big workouts on one day, the next fight started by hand: what one fight used stays used for the rest of the day", () => {
     const big1 = A(240, { id: "big1", time: "", createdAt: `${D}T10:00:00.000Z` });
     const big2 = A(200, { id: "big2", time: "", createdAt: `${D}T11:00:00.000Z` });
     const log = logOf([], [warm, big1, big2]);
     const out = settle(run(), log, clock(D));
-    expect(out.state.fights.map((f) => [f.level, f.status])).toEqual([[1, "won"], [2, "won"], [3, "open"]]);
-    expect(out.added.filter((e) => e.kind === "ko").map((e) => e.data.used)).toEqual([["big1"], ["big1", "big2"]]);
-    expect(buildView(out.state, log, D, false).fight).toMatchObject({ name: levelInfo(3).name, hp: levelInfo(3).hp });
-    // and one at a time (a sync between them) ends the same way
-    const one = settle(run(), logOf([], [warm, big1]), clock(D));
-    expect(settle(one.state, log, clock(D)).state.fights.map((f) => f.status)).toEqual(["won", "won", "open"]);
+    expect(out.state.fights.map((f) => [f.level, f.status])).toEqual([[1, "won"]]); // big2 waits: no monster to hit
+    // Chiplet started that day gets big2 (Crumbs didn't use it) and goes down at once
+    const two = startNext(out.state, log);
+    expect(two.state.fights.map((f) => [f.level, f.status])).toEqual([[1, "won"], [2, "won"]]);
+    expect([...out.added, ...two.added].filter((e) => e.kind === "ko").map((e) => e.data.used)).toEqual([["big1"], ["big1", "big2"]]);
+    // the third, started the same day, gets neither
+    const three = startNext(two.state, log, D, `${D}T21:00:00.000Z`);
+    expect(buildView(three.state, log, D, false).fight).toMatchObject({ name: levelInfo(3).name, hp: levelInfo(3).hp });
   });
 
   it("splurges of the KO day go to one fight too; a potion KO splits the day at the potion; a crit KO gives the next fight the whole next day", () => {
@@ -659,7 +701,7 @@ describe("Stage 4 review fixes", () => {
     const log = logOf([before, after], [warm, hit, A(25, { id: "more", time: "11:00" })]);
     const out = settle(run(), log, clock(D));
     expect(out.state.fights[0].status).toBe("won");
-    const v = buildView(out.state, log, D, false).fight!;
+    const v = buildView(startNext(out.state, log).state, log, D, false).fight!;
     expect(v.name).toBe("Chiplet");
     expect(v.lines.map((l) => l.sourceId)).toEqual(["more", "late"]);
     // a potion KO: what sorts before the potion was Crumbs'; what comes after (or is logged later) is the next fight's
@@ -669,19 +711,19 @@ describe("Stage 4 review fixes", () => {
     expect(p.state.fights[0].status).toBe("won");
     expect(p.added.find((e) => e.kind === "ko")?.data.used).toEqual(["am"]);
     const later = logOf([], [...plog.activities, A(15, { id: "pm", time: "18:00", createdAt: `${D}T18:00:00.000Z` })]);
-    expect(buildView(p.state, later, D, false).fight?.hp).toBe(120 - 15);
+    expect(buildView(startNext(p.state, later).state, later, D, false).fight?.hp).toBe(120 - 15);
     // a crit KO lands at midnight: no part-day, nothing to split
-    const crit = settle(run(), logOf([], [warm, A(80, { createdAt: `${D}T09:00:00.000Z` })]), clock(day(1)));
+    const clog = logOf([], [warm, A(80, { createdAt: `${D}T09:00:00.000Z` })]);
+    const crit = settle(run(), clog, clock(day(1)));
     expect(crit.added.find((e) => e.kind === "ko")?.data.used).toBeUndefined();
-    expect(crit.state.fights[1]).toMatchObject({ startedOn: day(1), startedAfter: null });
+    expect(startNext(crit.state, clog, day(1)).state.fights[1]).toMatchObject({ startedOn: day(1), startedAfter: null });
   });
 
-  it("a long time away settles in one pass over the days (not one per fight)", () => {
+  it("a long time away settles quickly: one strike, then the run waits (no fight opens by itself)", () => {
     const t0 = Date.now();
     const out = settle(run(), logOf(), clock(addDays(D, 3650)));
     expect(Date.now() - t0).toBeLessThan(3000);
-    expect(out.state.fights.length).toBeGreaterThan(100);
-    expect(out.state.fights.filter((f) => f.status === "open")).toHaveLength(1);
+    expect(out.state.fights.map((f) => f.status)).toEqual(["struck"]);
     // a Veggie Shield every 3 clean days, capped at 3; the rest are recorded as not given
     expect(out.state.run.shields).toBe(3);
   });
@@ -767,13 +809,16 @@ describe("the view", () => {
     const none = buildView(null, null, D, false);
     expect([none.run, none.fight, none.map.length, none.map[0].status]).toEqual([null, null, 60, "locked"]);
     const log = logOf([], [A(null, { day: day(-1) }), A(100)]);
-    const st = settle(run(), log, clock(D)).state;
+    const won = settle(run(), log, clock(D)).state;
+    expect(buildView(won, log, D, false, true)).toMatchObject({ fight: null, next: { level: 2 }, autoStart: true });
+    const st = startNext(won, log).state;
     const v = buildView(st, log, D, true);
     expect(v.map.slice(0, 3).map((m) => m.status)).toEqual(["beaten", "current", "locked"]);
     expect(v.map[0]).toMatchObject({ attempts: 1, wins: 1, bestPoints: 400 });
     expect(v.fight).toMatchObject({ level: 2, name: "Chiplet", slug: "02-chiplet", world: 1, worldName: "Snack Swamp", daysLeft: 4, ability: { name: "Crunch Flurry" }, finish: { hp: 120, minutes: 120, calories: 1200 } });
-    expect(v.events.map((e) => e.kind)).toEqual(["ko", "powerup_earned", "run_start"]);
-    expect(v.events[0].text).toBe("Crumbs went down! +400 points.");
+    expect([v.next, v.autoStart]).toEqual([null, false]);
+    expect(v.events.map((e) => e.kind)).toEqual(["fight_start", "ko", "powerup_earned", "run_start"]);
+    expect(v.events[1].text).toBe("Crumbs went down! +400 points.");
     expect(v.needsSync).toBe(true);
   });
 });

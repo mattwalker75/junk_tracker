@@ -42,7 +42,7 @@ export function planResults(events: readonly EventView[]): { results: Result[]; 
     } else if (e.kind === "finish") {
       // a finish without its KO in the same batch still gets its screen
       results.push({ kind: "finish", id: e.id, ko: e, rewards: [] });
-    } else if (TOAST.has(e.kind)) {
+    } else if (TOAST.has(e.kind) || (e.kind === "fight_start" && e.data.auto)) {
       toasts.push(e);
     }
     used.add(e.id);

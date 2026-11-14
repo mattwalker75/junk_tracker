@@ -30,7 +30,7 @@ export function ResultHost({ screen }: { screen: GameScreen }) {
   const { head, waiting } = useResults();
   const { today, view } = useGame();
   // away from a fight on the battle screen (or with reduced motion) a result comes up at once
-  const battling = screen === "battle" && !!view?.fight;
+  const battling = screen === "battle" && !!(view?.fight || view?.next);
   useEffect(() => {
     if (head && !head.shown && (!battling || reducedMotion())) markShown(head.result.id);
   }, [head, battling]);
@@ -66,6 +66,7 @@ function ToastIcon({ e }: { e: EventView }) {
   if (e.kind === "heart") return <HeartFull className="h-[22px] w-6 shrink-0" />;
   if (e.kind === "mode_drop") return <Skull className="size-6 shrink-0" />;
   if (e.kind === "run_start") return <Star className="size-6 shrink-0" />;
+  if (e.kind === "fight_start") return <Sword className="size-6 shrink-0" />;
   if (e.data.kind === "shield") return <Shield className="h-7 w-[26px] shrink-0" />;
   if (e.data.kind === "potion") return <Potion className="h-6 w-5 shrink-0" />;
   return <Wind className="size-6 shrink-0" />;
@@ -142,8 +143,8 @@ const BigBtn = ({ href, onClick, children, color = "#ffc93c", className }: { hre
   return href ? <a href={href} onClick={onClick} className={cls} style={style}>{children}</a> : <button onClick={onClick} className={cls} style={style}>{children}</button>;
 };
 
-/** Where the "fight on" buttons go: Choose your fight while the bet can still change, else the battle. */
-const fightHref = (view: GameView) => (view.fight?.betOptions.length ? "#/game/choose" : "#/game/battle");
+/** Where the "fight on" buttons go: Choose your fight while the bet can still change, or to start the one up next; else the battle. */
+const fightHref = (view: GameView) => (view.fight?.betOptions.length || (!view.fight && view.next) ? "#/game/choose" : "#/game/battle");
 
 /** The animated score: counts up from 0 (once, or again on Replay). */
 function useCount(total: number, key: number): number {
@@ -268,7 +269,14 @@ function Victory({ r, view }: { r: Extract<Result, { kind: "victory" }>; view: G
               <p className="text-[13px] leading-snug font-extrabold text-[#6b5a7a]"><b className="text-[#2b1d3a]">{ab.name}:</b> {ab.text}</p>
             </div>
           </div>
-          <BigBtn href={fightHref(view)} onClick={nextResult} color="#7bd36b" className="mt-3">{view.fight?.betOptions.length ? "Choose your deadline ›" : "To the battle ›"}</BigBtn>
+          {!view.fight && view.next ? (
+            <>
+              <p className="mt-2 text-[13px] leading-snug font-bold text-[#6b5a7a]">{next.name} waits until you start it{view.autoStart ? ", or it starts by itself the first time you open game mode on a new day (Keep the monsters coming)" : ""}.</p>
+              <BigBtn href={fightHref(view)} onClick={nextResult} color="#7bd36b" className="mt-2">Start the next fight ›</BigBtn>
+            </>
+          ) : (
+            <BigBtn href={fightHref(view)} onClick={nextResult} color="#7bd36b" className="mt-3">{view.fight?.betOptions.length ? "Choose your deadline ›" : "To the battle ›"}</BigBtn>
+          )}
         </Panel>
       ) : null}
       <div className="mx-4 mt-3"><button onClick={nextResult} className="w-full py-2 text-center text-[14px] font-black text-[#fff7e6] underline underline-offset-2">Close</button></div>
@@ -314,7 +322,7 @@ function Strike({ r, view }: { r: Extract<Result, { kind: "strike" }>; view: Gam
         </div>
       </Panel>
       <Panel>
-        <p className="text-[16px] leading-snug font-extrabold">{lv.name} is back to full ({lv.hp} HP){fight ? <> — new deadline {shortDate(fight.deadlineOn)}.</> : "."} <span className="text-[#2f9a2a]">You've got this.</span></p>
+        <p className="text-[16px] leading-snug font-extrabold">{lv.name} is back to full ({lv.hp} HP){fight ? <> — new deadline {shortDate(fight.deadlineOn)}.</> : view.next ? <> and waits for its rematch: start it when you're ready{view.autoStart ? " (or it starts by itself the first time you open game mode on a new day)" : ""}.</> : "."} <span className="text-[#2f9a2a]">You've got this.</span></p>
         <div className="mt-2 flex justify-between text-[13px] font-black"><span>{lv.name}</span><span>{fight ? hpText(hpLeft(fight), fight.max) : `${lv.hp} / ${lv.hp}`} HP</span></div>
         <HpBar label={`${lv.name} hit points`} max={fight?.max ?? lv.hp} value={fight ? hpLeft(fight) : lv.hp} fillClass="rounded-full" gloss={false} className="mt-1 h-3" />
         {fight ? <span className="mt-2 inline-block rounded-full border-2 border-[#2b1d3a] bg-[#ffe3e8] px-2.5 py-0.5 text-[13px] font-black">Due {dueText(fight.deadlineOn)}</span> : null}

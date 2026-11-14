@@ -69,3 +69,18 @@ export function HealPreview({ p, slug }: { p: HealPanel; slug: string }) {
     </section>
   );
 }
+
+/**
+ * Between fights (Matt, Nov 14 2026), in place of the live panel: nothing is going, so this entry
+ * hits or heals nothing, and the next monster only counts what is logged once it starts.
+ */
+export function NoFightNote({ name, kind }: { name: string; kind: "hit" | "heal" }) {
+  return (
+    <section aria-label="No monster right now" className={cx(panelBox, "gap-1")} style={panelBg}>
+      <span className="font-game text-[19px] leading-tight">No monster right now</span>
+      <span className="text-sm leading-snug font-extrabold">
+        This {kind === "hit" ? "workout won't hit" : "splurge won't heal"} anything; it still earns +5 points. {name} is up next: start it from the battle screen.
+      </span>
+    </section>
+  );
+}

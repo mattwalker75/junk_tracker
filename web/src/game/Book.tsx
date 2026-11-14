@@ -73,7 +73,7 @@ function Card({ lv, status, fight, onOpen }: { lv: Level; status: MapStatus; fig
   const ab = abilityFor(lv.level);
   const boss = lv.boss;
   const art = boss ? 96 : 66;
-  const tag = status === "beaten" ? { t: "Beaten", bg: "#2f9a52", fg: "#fff" } : status === "current" ? { t: "Fighting now", bg: "#ff7a2f", fg: "#fff" } : { t: "Up ahead", bg: "#5b4a6b", fg: "#fff" };
+  const tag = status === "beaten" ? { t: "Beaten", bg: "#2f9a52", fg: "#fff" } : status === "current" ? { t: fight ? "Fighting now" : "Up next", bg: "#ff7a2f", fg: "#fff" } : { t: "Up ahead", bg: "#5b4a6b", fg: "#fff" };
   return (
     <li className="mx-4">
       <button onClick={onOpen} aria-label={`Level ${lv.level}, ${lv.name}${boss ? ", boss" : ""}: ${tag.t.toLowerCase()}. Open its page.`}
@@ -133,10 +133,12 @@ function MonsterSheet({ lv, view, onClose }: { lv: Level | null; view: GameView 
           </div>
           <p className="mt-2 rounded-xl border-2 border-g-line px-3 py-1.5 text-[14px] font-extrabold" style={{ background: status === "beaten" ? "var(--g-soft-green)" : status === "current" ? "var(--g-soft-yellow)" : "var(--g-panel-2)" }}>
             {fight ? `Fighting now: ${hpLeft(fight)} HP to go${fight.bonus ? ` (${fight.bonus} of it bonus HP)` : ""}, due ${shortDate(fight.deadlineOn)}.`
+              : status === "current" ? "Up next: it waits until you start it (battle screen → Start the next fight)."
               : status === "beaten" ? `Beaten in Run #${view?.run?.number}${m?.bestPoints ? ` for ${m.bestPoints.toLocaleString("en-US")} points` : ""}.`
               : `Up ahead · Level ${lv.level}. You'll meet it after ${lv.level > 1 ? LEVELS[lv.level - 2].name : "starting a run"}.`}
           </p>
-          {fight ? <a href="#/game/battle" className="g-btn mt-3 flex h-12 items-center justify-center rounded-2xl bg-g-yellow font-game text-xl">Fight {lv.name}</a> : null}
+          {fight ? <a href="#/game/battle" className="g-btn mt-3 flex h-12 items-center justify-center rounded-2xl bg-g-yellow font-game text-xl">Fight {lv.name}</a>
+            : status === "current" ? <a href="#/game/choose" className="g-btn mt-3 flex h-12 items-center justify-center rounded-2xl bg-g-green font-game text-xl">Start {lv.name}</a> : null}
         </div>
       ) : null}
     </Sheet>

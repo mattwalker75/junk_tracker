@@ -108,10 +108,15 @@ you play or not.
 
 **Opening it.** Tap your initials (top right) → **Game mode**. In the game the same menu has
 **Back to tracker**. The first time, tap **Start a run** and pick **Normal** or **Hardcore**
-(below). Each person has their own run. Inside a run the next monster starts the moment you beat
-one (and a rematch starts the day after a missed deadline), so there is always a monster to fight
-until the run ends. To have a new run start by itself as well, turn on **Keep the monsters coming**
-in Settings → You.
+(below). Each person has their own run.
+
+**Between fights.** When you beat a monster (or one strikes), the next one does **not** start by
+itself: the battle screen says *No monster right now* and shows who is up next. Until it starts,
+what you log hits and heals nothing (it still earns +5 points). Start it when you're ready with
+**Start the next fight** (it takes you to Choose your fight, where you pick the deadline). Started
+on the day you beat the one before, it gets the rest of that day as a head start and its deadline
+counts from tomorrow; started on another day, that day is day 1. To have it start by itself each
+morning, turn on **Keep the monsters coming** in Settings → You.
 
 **The battle screen** shows your hearts, the run number, your score, the deadline counting down,
 the monster with its HP bar and its special trick, a **So close!** line (how many minutes or
@@ -188,7 +193,7 @@ workout logged from the tracker counts too: the next time you open the game, you
 **Finished fights are frozen.** Once a monster is beaten (or has struck), that fight's result stays
 as it was, even if you later edit or delete an entry from those days. Changing an entry inside the
 fight going on now changes it right away. An entry logged later on the day of a knockout counts for
-the next monster.
+the next monster if you start it that day.
 
 **The other screens.** The **Adventure map** shows all 60 levels in six worlds (tap a monster for
 its card, or a world's sign to see it up close). The **Hall of Heroes** lists everyone's runs (All
@@ -215,10 +220,11 @@ where you land when you open the app; the menu under your initials still switche
 bookmarked page opens where it points.
 
 **Keep the monsters coming** — off to start with. With it on, the first time you open game mode
-each day, if your last run is over (or you never started one), a new run starts by itself with
-Crumbs, in the same mode as your last run (Normal for your first). A note at the top says so.
-When a run ends you see how it went first (the Defeated or the finish screen), and the new run
-starts the next day. Starting a run yourself still works as before.
+each day, if no monster is going, the next one starts by itself with the whole day ahead (a note at
+the top says so). It never starts one on the same day a monster went down — start that one yourself
+if you want to keep going. If your run is over (or you never started one), a new run starts the
+same way, with Crumbs, in the same mode as your last run (Normal for your first); when a run ends
+you see how it went first, and the new run starts the next day.
 
 **Weight and weeks** — pounds or kilograms (weigh-ins are kept exactly; only the display
 changes); the trend over 1 week, 2 weeks or a month; weeks start on Sunday or Monday.

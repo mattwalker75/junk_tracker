@@ -6,7 +6,7 @@
  */
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { POWER_UP_LABEL, type FightView, type PowerUp, type RunView } from "../../../shared/game/types";
+import { POWER_UP_LABEL, type FightView, type NextFightView, type PowerUp, type RunView } from "../../../shared/game/types";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
 import { useActions } from "../lib/actions";
@@ -73,6 +73,7 @@ export function Battle() {
   if (error) return <Shell><GameNote title="Hmm, that didn't load">{error.message}</GameNote></Shell>;
   if (loading || !view) return <Shell><div className="h-40" /></Shell>;
   const run = view.run, fight = view.fight;
+  if (run?.active && !fight && view.next) return <Between run={run} next={view.next} autoStart={view.autoStart} head={head} />;
   if (!run || !run.active || !fight) {
     return (
       <Shell>
@@ -97,6 +98,89 @@ function Shell({ children }: { children: ReactNode }) {
 }
 
 type Fx = { kind: "hit" | "heal"; amount: number; n: number } | null;
+
+/** Hearts · run · score, the battle's top row. */
+function RunRow({ run, crack }: { run: RunView; crack: boolean }) {
+  return (
+    <div className="mx-3 mt-2 flex items-stretch gap-2">
+      <div className="g-panel flex h-10 shrink-0 items-center gap-1 rounded-[14px] px-2.5">
+        <BattleHearts hearts={run.hearts} crack={crack} />
+      </div>
+      <div className={cx("g-panel flex h-10 shrink-0 flex-col items-center justify-center rounded-[14px] px-2.5 leading-none", run.hardcore ? "bg-g-night text-g-night-ink" : "bg-g-blue text-g-on")}>
+        <span className="flex items-center gap-0.5 text-[10px] font-black tracking-[0.06em]">{run.hardcore ? <Skull className="size-3" /> : null}RUN</span>
+        <span className="font-game text-lg/none">#{run.number}</span>
+      </div>
+      <div className="g-panel flex h-10 min-w-0 flex-1 items-center justify-between gap-1.5 rounded-[14px] bg-g-yellow pr-3 pl-2 text-g-on" aria-label={`Score ${fmt(run.liveScore)}`}>
+        <Star className="size-6 shrink-0" />
+        <span aria-hidden className="text-[11px] font-black tracking-[0.06em] max-[370px]:hidden">SCORE</span>
+        <span aria-hidden className="g-stroke-thin min-w-0 truncate font-game text-[22px] leading-none tabular max-[370px]:text-[19px]">{fmt(run.liveScore)}</span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Between fights (Matt, Nov 14 2026): a monster went down (or struck) and the next one waits to be
+ * started. The KO or strike that just came in plays here first, as on the battle screen; then the
+ * monster that is up next, what starting it now means, and Choose your fight → Start the fight.
+ * Logging still works (and still earns points), it just hits or heals nothing.
+ */
+function Between({ run, next, autoStart, head }: { run: RunView; next: NextFightView; autoStart: boolean; head: QueuedResult | null }) {
+  const act = useActions();
+  const scene = useScene(head);
+  const shown = scene ? levelInfo(scene.level) : null;
+  return (
+    <main className="relative min-h-dvh pb-2">
+      <GameBg background={worldLook(next.world).page} />
+      <GameHeader kicker={`WORLD ${next.world} · LEVEL ${next.level} OF 60`} title={next.worldName}><MapLink /></GameHeader>
+      <RunRow run={run} crack={!!scene?.crack} />
+
+      <section aria-label="Between fights" className={cx("relative mx-3 mt-2.5 h-[230px] overflow-hidden rounded-[22px] border-[3px] border-g-line shadow-[0_4px_0_var(--g-line)]", scene && "g-anim-shake")}>
+        <Arena world={next.world} className="g-art absolute inset-0 size-full" />
+        <div className="absolute inset-x-2.5 top-2 flex items-start justify-between gap-2">
+          <span className="g-stroke truncate font-game text-2xl leading-none" style={{ textShadow: "0 2px 0 #2b1d3a" }}>{shown?.name ?? next.name}</span>
+          {!scene ? <span className="shrink-0 -rotate-2 rounded-full border-2 border-[#2b1d3a] bg-g-yellow px-2.5 py-0.5 font-game text-[15px] text-[#2b1d3a]">{next.rematch ? "REMATCH" : "UP NEXT"}</span> : null}
+        </div>
+        <div className="pointer-events-none absolute inset-x-0 bottom-1 flex justify-center">
+          {scene?.kind === "ko" && shown ? <img src={`/monsters/${shown.slug}.svg`} alt={`${shown.name}, knocked out`} className="g-anim-ko h-[160px] w-[160px] origin-[50%_85%]" />
+            : <Monster slug={shown?.slug ?? next.slug} name={shown?.name ?? next.name} pose={scene ? "strike" : "normal"} motion={scene ? "strike" : "idle"} className="h-[160px] w-[160px]" />}
+        </div>
+        {scene?.kind === "ko" ? <>
+          <Confetti className="pointer-events-none absolute inset-0 z-10" />
+          <Burst text="K.O.!" className="g-anim-burst absolute top-[90px] right-2 z-10 w-[112px]" />
+        </> : null}
+        {scene?.kind === "strike" ? <Burst text="WHAM!" fill="#ffc93c" className="g-anim-burst absolute top-[90px] left-2 z-10 w-[112px]" /> : null}
+      </section>
+
+      <section aria-label="Up next" className="g-panel mx-3 mt-2.5 px-3 py-2.5">
+        <span className="text-[11px] font-black tracking-[0.06em] text-g-warn">{next.rematch ? `REMATCH · ATTEMPT ${next.attempt}` : "NO MONSTER RIGHT NOW"}</span>
+        <h2 className="font-game text-[22px] leading-tight font-normal">{next.rematch ? `${next.name} is waiting for a rematch` : `Next up: ${next.name}`}</h2>
+        <p className="text-[14px] font-black">{next.hp} HP · {next.days}-day deadline{next.boss ? " · BOSS" : ""}</p>
+        <p className="mt-0.5 text-[13px] leading-snug font-extrabold text-g-mute"><b className="text-g-text">{next.ability.name}:</b> {next.ability.text}</p>
+        <p className="mt-1.5 text-[13px] leading-snug font-bold">
+          {next.partDay ? "Start it now and it gets the rest of today as a head start: its deadline counts from tomorrow." : "Start it now and today is day 1: everything you log today counts."}
+          {" "}Until it starts, what you log hits and heals nothing (it still earns +5 points).
+        </p>
+        <p className="mt-1 text-[13px] leading-snug font-bold text-g-mute">
+          {autoStart ? "Keep the monsters coming is on: if you don't start it today, it starts by itself the first time you open game mode on a new day."
+            : "Or turn on Keep the monsters coming (Settings → You) and the next monster starts by itself the first time you open game mode each day."}
+        </p>
+        <a href="#/game/choose" className="g-btn g-anim-glow mt-2.5 flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-g-green font-game text-[21px] text-[#2b1d3a] shadow-[0_5px_0_var(--g-line)]">
+          <Sword className="size-7 shrink-0" />Start the next fight ›
+        </a>
+      </section>
+
+      <div className="pb-safe sticky bottom-0 z-20 grid grid-cols-2 gap-2.5 px-3 pt-4">
+        <button onClick={() => act.activity()} aria-label="+ Activity" className="g-btn flex h-[64px] items-center justify-center gap-2 rounded-[20px] bg-g-green px-1.5 shadow-[0_5px_0_var(--g-line)]">
+          <Sword className="size-[30px] shrink-0" /><span className="g-stroke-thin font-game text-[21px] whitespace-nowrap">+ Activity</span>
+        </button>
+        <button onClick={() => act.log()} aria-label="+ Splurge" className="g-btn flex h-[64px] items-center justify-center gap-2 rounded-[20px] bg-g-blue px-1.5 shadow-[0_5px_0_var(--g-line)]">
+          <HeartPlus className="size-[30px] shrink-0" /><span className="g-stroke-thin font-game text-[21px] whitespace-nowrap">+ Splurge</span>
+        </button>
+      </div>
+    </main>
+  );
+}
 
 /** The adventure map, from the battle screen's header. */
 function MapLink() {
@@ -155,20 +239,7 @@ function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightVie
       <GameHeader kicker={`WORLD ${fight.world} · LEVEL ${fight.level} OF 60`} title={fight.worldName}><MapLink /></GameHeader>
 
       {/* hearts · run · score */}
-      <div className="mx-3 mt-2 flex items-stretch gap-2">
-        <div className="g-panel flex h-10 shrink-0 items-center gap-1 rounded-[14px] px-2.5">
-          <BattleHearts hearts={run.hearts} crack={!!scene?.crack} />
-        </div>
-        <div className={cx("g-panel flex h-10 shrink-0 flex-col items-center justify-center rounded-[14px] px-2.5 leading-none", run.hardcore ? "bg-g-night text-g-night-ink" : "bg-g-blue text-g-on")}>
-          <span className="flex items-center gap-0.5 text-[10px] font-black tracking-[0.06em]">{run.hardcore ? <Skull className="size-3" /> : null}RUN</span>
-          <span className="font-game text-lg/none">#{run.number}</span>
-        </div>
-        <div className="g-panel flex h-10 min-w-0 flex-1 items-center justify-between gap-1.5 rounded-[14px] bg-g-yellow pr-3 pl-2 text-g-on" aria-label={`Score ${fmt(run.liveScore)}`}>
-          <Star className="size-6 shrink-0" />
-          <span aria-hidden className="text-[11px] font-black tracking-[0.06em] max-[370px]:hidden">SCORE</span>
-          <span aria-hidden className="g-stroke-thin min-w-0 truncate font-game text-[22px] leading-none tabular max-[370px]:text-[19px]">{fmt(run.liveScore)}</span>
-        </div>
-      </div>
+      <RunRow run={run} crack={!!scene?.crack} />
 
       <Deadline deadlineOn={fight.deadlineOn} />
 

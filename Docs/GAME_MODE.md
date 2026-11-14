@@ -97,6 +97,10 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 ### Hearts and dying
 - A run starts with **3 hearts**; the most you can hold is 5.
 - If the deadline passes with HP left, the monster **strikes**: you lose 1 heart. It heals back to full and you rematch it with a fresh deadline.
+- **Between fights** (Matt, Nov 14 2026): after a KO or a strike nothing starts by itself. The next
+  monster (or the rematch) starts when the player taps **Start the next fight** (Choose your fight),
+  or, with **Keep the monsters coming** on, the first time game mode opens on a later day. Never the
+  same day one went down. With no monster going, entries hit and heal nothing.
 - You earn a heart back for:
   - beating a world boss: +1
   - a week with 5+ active days: +1

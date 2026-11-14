@@ -152,6 +152,7 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.post("/api/game/sync", h((req) => game.sync(owner(req), req.body)));
   app.post("/api/game/run", h((req) => game.start(owner(req), req.body)));
   app.post("/api/game/auto", h((req) => game.auto(owner(req), req.body)));
+  app.post("/api/game/next", h((req) => game.next(owner(req), req.body)));
   app.post("/api/game/bet", h((req) => game.bet(owner(req), req.body)));
   app.post("/api/game/powerup", h((req) => game.powerUp(owner(req), req.body)));
   app.post("/api/game/mode", h((req) => game.mode(owner(req), req.body)));

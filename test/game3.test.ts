@@ -122,6 +122,8 @@ describe("the result screens", () => {
     const ko = E("ko", { level: 60 }, "z"), fin = E("finish", {}, "z");
     expect(planResults([ko, fin, E("run_start"), E("powerup_used", { kind: "shield" })])).toEqual({ results: [{ kind: "finish", id: ko.id, ko, rewards: [] }], toasts: [] });
     expect(planResults([E("mode_drop")]).toasts).toHaveLength(1);
+    // a fight that started by itself (Keep the monsters coming) is a toast; one started by hand is not
+    expect(planResults([E("fight_start", { auto: true }), E("fight_start", {})]).toasts.map((e) => e.data.auto)).toEqual([true]);
   });
   it("breaks a Victory's points down to the server's total", () => {
     const base = { level: 11, damage: 295, daysLeft: 2, flawless: false, boss: false };

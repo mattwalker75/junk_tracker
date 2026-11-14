@@ -5,7 +5,8 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 ## [Unreleased]
 
 ## [1.1.0] — 2026-11-14
-Craving Crusher: splurging at full HP now costs something, and a run can start by itself each day.
+Craving Crusher: splurging at full HP now costs something; you choose when the next monster starts,
+or let it start by itself each morning.
 
 ### Added
 - 2026-11-14: **Bonus HP.** A splurge when the monster is already at full HP is no longer free:
@@ -14,12 +15,20 @@ Craving Crusher: splurging at full HP now costs something, and a run can start b
   Monster Book and the live panels count it in the HP left. The size buttons show "+20 bonus", or
   "maxed out" once the bonus bar is full. How to crush explains it.
 - 2026-11-14: **Keep the monsters coming** (Settings → You, off unless you turn it on). The first
-  time you open game mode each day, if your last run is over (or you never started one), a new run
-  starts by itself with Crumbs, in the same mode as your last one, and a note at the top says so.
-  When a run ends you still see how it went first; the new one starts the next day. (Inside a run
-  the next monster already started by itself the moment you beat one.)
+  time you open game mode each day, if no monster is going, the next one starts by itself with the
+  whole day ahead, and a note at the top says so. It never starts one on the same day a monster
+  went down. If your run is over (or you never started one), a new run starts the same way, in the
+  same mode as your last one; when a run ends you still see how it went first, and the new one
+  starts the next day.
 
 ### Changed
+- 2026-11-14: **The next monster waits for you.** Beating a monster (or missing a deadline) no
+  longer starts the next one (or the rematch) by itself. The battle screen says *No monster right
+  now*, shows who is up next, and has **Start the next fight** (it goes to Choose your fight, where
+  you pick the deadline and tap **Start the fight!**). Until it starts, what you log hits and heals
+  nothing, but still earns +5 points. Started the same day, it gets the rest of that day as a head
+  start; on another day, that day is day 1. The map, the Monster Book and the title screen show it
+  as *Up next*.
 - 2026-11-14: The database goes to version 5 (one new column, for Keep the monsters coming). Your
   first start after updating saves a copy first, as `junk.db.before-v5`.
 - 2026-11-14: The fight you are in now is worked out again with bonus HP, so a splurge you logged

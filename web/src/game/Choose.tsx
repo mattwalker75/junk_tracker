@@ -6,7 +6,7 @@
  */
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
-import { levelInfo } from "../../../shared/game";
+import { abilityFor, levelInfo } from "../../../shared/game";
 import type { Bet } from "../../../shared/game/types";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
@@ -57,7 +57,7 @@ export function Choose() {
 
   if (error) return <main className="relative min-h-dvh">{bg}{header}<GameNote title="Hmm, that didn't load">{error.message}</GameNote></main>;
   if (!view) return <main className="relative min-h-dvh">{bg}{header}</main>;
-  if (!run?.active || !fight) {
+  if (!run?.active || (!fight && !view.next)) {
     return (
       <main className="relative min-h-dvh">{bg}{header}
         <GameNote title="No fight going" action={<a href="#/game/start" className="g-btn flex h-12 items-center justify-center rounded-2xl bg-g-yellow font-game text-xl">Start a run</a>}>Start a run first: Crumbs is waiting.</GameNote>
@@ -65,18 +65,23 @@ export function Choose() {
     );
   }
 
-  // the monster just beaten, when this fight opened right after its KO
-  const ko = fight.attempt === 1 ? view.events.find((e) => e.kind === "ko" && Number(e.data.level) === fight.level - 1) : undefined;
-  const plans = fight.betOptions.map((o) => betPlan(o, fight, today, run.hardcore));
-  const chosen = pick ?? fight.bet;
+  // between fights (Matt, Nov 14 2026): the monster up next, started by Fight!
+  const waiting = fight ? null : view.next;
+  const subj = fight ?? (() => { const n = view.next!; return { ...n, max: n.hp, bonus: 0, bet: 1 as Bet, deadlineOn: n.betOptions[0].deadlineOn, powerUpsAllowed: !abilityFor(n.level).noPowerUps }; })();
+  // the monster just beaten, when this fight opened (or opens) right after its KO
+  const ko = subj.attempt === 1 ? view.events.find((e) => e.kind === "ko" && Number(e.data.level) === subj.level - 1) : undefined;
+  const plans = subj.betOptions.map((o) => betPlan(o, subj, today, run.hardcore));
+  const chosen = pick ?? subj.bet;
   const plan = plans.find((p) => p.bet === chosen) ?? plans[0];
-  const canBring = fight.powerUpsAllowed && run.shields > 0 && !run.shieldArmed;
+  const canBring = subj.powerUpsAllowed && run.shields > 0 && !run.shieldArmed;
 
   const fightNow = async () => {
     setBusy(true); setProblem(null);
     try {
-      if (chosen !== fight.bet) applyResult(qc, today, await api.gameBet(chosen, today, nowTime()));
-      if (bring && canBring) applyResult(qc, today, await api.gamePowerUp("shield", today, nowTime()));
+      let open = !!fight;
+      if (waiting) open = !!applyResult(qc, today, await api.gameNext(chosen, today, nowTime())).view.fight; // today's entries may knock it out at once
+      else if (chosen !== subj.bet) applyResult(qc, today, await api.gameBet(chosen, today, nowTime()));
+      if (bring && canBring && open) applyResult(qc, today, await api.gamePowerUp("shield", today, nowTime()));
       go("/game/battle");
     } catch (e) { setProblem((e as Error).message); }
     finally { setBusy(false); }
@@ -89,7 +94,7 @@ export function Choose() {
       {ko ? (
         <div className="g-panel mx-4 flex items-center gap-2.5 bg-[#d7f5c8] py-1.5 pr-3 pl-1.5 text-[#2b1d3a]">
           <div className="grid size-11 shrink-0 place-items-center overflow-hidden rounded-full border-[3px] border-g-line bg-[#ffd2b0]">
-            <img src={`/monsters/${levelInfo(fight.level - 1).slug}.svg`} alt="" className="mt-1.5 w-12" />
+            <img src={`/monsters/${levelInfo(subj.level - 1).slug}.svg`} alt="" className="mt-1.5 w-12" />
           </div>
           <div className="flex min-w-0 flex-1 flex-col leading-tight">
             <span className="font-game text-[17px]">{String(ko.data.name)} beaten!</span>
@@ -100,22 +105,22 @@ export function Choose() {
       ) : null}
 
       {/* the monster */}
-      <section aria-label={`Next monster: ${fight.name}`} className="relative mx-4 mt-2 flex items-center gap-1 rounded-[20px] border-[3px] border-g-line pt-4 pb-2.5 pr-3 pl-1 text-[#2b1d3a] shadow-[0_4px_0_#1a1024]"
+      <section aria-label={`Next monster: ${subj.name}`} className="relative mx-4 mt-2 flex items-center gap-1 rounded-[20px] border-[3px] border-g-line pt-4 pb-2.5 pr-3 pl-1 text-[#2b1d3a] shadow-[0_4px_0_#1a1024]"
         style={{ background: "radial-gradient(90% 90% at 25% 60%, #ffe3a1 0%, #fff7e6 60%)" }}>
-        <span className="absolute -top-3 left-3 rounded-full bg-[#2b1d3a] px-2.5 py-0.5 font-game text-[13px] tracking-[0.04em] text-g-yellow">{ko ? "NEXT UP" : "THIS FIGHT"} · LEVEL {fight.level} OF 60{fight.boss ? " · BOSS" : ""}</span>
-        <div className="g-anim-bob shrink-0"><img src={`/monsters/${fight.slug}.svg`} alt={fight.name} className="w-[120px]" /></div>
+        <span className="absolute -top-3 left-3 rounded-full bg-[#2b1d3a] px-2.5 py-0.5 font-game text-[13px] tracking-[0.04em] text-g-yellow">{waiting ? (waiting.rematch ? "REMATCH" : "UP NEXT") : ko ? "NEXT UP" : "THIS FIGHT"} · LEVEL {subj.level} OF 60{subj.boss ? " · BOSS" : ""}</span>
+        <div className="g-anim-bob shrink-0"><img src={`/monsters/${subj.slug}.svg`} alt={subj.name} className="w-[120px]" /></div>
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <div className="flex flex-col">
-            <span className="truncate text-[11px] font-black tracking-[0.04em] text-[#c2410c]">WORLD {fight.world} · {fight.worldName.toUpperCase()}</span>
-            <h2 className="m-0 font-game text-[27px] leading-none font-normal">{fight.name}</h2>
+            <span className="truncate text-[11px] font-black tracking-[0.04em] text-[#c2410c]">WORLD {subj.world} · {subj.worldName.toUpperCase()}</span>
+            <h2 className="m-0 font-game text-[27px] leading-none font-normal">{subj.name}</h2>
           </div>
           <div className="flex flex-col gap-[3px]">
-            <div className="flex justify-between gap-1 text-xs font-black"><span>HP</span><HpNumbers hp={fight.hp} max={fight.max} bonus={fight.bonus} /></div>
-            <HpBar label={`${fight.name} hit points`} max={fight.max} value={hpLeft(fight)} fill="var(--g-orange)" className="h-2.5" gloss={false} />
+            <div className="flex justify-between gap-1 text-xs font-black"><span>HP</span><HpNumbers hp={subj.hp} max={subj.max} bonus={subj.bonus} /></div>
+            <HpBar label={`${subj.name} hit points`} max={subj.max} value={hpLeft(subj)} fill="var(--g-orange)" className="h-2.5" gloss={false} />
           </div>
           <div className="flex flex-col gap-px rounded-xl border-2 border-[#2b1d3a] bg-white px-2 py-1.5">
-            <span className="flex items-center gap-1 font-game text-sm text-[#c27a00]"><Ability className="size-4" />{fight.ability.name}</span>
-            <span className="text-xs leading-tight">{fight.ability.text}</span>
+            <span className="flex items-center gap-1 font-game text-sm text-[#c27a00]"><Ability className="size-4" />{subj.ability.name}</span>
+            <span className="text-xs leading-tight">{subj.ability.text}</span>
           </div>
         </div>
       </section>
@@ -125,7 +130,7 @@ export function Choose() {
           <section aria-labelledby="cf-dl" className="relative mx-4 mt-0.5 flex flex-col gap-2">
             <div className="flex items-baseline justify-between">
               <h2 id="cf-dl" className="g-stroke g-shadow-text m-0 font-game text-[22px] font-normal">Pick your deadline</h2>
-              <span className="text-xs font-black text-[#fff7e6]">Today is day 1</span>
+              <span className="text-xs font-black text-[#fff7e6]">{waiting?.partDay ? "Counts from tomorrow" : "Today is day 1"}</span>
             </div>
             <div role="radiogroup" aria-label="Deadline" className="flex flex-col gap-2">
               {plans.map((p) => {
@@ -175,7 +180,7 @@ export function Choose() {
           </section>
         </>
       ) : (
-        <GameNote title="The deadline is set">The bet can only change before your first attack lands, on the fight's first day. This fight runs to the {dueText(fight.deadlineOn)}, at ×{fight.bet}.</GameNote>
+        <GameNote title="The deadline is set">The bet can only change before your first attack lands, on the fight's first day. This fight runs to the {dueText(subj.deadlineOn)}, at ×{subj.bet}.</GameNote>
       )}
 
       {/* power-ups */}
@@ -193,7 +198,7 @@ export function Choose() {
               <span className={cx("text-[11px] font-black", bring || run.shieldArmed ? "text-[#2f7a2a]" : "text-[#5b4a6b]")}>{run.shieldArmed ? "ALREADY UP ✓" : bring ? "BRINGING ✓" : "Tap to bring"}</span>
             </button>
           ) : (
-            <Locked icon={<Shield className="h-7 w-[26px]" />} name={`Veggie Shield ×${run.shields}`} how={fight.powerUpsAllowed ? "earn: 3 clean days" : "not in this fight"} />
+            <Locked icon={<Shield className="h-7 w-[26px]" />} name={`Veggie Shield ×${run.shields}`} how={subj.powerUpsAllowed ? "earn: 3 clean days" : "not in this fight"} />
           )}
           <Locked icon={<Potion className="h-6 w-5" />} name={`Water Potion ×${run.potions}`} how={run.potions ? "use it in the battle" : "earn: 60+ min workout"} />
           <Locked icon={<Wind className="size-[22px]" />} name={`Second Wind ×${run.winds}`} how={run.winds ? "use it in the battle" : "earn: a boss kill"} />
@@ -205,8 +210,8 @@ export function Choose() {
         className="g-btn relative mx-4 mt-0.5 flex min-h-[68px] flex-col items-center justify-center rounded-[22px] border-4 p-1.5 text-white shadow-[0_6px_0_#1a1024]"
         style={{ background: "linear-gradient(180deg, #ff7088 0%, #ff4d6d 55%, #e2324f 100%)" }}>
         <span className="absolute inset-x-3.5 top-1 h-1.5 rounded-full bg-white opacity-35" />
-        <span className="g-stroke font-game text-[32px] leading-none tracking-[0.02em]" style={{ WebkitTextStroke: "2.5px #2b1d3a" }}>Fight!</span>
-        <span className="text-[13px] font-black text-[#fff0f3]">{plan ? `${plan.days} ${plan.days === 1 ? "day" : "days"} · due ${shortDate(plan.deadlineOn)} · ×${plan.bet}` : `due ${shortDate(fight.deadlineOn)} · ×${fight.bet}`}{bring && canBring ? " · Veggie Shield" : ""}</span>
+        <span className="g-stroke font-game text-[32px] leading-none tracking-[0.02em]" style={{ WebkitTextStroke: "2.5px #2b1d3a" }}>{waiting ? "Start the fight!" : "Fight!"}</span>
+        <span className="text-[13px] font-black text-[#fff0f3]">{plan ? `${plan.days} ${plan.days === 1 ? "day" : "days"} · due ${shortDate(plan.deadlineOn)} · ×${plan.bet}` : `due ${shortDate(subj.deadlineOn)} · ×${subj.bet}`}{bring && canBring ? " · Veggie Shield" : ""}</span>
       </button>
     </main>
   );

@@ -84,7 +84,7 @@ export interface FightData {
   betLocked: boolean;
 }
 
-export type EventKind = "run_start" | "ko" | "strike" | "knockback" | "defeat" | "finish" | "heart" | "powerup_earned" | "powerup_used" | "mode_drop";
+export type EventKind = "run_start" | "fight_start" | "ko" | "strike" | "knockback" | "defeat" | "finish" | "heart" | "powerup_earned" | "powerup_used" | "mode_drop";
 export interface EventData {
   id: Id;
   fightId: Id | null;
@@ -220,6 +220,34 @@ export interface FightView extends Omit<FightData, "points"> {
   input: FightInput;
 }
 
+/**
+ * Between fights (Matt, Nov 14 2026): a knockout or a missed deadline closes the fight and nothing
+ * opens until the person starts the next one (Choose your fight → Start the fight), or Keep the
+ * monsters coming starts it the first time game mode opens on a later day.
+ */
+export interface NextFightView {
+  level: number;
+  attempt: number;
+  name: string;
+  slug: string;
+  world: number;
+  worldName: string;
+  boss: boolean;
+  ability: { id: string; name: string; text: string };
+  /** its full HP and default deadline in days */
+  hp: number;
+  days: number;
+  /** the same monster again, after a missed deadline (or the start of the world, after a knock-back) */
+  rematch: boolean;
+  /**
+   * started today it gets the rest of the day: a monster went down today, so what that one used
+   * stays with it and the deadline counts from tomorrow; otherwise the whole of today counts
+   */
+  partDay: boolean;
+  /** the three deadline cards, for a start now */
+  betOptions: { bet: Bet; label: string; deadlineOn: Day }[];
+}
+
 export type MapStatus = "beaten" | "current" | "locked";
 export interface MapLevel { level: number; status: MapStatus; attempts: number; wins: number; bestPoints: number }
 
@@ -229,8 +257,12 @@ export interface GameView {
   today: Day;
   /** the person's latest run (going or ended), or null before their first */
   run: RunView | null;
-  /** the open fight, worked out from the log; null with no run going */
+  /** the open fight, worked out from the log; null with no run going, or between fights */
   fight: FightView | null;
+  /** between fights in a run that is going: the monster that is up next, waiting to be started */
+  next: NextFightView | null;
+  /** the person's Keep the monsters coming setting (the between-fights screen says what happens next) */
+  autoStart: boolean;
   /** all 60 levels */
   map: MapLevel[];
   /** what happened in the run, newest first (the latest 50) */
@@ -241,10 +273,11 @@ export interface GameView {
 
 export interface SyncResult { happened: EventView[]; view: GameView }
 /**
- * POST /api/game/auto: whether a run started by itself (Keep the monsters coming), and if so what
- * came of it. `checked`: today's look has been taken (false only while the setting is off).
+ * POST /api/game/auto: what Keep the monsters coming did — started a run, started the next fight, or
+ * nothing — and what came of it (its first look settles the run). `checked`: today's look has been
+ * taken (false while the setting is off; then nothing else comes back).
  */
-export type AutoResult = { started: false; checked: boolean } | ({ started: true; checked: true } & SyncResult);
+export type AutoResult = { started: false; checked: false } | ({ started: false | "run" | "fight"; checked: true } & SyncResult);
 
 export interface HallRun {
   userId: Id;

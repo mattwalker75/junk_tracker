@@ -14,7 +14,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
 import { attackPanel, previewStamp, savedText } from "../game/logic";
 import { Sword } from "../game/icons";
-import { AttackPreview } from "../game/Panels";
+import { AttackPreview, NoFightNote } from "../game/Panels";
 import { syncAfterLog, useGame } from "../game/state";
 import { toast } from "sonner";
 import { quickPickNames, type Activity, type Day } from "../../../shared/types";
@@ -118,7 +118,7 @@ export function ActivitySheet({ open, onOpenChange, day, edit, skin = "tracker" 
       lead={game ? <span aria-hidden className="grid size-11 shrink-0 -rotate-[4deg] place-items-center rounded-[14px] border-[3px] border-g-line bg-g-red shadow-[0_4px_0_var(--g-line)]"><Sword className="size-8" /></span> : undefined}
       titleNode={game ? <span className="flex items-baseline gap-2"><span className="g-stroke-thin" style={{ color: "#ff4d6d" }}>Attack!</span><span>{title}</span></span> : undefined}>
       <form onSubmit={save} className={game ? "space-y-3 pb-2" : "space-y-4 pb-2"}>
-        {panel && fight ? <AttackPreview p={panel} slug={fight.slug} /> : null}
+        {panel && fight ? <AttackPreview p={panel} slug={fight.slug} /> : game && !fight && gameView?.next ? <NoFightNote name={gameView.next.name} kind="hit" /> : null}
         {recent.length ? (
           <div>
             <Label>Again?</Label>

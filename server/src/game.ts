@@ -13,7 +13,7 @@ import type Database from "better-sqlite3";
 import { z } from "zod";
 import type { Day, Id } from "../../shared/types.js";
 import {
-  abandonRun, addDays, badgesFor, daysBetween, BETS, buildView, dropToNormal, GameRuleError, newRun, setBet, settle, toEventView, usePowerUp,
+  abandonRun, addDays, badgesFor, daysBetween, BETS, buildView, dropToNormal, GameRuleError, lastEndedBefore, newRun, pendingLevel, setBet, settle, startNextFight, toEventView, usePowerUp,
   type ActivityEv, type Bet, type EventData, type FightData, type GameClock, type GameLog, type GameView, type HallRun, type HallView,
   type AutoResult, type Mode, type RunData, type RunState, type SplurgeEv, type SyncResult,
 } from "../../shared/game/index.js";
@@ -146,7 +146,7 @@ export class Game {
   }
 
   private result(owner: Id, st: RunState | null, happened: EventData[], t: Day): SyncResult {
-    return { happened: happened.map(toEventView), view: buildView(st, st ? this.gameLog(owner, st.run, t) : null, t, false) };
+    return { happened: happened.map(toEventView), view: buildView(st, st ? this.gameLog(owner, st.run, t) : null, t, false, this.users.settings(owner).autoStart) };
   }
 
   // ---------------------------------------------------------------- the routes
@@ -155,11 +155,12 @@ export class Game {
     const t = parse(this.sc.today, q.today);
     if (q.now !== undefined && q.now !== "") parse(nowTime, q.now);
     const st = this.load(owner);
-    if (!st) return buildView(null, null, t, false);
+    const autoStart = this.users.settings(owner).autoStart;
+    if (!st) return buildView(null, null, t, false, autoStart);
     const log = this.gameLog(owner, st.run, t);
     let n = 0;
     const needsSync = !st.run.endReason && settle(st, log, { today: t, nowTime: "", nowIso: now(), newId: () => `dry${n++}` }).added.length > 0;
-    return buildView(st, log, t, needsSync);
+    return buildView(st, log, t, needsSync, autoStart);
   }
 
   /** POST /api/game/sync: settle KOs, strikes, weekly hearts and power-ups up to today. */
@@ -190,12 +191,16 @@ export class Game {
   }
 
   /**
-   * POST /api/game/auto — Keep the monsters coming (Matt, Nov 14 2026). The game page calls it when
-   * it first opens each day. With the setting on, the first call of the person's day (on any phone)
-   * looks at the run as stored: if none is going — never started, defeated, finished — run N+1
-   * starts by itself, in the last run's mode (Normal for a first run). A run that is still going
-   * (even one whose missed deadline is about to end it) means nothing starts today: the Defeated
-   * screen gets its moment, and the next day starts a new run. Later calls that day do nothing.
+   * POST /api/game/auto — Keep the monsters coming (Matt, Nov 14 2026). The game page calls it before
+   * its first read each day. With the setting on, the first call of the person's day (on any phone)
+   * settles the run, then:
+   * - between fights in a run that is going, when the last fight ended on an earlier day (a KO or a
+   *   missed deadline before today): the next fight starts, with the whole of today. A monster that
+   *   went down today means nothing starts until tomorrow (or until it is started by hand);
+   * - no run going: run N+1 starts, in the last run's mode (Normal for a first run) — but only when
+   *   the run had already ended before this look. A run that ends in this very settle (a missed
+   *   deadline that was its last heart) gets its Defeated screen, and the new run starts the next day.
+   * Later calls that day settle nothing and start nothing. With the setting off nothing is stamped.
    */
   auto(owner: Id, body: unknown): AutoResult {
     const v = parse(this.sc.clock, body);
@@ -203,10 +208,32 @@ export class Game {
     return this.db.transaction((): AutoResult => {
       if (!this.users.settings(owner).autoStart) return { started: false, checked: false };
       const u = this.db.prepare("UPDATE users SET game_checked_on = ? WHERE id = ? AND (game_checked_on IS NULL OR game_checked_on <> ?)").run(v.today, owner, v.today);
-      if (!u.changes) return { started: false, checked: true };
-      const last = this.latestRun(owner);
-      if (last && !last.end_reason) return { started: false, checked: true };
-      return { started: true, checked: true, ...this.begin(owner, (last?.number ?? 0) + 1, last?.mode ?? "normal", c, true) };
+      const stored = this.load(owner);
+      const endedBefore = !stored || !!stored.run.endReason;
+      const { st, happened } = this.settleAndStore(owner, c);
+      if (!u.changes) return { started: false, checked: true, ...this.result(owner, st, happened, v.today) };
+      if (endedBefore) {
+        return { started: "run", checked: true, ...this.begin(owner, (stored?.run.number ?? 0) + 1, stored?.run.mode ?? "normal", c, true) };
+      }
+      if (st && !st.run.endReason && pendingLevel(st) !== null && lastEndedBefore(st, v.today)) {
+        const out = startNextFight(st, this.gameLog(owner, st.run, v.today), c, 1, true);
+        this.store(owner, out.state, out.added);
+        return { started: "fight", checked: true, ...this.result(owner, out.state, [...happened, ...out.added], v.today) };
+      }
+      return { started: false, checked: true, ...this.result(owner, st, happened, v.today) };
+    })();
+  }
+
+  /** POST /api/game/next: start the fight that is up next, now (Choose your fight → Start the fight), at a bet. */
+  next(owner: Id, body: unknown): SyncResult {
+    const v = parse(this.sc.bet.partial({ bet: true }), body);
+    const c = this.clock(v.today, v.now);
+    return this.db.transaction(() => {
+      const { st, happened } = this.settleAndStore(owner, c);
+      if (!st) throw new UserError("Start a run first.", 409);
+      const out = this.rule(() => startNextFight(st, this.gameLog(owner, st.run, v.today), c, (v.bet ?? 1) as Bet));
+      this.store(owner, out.state, out.added);
+      return this.result(owner, out.state, [...happened, ...out.added], v.today);
     })();
   }
 

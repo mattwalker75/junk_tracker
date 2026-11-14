@@ -620,11 +620,19 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     const synced = (await b.call("POST", "/api/game/sync", { today: T, now: "10:00" })).body;
     expect(synced.happened.map((e: { kind: string }) => e.kind)).toEqual(["powerup_earned", "ko"]);
     expect(synced.happened[1].text).toMatch(/^Crumbs went down! \+/);
-    expect(synced.view.fight).toMatchObject({ level: 2, name: "Chiplet", hp: 120 });
+    // between fights: nothing opens by itself (Matt, Nov 14 2026)
+    expect(synced.view.fight).toBeNull();
+    expect(synced.view.next).toMatchObject({ level: 2, name: "Chiplet", hp: 120, partDay: true });
     expect(synced.view.run.potions).toBe(1);
     expect((await b.call("GET", `/api/game?today=${T}`)).body.needsSync).toBe(false);
     expect((await b.call("POST", "/api/game/sync", { today: T })).body.happened).toEqual([]);
-    // a splurge logged after the KO heals the new monster; the score counts every entry since the run began
+    // started by hand: Chiplet is on; refused while it is going
+    expect((await b.call("POST", "/api/game/next", { bet: 4, today: T })).body.error).toBe("Pick Steady, Bold or Daredevil.");
+    const go = (await b.call("POST", "/api/game/next", { today: T, now: "11:00" })).body;
+    expect(go.happened.map((e: { kind: string; text: string }) => [e.kind, e.text])).toEqual([["fight_start", "Chiplet: the fight is on!"]]);
+    expect(go.view.fight).toMatchObject({ level: 2, name: "Chiplet", hp: 120 });
+    expect((await b.call("POST", "/api/game/next", { today: T })).body.error).toBe("A fight is already going. Beat it first.");
+    // a splurge logged after it started heals the new monster; the score counts every entry since the run began
     await b.call("POST", "/api/splurges", { what: "Fries", size: "meal", day: T, time: "12:00", planned: true });
     const v = (await b.call("GET", `/api/game?today=${T}`)).body;
     // Chiplet was at full HP: the planned meal's 13 goes on as bonus HP (Nov 14 2026)
@@ -634,7 +642,7 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     expect(v.run.logPoints).toBe(5);
   });
 
-  it("a missed deadline: strike, a heart lost, a rematch", async () => {
+  it("a missed deadline: strike, a heart lost, a rematch that waits to be started", async () => {
     s = await scratch({}, GAME);
     const b = await firstPerson();
     await b.call("POST", "/api/game/run", { mode: "hardcore", today: T });
@@ -642,7 +650,9 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     const r = (await b.call("POST", "/api/game/sync", { today: "2026-11-13" })).body;
     expect(r.happened.map((e: { kind: string }) => e.kind)).toEqual(["strike"]);
     expect(r.view.run.hearts).toBe(2);
-    expect(r.view.fight).toMatchObject({ level: 1, attempt: 2, startedOn: "2026-11-13", deadlineOn: "2026-11-15" });
+    expect([r.view.fight, r.view.next.rematch, r.view.next.attempt]).toEqual([null, true, 2]);
+    const go = (await b.call("POST", "/api/game/next", { today: "2026-11-13", bet: 1.5 })).body;
+    expect(go.view.fight).toMatchObject({ level: 1, attempt: 2, startedOn: "2026-11-13", deadlineOn: "2026-11-14", bet: 1.5 });
   });
 
   it("the bet, power-ups and the mode, each with its own plain refusal", async () => {
@@ -663,7 +673,9 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     expect((await b.call("POST", "/api/game/mode", { to: "normal", today: T })).body.error).toMatch(/already Normal/);
     // a 60-minute workout earns a Water Potion (and finishes Crumbs), and drinking it hits Chiplet for 50
     await b.call("POST", "/api/activities", { what: "Bike", minutes: 60, day: T, time: "08:00" });
-    expect((await b.call("POST", "/api/game/sync", { today: T })).body.view.fight).toMatchObject({ name: "Chiplet", hp: 120 });
+    expect((await b.call("POST", "/api/game/sync", { today: T })).body.view.next).toMatchObject({ name: "Chiplet" });
+    expect((await b.call("POST", "/api/game/powerup", { kind: "potion", today: T, now: "09:00" })).body.error).toMatch(/no fight going/);
+    expect((await b.call("POST", "/api/game/next", { today: T })).body.view.fight).toMatchObject({ name: "Chiplet", hp: 120 });
     const p = (await b.call("POST", "/api/game/powerup", { kind: "potion", today: T, now: "09:00" })).body;
     expect(p.happened.map((e: { kind: string }) => e.kind)).toEqual(["powerup_used"]);
     expect(p.view.run.potions).toBe(0);
@@ -697,10 +709,11 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     expect((await b.call("GET", "/api/game/hall")).status).toBe(400);
   });
 
-  it("Keep the monsters coming: off by default; on, the day's first open starts a run when none is going — once a day, in the last run's mode", async () => {
+  it("Keep the monsters coming: off by default; on, the day's first open starts a run, then each next monster on a later day — never the same day one went down", async () => {
     s = await scratch({}, GAME);
     const b = await firstPerson();
-    const auto = async (today: string) => (await b.call("POST", "/api/game/auto", { today, now: "08:00" })).body;
+    const auto = async (today: string, now = "08:00") => (await b.call("POST", "/api/game/auto", { today, now })).body;
+    const kindsOf = (r: { happened: { kind: string }[] }) => r.happened.map((e) => e.kind);
     const runs = () => s.handle.db.prepare("SELECT number, mode, end_reason FROM game_runs ORDER BY number").all();
     // off: nothing starts, and the day is not used up (turning it on later today still works)
     expect(await auto(T)).toEqual({ started: false, checked: false });
@@ -708,45 +721,49 @@ describe("Craving Crusher (game mode, Nov 11 2026)", () => {
     expect((await b.call("PUT", "/api/me/settings", { autoStart: "yes" })).body.error).toBe("Keep the monsters coming is on or off.");
     expect((await b.call("PUT", "/api/me/settings", { autoStart: true })).body.autoStart).toBe(true);
     expect((await b.call("POST", "/api/game/auto", { today: "2200-01-01" })).status).toBe(400);
-    // on, with no run yet: run 1 starts (Normal), told as started by itself
-    await b.call("POST", "/api/activities", { what: "Long walk", minutes: 150, day: T, time: "07:00" });
-    const first = await auto(T);
-    expect(first.started).toBe(true);
-    expect(first.happened[0]).toMatchObject({ kind: "run_start", data: { number: 1, mode: "normal", auto: true } });
-    expect(first.happened[0].text).toBe("Run #1 started by itself (Normal): Keep the monsters coming is on. Crumbs is first.");
-    // fight 1 counts the whole of today: this morning's walk knocks Crumbs out at once
-    expect(first.happened.map((e: { kind: string }) => e.kind)).toContain("ko");
-    expect(first.view.fight).toMatchObject({ level: 2 });
-    // once a day: the same day again does nothing, and a run going means nothing starts
-    expect(await auto(T)).toEqual({ started: false, checked: true });
-    expect(await auto("2026-11-11")).toEqual({ started: false, checked: true });
+    // Tuesday, first open, no run yet: run 1 starts (Normal), told as started by itself
+    const tue = await auto(T);
+    expect(tue.started).toBe("run");
+    expect(tue.happened[0]).toMatchObject({ kind: "run_start", data: { number: 1, mode: "normal", auto: true } });
+    expect(tue.happened[0].text).toBe("Run #1 started by itself (Normal): Keep the monsters coming is on. Crumbs is first.");
+    expect(tue.view).toMatchObject({ fight: { level: 1 }, autoStart: true });
+    // later that day a long walk knocks Crumbs out: nothing new starts, today or on another open today
+    await b.call("POST", "/api/activities", { what: "Long walk", minutes: 150, day: T, time: "15:00" });
+    expect(kindsOf((await b.call("POST", "/api/game/sync", { today: T, now: "15:05" })).body)).toContain("ko");
+    expect(await auto(T, "18:00")).toMatchObject({ started: false, checked: true, view: { fight: null, next: { level: 2 } } });
+    // Wednesday's first open: Chiplet shows up by itself, with the whole day
+    const wed = await auto("2026-11-11");
+    expect(wed.started).toBe("fight");
+    expect(wed.happened.map((e: { kind: string; data: { auto?: boolean } }) => [e.kind, e.data.auto])).toEqual([["fight_start", true]]);
+    expect(wed.view.fight).toMatchObject({ level: 2, startedOn: "2026-11-11", startedAfter: null });
+    expect(await auto("2026-11-11", "20:00")).toMatchObject({ started: false, checked: true });
+    // Thursday: a workout logged in the tracker before the game is opened knocks Chiplet out today, so nothing starts…
+    await b.call("POST", "/api/activities", { what: "Ride", minutes: 200, day: "2026-11-12", time: "07:00" });
+    const thu = await auto("2026-11-12");
+    expect(thu.started).toBe(false);
+    expect(kindsOf(thu)).toContain("ko"); // the look settles first, so the Victory is told
+    expect(thu.view).toMatchObject({ fight: null, next: { level: 3 } });
+    // …until Friday, or until it is started by hand
+    expect((await auto("2026-11-13")).started).toBe("fight");
     expect(runs()).toEqual([{ number: 1, mode: "normal", end_reason: null }]);
-    // a Hardcore run that ended: the next day's first open starts run 2, Hardcore again
-    s.handle.db.prepare("UPDATE game_runs SET mode = 'hardcore', end_reason = 'defeated', ended_on = '2026-11-11'").run();
-    expect(await auto("2026-11-11")).toEqual({ started: false, checked: true }); // today was already looked at
-    const next = await auto("2026-11-12");
-    expect(next).toMatchObject({ started: true, view: { run: { number: 2, mode: "hardcore", active: true } } });
-    expect(runs()).toEqual([{ number: 1, mode: "hardcore", end_reason: "defeated" }, { number: 2, mode: "hardcore", end_reason: null }]);
     // off again: nothing more
     await b.call("PUT", "/api/me/settings", { autoStart: false });
-    s.handle.db.prepare("UPDATE game_runs SET end_reason = 'finished', ended_on = '2026-11-12' WHERE number = 2").run();
-    expect(await auto("2026-11-13")).toEqual({ started: false, checked: false });
-    expect(runs()).toHaveLength(2);
+    expect(await auto("2026-11-14")).toEqual({ started: false, checked: false });
   });
 
-  it("Keep the monsters coming waits a day after a run ends: a run still stored as going (its deadline just passed) is settled by the sync, not replaced", async () => {
+  it("Keep the monsters coming after a run ends: a run that ends at the day's first look gets its Defeated screen; the new run starts the next day, in the same mode", async () => {
     s = await scratch({}, GAME);
     const b = await firstPerson();
     await b.call("POST", "/api/game/run", { mode: "hardcore", today: T });
     await b.call("PUT", "/api/me/settings", { autoStart: true });
     s.handle.db.prepare("UPDATE game_runs SET hearts = 1").run();
-    // Crumbs' deadline was Nov 12; on Nov 13 the stored run is still going, so nothing starts…
-    expect((await b.call("POST", "/api/game/auto", { today: "2026-11-13" })).body).toEqual({ started: false, checked: true });
-    // …and the sync brings the Defeated news
-    const synced = (await b.call("POST", "/api/game/sync", { today: "2026-11-13" })).body;
-    expect(synced.happened.map((e: { kind: string }) => e.kind).filter((k: string) => k !== "powerup_earned")).toEqual(["strike", "defeat"]); // (3 clean days earned a shield on the way)
+    // Crumbs' deadline was Nov 12; the look on Nov 13 settles the strike and the defeat, and starts nothing
+    const first = (await b.call("POST", "/api/game/auto", { today: "2026-11-13" })).body;
+    expect(first.started).toBe(false);
+    expect(first.happened.map((e: { kind: string }) => e.kind).filter((k: string) => k !== "powerup_earned")).toEqual(["strike", "defeat"]); // (3 clean days earned a shield on the way)
+    expect(first.view.run).toMatchObject({ active: false, endReason: "defeated" });
     expect((await b.call("POST", "/api/game/auto", { today: "2026-11-13" })).body.started).toBe(false);
-    expect((await b.call("POST", "/api/game/auto", { today: "2026-11-14" })).body).toMatchObject({ started: true, view: { run: { number: 2, mode: "hardcore" } } });
+    expect((await b.call("POST", "/api/game/auto", { today: "2026-11-14" })).body).toMatchObject({ started: "run", view: { run: { number: 2, mode: "hardcore" } } });
   });
 
   it("one person can't touch another person's run: each sees, syncs and changes only their own", async () => {

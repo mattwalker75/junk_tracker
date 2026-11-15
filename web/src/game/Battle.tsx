@@ -38,7 +38,7 @@ function Deadline({ deadlineOn }: { deadlineOn: string }) {
       <div className="flex min-w-0 flex-1 flex-col leading-tight">
         <span className="text-[10px] font-black tracking-[0.02em] whitespace-nowrap text-g-warn">{cd.kicker}</span>
         <span className="font-game text-[23px] leading-[1.05]">{cd.passed ? "Time’s up!" : cd.big}</span>
-        <span className="text-xs font-extrabold text-g-mute">{cd.passed ? "It strikes once the day is over: −1 heart." : "Miss it: it strikes, −1 heart"}</span>
+        <span className="text-xs font-extrabold text-g-mute">{cd.passed ? "It strikes once the day is over: −1 heart." : "Miss it: −1 heart, then one more day"}</span>
       </div>
       <div className="flex shrink-0 flex-col items-center gap-0.5">
         <span aria-hidden className={cx("tabular rounded-[10px] bg-g-night px-[7px] py-[5px] text-[15px] font-black whitespace-nowrap", cd.passed ? "text-[#ff7a95]" : "text-g-yellow")}>{cd.digits}</span>
@@ -197,7 +197,7 @@ function MapLink() {
  * result screen comes up (Results.tsx). Reduced motion skips straight to the screen.
  */
 const SCENE_MS = 1700;
-function useScene(head: QueuedResult | null): { kind: "ko" | "strike"; level: number; crack: boolean } | null {
+function useScene(head: QueuedResult | null): { kind: "ko" | "strike"; level: number; crack: boolean; goesOn: boolean } | null {
   const pending = head && !head.shown ? head.result : null;
   const id = pending?.id;
   useEffect(() => {
@@ -206,8 +206,9 @@ function useScene(head: QueuedResult | null): { kind: "ko" | "strike"; level: nu
     return () => window.clearTimeout(t);
   }, [id]);
   if (!pending) return null;
-  if (pending.kind === "victory" || pending.kind === "finish") return { kind: "ko", level: Number(pending.ko.data.level ?? 60), crack: false };
-  return { kind: "strike", level: Number(pending.strike.data.level), crack: pending.kind === "strike" };
+  if (pending.kind === "victory" || pending.kind === "finish") return { kind: "ko", level: Number(pending.ko.data.level ?? 60), crack: false, goesOn: false };
+  // a strike that left hearts: the same fight goes on, so its HP bar stays as it is
+  return { kind: "strike", level: Number(pending.strike.data.level), crack: pending.kind === "strike", goesOn: pending.kind === "strike" && pending.strike.data.extended === true };
 }
 
 function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightView; today: string; head: QueuedResult | null }) {
@@ -249,7 +250,7 @@ function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightVie
         <div className="absolute inset-x-2.5 top-2 flex flex-col gap-1">
           <div className="flex items-end justify-between gap-2">
             <span className="g-stroke truncate font-game text-2xl leading-none" style={{ textShadow: "0 2px 0 #2b1d3a" }}>{ko?.name ?? strikeBy?.name ?? fight.name}</span>
-            <span className="g-stroke-thin shrink-0 text-base font-black">{ko ? `HP 0 / ${ko.hp}` : strikeBy ? `HP ${strikeBy.hp} / ${strikeBy.hp}` : <>HP <HpNumbers hp={fight.hp} max={fight.max} bonus={fight.bonus} /></>}</span>
+            <span className="g-stroke-thin shrink-0 text-base font-black">{ko ? `HP 0 / ${ko.hp}` : strikeBy && !scene?.goesOn ? `HP ${strikeBy.hp} / ${strikeBy.hp}` : <>HP <HpNumbers hp={fight.hp} max={fight.max} bonus={fight.bonus} /></>}</span>
           </div>
           <HpBar label={`${fight.name} hit points`} max={fight.max} value={ko ? 0 : left}
             fill={fx?.kind === "heal" ? "#ff4d6d" : "#ff7a2f"} fillClass="rounded-full shadow-[inset_0_-4px_0_rgba(0,0,0,.18)]" />

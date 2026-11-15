@@ -1,6 +1,7 @@
 /**
  * Calorie Crusher's engine: works out a fight from the log, settles a run (KO → next fight, strike →
- * rematch, knock-back or defeat, weekly hearts, power-ups) and builds what the game screens show.
+ * a heart and one more day, or at the last heart a knock-back or defeat; weekly hearts, power-ups)
+ * and builds what the game screens show.
  * Pure: it never reads a clock or a database. The server (server/src/game.ts) loads a run, calls
  * these and stores what comes back; the page uses the same functions for its live previews.
  *
@@ -363,7 +364,8 @@ function openFight(st: RunState, level: number, startedOn: Day, startedAfter: st
 
 /**
  * Between fights: the level that is up next, or null (a fight is open, or the run is over). After a
- * KO it is the next level; after a strike the same one, or the world's first after a knock-back.
+ * KO it is the next level; after a knock-back the world's first (a strike that left hearts keeps
+ * its fight open, so nothing is pending).
  */
 export function pendingLevel(st: RunState): number | null {
   if (st.run.endReason || openFightOf(st)) return null;
@@ -433,9 +435,9 @@ export function abandonRun(input: RunState, clock: GameClock): RunState {
 }
 
 /**
- * Settle a run up to today, in order: a knockout opens the next fight at once; a deadline that has
- * passed is a strike (a heart, then a rematch — or at 0 hearts a knock-back on Normal, defeat on
- * Hardcore); weekly hearts, Veggie Shields and Water Potions are given as they are earned. Running
+ * Settle a run up to today, in order: a knockout closes the fight (the next one waits to be
+ * started); a deadline that has passed is a strike (a heart, and the same fight goes on one more day
+ * with its HP as it was — or at the last heart a knock-back on Normal, defeat on Hardcore); weekly hearts, Veggie Shields and Water Potions are given as they are earned. Running
  * it again with nothing new changes nothing.
  */
 export function settle(input: RunState, log: GameLog, clock: GameClock): { state: RunState; added: EventData[] } {
@@ -450,7 +452,7 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
   const hardcore = () => run.mode === "hardcore";
   const award = awarder(st, log, ev);
 
-  // each pass ends a fight (or stops): at most 60 KOs and one strike a day, so the days bound it
+  // each pass ends a fight, moves its deadline on a day (a strike) or stops, so the days bound it
   const first = openFightOf(st);
   const passes = first ? 61 * (Math.max(0, daysBetween(first.startedOn, clock.today)) + 2) : 0;
   for (let guard = 0; guard < passes; guard++) {
@@ -508,21 +510,28 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
     }
 
     if (clock.today > f.deadlineOn) {
-      award(f.deadlineOn);
-      f.status = "struck"; f.endedOn = f.deadlineOn; f.betLocked = true;
-      f.points = struckPoints({ damage: f.damage, hardcore: hardcore() });
+      const missed = f.deadlineOn;
+      award(missed);
+      f.betLocked = true;
       run.hearts -= 1;
-      ev("strike", f.deadlineOn, f.id, { level: f.level, name: lv.name, hpLeft: sim.hp + sim.bonus, hearts: Math.max(0, run.hearts), points: f.points });
-      // the rematch (or the start of the world, after a knock-back) waits to be started, like the next monster
-      if (run.hearts <= 0) {
-        if (run.mode === "normal") {
-          run.knockbacks += 1; run.hearts = START_HEARTS;
-          const to = firstLevelOfWorld(f.level);
-          ev("knockback", f.deadlineOn, f.id, { from: f.level, to, world: lv.world, worldName: lv.worldName, points: -250 });
-        } else {
-          run.hearts = 0; run.endedOn = f.deadlineOn; run.endReason = "defeated";
-          ev("defeat", f.deadlineOn, f.id, { level: f.level, name: lv.name });
-        }
+      // a heart, and one more day: the fight stays open and the monster's HP stays where it is
+      // (Matt, Nov 15 2026). Every further missed day costs another heart, until the last one.
+      if (run.hearts > 0) {
+        f.deadlineOn = addDays(missed, 1);
+        ev("strike", missed, f.id, { level: f.level, name: lv.name, hpLeft: sim.hp + sim.bonus, hearts: run.hearts, extended: true, deadlineOn: f.deadlineOn });
+        continue;
+      }
+      // the last heart: the fight is over. The start of the world (after a knock-back) waits to be started.
+      f.status = "struck"; f.endedOn = missed;
+      f.points = struckPoints({ damage: f.damage, hardcore: hardcore() });
+      ev("strike", missed, f.id, { level: f.level, name: lv.name, hpLeft: sim.hp + sim.bonus, hearts: 0, points: f.points });
+      if (run.mode === "normal") {
+        run.knockbacks += 1; run.hearts = START_HEARTS;
+        const to = firstLevelOfWorld(f.level);
+        ev("knockback", missed, f.id, { from: f.level, to, world: lv.world, worldName: lv.worldName, points: -250 });
+      } else {
+        run.hearts = 0; run.endedOn = missed; run.endReason = "defeated";
+        ev("defeat", missed, f.id, { level: f.level, name: lv.name });
       }
       break;
     }
@@ -647,7 +656,7 @@ export function eventText(e: EventData): string {
       ? `Run #${d.number} started by itself (${d.mode === "hardcore" ? "Hardcore" : "Normal"}): Keep the monsters coming is on. Crumbs is first.`
       : `Run #${d.number} started (${d.mode === "hardcore" ? "Hardcore" : "Normal"}). Crumbs is first.`;
     case "ko": return `${d.name} went down! +${Number(d.points).toLocaleString("en-US")} points.`;
-    case "strike": return `${d.name} struck: the deadline passed with ${d.hpLeft} HP left. You lost a heart.`;
+    case "strike": return `${d.name} struck: the deadline passed with ${d.hpLeft} HP left. You lost a heart${d.extended ? ", and the fight goes on one more day" : ""}.`;
     case "knockback": return `Knocked back to level ${d.to}, the start of ${d.worldName}. −250 points, and 3 hearts again.`;
     case "defeat": return `Defeated by ${d.name}. The run is over${d.score !== undefined ? ` with ${Number(d.score).toLocaleString("en-US")} points` : ""}.`;
     case "finish": return "All 60 monsters crushed! The run is complete.";
@@ -665,7 +674,7 @@ export const toEventView = (e: EventData): EventView => ({ ...e, text: eventText
 
 /** Everything GET /api/game returns, from a stored run (or none) and the log. */
 export function buildView(st: RunState | null, log: GameLog | null, today: Day, needsSync: boolean, autoStart = false): GameView {
-  if (!st) return { today, run: null, fight: null, next: null, autoStart, map: LEVELS.map((l) => ({ level: l.level, status: "locked", attempts: 0, wins: 0, bestPoints: 0 })), events: [], needsSync: false };
+  if (!st) return { today, run: null, fight: null, next: null, autoStart, map: LEVELS.map((l) => ({ level: l.level, status: "locked", attempts: 0, wins: 0, strikes: 0, bestPoints: 0 })), events: [], needsSync: false };
   const run = st.run;
   const active = !run.endReason;
   const lg: GameLog = log ?? { splurges: [], activities: [], entriesSinceStart: 0, weekStart: 0 };
@@ -694,13 +703,14 @@ export function buildView(st: RunState | null, log: GameLog | null, today: Day, 
   }
   const next = active && !open ? nextView(st, today) : null;
   const at = run.endReason === "finished" ? LEVEL_COUNT + 1 : next?.level ?? (open ?? st.fights[st.fights.length - 1])?.level ?? 1;
+  const strikes = st.events.filter((e) => e.kind === "strike");
   const map: MapLevel[] = LEVELS.map((l) => {
     const fs = st.fights.filter((f) => f.level === l.level);
     const won = fs.filter((f) => f.status === "won");
     return {
       level: l.level,
       status: l.level < at ? "beaten" : l.level === at && (open || next) ? "current" : "locked",
-      attempts: fs.length, wins: won.length, bestPoints: won.reduce((m, f) => Math.max(m, f.points), 0),
+      attempts: fs.length, wins: won.length, strikes: strikes.filter((e) => Number(e.data.level) === l.level).length, bestPoints: won.reduce((m, f) => Math.max(m, f.points), 0),
     };
   });
   return {

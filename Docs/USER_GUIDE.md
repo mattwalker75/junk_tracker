@@ -113,7 +113,7 @@ you play or not.
 **Back to tracker**. The first time, tap **Start a run** and pick **Normal** or **Hardcore**
 (below). Each person has their own run.
 
-**Between fights.** When you beat a monster (or one strikes), the next one does **not** start by
+**Between fights.** When you beat a monster (or are knocked back), the next one does **not** start by
 itself: the battle screen says *No monster right now* and shows who is up next. Until it starts,
 what you log hits and heals nothing (it still earns +5 points). Start it when you're ready with
 **Start the next fight** (it takes you to Choose your fight, where you pick the deadline). Started
@@ -154,8 +154,10 @@ your first hit lands, on the fight's first day.
 
 **Hearts, strikes, knock-back and defeat.**
 - A run starts with **3 hearts**; you can hold up to **5**.
-- If the deadline passes and the monster still has HP, it **strikes**: you lose a heart, it heals
-  back to full and you fight it again with a fresh deadline.
+- If the deadline passes and the monster still has HP, it **strikes**: you lose a heart and get
+  **one more day** to finish it. Its HP stays where it was, so nothing you did is lost. If that day
+  passes too, it costs another heart for another day, and so on. Not opening the app doesn't stop
+  the clock: three days late is three hearts.
 - You win a heart back by beating a **boss** (every 10th level) and for every week with **5 or
   more active days** (your own week start, from Settings).
 - At **0 hearts**, what happens depends on the run's mode (next).
@@ -179,7 +181,7 @@ your first hit lands, on the fight's first day.
 - A monster beaten: the damage you did + the monster's full HP + **50 for each day left** on the
   deadline + **100** if no heal landed (flawless) + **500** for a boss, all times your bet (and ×1.25
   on Hardcore).
-- A monster that struck you: the damage you did.
+- A monster that took your last heart: the damage you did.
 - **Every entry you log during the run** (activity, splurge or weigh-in): **+5**, even a Feast — so
   being honest always pays.
 - Each knock-back: −250.
@@ -194,7 +196,7 @@ you last looked: a **Victory** for each knockout, a **Strike** for each missed d
 next one. If you close the app in the middle, they come back the next time you open the game. A
 workout logged from the tracker counts too: the next time you open the game, you see the Victory.
 
-**Finished fights are frozen.** Once a monster is beaten (or has struck), that fight's result stays
+**Finished fights are frozen.** Once a monster is beaten (or has taken your last heart), that fight's result stays
 as it was, even if you later edit or delete an entry from those days. Changing an entry inside the
 fight going on now changes it right away. An entry logged later on the day of a knockout counts for
 the next monster if you start it that day.

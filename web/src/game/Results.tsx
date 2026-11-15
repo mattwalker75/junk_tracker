@@ -104,7 +104,7 @@ function Overlay({ r, view, today, waiting }: { r: Result; view: GameView; today
       <div className="mx-auto w-full max-w-xl pb-8">
         {r.kind === "victory" ? <Victory r={r} view={view} /> : null}
         {r.kind === "finish" ? <Finish r={r} view={view} today={today} /> : null}
-        {r.kind === "strike" ? <Strike r={r} view={view} /> : null}
+        {r.kind === "strike" ? <Strike r={r} view={view} today={today} /> : null}
         {r.kind === "knockback" ? <Knockback r={r} view={view} /> : null}
         {r.kind === "defeat" ? <Defeat r={r} view={view} today={today} /> : null}
         {waiting ? (
@@ -286,14 +286,16 @@ function Victory({ r, view }: { r: Extract<Result, { kind: "victory" }>; view: G
 
 // ================================================================ Strike
 
-function Strike({ r, view }: { r: Extract<Result, { kind: "strike" }>; view: GameView }) {
+function Strike({ r, view, today }: { r: Extract<Result, { kind: "strike" }>; view: GameView; today: string }) {
+  // a strike that left hearts: the same fight goes on one more day, its HP as it was (Matt, Nov 15 2026)
   const d = r.strike.data;
   const lv = levelInfo(Number(d.level));
   const after = Number(d.hearts ?? 0), before = after + 1;
   const run = view.run;
-  const fight = view.fight && view.fight.level === lv.level ? view.fight : null;
-  const days = fight ? daysFrom(fight.startedOn, fight.deadlineOn) + 1 : lv.days;
-  const perDay = Math.ceil(lv.hp / days);
+  const left = Number(d.hpLeft ?? lv.hp);
+  const due = typeof d.deadlineOn === "string" ? d.deadlineOn : view.fight?.deadlineOn ?? r.strike.day;
+  // caught up after days away: that extra day is over too, and the next screen says what came of it
+  const gone = due < today;
   const ab = abilityFor(lv.level);
   const boss = levelInfo(worldOf(lv.level) * 10);
   const slots = Math.max(START_HEARTS, before);
@@ -318,30 +320,32 @@ function Strike({ r, view }: { r: Extract<Result, { kind: "strike" }>; view: Gam
         <div className="flex flex-col items-end leading-none">
           <span className="text-[12px] font-black tracking-[0.08em] text-[#a83f4a]">HEARTS</span>
           <span className="font-game text-[34px]">{before} <span className="text-[#b9a991]">→</span> <span className="text-[#ff4d6d]">{after}</span></span>
-          <span className="text-[12px] font-black text-[#6b5a7a]">of {MAX_HEARTS} at most · the run goes on</span>
+          <span className="text-[12px] font-black text-[#6b5a7a]">of {MAX_HEARTS} at most · the fight goes on</span>
         </div>
       </Panel>
       <Panel>
-        <p className="text-[16px] leading-snug font-extrabold">{lv.name} is back to full ({lv.hp} HP){fight ? <> — new deadline {shortDate(fight.deadlineOn)}.</> : view.next ? <> and waits for its rematch: start it when you're ready{view.autoStart ? " (or it starts by itself the first time you open game mode on a new day)" : ""}.</> : "."} <span className="text-[#2f9a2a]">You've got this.</span></p>
-        <div className="mt-2 flex justify-between text-[13px] font-black"><span>{lv.name}</span><span>{fight ? hpText(hpLeft(fight), fight.max) : `${lv.hp} / ${lv.hp}`} HP</span></div>
-        <HpBar label={`${lv.name} hit points`} max={fight?.max ?? lv.hp} value={fight ? hpLeft(fight) : lv.hp} fillClass="rounded-full" gloss={false} className="mt-1 h-3" />
-        {fight ? <span className="mt-2 inline-block rounded-full border-2 border-[#2b1d3a] bg-[#ffe3e8] px-2.5 py-0.5 text-[13px] font-black">Due {dueText(fight.deadlineOn)}</span> : null}
-        <p className="mt-2 text-[13px] font-black text-[#6b5a7a]">{days} fresh days · about {perDay} damage a day</p>
-        <p className="mt-1 text-[13px] leading-snug font-bold text-[#6b5a7a]">{Number(d.hpLeft) < lv.hp
-          ? `You had it down to ${String(d.hpLeft)} HP. Every minute you put in still counts: ${fmt(Number(d.points ?? 0))} points kept.`
-          : "It didn't get a scratch this time. One workout a day is all it takes to start."}</p>
+        {gone
+          ? <p className="text-[16px] leading-snug font-extrabold">The heart bought you <span className="text-[#c2410c]">one more day</span>, to the {dueText(due)}. That day went by too: see what happened next.</p>
+          : <p className="text-[16px] leading-snug font-extrabold">The heart bought you <span className="text-[#c2410c]">one more day</span>. {lv.name} keeps the damage you did: finish it by the {dueText(due)}. <span className="text-[#2f9a2a]">You've got this.</span></p>}
+        <div className="mt-2 flex justify-between text-[13px] font-black"><span>{lv.name}</span><span>{left} / {lv.hp} HP</span></div>
+        <HpBar label={`${lv.name} hit points`} max={lv.hp} value={Math.min(left, lv.hp)} fillClass="rounded-full" gloss={false} className="mt-1 h-3" />
+        <span className="mt-2 inline-block rounded-full border-2 border-[#2b1d3a] bg-[#ffe3e8] px-2.5 py-0.5 text-[13px] font-black">{gone ? "Was due" : "Due"} {dueText(due)}</span>
+        <p className="mt-2 text-[13px] font-black text-[#6b5a7a]">{left} HP {gone ? "were left" : "to go"} · {left} minutes of activity, or {fmt(left * 10)} calories, or a mix</p>
+        <p className={cx("mt-1 text-[13px] leading-snug font-bold text-[#6b5a7a]", gone && "hidden")}>{after === 1
+          ? `That was your second-to-last heart. Miss this day too and ${run?.hardcore ? "the run is over (Hardcore)" : `you are knocked back to the start of ${lv.worldName}`}.`
+          : "Miss this day too and it costs another heart, for another day."}</p>
       </Panel>
       <Panel>
-        <h3 className="font-game text-[21px] font-normal">Rematch tips</h3>
+        <h3 className="font-game text-[21px] font-normal">Finish it</h3>
         <ul className="mt-1.5 space-y-2.5">
+          <Tip icon={<ClockSmall className="size-8" />} title="One day, one push">{cap(dayExample(left))} = {left} damage, and it's toast.</Tip>
           {!ab.noPowerUps ? (
             <Tip icon={<Shield className="h-8 w-[30px]" />} title={<>Take the Veggie Shield <span className="ml-1 rounded-full bg-[#2b1d3a] px-1.5 text-[11px] text-[#7bd36b]">×{run?.shields ?? 0}</span></>}>
               {run?.shields ? `It blocks one heal. Save it for a splurge day (${ab.name}: ${ab.text})` : "Three clean days in a row earn one. It blocks one heal."}
             </Tip>
           ) : (
-            <Tip icon={<Shield className="h-8 w-[30px]" />} title="No power-ups this time">{ab.name}: {ab.text} You keep them for the next fight.</Tip>
+            <Tip icon={<Shield className="h-8 w-[30px]" />} title="No power-ups in this fight">{ab.name}: {ab.text} You keep them for the next fight.</Tip>
           )}
-          <Tip icon={<ClockSmall className="size-8" />} title="Hit early, a little each day">{cap(dayExample(perDay))} = {perDay} damage. {days} of those and it's toast.</Tip>
           <Tip icon={<Potion className="h-8 w-7" />} title="Go long once for a Water Potion">One {POTION_MINUTES}+ min workout earns it (+{POTION_DAMAGE} damage).</Tip>
         </ul>
       </Panel>
@@ -351,7 +355,7 @@ function Strike({ r, view }: { r: Extract<Result, { kind: "strike" }>; view: Gam
         <div className="mt-1 flex justify-between gap-2 text-[14px] font-extrabold"><span>A week with {WEEK_ACTIVE_DAYS}+ active days</span><span className="shrink-0 text-[#e0264b]">+1 heart</span></div>
       </Panel>
       <div className="mx-4 mt-3.5 grid grid-cols-2 gap-2.5">
-        <BigBtn href={fightHref(view)} onClick={nextResult} color="#ff7a2f"><Sword className="size-7" /><span className="text-white" style={{ WebkitTextStroke: "2px #2b1d3a", paintOrder: "stroke fill" }}>Rematch</span></BigBtn>
+        <BigBtn href={fightHref(view)} onClick={nextResult} color="#ff7a2f"><Sword className="size-7" /><span className="text-white" style={{ WebkitTextStroke: "2px #2b1d3a", paintOrder: "stroke fill" }}>Keep fighting</span></BigBtn>
         {/* closes this one; anything still waiting behind it comes up next time in the game */}
         <BigBtn href="#/" onClick={nextResult} color="#fff7e6" className="gap-1.5 px-1.5 text-[15px] whitespace-nowrap"><Home className="size-[18px] shrink-0" />Back to tracker</BigBtn>
       </div>

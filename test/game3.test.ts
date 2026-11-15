@@ -44,6 +44,9 @@ describe("the Hall of Heroes badges", () => {
   it("Comeback Kid needs a win after a strike at the same level in the same run", () => {
     expect(get([F({ seq: 1, level: 5, status: "struck" }), F({ seq: 2, level: 6 })], "comeback").earned).toBe(false);
     expect(get([F({ run: 1, seq: 1, level: 5, status: "struck" }), F({ run: 2, seq: 1, level: 5 })], "comeback").earned).toBe(false);
+    expect(get([F({ seq: 1, level: 5, strikes: 1, status: "struck" })], "comeback").earned).toBe(false);
+    // a monster that took a heart and was then beaten in the same fight (Nov 15 2026)
+    expect(get([F({ seq: 1, level: 5, strikes: 1, endedOn: "2026-11-06" })], "comeback")).toMatchObject({ earned: true, earnedOn: "2026-11-06" });
     const b = get([F({ seq: 1, level: 5, status: "struck" }), F({ seq: 2, level: 5, endedOn: "2026-11-05" })], "comeback");
     expect(b).toMatchObject({ earned: true, earnedOn: "2026-11-05" });
     expect(b.detail).toBe("Gummo took a heart, then got squished (Run #1).");

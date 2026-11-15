@@ -211,7 +211,7 @@ function NodeCard({ m, view, box, onClose }: { m: MapLevel; view: GameView; box:
   } else if (waiting) {
     status = `Up next${waiting.rematch ? " · rematch" : ""} · it waits until you start it${view.autoStart ? ", or starts by itself the first time you open game mode on a new day" : ""}.`;
   } else if (m.status === "beaten") {
-    status = m.wins ? `Beaten${m.wins > 1 ? ` ${m.wins} times` : ""} in Run #${view.run?.number}${m.attempts > m.wins ? ` · it struck ${m.attempts - m.wins} ${m.attempts - m.wins === 1 ? "time" : "times"}` : ""} · best ${fmt(m.bestPoints)} points` : `Beaten in Run #${view.run?.number}`;
+    status = m.wins ? `Beaten${m.wins > 1 ? ` ${m.wins} times` : ""} in Run #${view.run?.number}${m.strikes ? ` · it struck ${m.strikes} ${m.strikes === 1 ? "time" : "times"}` : ""} · best ${fmt(m.bestPoints)} points` : `Beaten in Run #${view.run?.number}`;
   } else if (!view.run) {
     status = lv.level === 1 ? "Locked · start a run and Crumbs is first." : `Locked · start a run, then beat ${prev?.name} first.`;
   } else if (!view.run.active) {

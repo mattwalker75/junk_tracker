@@ -516,20 +516,45 @@ describe("a run: settling, hearts, power-ups", () => {
     expect(startNext(out.state, log, day(1)).state.fights[1]).toMatchObject({ level: 2, startedOn: day(1), startedAfter: null, deadlineOn: day(3) });
   });
 
-  it("strike → a heart lost; the rematch of the same level waits to be started", () => {
+  it("strike → a heart lost and one more day: the same fight goes on with its HP as it was (Matt, Nov 15 2026)", () => {
     const st = run();
-    const log = logOf([S("snack", { day: D }), S("snack", { day: day(1) }), S("snack", { day: day(2) })]);
+    const snacks = [0, 1, 2].map((i) => S("snack", { day: day(i) })); // no clean days before the deadline, so no crits
+    const rest = A(null, { day: day(-1), time: "07:00" }); // active the day before, so no comeback ×2
+    const log = logOf(snacks, [rest, A(50, { day: D })]);
     const out = settle(st, log, clock(day(3)));
     expect(out.state.fights).toHaveLength(1);
-    expect(out.state.fights[0]).toMatchObject({ status: "struck", endedOn: day(2), points: 0 });
+    expect(out.state.fights[0]).toMatchObject({ status: "open", endedOn: null, deadlineOn: day(3), attempt: 1, betLocked: true });
     expect(out.state.run.hearts).toBe(2);
     expect(kinds(out)).toEqual(["strike"]);
-    expect(buildView(out.state, log, day(3), false).next).toMatchObject({ level: 1, attempt: 2, rematch: true, partDay: false });
-    expect(startNext(out.state, log, day(3)).state.fights[1]).toMatchObject({ level: 1, attempt: 2, startedOn: day(3), deadlineOn: day(5), status: "open" });
-    // a long time away: one strike, then nothing more happens until the rematch is started
-    const away = settle(st, logOf(), clock(day(9)));
-    expect(away.state.fights.map((f) => [f.level, f.status])).toEqual([[1, "struck"]]);
-    expect(away.state.run).toMatchObject({ hearts: 2, knockbacks: 0 });
+    expect(out.added[0]).toMatchObject({ day: day(2), data: { extended: true, deadlineOn: day(3), hearts: 2 } });
+    const v = buildView(out.state, log, day(3), false);
+    expect(v.next).toBeNull();
+    expect(v.fight).toMatchObject({ level: 1, damage: 50, daysLeft: 1, deadlineOn: day(3) });
+    expect(v.fight!.hp + v.fight!.bonus).toBe(out.added[0].data.hpLeft); // nothing healed back
+    expect(v.map[0].strikes).toBe(1);
+    expect(settle(out.state, log, clock(day(3))).added).toEqual([]); // settling again changes nothing
+    // the extra day is enough: one fight, won, and the heart stays lost
+    const won = settle(out.state, logOf(snacks, [rest, A(50, { day: D }), A(120, { day: day(3) })]), clock(day(3)));
+    expect(won.state.fights.map((f) => [f.attempt, f.status, f.endedOn])).toEqual([[1, "won", day(3)]]);
+    expect(won.state.run.hearts).toBe(2);
+  });
+
+  it("every further missed day costs another heart; the last one is a knock-back (Normal) or defeat (Hardcore)", () => {
+    const snacks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => S("snack", { day: day(i) }));
+    const two = settle(run(), logOf(snacks), clock(day(4)));
+    expect(kinds(two)).toEqual(["strike", "strike"]);
+    expect(two.state.run.hearts).toBe(1);
+    expect(two.state.fights[0]).toMatchObject({ status: "open", deadlineOn: day(4) });
+    // a long time away: three strikes, a knock-back, then nothing more until the next fight is started
+    const away = settle(run(), logOf(snacks), clock(day(9)));
+    expect(kinds(away)).toEqual(["strike", "strike", "strike", "knockback"]);
+    expect(away.added.map((e) => e.day)).toEqual([day(2), day(3), day(4), day(4)]);
+    expect(away.state.fights.map((f) => [f.level, f.status, f.endedOn])).toEqual([[1, "struck", day(4)]]);
+    expect(away.state.run).toMatchObject({ hearts: 3, knockbacks: 1, endReason: null });
+    expect(buildView(away.state, logOf(snacks), day(9), false).next).toMatchObject({ level: 1, attempt: 2, rematch: true });
+    const hard = settle(run(D, { mode: "hardcore" }), logOf(snacks), clock(day(9)));
+    expect(kinds(hard)).toEqual(["strike", "strike", "strike", "defeat"]);
+    expect(hard.state.run).toMatchObject({ hearts: 0, endReason: "defeated", endedOn: day(4) });
   });
 
   it("at 0 hearts: Normal is knocked back to the world's first level (−250, 3 hearts); Hardcore is defeated", () => {
@@ -565,11 +590,11 @@ describe("a run: settling, hearts, power-ups", () => {
     const sun = "2026-11-08";
     const acts = [0, 1, 2, 3, 4].map((i) => A(null, { day: addDays(sun, i) }));
     const spl = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => S("snack", { day: addDays(sun, i) })); // no crits, so Crumbs just waits
-    // Crumbs strikes on the 10th (no rematch is started); the week is not over until the end of the 14th
-    expect(settle(run(sun), logOf(spl, acts), clock("2026-11-14")).state.run.hearts).toBe(2);
+    // Crumbs strikes on the 10th, 11th and 12th (a knock-back: 3 hearts again); the week is not over until the end of the 14th
+    expect(settle(run(sun), logOf(spl, acts), clock("2026-11-14")).state.run).toMatchObject({ hearts: 3, knockbacks: 1 });
     const out = settle(run(sun), logOf(spl, acts), clock("2026-11-15"));
     expect(out.added.filter((e) => e.kind === "heart").map((e) => e.data)).toEqual([{ reason: "week", week: sun, activeDays: 5, gained: true }]);
-    expect(out.state.run.hearts).toBe(3); // between fights too
+    expect(out.state.run.hearts).toBe(4); // between fights too
     // with Monday weeks, the same five days fall in two weeks: no heart
     expect(settle(run(sun), logOf(spl, acts, { weekStart: 1 }), clock("2026-11-17")).added.some((e) => e.kind === "heart")).toBe(false);
     const full = run(sun, { hearts: 5, level: 60 });
@@ -719,11 +744,13 @@ describe("Stage 4 review fixes", () => {
     expect(startNext(crit.state, clog, day(1)).state.fights[1]).toMatchObject({ startedOn: day(1), startedAfter: null });
   });
 
-  it("a long time away settles quickly: one strike, then the run waits (no fight opens by itself)", () => {
+  it("a long time away settles quickly, and no fight opens by itself", () => {
     const t0 = Date.now();
     const out = settle(run(), logOf(), clock(addDays(D, 3650)));
     expect(Date.now() - t0).toBeLessThan(3000);
-    expect(out.state.fights.map((f) => f.status)).toEqual(["struck"]);
+    // three clean days leave Crumbs on 25 HP: it strikes, and the extra day's crit finishes it
+    expect(out.state.fights.map((f) => f.status)).toEqual(["won"]);
+    expect(out.state.run.hearts).toBe(2);
     // a Veggie Shield every 3 clean days, capped at 3; the rest are recorded as not given
     expect(out.state.run.shields).toBe(3);
   });

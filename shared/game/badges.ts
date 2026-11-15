@@ -7,7 +7,8 @@
  * - Flawless: a monster beaten with no heal landing in the whole fight.
  * - Daredevil: a monster beaten on the Daredevil bet (×2, two days less).
  * - World 1 Clear: Sir Soda (level 10, the Snack Swamp boss) beaten.
- * - Comeback Kid: a monster beaten in a rematch, after it struck you at that level in the same run.
+ * - Comeback Kid: a monster beaten after it struck you — in the same fight (it took a heart and the
+ *   fight went on), or earlier at that level in the same run.
  */
 import type { Day } from "../types.js";
 import { levelInfo } from "./levels.js";
@@ -15,8 +16,8 @@ import type { Bet, FightStatus } from "./types.js";
 
 export type BadgeId = "first-blood" | "flawless" | "daredevil" | "world-1" | "comeback";
 
-/** One stored fight, with the run it belongs to. `seq` is its order in that run. */
-export interface BadgeFight { run: number; seq: number; level: number; status: FightStatus; bet: Bet; flawless: boolean; endedOn: Day | null }
+/** One stored fight, with the run it belongs to. `seq` is its order in that run; `strikes` the hearts it took. */
+export interface BadgeFight { run: number; seq: number; level: number; status: FightStatus; bet: Bet; flawless: boolean; endedOn: Day | null; strikes?: number }
 
 export interface Badge {
   id: BadgeId;
@@ -34,14 +35,14 @@ const RULES: { id: BadgeId; name: string; how: string }[] = [
   { id: "flawless", name: "Flawless", how: "Beat a monster without a single heal landing in the fight." },
   { id: "daredevil", name: "Daredevil", how: "Beat a monster on the Daredevil bet (×2, two days less)." },
   { id: "world-1", name: "World 1 Clear", how: "Beat Sir Soda, the boss of the Snack Swamp." },
-  { id: "comeback", name: "Comeback Kid", how: "Win the rematch with a monster that struck you." },
+  { id: "comeback", name: "Comeback Kid", how: "Beat a monster after it struck you." },
 ];
 
 export function badgesFor(fights: readonly BadgeFight[]): Badge[] {
   const all = [...fights].sort((a, b) => a.run - b.run || a.seq - b.seq);
   const won = all.filter((f) => f.status === "won");
   const name = (f: BadgeFight) => levelInfo(f.level).name;
-  const firstComeback = won.find((w) => all.some((s) => s.run === w.run && s.seq < w.seq && s.level === w.level && s.status === "struck"));
+  const firstComeback = won.find((w) => (w.strikes ?? 0) > 0 || all.some((s) => s.run === w.run && s.seq < w.seq && s.level === w.level && s.status === "struck"));
   const found: Record<BadgeId, { f: BadgeFight; detail: string } | null> = {
     "first-blood": pick(won[0], (f) => `${name(f)} went down first (Run #${f.run}).`),
     flawless: pick(won.find((f) => f.flawless), (f) => `${name(f)} never got a bite in (Run #${f.run}).`),

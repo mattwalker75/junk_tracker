@@ -4,6 +4,15 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+## [1.4.0] — 2026-11-15
+### Changed
+- 2026-11-15: **Calorie Crusher: a missed deadline now buys one more day.** When a monster's
+  deadline passes, you still lose a heart, but the fight carries on: you get one more day and the
+  monster's HP stays where you left it (it used to heal back to full and wait for a rematch with a
+  fresh deadline). Each further day you miss costs another heart. Your last heart works as before:
+  knocked back to the start of the world on Normal, the run is over on Hardcore. The *Comeback Kid*
+  badge is now for beating a monster after it struck you.
+
 ## [1.3.0] — 2026-11-14
 ### Changed
 - 2026-11-14: **New names.** The app is now **Craving Crusher** (was Junk Tracker), and its game

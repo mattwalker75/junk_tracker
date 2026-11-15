@@ -108,7 +108,10 @@ The person using it is not a developer — every message the page shows is a pla
       never changed by the game.
     - **Bonus HP** (Matt, Nov 14 2026): a heal past full HP goes on as bonus HP (a violet bar over the
       HP bar), capped at 20% of max HP; damage takes it off first. "HP left" counts it.
-    - **Between fights** (Matt, Nov 14 2026): a KO or a strike never opens the next fight by itself; it
+    - **A strike adds a day** (Matt, Nov 15 2026): a missed deadline costs a heart and the SAME fight
+      goes on one more day with its HP as it was; each further missed day costs another heart. Only
+      the last heart ends the fight (knock-back on Normal, defeat on Hardcore). No rematch at full HP.
+    - **Between fights** (Matt, Nov 14 2026): a KO or a knock-back never opens the next fight by itself; it
       waits for **Start the next fight** (`POST /api/game/next`) or Keep the monsters coming. With no
       fight open, entries hit and heal nothing.
     - **Keep the monsters coming** (`autoStart`, Settings → You, off by default): the first game open of

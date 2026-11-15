@@ -119,7 +119,7 @@ function Fight({ example }: { example: number }) {
       <Card title="Hearts">
         <div className="mt-1 flex items-center gap-1" aria-hidden>{Array.from({ length: MAX_HEARTS }, (_, i) => i < START_HEARTS ? <HeartFull key={i} className="h-6 w-7" /> : <HeartEmpty key={i} className="h-6 w-7" />)}</div>
         <dl className="mt-1.5 grid grid-cols-[64px_1fr] gap-x-2 gap-y-1.5 text-[14px] leading-snug font-bold">
-          <dt className="font-black text-[#e0264b]">Lose 1</dt><dd>The deadline passes with HP left: it <b>strikes</b>. Rematch at full HP. Junk never costs hearts.</dd>
+          <dt className="font-black text-[#e0264b]">Lose 1</dt><dd>The deadline passes with HP left: it <b>strikes</b>. You get one more day to finish it, and its HP stays where it is. Every extra day costs another heart. Junk never costs hearts.</dd>
           <dt className="font-black text-[#2f9a2a]">Earn 1</dt><dd>Beat a world boss, or have a week with {WEEK_ACTIVE_DAYS}+ active days. Start with {START_HEARTS}, hold up to {MAX_HEARTS}.</dd>
           <dt className="font-black">At 0</dt><dd>Depends on the run's mode, below.</dd>
         </dl>
@@ -159,7 +159,7 @@ function PointsTab({ example, shields, potions, winds }: { example: number; shie
     { id: "boss", label: "Boss kill", value: `+${POINTS.boss}`, more: "Each world's level 10 is a boss: +500, a heart back and a Second Wind." },
     { id: "log", label: "Honest log", value: `+${POINTS.perLogEntry} each`, more: `Every activity, splurge or weigh-in you log during the run is +${POINTS.perLogEntry}, even a Feast. Logging is always worth it.` },
     { id: "hard", label: "Hardcore", value: `×${POINTS.hardcore}`, more: `While a run is Hardcore, every fight's points are ×${POINTS.hardcore}.` },
-    { id: "struck", label: "When it strikes", value: "damage kept", more: "A fight you lose still keeps its damage as points (no bet)." },
+    { id: "struck", label: "A fight you lose", value: "damage kept", more: "A monster that takes your last heart still leaves you its damage as points (no bet)." },
     { id: "kb", label: "Knock-back", value: `−${POINTS.knockback}`, more: `On Normal, every knock-back takes off ${POINTS.knockback}.` },
   ];
   const PU = {

@@ -642,7 +642,7 @@ describe("Calorie Crusher (game mode, Nov 11 2026)", () => {
     expect(v.run.logPoints).toBe(5);
   });
 
-  it("a missed deadline: strike, a heart lost, a rematch that waits to be started", async () => {
+  it("a missed deadline: strike, a heart lost, and the same fight goes on one more day", async () => {
     s = await scratch({}, GAME);
     const b = await firstPerson();
     await b.call("POST", "/api/game/run", { mode: "hardcore", today: T });
@@ -650,9 +650,16 @@ describe("Calorie Crusher (game mode, Nov 11 2026)", () => {
     const r = (await b.call("POST", "/api/game/sync", { today: "2026-11-13" })).body;
     expect(r.happened.map((e: { kind: string }) => e.kind)).toEqual(["strike"]);
     expect(r.view.run.hearts).toBe(2);
-    expect([r.view.fight, r.view.next.rematch, r.view.next.attempt]).toEqual([null, true, 2]);
-    const go = (await b.call("POST", "/api/game/next", { today: "2026-11-13", bet: 1.5 })).body;
-    expect(go.view.fight).toMatchObject({ level: 1, attempt: 2, startedOn: "2026-11-13", deadlineOn: "2026-11-14", bet: 1.5 });
+    expect(r.view.next).toBeNull();
+    expect(r.view.fight).toMatchObject({ level: 1, attempt: 1, startedOn: T, deadlineOn: "2026-11-13", daysLeft: 1 });
+    expect((await b.call("POST", "/api/game/next", { today: "2026-11-13" })).status).toBe(409); // nothing to start: the fight is still going
+    // the extended deadline is stored: the extra day's workout finishes the same fight
+    await b.call("POST", "/api/activities", { what: "Run", minutes: 150, day: "2026-11-13" });
+    const won = (await b.call("POST", "/api/game/sync", { today: "2026-11-13" })).body;
+    expect(won.happened.map((e: { kind: string }) => e.kind)).toContain("ko");
+    expect(won.view.run.hearts).toBe(2);
+    const hall = (await b.call("GET", "/api/game/hall?today=2026-11-13")).body;
+    expect(hall.badges.find((x: { id: string }) => x.id === "comeback").earned).toBe(true);
   });
 
   it("the bet, power-ups and the mode, each with its own plain refusal", async () => {

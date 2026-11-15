@@ -96,9 +96,9 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 
 ### Hearts and dying
 - A run starts with **3 hearts**; the most you can hold is 5.
-- If the deadline passes with HP left, the monster **strikes**: you lose 1 heart. It heals back to full and you rematch it with a fresh deadline.
-- **Between fights** (Matt, Nov 14 2026): after a KO or a strike nothing starts by itself. The next
-  monster (or the rematch) starts when the player taps **Start the next fight** (Choose your fight),
+- If the deadline passes with HP left, the monster **strikes**: you lose 1 heart and get **one more day** on the same fight. The monster's HP stays where it was (Matt, Nov 15 2026; until then it healed to full and you rematched it with a fresh deadline). Every further day missed costs another heart.
+- **Between fights** (Matt, Nov 14 2026): after a KO or a knock-back nothing starts by itself. The next
+  monster starts when the player taps **Start the next fight** (Choose your fight),
   or, with **Keep the monsters coming** on, the first time game mode opens on a later day. Never the
   same day one went down. With no monster going, entries hit and heal nothing.
 - You earn a heart back for:
@@ -173,7 +173,7 @@ The finished drawings are inlined in the Round 6 boards (Monster Book 1 and 2). 
 | `MonBattle` | The battle: HP bar, ticking deadline, hearts, score, ability, "So close!", battle log, power-ups, + Log activity |
 | `MonLogPreview` | The real Log activity sheet with the live damage strip |
 | `MonVictory` | KO, the score counting up, a trophy card, the next monster |
-| `MonStrike` | Deadline missed: −1 heart, the monster back to full, rematch tips |
+| `MonStrike` | Deadline missed: −1 heart, one more day on the same fight (since Nov 15 2026; the mockup shows the old rematch at full HP) |
 | `MonDefeat` | 0 hearts: run summary, Hall of Heroes placing, Start Run #N |
 | `MonHall` | Hall of Heroes: all time / this month / my runs, badges |
 | `MonScoring` | How to crush: every rule and number on one page |

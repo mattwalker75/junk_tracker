@@ -251,7 +251,8 @@ export interface NextFightView {
 }
 
 export type MapStatus = "beaten" | "current" | "locked";
-export interface MapLevel { level: number; status: MapStatus; attempts: number; wins: number; bestPoints: number }
+/** `strikes`: the hearts this level took in the run (missed deadlines) */
+export interface MapLevel { level: number; status: MapStatus; attempts: number; wins: number; strikes: number; bestPoints: number }
 
 export interface EventView extends Omit<EventData, "id"> { id: Id; text: string }
 

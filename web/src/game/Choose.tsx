@@ -15,7 +15,7 @@ import { go } from "../lib/route";
 import { Ability, Flame, Potion, Shield, Star, Wind } from "./icons";
 import { betPlan, dueText, hpLeft, shortDate } from "./logic";
 import { GameBg, GameMenu, GameNote, Hearts, HpBar, HpNumbers } from "./parts";
-import { applyResult, useGame } from "./state";
+import { applyResult, useGame, useHeldHearts } from "./state";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 const CARD: Record<string, { fill: string; tint: string; ring: string; note: string }> = {
@@ -27,6 +27,7 @@ const CARD: Record<string, { fill: string; tint: string; ring: string; note: str
 export function Choose() {
   const qc = useQueryClient();
   const { today, view, error } = useGame();
+  const held = useHeldHearts();
   const [pick, setPick] = useState<Bet | null>(null);
   const [bring, setBring] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -44,7 +45,7 @@ export function Choose() {
       </div>
       {run ? (
         <div className="flex shrink-0 flex-col items-end gap-0.5">
-          <Hearts hearts={run.hearts} className="[&_svg]:h-4 [&_svg]:w-[18px]" />
+          <Hearts hearts={run.hearts + held} className="[&_svg]:h-4 [&_svg]:w-[18px]" />
           <span className="flex items-center gap-1 rounded-[10px] border-2 border-g-yellow bg-[#2b1d3a] px-1.5" aria-label={`Score ${fmt(run.liveScore)}`}>
             <Star className="size-3.5" /><span className="font-game text-sm leading-tight text-g-yellow">{fmt(run.liveScore)}</span>
           </span>

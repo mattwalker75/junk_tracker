@@ -63,6 +63,9 @@ export function waitsForBattle(r: Result, screen: string, openLevel: number | nu
   return r.kind === "strike" && screen !== "battle" && openLevel !== null && openLevel === Number(r.strike.data.level);
 }
 
+/** The hearts that strikes still waiting to be seen have taken: screens that hold them back show the run's hearts plus these. */
+export const heldHearts = (q: readonly { result: Result; shown: boolean }[]): number => q.filter((x) => x.result.kind === "strike" && !x.shown).length;
+
 export interface ScoreRow { label: string; sub: string; value: string }
 export interface Breakdown { rows: ScoreRow[]; total: number }
 

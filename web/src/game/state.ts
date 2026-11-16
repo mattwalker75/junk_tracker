@@ -11,7 +11,7 @@ import type { Day } from "../../../shared/types";
 import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
 import { useToday } from "../lib/useToday";
-import { planResults, type Result } from "./outcomes";
+import { heldHearts, planResults, type Result } from "./outcomes";
 
 // ---------------------------------------------------------------- what just happened
 /**
@@ -105,6 +105,14 @@ export function pushHappened(events: EventView[]): void {
 export function useResults(): { head: QueuedResult | null; waiting: number } {
   const q = useSyncExternalStore(subscribe, () => queue, () => queue);
   return { head: q[0] ?? null, waiting: Math.max(0, q.length - 1) };
+}
+/**
+ * Hearts that strikes not yet seen have taken (Matt, Nov 15 2026): away from the battle screen a
+ * strike waits to be played in the fight, so until then the title, the map and Choose your fight
+ * show the hearts as the person last saw them — the run's hearts plus these.
+ */
+export function useHeldHearts(): number {
+  return heldHearts(useSyncExternalStore(subscribe, () => queue, () => queue));
 }
 export function markShown(id: string): void {
   if (queue[0]?.result.id !== id || queue[0].shown) return;

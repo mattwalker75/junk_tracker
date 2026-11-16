@@ -20,7 +20,7 @@ import { Castle, CheckBadge, Hero, Padlock, Play, ShieldBlue, Skull } from "./ic
 import { ALL_LEVELS, BAND_H, bandTop, cardBox, MAP_H, MAP_START, MAP_W, mapNode, paths, trailEnd, WORLD_H, WORLD_START, worldLevels, worldNode, worldOf, type Pt } from "./layout";
 import { countdown, dueText, hpLeft, hpText, shortDate, soClose } from "./logic";
 import { GameMenu, GameNote } from "./parts";
-import { applyResult, useGame } from "./state";
+import { applyResult, useGame, useHeldHearts } from "./state";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 const portrait = (slug: string) => `/monsters/${slug}.svg`;
@@ -95,6 +95,7 @@ function SmallHearts({ hearts }: { hearts: number }) {
 }
 
 function Hud({ kicker, title, back, run, today, children }: { kicker: string; title: string; back: string; run: RunView | null; today: string; children: ReactNode }) {
+  const held = useHeldHearts();
   return (
     <header className="sticky top-0 z-30 flex flex-col gap-[7px] border-b-[3px] border-[#1a1024] px-3 pt-[9px] pb-[9px]" style={{ background: "rgb(43 29 58 / .95)" }}>
       <div className="relative flex items-center gap-2">
@@ -109,7 +110,7 @@ function Hud({ kicker, title, back, run, today, children }: { kicker: string; ti
         <GameMenu />
       </div>
       <div className="flex items-center gap-2">
-        {run ? <SmallHearts hearts={run.hearts} /> : null}
+        {run ? <SmallHearts hearts={run.hearts + held} /> : null}
         {run ? (
           <div aria-label={`Score ${fmt(run.liveScore)}`} className="flex shrink-0 items-center gap-1 rounded-xl border-[3px] border-[#ffc93c] bg-[#2b1d3a] px-[7px] py-px">
             <svg viewBox="0 0 24 24" className="size-[15px]" aria-hidden><path d="M12 2l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 16.6 6.1 19.8l1.3-6.5L2.5 8.8 9.1 8z" fill="#ffc93c" stroke="#1a1024" strokeWidth="2" strokeLinejoin="round" /></svg>

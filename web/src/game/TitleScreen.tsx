@@ -9,7 +9,7 @@ import { api } from "../lib/api";
 import { Clouds, Hill, LogoBurst, Sunburst } from "./art";
 import { Book, Fist, HeartFull, MapIcon, PadSmall, Play, Trophy } from "./icons";
 import { GameBg, GameMenu } from "./parts";
-import { useGame } from "./state";
+import { useGame, useHeldHearts } from "./state";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 const peek = (slug: string) => `/monsters/${slug}.svg`;
@@ -22,6 +22,8 @@ export function TitleScreen() {
   const fight = view?.fight ?? view?.next ?? null;
   const waiting = !view?.fight && !!view?.next;
   const going = !!(run?.active && fight);
+  // a strike that waits to be played in the fight hasn't taken its heart here yet
+  const hearts = (run?.hearts ?? 0) + useHeldHearts();
   const best = hall.data?.mine[0];
   const leader = hall.data?.allTime[0];
 
@@ -61,9 +63,9 @@ export function TitleScreen() {
             <span className="flex min-w-0 flex-1 flex-col gap-px">
               <span className="font-game text-[26px] leading-none" style={{ color: "#fff", WebkitTextStroke: "2.5px #2b1d3a", paintOrder: "stroke fill" }}>Continue Run #{run.number}</span>
               <span className="flex flex-wrap items-center gap-1 text-xs font-black text-[#4a2f00]">
-                World {fight.world} · {waiting ? `Up next: ${fight.name}` : fight.name} · {Array.from({ length: run.hearts }, (_, i) => <HeartFull key={i} className="h-3 w-[13px]" />)}
+                World {fight.world} · {waiting ? `Up next: ${fight.name}` : fight.name} · {Array.from({ length: hearts }, (_, i) => <HeartFull key={i} className="h-3 w-[13px]" />)}
               </span>
-              <span className="text-xs font-black text-[#4a2f00]">{run.hearts} {run.hearts === 1 ? "heart" : "hearts"}{run.lives ? ` · ${run.lives} extra ${run.lives === 1 ? "life" : "lives"}` : ""} · {fmt(run.liveScore)} pts{run.hardcore ? " · Hardcore" : ""}</span>
+              <span className="text-xs font-black text-[#4a2f00]">{hearts} {hearts === 1 ? "heart" : "hearts"}{run.lives ? ` · ${run.lives} extra ${run.lives === 1 ? "life" : "lives"}` : ""} · {fmt(run.liveScore)} pts{run.hardcore ? " · Hardcore" : ""}</span>
             </span>
             <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-full border-[3px] border-g-line bg-g-red"><Play className="ml-0.5 h-[18px] w-4" /></span>
           </a>

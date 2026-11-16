@@ -3,6 +3,9 @@
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
 ## [Unreleased]
+### Changed
+- 2026-11-15: While a monster's hit is still waiting to be played in the fight, the title screen,
+  the map and Choose your fight keep showing the hearts you had. The heart goes when you see the hit.
 
 ## [1.5.0] — 2026-11-15
 ### Added

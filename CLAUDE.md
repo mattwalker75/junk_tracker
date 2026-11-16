@@ -111,6 +111,8 @@ The person using it is not a developer — every message the page shows is a pla
     - **A strike adds a day** (Matt, Nov 15 2026): a missed deadline costs a heart and the SAME fight
       goes on one more day with its HP as it was; each further missed day costs another heart. Only
       the last heart ends the fight (knock-back on Normal, defeat on Hardcore). No rematch at full HP.
+      The bet stays (Matt, Nov 15 2026): a Bold or Daredevil fight that strikes keeps its ×1.5 / ×2 —
+      paying a heart for the day back is the price. Don't "fix" it.
     - **Extra lives** (Matt, Nov 15 2026): Normal runs only — one for every 20 monsters beaten in the
       run (`LIFE_EVERY`), 2 held at most (`MAX_LIVES`). At 0 hearts a life is spent by itself in place
       of the knock-back: 3 hearts, no points lost, and the same monster is up for a rematch at full HP

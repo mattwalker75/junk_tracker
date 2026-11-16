@@ -399,6 +399,8 @@ start the exact same day you just defeated one")
 **A strike adds a day** (Matt, Nov 15 2026: "When you lose a heart, what that should do is add an
 additional 24 hours to the current monster")
 - Deadlines are whole phone days, so the extra time is one more calendar day (to midnight).
+- **The bet survives a strike, on purpose** (Matt, Nov 15 2026, asked and decided): a Daredevil
+  fight that misses its short deadline still scores ×2 when it is beaten; the heart is the cost.
 - The fight is the same one: damage, bonus HP, the bet and its multiplier, a Veggie Shield that is
   up and the battle log all carry on. No points are given for the strike; a KO on an extra day has
   0 days left, so no speed bonus.

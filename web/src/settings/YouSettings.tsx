@@ -2,7 +2,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { DEFAULT_EXAMPLES, DEFAULT_QUICK_PICKS, QUICK_PICK_MAX, SIZE_LABEL, SIZES, type Size, type UserSettings } from "../../../shared/types";
+import { DEFAULT_EXAMPLES, DEFAULT_QUICK_PICKS, QUICK_PICK_MAX, SIZE_LABEL, SIZES, TOUGHNESS, type Size, type Toughness, type UserSettings } from "../../../shared/types";
 import { Card, cx, Input, Segmented, SIZE_DOT, Toggle } from "../components/ui";
 import { api } from "../lib/api";
 
@@ -71,6 +71,16 @@ export function YouSettings() {
         <p className="text-sm text-mute">
           With this on, the first time you open Calorie Crusher each day, if no monster is going, the next one starts by itself — never on the same day you beat one (start it yourself if you want it sooner). If your last run is over (or you never started one), a new run starts with Crumbs, in the same mode as the last one; when a run ends, you see how it went first, and the new one starts the next day.
         </p>
+      </Card>
+      <Card className="space-y-3 p-4">
+        <h2 className="text-[15px] font-extrabold">Monster toughness</h2>
+        <p className="text-sm text-mute">For Calorie Crusher. Tougher monsters have more HP and the same deadline, so they take more activity each day — and they are worth more points. A change counts from the next monster you start; the one you are fighting now stays as it is.</p>
+        {s ? (
+          <>
+            <Segmented label="Monster toughness" value={s.toughness} options={TOUGHNESS.map((t): [Toughness, string] => [t.id, t.label])} onChange={(v) => void save({ toughness: v })} />
+            <p className="text-[13px] text-mute">{s.toughness === "standard" ? "Standard: the usual HP." : s.toughness === "tough" ? "Tough: one and a half times the HP." : "Brutal: twice the HP."}</p>
+          </>
+        ) : <div className="h-11 animate-pulse rounded-xl bg-surface-2" />}
       </Card>
       <Card className="space-y-3.5 p-4">
         <h2 className="text-[15px] font-extrabold">Weight and weeks</h2>

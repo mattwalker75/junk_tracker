@@ -8,7 +8,7 @@
  */
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { abilityFor, LEVEL_COUNT, levelInfo, MAX_HEARTS, POTION_DAMAGE, POTION_MINUTES, START_HEARTS, WEEK_ACTIVE_DAYS, WORLDS, type EventView, type GameView, type HallRun } from "../../../shared/game";
+import { abilityFor, LEVEL_COUNT, levelInfo, MAX_HEARTS, MAX_LIVES, monsterHp, POTION_DAMAGE, POTION_MINUTES, START_HEARTS, WEEK_ACTIVE_DAYS, WORLDS, type EventView, type GameView, type HallRun } from "../../../shared/game";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
 import type { GameScreen } from "../lib/route";
@@ -66,7 +66,7 @@ function Toasts() {
 }
 
 function ToastIcon({ e }: { e: EventView }) {
-  if (e.kind === "heart") return <HeartFull className="h-[22px] w-6 shrink-0" />;
+  if (e.kind === "heart" || e.kind === "life") return <HeartFull className="h-[22px] w-6 shrink-0" />;
   if (e.kind === "mode_drop") return <Skull className="size-6 shrink-0" />;
   if (e.kind === "run_start") return <Star className="size-6 shrink-0" />;
   if (e.kind === "fight_start") return <Sword className="size-6 shrink-0" />;
@@ -98,16 +98,18 @@ function Overlay({ r, view, today, waiting }: { r: Result; view: GameView; today
   }, []);
   const bg = r.kind === "victory" ? "linear-gradient(180deg, #3a2654 0%, #2b1d3a 100%)"
     : r.kind === "strike" ? "linear-gradient(180deg, #4a1f3a 0%, #2b1d3a 100%)"
+    : r.kind === "life" ? "linear-gradient(180deg, #3f8f4a 0%, #2a5a3a 34%, #2b1d3a 100%)"
     : r.kind === "knockback" ? "linear-gradient(180deg, #f08a48 0%, #e0703f 30%, #3a2240 62%, #2b1d3a 100%)"
     : r.kind === "defeat" ? "radial-gradient(120% 60% at 50% 10%, #5a3a8a 0%, #2b1d3a 70%)"
     : "radial-gradient(130% 45% at 50% 18%, #9a4aa8 0%, #3a2654 60%, #2b1d3a 100%)";
-  const label = r.kind === "victory" ? "Victory" : r.kind === "strike" ? "The monster struck" : r.kind === "knockback" ? "Knocked back" : r.kind === "defeat" ? "Defeated" : "All 60 crushed";
+  const label = r.kind === "victory" ? "Victory" : r.kind === "strike" ? "The monster struck" : r.kind === "life" ? "Extra life" : r.kind === "knockback" ? "Knocked back" : r.kind === "defeat" ? "Defeated" : "All 60 crushed";
   return (
     <div ref={ref} tabIndex={-1} role="dialog" aria-modal="true" aria-label={label} className="game fixed inset-0 z-[60] overflow-y-auto outline-none" style={{ background: bg }}>
       <div className="mx-auto w-full max-w-xl pb-8">
         {r.kind === "victory" ? <Victory r={r} view={view} /> : null}
         {r.kind === "finish" ? <Finish r={r} view={view} today={today} /> : null}
         {r.kind === "strike" ? <Strike r={r} view={view} today={today} /> : null}
+        {r.kind === "life" ? <LifeUsed r={r} view={view} /> : null}
         {r.kind === "knockback" ? <Knockback r={r} view={view} /> : null}
         {r.kind === "defeat" ? <Defeat r={r} view={view} today={today} /> : null}
         {waiting ? (
@@ -252,7 +254,7 @@ function Victory({ r, view }: { r: Extract<Result, { kind: "victory" }>; view: G
         <div className="flex w-[74px] shrink-0 flex-col items-center rounded-xl border-[3px] border-[#2b1d3a] px-1 pt-1 pb-0.5" style={{ background: "linear-gradient(180deg, #ffd765, #f0a91f)" }}>
           <span className="grid w-full place-items-center rounded-lg border-2 border-[#2b1d3a] bg-[#ffd2b0]"><img src={portrait(lv.slug)} alt="" className="size-14" /></span>
           <span className="mt-0.5 max-w-full truncate font-game text-[10px] leading-tight text-[#2b1d3a]">{lv.name.toUpperCase()}</span>
-          <span className="text-[9px] font-black text-[#6b4a00]">Lv {lv.level} · {lv.hp}</span>
+          <span className="text-[9px] font-black text-[#6b4a00]">Lv {lv.level} · {Number(d.max ?? lv.hp)}</span>
         </div>
         <div className="min-w-0 flex-1">
           <span className="rounded-full border-2 border-[#2b1d3a] bg-[#7bd36b] px-2 py-px text-[11px] font-black tracking-[0.04em]">LOOT · TROPHY CARD</span>
@@ -295,7 +297,8 @@ function Strike({ r, view, today }: { r: Extract<Result, { kind: "strike" }>; vi
   const lv = levelInfo(Number(d.level));
   const after = Number(d.hearts ?? 0), before = after + 1;
   const run = view.run;
-  const left = Number(d.hpLeft ?? lv.hp);
+  const max = Number(d.max ?? lv.hp);
+  const left = Number(d.hpLeft ?? max);
   const due = typeof d.deadlineOn === "string" ? d.deadlineOn : view.fight?.deadlineOn ?? r.strike.day;
   // caught up after days away: that extra day is over too, and the next screen says what came of it
   const gone = due < today;
@@ -330,8 +333,8 @@ function Strike({ r, view, today }: { r: Extract<Result, { kind: "strike" }>; vi
         {gone
           ? <p className="text-[16px] leading-snug font-extrabold">The heart bought you <span className="text-[#c2410c]">one more day</span>, to the {dueText(due)}. That day went by too: see what happened next.</p>
           : <p className="text-[16px] leading-snug font-extrabold">The heart bought you <span className="text-[#c2410c]">one more day</span>. {lv.name} keeps the damage you did: finish it by the {dueText(due)}. <span className="text-[#2f9a2a]">You've got this.</span></p>}
-        <div className="mt-2 flex justify-between text-[13px] font-black"><span>{lv.name}</span><span>{left} / {lv.hp} HP</span></div>
-        <HpBar label={`${lv.name} hit points`} max={lv.hp} value={Math.min(left, lv.hp)} fillClass="rounded-full" gloss={false} className="mt-1 h-3" />
+        <div className="mt-2 flex justify-between text-[13px] font-black"><span>{lv.name}</span><span>{left} / {max} HP</span></div>
+        <HpBar label={`${lv.name} hit points`} max={max} value={Math.min(left, max)} fillClass="rounded-full" gloss={false} className="mt-1 h-3" />
         <span className="mt-2 inline-block rounded-full border-2 border-[#2b1d3a] bg-[#ffe3e8] px-2.5 py-0.5 text-[13px] font-black">{gone ? "Was due" : "Due"} {dueText(due)}</span>
         <p className="mt-2 text-[13px] font-black text-[#6b5a7a]">{left} HP {gone ? "were left" : "to go"} · {left} minutes of activity, or {fmt(left * 10)} calories, or a mix</p>
         <p className={cx("mt-1 text-[13px] leading-snug font-bold text-[#6b5a7a]", gone && "hidden")}>{after === 1
@@ -372,6 +375,48 @@ function Tip({ icon, title, children }: { icon: ReactNode; title: ReactNode; chi
       <span className="mt-0.5 shrink-0">{icon}</span>
       <span className="flex min-w-0 flex-col leading-snug"><b className="font-game text-[17px] font-normal">{title}</b><span className="text-[14px] font-bold text-[#6b5a7a]">{children}</span></span>
     </li>
+  );
+}
+
+// ================================================================ Extra life
+
+/** The last heart went, but an extra life was held (Normal only; Matt, Nov 15 2026): 3 hearts again and the same monster once more. */
+function LifeUsed({ r, view }: { r: Extract<Result, { kind: "life" }>; view: GameView }) {
+  const lv = levelInfo(Number(r.strike.data.level));
+  const left = Number(r.life.data.lives ?? 0);
+  const next = view.next && view.next.level === lv.level ? view.next : null;
+  const hp = next?.hp ?? monsterHp(lv.level, view.hpMult);
+  const days = next?.days ?? lv.days;
+  return (
+    <>
+      <header className="flex items-center gap-2 px-4 pt-3.5">
+        <div className="flex min-w-0 flex-1 flex-col">
+          <span className="truncate font-game text-[12px] tracking-[0.08em] text-[#d4f3c4]">CALORIE CRUSHER · RUN #{view.run?.number ?? ""}</span>
+          <span className="flex items-center gap-1.5 text-[14px] font-black text-[#fff7e6]"><ClockSmall className="size-4" />Deadline passed · {dueText(r.strike.day)}</span>
+        </div>
+        <GameMenu />
+      </header>
+      <h2 className="g-anim-pop mt-2 text-center font-game text-[46px] leading-none font-normal text-white" style={{ WebkitTextStroke: "6px #2b1d3a", paintOrder: "stroke fill", textShadow: "0 5px 0 #2b1d3a" }}>Extra life<span className="text-[#ffc93c]">!</span></h2>
+      <p className="mx-5 mt-2 text-center text-[15px] leading-snug font-extrabold text-[#fff7e6]">{lv.name} took your last heart, but you had an extra life. You stay right here: a full set of hearts, and {lv.name} again from the top.</p>
+      <section className="relative mx-4 mt-3 h-[190px] overflow-hidden rounded-[24px] border-[3px] border-[#1a1024] shadow-[0_5px_0_#1a1024]">
+        <Arena world={lv.world} className="g-art absolute inset-0 size-full" />
+        <img src={portrait(lv.slug)} alt={lv.name} className="absolute bottom-1 left-3 h-[140px] w-[140px]" />
+        <Hero className="g-anim-pop absolute right-10 bottom-6 h-[78px] w-[66px]" />
+        <span className="absolute top-3 right-4 -rotate-6 font-game text-[28px] text-[#7bd36b]" style={{ WebkitTextStroke: "3px #2b1d3a", paintOrder: "stroke fill" }}>1UP!</span>
+      </section>
+      <Panel>
+        <h3 className="font-game text-[24px] font-normal">What just happened</h3>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          <Fact tone="#ffe3e8" ink="#e0264b" k="HEARTS REFILLED"><span className="flex items-center gap-0.5">{Array.from({ length: START_HEARTS }, (_, i) => <HeartFull key={i} className="h-5 w-[22px]" />)} {START_HEARTS} / {START_HEARTS}</span></Fact>
+          <Fact tone="#e6f8d8" ink="#2f7a2a" k="EXTRA LIVES LEFT"><span className="font-game text-[26px]">{left}</span> <span className="text-[13px]">of {MAX_LIVES} at most</span></Fact>
+          <Fact tone="#ffe9c2" ink="#c2410c" k="REMATCH">{lv.name} · full HP ({hp}) · {days} fresh days</Fact>
+          <Fact tone="#ece6f0" ink="#5b4a6b" k="NO KNOCK-BACK">Still on level {lv.level}. No points lost.</Fact>
+        </div>
+        <p className="mt-2.5 text-[13px] leading-snug font-bold text-[#6b5a7a]">{lv.name} waits until you start the rematch{view.autoStart ? ", or it starts by itself the first time you open game mode on a new day" : ""}. {left ? "" : "That was your last extra life: at 0 hearts next time you are knocked back to the start of the world. "}Every 20 monsters beaten earn another life.</p>
+      </Panel>
+      <div className="mx-4 mt-3.5"><BigBtn href={fightHref(view)} onClick={nextResult} color="#7bd36b"><Sword className="size-7" />Rematch {lv.name}</BigBtn></div>
+      <p className="mx-4 mt-2 text-right text-[13px] font-extrabold"><a href="#/game/map" onClick={nextResult} className="font-black text-[#ffc93c] underline underline-offset-2">See the map</a></p>
+    </>
   );
 }
 
@@ -487,13 +532,14 @@ function HallSpot({ all, at }: { all: HallRun[]; at: number }) {
 
 function NewRunCard({ number }: { number: number }) {
   const crumbs = levelInfo(1);
+  const hp = monsterHp(1, useGame().view?.hpMult);
   return (
     <section className="mx-4 mt-3.5 rounded-[22px] border-[3px] border-[#1a1024] px-4 py-3.5 text-[#2b1d3a] shadow-[0_5px_0_#1a1024]" style={{ background: "linear-gradient(180deg, #d4f3c4, #a8e6a0)" }}>
       <div className="flex items-center gap-3">
         <span className="grid size-[84px] shrink-0 place-items-center overflow-hidden rounded-full border-[3px] border-[#2b1d3a] bg-[#7bd36b]"><img src={portrait(crumbs.slug)} alt="" className="mt-2 size-[84px]" /></span>
         <div className="min-w-0 flex-1">
           <h3 className="font-game text-[21px] leading-tight font-normal">New run: back to Crumbs in the Snack Swamp</h3>
-          <p className="text-[13px] leading-snug font-bold text-[#2f5a2a]">"Hi again! I've been practising." · {crumbs.hp} HP · {START_HEARTS} fresh hearts</p>
+          <p className="text-[13px] leading-snug font-bold text-[#2f5a2a]">"Hi again! I've been practising." · {hp} HP · {START_HEARTS} fresh hearts</p>
         </div>
       </div>
       <BigBtn href="#/game/start" onClick={clearResults} className="mt-3"><PlayDark className="size-6" />Start Run #{number}</BigBtn>

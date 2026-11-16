@@ -266,6 +266,7 @@ export class Users {
       quickPicks: DEFAULT_QUICK_PICKS.map((_, i) => (Array.isArray(saved.quickPicks) ? String(saved.quickPicks[i] ?? "") : "")),
       openIn: saved.openIn === "game" ? "game" : "tracker",
       autoStart: saved.autoStart === true,
+      toughness: saved.toughness === "tough" || saved.toughness === "brutal" ? saved.toughness : "standard",
     };
   }
 

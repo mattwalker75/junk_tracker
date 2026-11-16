@@ -557,6 +557,67 @@ describe("a run: settling, hearts, power-ups", () => {
     expect(hard.state.run).toMatchObject({ hearts: 0, endReason: "defeated", endedOn: day(4) });
   });
 
+  it("extra lives (Normal only): one for every 20 monsters beaten, 2 at most; at 0 hearts one is spent instead of a knock-back", () => {
+    const rest = A(null, { day: day(-1), time: "07:00" });
+    const beaten = (mode: "normal" | "hardcore", wins: number, lives = 0) => {
+      const st = run(D, { mode });
+      const f = st.fights[0];
+      st.fights.unshift(...Array.from({ length: wins }, (_, i) => ({ ...f, id: `w${i}`, status: "won" as const, endedOn: day(-1) })));
+      st.run.lives = lives;
+      return settle(st, logOf([], [rest, A(50, { calories: 600 })]), clock(D)); // 110 damage: Crumbs goes down
+    };
+    const twenty = beaten("normal", 19);
+    expect(twenty.added.find((e) => e.kind === "life")?.data).toEqual({ wins: 20, gained: true });
+    expect(twenty.state.run.lives).toBe(1);
+    expect(beaten("normal", 18).added.some((e) => e.kind === "life")).toBe(false);
+    expect(beaten("normal", 39, 1).state.run.lives).toBe(2);
+    const full = beaten("normal", 39, 2);
+    expect([full.state.run.lives, full.added.find((e) => e.kind === "life")?.data.gained]).toEqual([2, false]);
+    const hard = beaten("hardcore", 19);
+    expect([hard.state.run.lives, hard.added.some((e) => e.kind === "life")]).toEqual([0, false]);
+
+    // the last heart with a life held: 3 hearts, no knock-back, the same monster again at full HP with its full time
+    const busy = logOf([0, 1, 2, 3].map((i) => S("snack", { day: day(i) })), [rest, A(50)]);
+    const st = run(D, { level: 13, hearts: 1 });
+    st.run.lives = 1;
+    const out = settle(st, busy, clock(day(4)));
+    expect(kinds(out)).toEqual(["strike", "life_used"]);
+    expect(out.state.run).toMatchObject({ hearts: 3, lives: 0, knockbacks: 0, score: 50, endReason: null });
+    expect(out.state.fights[0]).toMatchObject({ status: "struck", points: 50 });
+    expect(pendingLevel(out.state)).toBe(13);
+    expect(buildView(out.state, busy, day(4), false).next).toMatchObject({ level: 13, attempt: 2, rematch: true, hp: levelInfo(13).hp });
+    const again = startNext(out.state, busy, day(4)).state;
+    expect(again.fights[1]).toMatchObject({ level: 13, attempt: 2, status: "open", startedOn: day(4), deadlineOn: deadlineFor(13, day(4), false) });
+    const v = buildView(again, busy, day(4), false).fight!;
+    expect([v.hp, v.damage]).toEqual([v.max, 0]);
+    // a Hardcore run never spends one
+    const hc = run(D, { level: 13, hearts: 1, mode: "hardcore" });
+    hc.run.lives = 1;
+    expect(kinds(settle(hc, busy, clock(day(4))))).toEqual(["strike", "defeat"]);
+  });
+
+  it("Monster toughness: a fight keeps the HP multiplier it started with; the next one takes the setting of the moment", () => {
+    const rest = A(null, { day: day(-1), time: "07:00" });
+    const st = newRun(1, "normal", clock(D, "", `${D}T00:00:01.000Z`), false, 2).state;
+    expect(st.fights[0].hpMult).toBe(2);
+    const some = logOf([], [rest, A(50, { calories: 1000 })], { hpMult: 1 }); // 150 damage; the setting is back on Standard
+    const v = buildView(settle(st, some, clock(D)).state, some, D, false);
+    expect(v.fight).toMatchObject({ max: 200, hp: 50, bonusMax: 40 });
+    expect(v.hpMult).toBe(1);
+    const more = logOf([], [rest, A(50, { calories: 1000 }), A(50, { time: "10:00", createdAt: `${D}T10:00:00.000Z` })], { hpMult: 1.5 });
+    const won = settle(st, more, clock(D));
+    const ko = won.added.find((e) => e.kind === "ko")!;
+    expect(ko.data).toMatchObject({ max: 200, damage: 200 });
+    expect(ko.data.points).toBe(wonPoints({ damage: 200, max: 200, koDay: D, deadlineOn: day(2), flawless: true, boss: false, bet: 1, hardcore: false }));
+    expect(buildView(won.state, more, D, false).next).toMatchObject({ level: 2, hp: 180 });
+    const next = startNext(won.state, more, D).state;
+    expect(next.fights[1]).toMatchObject({ level: 2, hpMult: 1.5 });
+    expect(buildView(next, more, D, false).fight!.max).toBe(180);
+    // a fight stored before toughness existed is Standard
+    const old = run(); delete old.fights[0].hpMult;
+    expect(buildView(old, logOf([], [], { hpMult: 2 }), D, false).fight!.max).toBe(100);
+  });
+
   it("at 0 hearts: Normal is knocked back to the world's first level (−250, 3 hearts); Hardcore is defeated", () => {
     const busy = logOf([0, 1, 2, 3].map((i) => S("snack", { day: day(i) })), [A(null, { day: day(-1) }), A(50)]);
     const normal = settle(run(D, { level: 13, hearts: 1 }), busy, clock(day(4)));

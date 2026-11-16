@@ -4,7 +4,8 @@
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { levelInfo, type FightView, type Mode } from "../../../shared/game";
+import { levelInfo, monsterHp, type FightView, type Mode } from "../../../shared/game";
+import { toughnessOf } from "../../../shared/types";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
@@ -18,7 +19,7 @@ const fmt = (n: number) => n.toLocaleString("en-US");
 
 const MODES: { mode: Mode; name: string; tag: string; points: string[]; tint: string; icon: string }[] = [
   { mode: "normal", name: "Normal", tag: "CHECKPOINTS", points: ["Knocked back to the start of your world at 0 hearts", "−250 points per knock-back", "Your run and score carry on"], tint: "#e8f6ff", icon: "#c9ecff" },
-  { mode: "hardcore", name: "Hardcore", tag: "NO CHECKPOINTS", points: ["0 hearts = the run is over, back to level 1", "×1.25 on all points", "Skull badge in the Hall of Heroes"], tint: "#ffe3e8", icon: "#5b4a6b" },
+  { mode: "hardcore", name: "Hardcore", tag: "NO CHECKPOINTS", points: ["0 hearts = the run is over, back to level 1", "No extra lives", "×1.25 on all points", "Skull badge in the Hall of Heroes"], tint: "#ffe3e8", icon: "#5b4a6b" },
 ];
 
 export function StartRun() {
@@ -126,7 +127,7 @@ export function StartRun() {
             <PlayDark className="size-[22px]" />Start Run #{next} · {mode === "hardcore" ? "Hardcore" : "Normal"}
           </button>
         )}
-        <span className="text-center text-xs font-extrabold text-[#e3f7da]">Level 1 · Crumbs · {crumbs.hp} HP · 3 hearts · score 0</span>
+        <span className="text-center text-xs font-extrabold text-[#e3f7da]">Level 1 · Crumbs · {monsterHp(1, view?.hpMult)} HP{view && view.hpMult !== 1 ? ` (${toughnessOf(view.hpMult).label})` : ""} · 3 hearts · score 0</span>
       </div>
 
       {begun ? <Begins begun={begun} /> : null}

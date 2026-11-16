@@ -415,3 +415,26 @@ additional 24 hours to the current monster")
   (`waitsForBattle` in outcomes.ts, used by `ResultHost`) on every screen but the battle screen
   while that fight is open; there the strike scene plays (lunge, WHAM!, the heart cracks), then the
   screen. Reduced motion shows it at once. Knocked back and Defeated still come up anywhere.
+
+**Extra lives and Monster toughness** (Matt, Nov 15 2026; database version 6)
+- **Lives:** `game_runs.lives` (`RunData.lives`). In `settle`, a KO in a Normal run whose count of
+  won fights reaches a multiple of `LIFE_EVERY` (20) adds a `life` event (`wins`, `gained`: false
+  when 2 are held; not for level 60, which ends the run). Rematches won after a knock-back count
+  too. A run dropped from Hardcore earns from then on, counting all its wins.
+- **Spending one:** at the last heart in a Normal run with `lives > 0`: the fight is 'struck'
+  (damage points kept), `lives − 1`, hearts back to 3 and a `life_used` event in place of
+  `knockback` (no −250). With no knock-back event `pendingLevel` is the same level, so the
+  between-fights screens show the rematch (attempt + 1) and `startNextFight` opens it at full HP
+  with its full deadline.
+- **Toughness:** `UserSettings.toughness` ('standard' | 'tough' | 'brutal'; `TOUGHNESS` and
+  `toughnessMult` in shared/types.ts). The server puts the multiplier in `GameLog.hpMult`;
+  `newRun` and `startNextFight` copy it to the new fight (`FightData.hpMult`,
+  `game_fights.hp_mult`), and `monsterHp(level, hpMult)` is the fight's full HP everywhere:
+  `simulateFight` (so the 20% bonus-HP cap scales too), `wonPoints`, the KO and strike events'
+  `max`, `NextFightView.hp`, the page's live panels. Heals, crits and deadlines are not scaled.
+  `GameView.hpMult` is the setting now (what a fight started now would get).
+- **The page:** a strike + `life_used` is one **Extra life** result (`Result.kind === "life"`,
+  `LifeUsed` in Results.tsx); `life` is a toast; lives sit beside the hearts on the battle screen
+  when any are held, and on the title's Continue button. The Monster Book and How to crush show
+  Standard HP.
+

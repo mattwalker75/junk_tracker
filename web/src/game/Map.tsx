@@ -11,7 +11,7 @@
  */
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { LEVEL_COUNT, LEVELS_PER_WORLD, levelInfo, WORLDS, type FightView, type GameView, type MapLevel, type MapStatus, type RunView } from "../../../shared/game";
+import { LEVEL_COUNT, LEVELS_PER_WORLD, levelInfo, monsterHp, WORLDS, type FightView, type GameView, type MapLevel, type MapStatus, type RunView } from "../../../shared/game";
 import { Sheet } from "../components/ui";
 import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
@@ -234,7 +234,7 @@ function NodeCard({ m, view, box, onClose }: { m: MapLevel; view: GameView; box:
         </button>
       </div>
       <div className="flex flex-wrap gap-1.5">
-        <span className="rounded-full bg-[#2b1d3a] px-2 py-0.5 text-xs font-black text-white">{fight ? `${hpText(hpLeft(fight), fight.max)} HP` : `${lv.hp} HP`}</span>
+        <span className="rounded-full bg-[#2b1d3a] px-2 py-0.5 text-xs font-black text-white">{fight ? `${hpText(hpLeft(fight), fight.max)} HP` : `${m.status === "beaten" ? lv.hp : monsterHp(lv.level, view.hpMult)} HP`}</span>
         <span className="rounded-full border-2 border-[#2b1d3a] bg-white px-2 py-0.5 text-xs font-black">{fight ? `Due ${dueText(fight.deadlineOn)} · ${countdown(fight.deadlineOn, new Date()).big}` : `${lv.days}-day deadline`}</span>
       </div>
       <div className="flex items-center gap-2 rounded-xl border-2 border-[#2b1d3a] px-2.5 py-[7px]" style={{ background: fight || waiting ? "#ffe3a1" : m.status === "beaten" ? "#d7f5c8" : "#ece6f0" }}>

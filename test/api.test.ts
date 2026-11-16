@@ -117,7 +117,7 @@ describe("splurges", () => {
     expect(o.last.what).toBe("Cheeseburger & fries"); // not the one dated after today
     expect(o.splurges.map((x: { day: string }) => x.day)).toEqual(["2026-10-11", "2026-10-03"]); // the 40-day window
     expect(o.recent.map((x: { what: string }) => x.what)).toEqual(["Future cake", "Cheeseburger & fries", "Pizza"]); // one "pizza", newest first
-    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false });
+    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false, toughness: "standard" });
   });
 });
 
@@ -558,7 +558,7 @@ describe("planned treat (Nov 11 2026)", () => {
     const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
     const Database = (await import("better-sqlite3")).default;
     const { MIGRATIONS, openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
-    expect(SCHEMA_VERSION).toBe(5);
+    expect(SCHEMA_VERSION).toBe(6);
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-up4-"));
     const file = path.join(dir, "junk.db");
     try {
@@ -640,6 +640,24 @@ describe("Calorie Crusher (game mode, Nov 11 2026)", () => {
     expect([v.fight.heals, v.fight.hp, v.fight.bonus, v.fight.bonusMax]).toEqual([13, 120, 13, 24]);
     expect(v.run.liveScore).toBe(v.run.score + 5); // the walk was counted at the sync; the fries since
     expect(v.run.logPoints).toBe(5);
+  });
+
+  it("Monster toughness: a setting per person; fights started from then on get its HP, the one going keeps its own", async () => {
+    s = await scratch({}, GAME);
+    const b = await firstPerson();
+    expect((await b.call("PUT", "/api/me/settings", { toughness: "nightmare" })).status).toBe(400);
+    expect((await b.call("PUT", "/api/me/settings", { toughness: "brutal" })).body.toughness).toBe("brutal");
+    const start = (await b.call("POST", "/api/game/run", { mode: "normal", today: T })).body;
+    expect(start.view).toMatchObject({ hpMult: 2, fight: { level: 1, max: 200, hp: 200, hpMult: 2 } });
+    // back to Standard: Crumbs stays at 200, the next one is the usual 120
+    await b.call("PUT", "/api/me/settings", { toughness: "standard" });
+    const v = (await b.call("GET", `/api/game?today=${T}`)).body;
+    expect(v).toMatchObject({ hpMult: 1, fight: { max: 200, hpMult: 2 } });
+    await b.call("POST", "/api/activities", { what: "Hike", minutes: 240, day: T });
+    const won = (await b.call("POST", "/api/game/sync", { today: T })).body;
+    expect(won.happened.find((e: { kind: string }) => e.kind === "ko").data).toMatchObject({ max: 200 });
+    expect(won.view.next).toMatchObject({ level: 2, hp: 120 });
+    expect(won.view.run.lives).toBe(0);
   });
 
   it("a missed deadline: strike, a heart lost, and the same fight goes on one more day", async () => {

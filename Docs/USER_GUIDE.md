@@ -161,11 +161,15 @@ your first hit lands, on the fight's first day.
 - You win a heart back by beating a **boss** (every 10th level) and for every week with **5 or
   more active days** (your own week start, from Settings).
 - At **0 hearts**, what happens depends on the run's mode (next).
+- **Extra lives** (Normal runs only): every **20 monsters** you beat in a run earn an extra life,
+  and you can hold **2**. When your last heart goes, a life is spent by itself: you get 3 hearts
+  again and fight the same monster once more at full HP with its full time. No points are lost.
+  They show next to your hearts on the battle screen.
 
 **Normal or Hardcore.** You pick when the run starts.
-- **Normal:** at 0 hearts you are **knocked back** to the first level of your world, lose 250
+- **Normal:** at 0 hearts, with no extra life left, you are **knocked back** to the first level of your world, lose 250
   points, get 3 hearts again, and the run carries on.
-- **Hardcore:** at 0 hearts you are **defeated**: the run is over and its score goes into the Hall
+- **Hardcore:** there are no extra lives. At 0 hearts you are **defeated**: the run is over and its score goes into the Hall
   of Heroes. In return every fight's points are worth ×1.25, and the run gets a skull badge.
 - A Hardcore run can switch to Normal at any time (tap the mode badge on the map). It can't go back,
   and the Hall shows it as "Hardcore → Normal".
@@ -176,6 +180,11 @@ your first hit lands, on the fight's first day.
 - **Water Potion** — **50 damage** at once. Earned with a workout of **60 minutes or more**.
 - **Second Wind** — **one more day** on the deadline. Earned by beating a boss.
 - One monster (Bacon Bandit) doesn't let you use power-ups in its fight; you keep them for later.
+
+**Monster toughness.** In **Settings → You**, pick **Standard**, **Tough** (monsters have one and
+a half times the HP) or **Brutal** (twice the HP). The deadlines stay the same, so tougher monsters
+take more activity each day, and they are worth more points. Change it whenever you like: it counts
+from the next monster you start, and the one you are fighting stays as it is.
 
 **Points.**
 - A monster beaten: the damage you did + the monster's full HP + **50 for each day left** on the

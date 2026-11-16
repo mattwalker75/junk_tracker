@@ -111,6 +111,14 @@ The person using it is not a developer — every message the page shows is a pla
     - **A strike adds a day** (Matt, Nov 15 2026): a missed deadline costs a heart and the SAME fight
       goes on one more day with its HP as it was; each further missed day costs another heart. Only
       the last heart ends the fight (knock-back on Normal, defeat on Hardcore). No rematch at full HP.
+    - **Extra lives** (Matt, Nov 15 2026): Normal runs only — one for every 20 monsters beaten in the
+      run (`LIFE_EVERY`), 2 held at most (`MAX_LIVES`). At 0 hearts a life is spent by itself in place
+      of the knock-back: 3 hearts, no points lost, and the same monster is up for a rematch at full HP
+      with its full time. No life left: knock-back to the world's first level. Hardcore: never a life.
+    - **Monster toughness** (Matt, Nov 15 2026): Settings → You, Standard ×1 / Tough ×1.5 / Brutal ×2
+      HP (`toughness`); deadlines unchanged. A fight keeps the multiplier it started with
+      (`game_fights.hp_mult`); the person may change the setting at any time and it only counts for
+      fights started after. Never use `levelInfo().hp` for a real fight: `monsterHp(level, hpMult)`.
     - **Between fights** (Matt, Nov 14 2026): a KO or a knock-back never opens the next fight by itself; it
       waits for **Start the next fight** (`POST /api/game/next`) or Keep the monsters coming. With no
       fight open, entries hit and heal nothing.

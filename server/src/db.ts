@@ -137,6 +137,12 @@ export const MIGRATIONS: readonly string[] = [
   `
   ALTER TABLE users ADD COLUMN game_checked_on TEXT;
   `,
+  // 6 — extra lives and Monster toughness (Nov 15 2026): the lives a run holds, and the HP
+  // multiplier each fight started with (the setting changes only fights started after it)
+  `
+  ALTER TABLE game_runs ADD COLUMN lives INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE game_fights ADD COLUMN hp_mult REAL NOT NULL DEFAULT 1;
+  `,
 ];
 
 export const SCHEMA_VERSION = MIGRATIONS.length;

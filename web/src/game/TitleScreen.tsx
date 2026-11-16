@@ -63,7 +63,7 @@ export function TitleScreen() {
               <span className="flex flex-wrap items-center gap-1 text-xs font-black text-[#4a2f00]">
                 World {fight.world} · {waiting ? `Up next: ${fight.name}` : fight.name} · {Array.from({ length: run.hearts }, (_, i) => <HeartFull key={i} className="h-3 w-[13px]" />)}
               </span>
-              <span className="text-xs font-black text-[#4a2f00]">{run.hearts} {run.hearts === 1 ? "heart" : "hearts"} · {fmt(run.liveScore)} pts{run.hardcore ? " · Hardcore" : ""}</span>
+              <span className="text-xs font-black text-[#4a2f00]">{run.hearts} {run.hearts === 1 ? "heart" : "hearts"}{run.lives ? ` · ${run.lives} extra ${run.lives === 1 ? "life" : "lives"}` : ""} · {fmt(run.liveScore)} pts{run.hardcore ? " · Hardcore" : ""}</span>
             </span>
             <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-full border-[3px] border-g-line bg-g-red"><Play className="ml-0.5 h-[18px] w-4" /></span>
           </a>

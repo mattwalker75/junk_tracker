@@ -66,6 +66,7 @@ const userSettingsSchema = z.object({
   // the six quick picks on Log activity, in order ("" = the default one)
   openIn: z.enum(["tracker", "game"], { error: "Open in the tracker or in game mode." }),
   autoStart: z.boolean({ error: "Keep the monsters coming is on or off." }),
+  toughness: z.enum(["standard", "tough", "brutal"], { error: "Pick Standard, Tough or Brutal." }),
   quickPicks: z.array(z.string().max(QUICK_PICK_MAX, `Keep each quick pick under ${QUICK_PICK_MAX} characters.`), { error: "The quick picks are six names." }).max(6, "There are six quick picks."),
 }).partial().strict();
 

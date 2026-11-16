@@ -80,8 +80,22 @@ export interface UserSettings {
    * is going, a new one starts by itself (in the last run's mode)
    */
   autoStart: boolean;
+  /**
+   * Monster toughness (Matt, Nov 15 2026): how much HP the monsters of fights started from now on
+   * have — Standard ×1, Tough ×1.5, Brutal ×2. The fight going on keeps what it started with.
+   */
+  toughness: Toughness;
 }
-export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false };
+export type Toughness = "standard" | "tough" | "brutal";
+export const TOUGHNESS: readonly { id: Toughness; label: string; mult: number }[] = [
+  { id: "standard", label: "Standard", mult: 1 },
+  { id: "tough", label: "Tough", mult: 1.5 },
+  { id: "brutal", label: "Brutal", mult: 2 },
+];
+export const toughnessMult = (t: Toughness | undefined): number => TOUGHNESS.find((x) => x.id === t)?.mult ?? 1;
+export const toughnessOf = (mult: number | undefined): (typeof TOUGHNESS)[number] => TOUGHNESS.find((x) => x.mult === mult) ?? TOUGHNESS[0];
+
+export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false, toughness: "standard" };
 
 export interface UserInfo {
   id: Id;

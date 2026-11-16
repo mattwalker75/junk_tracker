@@ -11,7 +11,7 @@
  */
 import type Database from "better-sqlite3";
 import { z } from "zod";
-import type { Day, Id } from "../../shared/types.js";
+import { toughnessMult, type Day, type Id } from "../../shared/types.js";
 import {
   abandonRun, addDays, badgesFor, daysBetween, BETS, buildView, dropToNormal, GameRuleError, lastEndedBefore, newRun, pendingLevel, setBet, settle, startNextFight, toEventView, usePowerUp,
   type ActivityEv, type Bet, type EventData, type FightData, type GameClock, type GameLog, type GameView, type HallRun, type HallView,
@@ -22,22 +22,22 @@ import { newId, now, parse, realDay, UserError } from "./util.js";
 
 interface RunRow {
   id: Id; user_id: Id; number: number; mode: Mode; started_at: string; started_on: Day; ended_on: Day | null; end_reason: RunData["endReason"];
-  hearts: number; shields: number; potions: number; winds: number; shield_armed: number; knockbacks: number; hardcore_dropped_on: Day | null; log_points: number; score: number;
+  lives: number; hearts: number; shields: number; potions: number; winds: number; shield_armed: number; knockbacks: number; hardcore_dropped_on: Day | null; log_points: number; score: number;
 }
 interface FightRow {
   id: Id; run_id: Id; user_id: Id; level: number; attempt: number; started_on: Day; started_after: string | null; deadline_on: Day; bet: number;
-  status: FightData["status"]; ended_on: Day | null; damage: number; heals: number; points: number; flawless: number; bet_locked: number; seq: number;
+  status: FightData["status"]; ended_on: Day | null; damage: number; heals: number; points: number; flawless: number; bet_locked: number; hp_mult: number; seq: number;
 }
 interface EventRow { id: Id; run_id: Id; fight_id: Id | null; day: Day; at: string; kind: EventData["kind"]; data_json: string; seq: number }
 
 const toRun = (r: RunRow): RunData => ({
   id: r.id, number: r.number, mode: r.mode, startedAt: r.started_at, startedOn: r.started_on, endedOn: r.ended_on, endReason: r.end_reason,
-  hearts: r.hearts, shields: r.shields, potions: r.potions, winds: r.winds, shieldArmed: !!r.shield_armed, knockbacks: r.knockbacks,
+  hearts: r.hearts, lives: r.lives, shields: r.shields, potions: r.potions, winds: r.winds, shieldArmed: !!r.shield_armed, knockbacks: r.knockbacks,
   hardcoreDroppedOn: r.hardcore_dropped_on, logPoints: r.log_points, score: r.score,
 });
 const toFight = (r: FightRow): FightData => ({
   id: r.id, level: r.level, attempt: r.attempt, startedOn: r.started_on, startedAfter: r.started_after, deadlineOn: r.deadline_on, bet: r.bet as Bet,
-  status: r.status, endedOn: r.ended_on, damage: r.damage, heals: r.heals, points: r.points, flawless: !!r.flawless, betLocked: !!r.bet_locked,
+  status: r.status, endedOn: r.ended_on, damage: r.damage, heals: r.heals, points: r.points, flawless: !!r.flawless, betLocked: !!r.bet_locked, hpMult: r.hp_mult,
 });
 const toEvent = (r: EventRow): EventData => {
   let data: Record<string, unknown> = {};
@@ -98,7 +98,12 @@ export class Game {
       .map((a): ActivityEv => ({ id: a.id, what: a.what, day: a.day, time: a.time, minutes: a.minutes, calories: a.calories, createdAt: a.created_at }));
     const made = (table: string) => (this.db.prepare(`SELECT day FROM ${table} WHERE user_id = ? AND created_at >= ?`).all(owner, run.startedAt) as { day: Day }[]).map((r) => r.day);
     const entryDays = [...made("splurges"), ...made("activities"), ...made("weigh_ins")];
-    return { splurges, activities, entriesSinceStart: entryDays.length, entryDays, weekStart: this.users.settings(owner).weekStart };
+    return { splurges, activities, entriesSinceStart: entryDays.length, entryDays, weekStart: this.users.settings(owner).weekStart, hpMult: this.hpMult(owner) };
+  }
+
+  /** The person's Monster toughness, as the HP multiplier a fight started now gets. */
+  private hpMult(owner: Id): number {
+    return toughnessMult(this.users.settings(owner).toughness);
   }
 
   /** Write a run as the engine left it: the run row, every fight (new ones added), and the new events. */
@@ -108,18 +113,18 @@ export class Game {
       this.db.prepare(`INSERT INTO game_runs (id, user_id, number, mode, started_at, started_on, hearts) VALUES (?, ?, ?, ?, ?, ?, ?)`)
         .run(r.id, owner, r.number, r.mode, r.startedAt, r.startedOn, r.hearts);
     }
-    const u = this.db.prepare(`UPDATE game_runs SET mode = ?, ended_on = ?, end_reason = ?, hearts = ?, shields = ?, potions = ?, winds = ?, shield_armed = ?,
+    const u = this.db.prepare(`UPDATE game_runs SET mode = ?, ended_on = ?, end_reason = ?, hearts = ?, lives = ?, shields = ?, potions = ?, winds = ?, shield_armed = ?,
       knockbacks = ?, hardcore_dropped_on = ?, log_points = ?, score = ? WHERE id = ? AND user_id = ?`)
-      .run(r.mode, r.endedOn, r.endReason, r.hearts, r.shields, r.potions, r.winds, r.shieldArmed ? 1 : 0, r.knockbacks, r.hardcoreDroppedOn, r.logPoints, r.score, r.id, owner);
+      .run(r.mode, r.endedOn, r.endReason, r.hearts, r.lives, r.shields, r.potions, r.winds, r.shieldArmed ? 1 : 0, r.knockbacks, r.hardcoreDroppedOn, r.logPoints, r.score, r.id, owner);
     if (!u.changes) throw new UserError("That run no longer exists.", 404);
     const have = new Set((this.db.prepare("SELECT id FROM game_fights WHERE run_id = ?").all(r.id) as { id: Id }[]).map((x) => x.id));
-    const ins = this.db.prepare(`INSERT INTO game_fights (id, run_id, user_id, level, attempt, started_on, started_after, deadline_on, bet, status, ended_on, damage, heals, points, flawless, bet_locked, seq)
-      VALUES (@id, @run_id, @user_id, @level, @attempt, @started_on, @started_after, @deadline_on, @bet, @status, @ended_on, @damage, @heals, @points, @flawless, @bet_locked, @seq)`);
+    const ins = this.db.prepare(`INSERT INTO game_fights (id, run_id, user_id, level, attempt, started_on, started_after, deadline_on, bet, status, ended_on, damage, heals, points, flawless, bet_locked, hp_mult, seq)
+      VALUES (@id, @run_id, @user_id, @level, @attempt, @started_on, @started_after, @deadline_on, @bet, @status, @ended_on, @damage, @heals, @points, @flawless, @bet_locked, @hp_mult, @seq)`);
     const upd = this.db.prepare(`UPDATE game_fights SET deadline_on = @deadline_on, bet = @bet, status = @status, ended_on = @ended_on, damage = @damage, heals = @heals,
       points = @points, flawless = @flawless, bet_locked = @bet_locked WHERE id = @id AND user_id = @user_id`);
     st.fights.forEach((f, seq) => {
       const row = { id: f.id, run_id: r.id, user_id: owner, level: f.level, attempt: f.attempt, started_on: f.startedOn, started_after: f.startedAfter, deadline_on: f.deadlineOn,
-        bet: f.bet, status: f.status, ended_on: f.endedOn, damage: f.damage, heals: f.heals, points: f.points, flawless: f.flawless ? 1 : 0, bet_locked: f.betLocked ? 1 : 0, seq };
+        bet: f.bet, status: f.status, ended_on: f.endedOn, damage: f.damage, heals: f.heals, points: f.points, flawless: f.flawless ? 1 : 0, bet_locked: f.betLocked ? 1 : 0, hp_mult: f.hpMult ?? 1, seq };
       if (have.has(f.id)) upd.run(row); else ins.run(row);
     });
     let seq = (this.db.prepare("SELECT COALESCE(MAX(seq), -1) AS n FROM game_events WHERE run_id = ?").get(r.id) as { n: number }).n;
@@ -146,7 +151,7 @@ export class Game {
   }
 
   private result(owner: Id, st: RunState | null, happened: EventData[], t: Day): SyncResult {
-    return { happened: happened.map(toEventView), view: buildView(st, st ? this.gameLog(owner, st.run, t) : null, t, false, this.users.settings(owner).autoStart) };
+    return { happened: happened.map(toEventView), view: buildView(st, st ? this.gameLog(owner, st.run, t) : null, t, false, this.users.settings(owner).autoStart, this.hpMult(owner)) };
   }
 
   // ---------------------------------------------------------------- the routes
@@ -156,7 +161,7 @@ export class Game {
     if (q.now !== undefined && q.now !== "") parse(nowTime, q.now);
     const st = this.load(owner);
     const autoStart = this.users.settings(owner).autoStart;
-    if (!st) return buildView(null, null, t, false, autoStart);
+    if (!st) return buildView(null, null, t, false, autoStart, this.hpMult(owner));
     const log = this.gameLog(owner, st.run, t);
     let n = 0;
     const needsSync = !st.run.endReason && settle(st, log, { today: t, nowTime: "", nowIso: now(), newId: () => `dry${n++}` }).added.length > 0;
@@ -183,7 +188,7 @@ export class Game {
 
   /** Run N: stored, then settled at once (fight 1 counts the whole of today, so it may already be over). */
   private begin(owner: Id, number: number, mode: Mode, c: GameClock, auto: boolean): SyncResult {
-    const fresh = newRun(number, mode, c, auto);
+    const fresh = newRun(number, mode, c, auto, this.hpMult(owner));
     this.store(owner, fresh.state, fresh.added, true);
     const out = settle(fresh.state, this.gameLog(owner, fresh.state.run, c.today), c);
     this.store(owner, out.state, out.added);

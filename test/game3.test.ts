@@ -125,6 +125,18 @@ describe("the result screens", () => {
     expect([waitsForBattle(ko, "title", 1), waitsForBattle(kb, "title", null)]).toEqual([false, false]);
   });
 
+  it("a last heart saved by an extra life is one Extra life screen; a life earned is a toast; a tougher monster's kill is its own max HP", () => {
+    const s = E("strike", { level: 13, hearts: 0 }, "x"), l = E("life_used", { level: 13, lives: 0 }, "x"), got = E("life", { wins: 20, gained: true }, "y");
+    const plan = planResults([s, l, got]);
+    expect(plan.results).toEqual([{ kind: "life", id: s.id, strike: s, life: l }]);
+    expect(plan.toasts).toEqual([got]);
+    expect(waitsForBattle(plan.results[0], "title", null)).toBe(false);
+    const ko = E("ko", { level: 1, max: 200, damage: 200, daysLeft: 2, bet: 1, flawless: true, boss: false, points: 600 }, "k");
+    const b = victoryBreakdown(ko);
+    expect(b.rows.find((r) => r.label === "Kill")).toMatchObject({ value: "+200", sub: "Crumbs's max HP (Brutal)" });
+    expect(b.total).toBe(600);
+  });
+
   it("turns a strike that took the last heart into Knocked back or Defeated", () => {
     const s = E("strike", { level: 13, hearts: 0 }, "x"), kb = E("knockback", { from: 13, to: 11 }, "x");
     expect(planResults([s, kb]).results).toEqual([{ kind: "knockback", id: s.id, strike: s, knockback: kb }]);

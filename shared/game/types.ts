@@ -17,6 +17,9 @@ export const POWER_UP_LABEL: Record<PowerUp, string> = { shield: "Veggie Shield"
 
 export const START_HEARTS = 3;
 export const MAX_HEARTS = 5;
+/** Extra lives (Matt, Nov 15 2026): Normal runs only — one for every 20 monsters beaten, 2 at most */
+export const MAX_LIVES = 2;
+export const LIFE_EVERY = 20;
 export const MAX_POWER_UPS = 3;
 
 /** A splurge as the engine sees it. No time ("") means "assume the worst" for time-based abilities. */
@@ -37,6 +40,8 @@ export interface GameLog {
   entryDays?: Day[];
   /** the person's week start, for the weekly heart */
   weekStart: 0 | 1;
+  /** the person's Monster toughness now, as an HP multiplier: a fight started now gets it (1 when missing) */
+  hpMult?: number;
 }
 
 export interface RunData {
@@ -49,6 +54,11 @@ export interface RunData {
   endedOn: Day | null;
   endReason: EndReason | null;
   hearts: number;
+  /**
+   * extra lives held (Normal only): at 0 hearts one is spent instead of a knock-back — a full set of
+   * hearts and the same monster again at full HP with its full time
+   */
+  lives: number;
   shields: number;
   potions: number;
   winds: number;
@@ -82,9 +92,11 @@ export interface FightData {
   points: number;
   flawless: boolean;
   betLocked: boolean;
+  /** the monster's HP is its level's × this: the Monster toughness when the fight started (1 when missing) */
+  hpMult?: number;
 }
 
-export type EventKind = "run_start" | "fight_start" | "ko" | "strike" | "knockback" | "defeat" | "finish" | "heart" | "powerup_earned" | "powerup_used" | "mode_drop";
+export type EventKind = "run_start" | "fight_start" | "ko" | "strike" | "knockback" | "defeat" | "finish" | "heart" | "life" | "life_used" | "powerup_earned" | "powerup_used" | "mode_drop";
 export interface EventData {
   id: Id;
   fightId: Id | null;
@@ -118,6 +130,8 @@ export interface FightInput {
   usedBefore?: Id[] | null;
   deadlineOn: Day;
   today: Day;
+  /** the monster's HP is its level's × this (the toughness the fight started with); 1 when missing */
+  hpMult?: number;
   /** the log from the day before the fight started (the comeback and "yesterday" look there) to today */
   splurges: SplurgeEv[];
   activities: ActivityEv[];
@@ -189,6 +203,7 @@ export interface RunView extends RunData {
   /** the score with the log points up to now */
   liveScore: number;
   maxHearts: number;
+  maxLives: number;
   maxPowerUps: number;
 }
 
@@ -266,6 +281,8 @@ export interface GameView {
   next: NextFightView | null;
   /** the person's Keep the monsters coming setting (the between-fights screen says what happens next) */
   autoStart: boolean;
+  /** the person's Monster toughness now, as an HP multiplier: what a fight started now would get */
+  hpMult: number;
   /** all 60 levels */
   map: MapLevel[];
   /** what happened in the run, newest first (the latest 50) */

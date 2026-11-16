@@ -7,7 +7,7 @@
 import { useState, type ReactNode } from "react";
 import {
   abilityFor, betDays, BONUS_SHARE, bonusMaxOf, CRIT, HEAL, LEVELS, levelInfo, MAX_HEARTS, MAX_POWER_UPS, POINTS, POTION_DAMAGE, POTION_MINUTES, rawDamage,
-  SHIELD_STREAK, START_HEARTS, WEEK_ACTIVE_DAYS, wonPoints, type Bet,
+  SHIELD_STREAK, START_HEARTS, WEEK_ACTIVE_DAYS, wonPoints, type Bet, LIFE_EVERY, MAX_LIVES,
 } from "../../../shared/game";
 import { cx } from "../components/ui";
 import { Burger, Cookie, HeartEmpty, HeartFull, IconCrit, Pizza, Potion, Shield, Skull, Sword, Wind, ShieldBlue } from "./icons";
@@ -122,20 +122,24 @@ function Fight({ example }: { example: number }) {
           <dt className="font-black text-[#e0264b]">Lose 1</dt><dd>The deadline passes with HP left: it <b>strikes</b>. You get one more day to finish it, and its HP stays where it is. Every extra day costs another heart. Junk never costs hearts.</dd>
           <dt className="font-black text-[#2f9a2a]">Earn 1</dt><dd>Beat a world boss, or have a week with {WEEK_ACTIVE_DAYS}+ active days. Start with {START_HEARTS}, hold up to {MAX_HEARTS}.</dd>
           <dt className="font-black">At 0</dt><dd>Depends on the run's mode, below.</dd>
+          <dt className="font-black text-[#2f9a2a]">Lives</dt><dd>Normal runs only: every {LIFE_EVERY} monsters you beat earn an <b>extra life</b> (hold up to {MAX_LIVES}). At 0 hearts it is spent by itself: {START_HEARTS} hearts again, and the same monster once more at full HP with its full time.</dd>
         </dl>
       </Card>
       <Card title="Normal or Hardcore" note="picked when a run starts">
         <div className="mt-1.5 grid grid-cols-2 gap-2 text-[13px] leading-snug font-bold">
           <div className="rounded-2xl border-[3px] border-[#2b1d3a] bg-[#e8f6ff] px-2.5 py-2 text-[#2b1d3a]">
             <span className="flex items-center gap-1 font-game text-[17px]"><ShieldBlue className="size-4" />Normal</span>
-            At 0 hearts you're knocked back to the first level of your world with {START_HEARTS} hearts, −{POINTS.knockback} points. The run goes on.
+            At 0 hearts an extra life saves you, if you hold one. With none, you're knocked back to the first level of your world with {START_HEARTS} hearts, −{POINTS.knockback} points. The run goes on.
           </div>
           <div className="rounded-2xl border-[3px] border-[#2b1d3a] bg-[#ffe3e8] px-2.5 py-2 text-[#2b1d3a]">
             <span className="flex items-center gap-1 font-game text-[17px]"><Skull className="size-4" />Hardcore</span>
-            At 0 hearts the run is over and the next starts at level 1. ×{POINTS.hardcore} on all points and a skull in the Hall.
+            At 0 hearts the run is over and the next starts at level 1. No extra lives. ×{POINTS.hardcore} on all points and a skull in the Hall.
           </div>
         </div>
         <p className="mt-2 text-[13px] font-bold text-g-mute">A Hardcore run can switch to Normal at any time from the map (tap its badge). That is one way: Normal can't become Hardcore.</p>
+      </Card>
+      <Card title="Monster toughness" note="Settings → You">
+        <p className="mt-1 text-[14px] leading-snug font-bold">Want a harder game? Pick <b>Tough</b> (HP ×1.5) or <b>Brutal</b> (HP ×2) in Settings → You. Deadlines stay the same, so it takes more activity each day, and since a kill is worth the monster's max HP, tougher monsters score more. A change counts from the next monster you start. The HP numbers on this page and in the Monster Book are the Standard ones.</p>
       </Card>
       <Card title="The road" note={`${LEVELS.length} levels · 6 worlds`}>
         <p className="mt-1 text-[14px] leading-snug font-bold">Every level is its own monster: nine, then a boss at level 10 of each world. HP grows from {LEVELS[0].hp} to {LEVELS[LEVELS.length - 1].hp}; deadlines from {LEVELS[0].days} to {LEVELS[LEVELS.length - 1].days} days. Beat level 60 and the run is complete.</p>

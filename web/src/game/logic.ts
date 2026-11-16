@@ -4,7 +4,7 @@
  * panel in the game-skinned sheets. Pure (tested in test/gameui.test.ts). The panel numbers come
  * from the shared engine's `preview()`, so they are what the server will do.
  */
-import { BET_LABEL, bonusMaxOf, levelInfo, POINTS, preview, type ActivityEv, type BattleLine, type Bet, type FightInput, type SplurgeEv } from "../../../shared/game";
+import { BET_LABEL, bonusMaxOf, levelInfo, monsterHp, POINTS, preview, type ActivityEv, type BattleLine, type Bet, type FightInput, type SplurgeEv } from "../../../shared/game";
 import type { Day, Size } from "../../../shared/types";
 import { SIZE_LABEL } from "../../../shared/types";
 
@@ -241,7 +241,8 @@ export function attackPanel(input: FightInput, a: { id?: string; what: string; d
   const line = after.lines.find((l) => l.sourceId === id && (l.kind === "hit" || l.kind === "note"));
   const dmg = line && line.kind === "hit" ? line.amount : 0;
   const hpBefore = hpLeft(before), hpAfter = hpLeft(after);
-  const base = { name, max: lv.hp, bonusMax: bonusMaxOf(lv.hp), hpBefore, hpAfter, raw, dmg, short: Math.max(0, hpAfter), over: 0, note: "" };
+  const max = monsterHp(input.level, input.hpMult);
+  const base = { name, max, bonusMax: bonusMaxOf(max), hpBefore, hpAfter, raw, dmg, short: Math.max(0, hpAfter), over: 0, note: "" };
   const formula = raw ? `${minutes} min + ${fmt(cal)} cal ÷ 10 = ${raw} damage` : "Damage = minutes + cal ÷ 10, no cap";
   if (before.ko) return { ...base, state: "down", formula, line: `${name} is already down. Logging still earns +5 points.` };
   if (!raw) return { ...base, state: "idle", formula, line: `${name} has ${hpBefore} HP left${before.bonus ? `, ${before.bonus} of it bonus HP` : ""}. Every 10 min or 100 cal is 10 damage.` };
@@ -281,7 +282,8 @@ export interface HealPanel {
 export function healPanel(input: FightInput, s: { id?: string; what: string; day: Day; time: string; size: Size | null; planned: boolean; createdAt: string }): HealPanel {
   const lv = levelInfo(input.level);
   const name = lv.name;
-  const base = { name, max: lv.hp, bonusMax: bonusMaxOf(lv.hp) };
+  const max = monsterHp(input.level, input.hpMult);
+  const base = { name, max, bonusMax: bonusMaxOf(max) };
   if (!s.size) {
     const hp = hpLeft(preview(input, {}).before);
     return { ...base, state: "none", hpBefore: hp, hpAfter: hp, heal: 0, bonus: 0, formula: "Snack +10 · Meal +25 · Feast +60, or the monster's own numbers", line: `Pick Snack, Meal or Feast to see how much ${name} heals.` };

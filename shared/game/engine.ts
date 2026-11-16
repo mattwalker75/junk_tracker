@@ -14,7 +14,7 @@ import { addDays, daysBetween, minDay, weekStartOf } from "./days.js";
 import { firstLevelOfWorld, LEVEL_COUNT, LEVELS, levelInfo } from "./levels.js";
 import { logPoints, runScore, struckPoints, wonPoints } from "./score.js";
 import {
-  BET_LABEL, BETS, MAX_HEARTS, MAX_POWER_UPS, START_HEARTS,
+  BET_LABEL, BETS, LIFE_EVERY, MAX_HEARTS, MAX_LIVES, MAX_POWER_UPS, START_HEARTS,
   type ActivityEv, type ArmPoint, type BattleLine, type Bet, type EventData, type EventKind, type EventView, type FightData, type FightInput, type FightResult, type FightView,
   type GameClock, type GameLog, type GameView, type MapLevel, type Mode, type NextFightView, type PowerUp, type RunData, type RunState, type SplurgeEv,
 } from "./types.js";
@@ -37,6 +37,9 @@ export const WEEK_ACTIVE_DAYS = 5;
 
 /** A rule the person ran into ("The bet is locked"): the server turns it into a plain 409. */
 export class GameRuleError extends Error {}
+
+/** A monster's full HP: its level's, times the toughness its fight started with (Standard 1, Tough 1.5, Brutal 2). */
+export const monsterHp = (level: number, hpMult = 1): number => Math.round(levelInfo(level).hp * hpMult);
 
 export function abilityFor(level: number): Ability {
   return ABILITIES[levelInfo(level).ability];
@@ -104,7 +107,7 @@ function afterArm(arm: ArmPoint, day: Day, w: Where): boolean {
 export function simulateFight(inp: FightInput): FightResult {
   const level = levelInfo(inp.level);
   const ab = abilityFor(inp.level);
-  const max = level.hp;
+  const max = monsterHp(inp.level, inp.hpMult);
   const name = level.name;
   const bonusMax = bonusMaxOf(max);
   let hp = max, bonus = 0, damage = 0, heals = 0, landed = 0, attacked = false, revived = false, thresholdDone = false;
@@ -336,27 +339,27 @@ export function fightInputFor(st: RunState, f: FightData, log: GameLog, today: D
   const potions = mine.filter((e) => isUse(e, "potion")).map((e) => ({ id: e.id, day: e.day, time: String(e.data.time ?? ""), at: e.at }));
   const usedBefore = usedBeforeOf(st, f);
   const { blocked, shieldFrom } = shieldIn(st, f, log, today, usedBefore);
-  return { level: f.level, startedOn: f.startedOn, startedAfter: f.startedAfter, usedBefore, deadlineOn: f.deadlineOn, today, splurges: log.splurges, activities: log.activities, potions, shieldFrom, blocked };
+  return { level: f.level, startedOn: f.startedOn, startedAfter: f.startedAfter, usedBefore, deadlineOn: f.deadlineOn, today, hpMult: f.hpMult ?? 1, splurges: log.splurges, activities: log.activities, potions, shieldFrom, blocked };
 }
 
-/** A new run: number N, 3 hearts, no power-ups, fight 1 (Crumbs) started today at Steady. `auto`: started by Keep the monsters coming. */
-export function newRun(number: number, mode: Mode, clock: GameClock, auto = false): { state: RunState; added: EventData[] } {
+/** A new run: number N, 3 hearts, no power-ups, fight 1 (Crumbs) started today at Steady. `auto`: started by Keep the monsters coming. `hpMult`: the person's Monster toughness. */
+export function newRun(number: number, mode: Mode, clock: GameClock, auto = false, hpMult = 1): { state: RunState; added: EventData[] } {
   const run: RunData = {
     id: clock.newId(), number, mode, startedAt: clock.nowIso, startedOn: clock.today, endedOn: null, endReason: null,
-    hearts: START_HEARTS, shields: 0, potions: 0, winds: 0, shieldArmed: false, knockbacks: 0, hardcoreDroppedOn: null, logPoints: 0, score: 0,
+    hearts: START_HEARTS, lives: 0, shields: 0, potions: 0, winds: 0, shieldArmed: false, knockbacks: 0, hardcoreDroppedOn: null, logPoints: 0, score: 0,
   };
   const st: RunState = { run, fights: [], events: [] };
-  openFight(st, 1, clock.today, null, clock);
+  openFight(st, 1, clock.today, null, clock, hpMult);
   const e: EventData = { id: clock.newId(), fightId: st.fights[0].id, day: clock.today, at: clock.nowIso, kind: "run_start", data: { number, mode, ...(auto ? { auto: true } : {}) } };
   st.events.push(e);
   return { state: st, added: [e] };
 }
 
-function openFight(st: RunState, level: number, startedOn: Day, startedAfter: string | null, clock: GameClock): FightData {
+function openFight(st: RunState, level: number, startedOn: Day, startedAfter: string | null, clock: GameClock, hpMult = 1): FightData {
   const f: FightData = {
     id: clock.newId(), level, attempt: st.fights.filter((x) => x.level === level).length + 1, startedOn, startedAfter,
     deadlineOn: deadlineFor(level, startedOn, !!startedAfter), bet: 1, status: "open", endedOn: null,
-    damage: 0, heals: 0, points: 0, flawless: true, betLocked: false,
+    damage: 0, heals: 0, points: 0, flawless: true, betLocked: false, hpMult,
   };
   st.fights.push(f);
   return f;
@@ -364,8 +367,8 @@ function openFight(st: RunState, level: number, startedOn: Day, startedAfter: st
 
 /**
  * Between fights: the level that is up next, or null (a fight is open, or the run is over). After a
- * KO it is the next level; after a knock-back the world's first (a strike that left hearts keeps
- * its fight open, so nothing is pending).
+ * KO it is the next level; after a knock-back the world's first; after an extra life was spent the
+ * same level again (a strike that left hearts keeps its fight open, so nothing is pending).
  */
 export function pendingLevel(st: RunState): number | null {
   if (st.run.endReason || openFightOf(st)) return null;
@@ -402,7 +405,7 @@ export function startNextFight(input: RunState, log: GameLog, clock: GameClock, 
   const level = pendingLevel(st);
   if (level === null) throw new GameRuleError("A fight is already going. Beat it first.");
   const ko = koToday(st, clock.today);
-  const f = openFight(st, level, clock.today, ko ? ko.at : null, clock);
+  const f = openFight(st, level, clock.today, ko ? ko.at : null, clock, log.hpMult ?? 1);
   f.deadlineOn = addDays(f.deadlineOn, -betDays(bet));
   f.bet = bet;
   const e: EventData = { id: clock.newId(), fightId: f.id, day: clock.today, at: clock.nowIso, kind: "fight_start", data: { level, name: levelInfo(level).name, attempt: f.attempt, ...(auto ? { auto: true } : {}) } };
@@ -412,7 +415,7 @@ export function startNextFight(input: RunState, log: GameLog, clock: GameClock, 
 }
 
 /** The monster that is up next, for the between-fights screens. */
-function nextView(st: RunState, today: Day): NextFightView | null {
+function nextView(st: RunState, today: Day, hpMult: number): NextFightView | null {
   const level = pendingLevel(st);
   if (level === null || !st.fights.length) return null;
   const lv = levelInfo(level);
@@ -421,7 +424,7 @@ function nextView(st: RunState, today: Day): NextFightView | null {
   const partDay = !!koToday(st, today);
   return {
     level, attempt: st.fights.filter((x) => x.level === level).length + 1, name: lv.name, slug: lv.slug, world: lv.world, worldName: lv.worldName, boss: lv.boss,
-    ability: { id: ab.id, name: ab.name, text: ab.text }, hp: lv.hp, days: lv.days + (ab.extraDays ?? 0),
+    ability: { id: ab.id, name: ab.name, text: ab.text }, hp: monsterHp(level, hpMult), days: lv.days + (ab.extraDays ?? 0),
     rematch: last.status === "struck", partDay,
     betOptions: BETS.map((b) => ({ bet: b, label: BET_LABEL[String(b)], deadlineOn: deadlineFor(level, today, partDay, b) })),
   };
@@ -489,8 +492,9 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
       const used = k.used ? [...before, ...k.used] : undefined;
       award(addDays(k.day, -1));
       f.status = "won"; f.endedOn = k.day; f.betLocked = true;
-      f.points = wonPoints({ damage: f.damage, max: lv.hp, koDay: k.day, deadlineOn: f.deadlineOn, flawless: f.flawless, boss: lv.boss, bet: f.bet, hardcore: hardcore() });
-      ev("ko", k.day, f.id, { level: f.level, name: lv.name, points: f.points, damage: f.damage, flawless: f.flawless, bet: f.bet, daysLeft: Math.max(0, daysBetween(k.day, f.deadlineOn)), boss: lv.boss, ...(k.at && used ? { used } : {}) }, k.at ?? clock.nowIso);
+      const max = monsterHp(f.level, f.hpMult);
+      f.points = wonPoints({ damage: f.damage, max, koDay: k.day, deadlineOn: f.deadlineOn, flawless: f.flawless, boss: lv.boss, bet: f.bet, hardcore: hardcore() });
+      ev("ko", k.day, f.id, { level: f.level, name: lv.name, max, points: f.points, damage: f.damage, flawless: f.flawless, bet: f.bet, daysLeft: Math.max(0, daysBetween(k.day, f.deadlineOn)), boss: lv.boss, ...(k.at && used ? { used } : {}) }, k.at ?? clock.nowIso);
       if (lv.boss) {
         const heart = run.hearts < MAX_HEARTS;
         if (heart) run.hearts += 1;
@@ -498,6 +502,13 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
         const wind = run.winds < MAX_POWER_UPS;
         if (wind) run.winds += 1;
         ev("powerup_earned", k.day, f.id, { kind: "wind", reason: "boss", name: lv.name, gained: wind });
+      }
+      // an extra life for every 20 monsters beaten in the run (Normal only; 2 held at most)
+      const wins = st.fights.filter((x) => x.status === "won").length;
+      if (run.mode === "normal" && f.level < LEVEL_COUNT && wins % LIFE_EVERY === 0) {
+        const gained = run.lives < MAX_LIVES;
+        if (gained) run.lives += 1;
+        ev("life", k.day, f.id, { wins, gained });
       }
       if (f.level === LEVEL_COUNT) {
         run.endedOn = k.day; run.endReason = "finished";
@@ -518,14 +529,19 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
       // (Matt, Nov 15 2026). Every further missed day costs another heart, until the last one.
       if (run.hearts > 0) {
         f.deadlineOn = addDays(missed, 1);
-        ev("strike", missed, f.id, { level: f.level, name: lv.name, hpLeft: sim.hp + sim.bonus, hearts: run.hearts, extended: true, deadlineOn: f.deadlineOn });
+        ev("strike", missed, f.id, { level: f.level, name: lv.name, max: sim.max, hpLeft: sim.hp + sim.bonus, hearts: run.hearts, extended: true, deadlineOn: f.deadlineOn });
         continue;
       }
-      // the last heart: the fight is over. The start of the world (after a knock-back) waits to be started.
+      // the last heart: the fight is over. What comes next (the same monster again after an extra
+      // life, the start of the world after a knock-back) waits to be started.
       f.status = "struck"; f.endedOn = missed;
       f.points = struckPoints({ damage: f.damage, hardcore: hardcore() });
-      ev("strike", missed, f.id, { level: f.level, name: lv.name, hpLeft: sim.hp + sim.bonus, hearts: 0, points: f.points });
-      if (run.mode === "normal") {
+      ev("strike", missed, f.id, { level: f.level, name: lv.name, max: sim.max, hpLeft: sim.hp + sim.bonus, hearts: 0, points: f.points });
+      if (run.mode === "normal" && run.lives > 0) {
+        // an extra life: a full set of hearts, and the same monster again at full HP with its full time
+        run.lives -= 1; run.hearts = START_HEARTS;
+        ev("life_used", missed, f.id, { level: f.level, name: lv.name, lives: run.lives });
+      } else if (run.mode === "normal") {
         run.knockbacks += 1; run.hearts = START_HEARTS;
         const to = firstLevelOfWorld(f.level);
         ev("knockback", missed, f.id, { from: f.level, to, world: lv.world, worldName: lv.worldName, points: -250 });
@@ -660,6 +676,8 @@ export function eventText(e: EventData): string {
     case "knockback": return `Knocked back to level ${d.to}, the start of ${d.worldName}. −250 points, and 3 hearts again.`;
     case "defeat": return `Defeated by ${d.name}. The run is over${d.score !== undefined ? ` with ${Number(d.score).toLocaleString("en-US")} points` : ""}.`;
     case "finish": return "All 60 monsters crushed! The run is complete.";
+    case "life": return `An extra life for ${d.wins} monsters beaten.${d.gained === false ? " You already hold 2." : ""}`;
+    case "life_used": return `An extra life spent: 3 hearts again, and ${d.name} is up for a rematch at full HP.`;
     case "heart": return (d.reason === "boss" ? `A heart for beating ${d.name}.` : `A heart for ${d.activeDays} active days in a week.`) + keep;
     case "powerup_earned":
       return (d.kind === "shield" ? "A Veggie Shield for 3 clean days in a row." : d.kind === "potion" ? `A Water Potion for ${d.what ?? "a workout"} (${d.minutes} min).` : `A Second Wind for beating ${d.name}.`) + keep;
@@ -673,8 +691,8 @@ export function eventText(e: EventData): string {
 export const toEventView = (e: EventData): EventView => ({ ...e, text: eventText(e) });
 
 /** Everything GET /api/game returns, from a stored run (or none) and the log. */
-export function buildView(st: RunState | null, log: GameLog | null, today: Day, needsSync: boolean, autoStart = false): GameView {
-  if (!st) return { today, run: null, fight: null, next: null, autoStart, map: LEVELS.map((l) => ({ level: l.level, status: "locked", attempts: 0, wins: 0, strikes: 0, bestPoints: 0 })), events: [], needsSync: false };
+export function buildView(st: RunState | null, log: GameLog | null, today: Day, needsSync: boolean, autoStart = false, hpMult = log?.hpMult ?? 1): GameView {
+  if (!st) return { today, run: null, fight: null, next: null, autoStart, hpMult, map: LEVELS.map((l) => ({ level: l.level, status: "locked", attempts: 0, wins: 0, strikes: 0, bestPoints: 0 })), events: [], needsSync: false };
   const run = st.run;
   const active = !run.endReason;
   const lg: GameLog = log ?? { splurges: [], activities: [], entriesSinceStart: 0, weekStart: 0 };
@@ -701,7 +719,7 @@ export function buildView(st: RunState | null, log: GameLog | null, today: Day, 
       input,
     };
   }
-  const next = active && !open ? nextView(st, today) : null;
+  const next = active && !open ? nextView(st, today, hpMult) : null;
   const at = run.endReason === "finished" ? LEVEL_COUNT + 1 : next?.level ?? (open ?? st.fights[st.fights.length - 1])?.level ?? 1;
   const strikes = st.events.filter((e) => e.kind === "strike");
   const map: MapLevel[] = LEVELS.map((l) => {
@@ -715,8 +733,8 @@ export function buildView(st: RunState | null, log: GameLog | null, today: Day, 
   });
   return {
     today,
-    run: { ...run, active, hardcore: run.mode === "hardcore", liveScore, maxHearts: MAX_HEARTS, maxPowerUps: MAX_POWER_UPS },
-    fight, next, autoStart, map,
+    run: { ...run, active, hardcore: run.mode === "hardcore", liveScore, maxHearts: MAX_HEARTS, maxLives: MAX_LIVES, maxPowerUps: MAX_POWER_UPS },
+    fight, next, autoStart, hpMult, map,
     events: st.events.slice(-50).reverse().map(toEventView),
     needsSync,
   };

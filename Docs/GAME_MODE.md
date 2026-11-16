@@ -104,7 +104,14 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 - You earn a heart back for:
   - beating a world boss: +1
   - a week with 5+ active days: +1
-- **At 0 hearts you are Defeated.** The run's score goes to the **Hall of Heroes**, and the next run starts again at World 1, Monster 1.
+- **Extra lives** (Matt, Nov 15 2026; Normal only): every 20 monsters beaten in the run earn one,
+  2 held at most. At 0 hearts a life is spent by itself: 3 hearts again and the same monster once
+  more at full HP with its full time (the rematch screen), no points lost. With none left, Normal is
+  the knock-back to the start of the world. Hardcore has no extra lives.
+- **Monster toughness** (Matt, Nov 15 2026): Settings → You — Standard, Tough (HP ×1.5), Brutal
+  (HP ×2); same deadlines; counts from the next fight started, never for the one going on. Scoring
+  follows by itself (damage and the kill bonus are the monster's HP).
+- **At 0 hearts you are Defeated** (Hardcore; the older text, before Normal's knock-back). The run's score goes to the **Hall of Heroes**, and the next run starts again at World 1, Monster 1.
 - The copy stays kind and funny: the monsters throw a party, and Fry Hydra wears your helmet.
 
 ### Points

@@ -4,6 +4,23 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+## [1.5.0] — 2026-11-15
+### Added
+- 2026-11-15: **Calorie Crusher: extra lives** (Normal runs only). Every 20 monsters you beat in a
+  run earn an extra life; you can hold 2. When your last heart goes, a life is spent by itself
+  instead of a knock-back: you get a full set of 3 hearts and fight the same monster again at full
+  HP with its full time, and you lose no points. With no life left, Normal knocks you back to the
+  start of the world as before. Hardcore has no extra lives: at 0 hearts the run is over. Lives show
+  next to your hearts on the battle screen.
+- 2026-11-15: **Monster toughness** in Settings → You: **Standard**, **Tough** (monsters have 1.5
+  times the HP) or **Brutal** (twice the HP). Deadlines stay the same, and tougher monsters are
+  worth more points. You can change it whenever you like; it counts from the next monster you
+  start, and the one you are fighting stays as it is.
+
+### Changed
+- 2026-11-15: The database moves to version 6 the first time the app starts (a copy of the old one
+  is saved beside it as `junk.db.before-v6`, as always).
+
 ## [1.4.0] — 2026-11-15
 ### Changed
 - 2026-11-15: **Calorie Crusher: a missed deadline now buys one more day.** When a monster's

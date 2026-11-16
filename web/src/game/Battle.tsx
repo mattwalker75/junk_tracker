@@ -106,6 +106,12 @@ function RunRow({ run, crack }: { run: RunView; crack: boolean }) {
       <div className="g-panel flex h-10 shrink-0 items-center gap-1 rounded-[14px] px-2.5">
         <BattleHearts hearts={run.hearts} crack={crack} />
       </div>
+      {run.lives > 0 ? (
+        <div className="g-panel flex h-10 shrink-0 flex-col items-center justify-center rounded-[14px] bg-g-green px-2 leading-none text-g-on" role="img" aria-label={`${run.lives} extra ${run.lives === 1 ? "life" : "lives"}`}>
+          <span aria-hidden className="text-[10px] font-black tracking-[0.06em]">{run.lives === 1 ? "LIFE" : "LIVES"}</span>
+          <span aria-hidden className="font-game text-lg/none">+{run.lives}</span>
+        </div>
+      ) : null}
       <div className={cx("g-panel flex h-10 shrink-0 flex-col items-center justify-center rounded-[14px] px-2.5 leading-none", run.hardcore ? "bg-g-night text-g-night-ink" : "bg-g-blue text-g-on")}>
         <span className="flex items-center gap-0.5 text-[10px] font-black tracking-[0.06em]">{run.hardcore ? <Skull className="size-3" /> : null}RUN</span>
         <span className="font-game text-lg/none">#{run.number}</span>
@@ -197,7 +203,7 @@ function MapLink() {
  * result screen comes up (Results.tsx). Reduced motion skips straight to the screen.
  */
 const SCENE_MS = 1700;
-function useScene(head: QueuedResult | null): { kind: "ko" | "strike"; level: number; crack: boolean; goesOn: boolean } | null {
+function useScene(head: QueuedResult | null): { kind: "ko" | "strike"; level: number; max: number; crack: boolean; goesOn: boolean } | null {
   const pending = head && !head.shown ? head.result : null;
   const id = pending?.id;
   useEffect(() => {
@@ -206,9 +212,11 @@ function useScene(head: QueuedResult | null): { kind: "ko" | "strike"; level: nu
     return () => window.clearTimeout(t);
   }, [id]);
   if (!pending) return null;
-  if (pending.kind === "victory" || pending.kind === "finish") return { kind: "ko", level: Number(pending.ko.data.level ?? 60), crack: false, goesOn: false };
+  const maxOf = (e: { data: Record<string, unknown> }, level: number) => Number(e.data.max ?? levelInfo(level).hp);
+  if (pending.kind === "victory" || pending.kind === "finish") { const level = Number(pending.ko.data.level ?? 60); return { kind: "ko", level, max: maxOf(pending.ko, level), crack: false, goesOn: false }; }
+  const level = Number(pending.strike.data.level);
   // a strike that left hearts: the same fight goes on, so its HP bar stays as it is
-  return { kind: "strike", level: Number(pending.strike.data.level), crack: pending.kind === "strike", goesOn: pending.kind === "strike" && pending.strike.data.extended === true };
+  return { kind: "strike", level, max: maxOf(pending.strike, level), crack: pending.kind === "strike", goesOn: pending.kind === "strike" && pending.strike.data.extended === true };
 }
 
 function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightView; today: string; head: QueuedResult | null }) {
@@ -250,7 +258,7 @@ function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightVie
         <div className="absolute inset-x-2.5 top-2 flex flex-col gap-1">
           <div className="flex items-end justify-between gap-2">
             <span className="g-stroke truncate font-game text-2xl leading-none" style={{ textShadow: "0 2px 0 #2b1d3a" }}>{ko?.name ?? strikeBy?.name ?? fight.name}</span>
-            <span className="g-stroke-thin shrink-0 text-base font-black">{ko ? `HP 0 / ${ko.hp}` : strikeBy && !scene?.goesOn ? `HP ${strikeBy.hp} / ${strikeBy.hp}` : <>HP <HpNumbers hp={fight.hp} max={fight.max} bonus={fight.bonus} /></>}</span>
+            <span className="g-stroke-thin shrink-0 text-base font-black">{ko ? `HP 0 / ${scene?.max ?? ko.hp}` : strikeBy && !scene?.goesOn ? `HP ${scene?.max ?? strikeBy.hp} / ${scene?.max ?? strikeBy.hp}` : <>HP <HpNumbers hp={fight.hp} max={fight.max} bonus={fight.bonus} /></>}</span>
           </div>
           <HpBar label={`${fight.name} hit points`} max={fight.max} value={ko ? 0 : left}
             fill={fx?.kind === "heal" ? "#ff4d6d" : "#ff7a2f"} fillClass="rounded-full shadow-[inset_0_-4px_0_rgba(0,0,0,.18)]" />

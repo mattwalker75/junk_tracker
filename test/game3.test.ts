@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { badgesFor, BIOS, bioFor, LEVELS, wonPoints, type BadgeFight, type EventView, type MapLevel } from "../shared/game/index.js";
 import { bandTop, cardBox, mapNode, MAP_START, pathThrough, paths, trailEnd, worldLevels, worldNode, ALL_LEVELS } from "../web/src/game/layout";
-import { countUp, planResults, victoryBreakdown } from "../web/src/game/outcomes";
+import { countUp, planResults, victoryBreakdown, waitsForBattle } from "../web/src/game/outcomes";
 import { parse } from "../web/src/lib/route";
 
 describe("the Monster Book bios", () => {
@@ -115,6 +115,16 @@ describe("the result screens", () => {
     const k1 = E("ko", { level: 1 }, "a"), k2 = E("ko", { level: 2 }, "b"), s = E("strike", { level: 3 }, "c");
     expect(planResults([k1, k2, s]).results.map((x) => x.kind + ":" + x.id)).toEqual([`victory:${k1.id}`, `victory:${k2.id}`, `strike:${s.id}`]);
   });
+  it("a strike whose fight goes on waits for the battle screen; everything else comes up where you are", () => {
+    const strike = planResults([E("strike", { level: 3, hearts: 2, extended: true }, "c")]).results[0];
+    expect(["title", "map", "choose", "hall"].map((s) => waitsForBattle(strike, s, 3))).toEqual([true, true, true, true]);
+    expect(waitsForBattle(strike, "battle", 3)).toBe(false);
+    expect([waitsForBattle(strike, "title", null), waitsForBattle(strike, "title", 4)]).toEqual([false, false]); // that fight is over since (a KO came after): nothing to walk into
+    const ko = planResults([E("ko", { level: 1 }, "a")]).results[0];
+    const kb = planResults([E("strike", { level: 13, hearts: 0 }, "x"), E("knockback", { from: 13, to: 11 }, "x")]).results[0];
+    expect([waitsForBattle(ko, "title", 1), waitsForBattle(kb, "title", null)]).toEqual([false, false]);
+  });
+
   it("turns a strike that took the last heart into Knocked back or Defeated", () => {
     const s = E("strike", { level: 13, hearts: 0 }, "x"), kb = E("knockback", { from: 13, to: 11 }, "x");
     expect(planResults([s, kb]).results).toEqual([{ kind: "knockback", id: s.id, strike: s, knockback: kb }]);

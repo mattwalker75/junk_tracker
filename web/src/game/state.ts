@@ -77,7 +77,9 @@ function startFrom(view: GameView): void {
       fresh = start >= 0 ? events.slice(0, start) : events;
     }
   }
-  newest = events[0]?.id ?? null;
+  // with unseen ones, "seen so far" is the event just before them: a result brought back keeps that
+  // as its mark, so it comes back again after another reload (it used to be lost the second time)
+  newest = events[fresh.length]?.id ?? null;
   for (const e of events) if (!fresh.includes(e)) seen.add(e.id);
   if (fresh.length) pushHappened([...fresh].reverse());
   else saveSeen();

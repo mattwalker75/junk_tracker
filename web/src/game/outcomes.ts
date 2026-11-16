@@ -50,6 +50,15 @@ export function planResults(events: readonly EventView[]): { results: Result[]; 
   return { results, toasts };
 }
 
+/**
+ * A strike that left hearts waits for the battle screen (Matt, Nov 15 2026): wherever the game was
+ * opened, its screen stays back until the person goes into the fight, so they see the monster hit
+ * them and the heart crack there first. Everything else comes up where the person is.
+ */
+export function waitsForBattle(r: Result, screen: string, openLevel: number | null): boolean {
+  return r.kind === "strike" && screen !== "battle" && openLevel !== null && openLevel === Number(r.strike.data.level);
+}
+
 export interface ScoreRow { label: string; sub: string; value: string }
 export interface Breakdown { rows: ScoreRow[]; total: number }
 

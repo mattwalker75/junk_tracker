@@ -12,6 +12,14 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
   fresh deadline). Each further day you miss costs another heart. Your last heart works as before:
   knocked back to the start of the world on Normal, the run is over on Hardcore. The *Comeback Kid*
   badge is now for beating a monster after it struck you.
+- 2026-11-15: **You see the hit when you go into the fight.** If a deadline passed while you were
+  away, the "it strikes" screen no longer comes up on the title screen or the map. It waits until
+  you open the fight: the monster lunges at you, a heart cracks, and then the screen tells you about
+  the extra day. (With your phone set to reduce motion, the screen comes up at once, as before.)
+### Fixed
+- 2026-11-15: A Victory or "it strikes" screen you hadn't closed came back after closing and
+  reopening the app once, but was lost if you did that a second time. It now keeps coming back
+  until you close it.
 
 ## [1.3.0] — 2026-11-14
 ### Changed

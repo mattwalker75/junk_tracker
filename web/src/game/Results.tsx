@@ -17,7 +17,7 @@ import { ClockSmall, HeartBroken, HeartEmpty, HeartFull, Hero, Home, Padlock, Pl
 import { worldOf } from "./layout";
 import { dayExample, daysFrom, dueText, hpLeft, hpText, shortDate } from "./logic";
 import { GameMenu, HpBar } from "./parts";
-import { countUp, victoryBreakdown, type Result } from "./outcomes";
+import { countUp, victoryBreakdown, waitsForBattle, type Result } from "./outcomes";
 import { dropToast, markShown, nextResult, clearResults, useGame, useResults, useToasts } from "./state";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
@@ -29,11 +29,14 @@ const reducedMotion = () => typeof window !== "undefined" && !!window.matchMedia
 export function ResultHost({ screen }: { screen: GameScreen }) {
   const { head, waiting } = useResults();
   const { today, view } = useGame();
-  // away from a fight on the battle screen (or with reduced motion) a result comes up at once
+  // away from a fight on the battle screen (or with reduced motion) a result comes up at once —
+  // but a strike whose fight goes on waits until the person is in that fight, where it plays first
   const battling = screen === "battle" && !!(view?.fight || view?.next);
+  const held = !!head && !head.shown && waitsForBattle(head.result, screen, view?.fight?.level ?? null);
   useEffect(() => {
-    if (head && !head.shown && (!battling || reducedMotion())) markShown(head.result.id);
-  }, [head, battling]);
+    if (!head || head.shown) return;
+    if (reducedMotion() || (!battling && !held)) markShown(head.result.id);
+  }, [head, battling, held]);
   return (
     <>
       <Toasts />

@@ -411,3 +411,7 @@ additional 24 hours to the current monster")
   Defeated). Its screen shows the HP left, the new due day and **Keep fighting**; the battle
   screen's strike scene keeps the real HP bar (`useScene().goesOn`).
 - No database change: `deadline_on` was already updated for an open fight (Second Wind).
+- **The hit is seen in the fight** (Matt, Nov 15 2026): a Strike result is held back
+  (`waitsForBattle` in outcomes.ts, used by `ResultHost`) on every screen but the battle screen
+  while that fight is open; there the strike scene plays (lunge, WHAM!, the heart cracks), then the
+  screen. Reduced motion shows it at once. Knocked back and Defeated still come up anywhere.

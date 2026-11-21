@@ -2,6 +2,12 @@
 
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
+## [Unreleased]
+### Added
+- 2026-11-21: A new `app_ports/` folder for the future iPhone and Android versions of Craving Crusher
+  (`app_ports/ios/`, `app_ports/android/`). Nothing is built there yet; `app_ports/README.md` lists what a
+  port starts from (the name, the icon, the shared game engine).
+
 ## [1.7.1] — 2026-11-21
 ### Changed
 - 2026-11-21: **The new app icon** (Matt's pick, idea 9 of Round 8): two chunky letter Cs, cream and

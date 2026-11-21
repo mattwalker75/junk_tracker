@@ -25,6 +25,8 @@ The person using it is not a developer — every message the page shows is a pla
   (the initials menu), `GoalsPage.tsx`, `GoalSheet.tsx`, `LogSheet.tsx`, `ActivitySheet.tsx` (Log activity), `WeighSheet.tsx`,
   `DaySheet.tsx`, `CalendarPage.tsx`; `web/src/settings/` — Settings pages; `web/src/lib/stats.ts` — the numbers
   on the home screen (pure, tested).
+- `app_ports/` — future phone-app versions, one folder each (`ios/`, `android/`); empty for now, never
+  built by `TRACKER.sh` (Matt, Nov 21 2026). `app_ports/README.md` says what a port starts from.
 
 ## Rules that exist for a reason
 1. **Matt's chosen design** (mockups artifact JaQKDBbcdYyzDybDBx2eXS, round 2 "E/F"): home =

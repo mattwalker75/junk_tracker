@@ -85,7 +85,19 @@ export interface UserSettings {
    * have — Standard ×1, Tough ×1.5, Brutal ×2. The fight going on keeps what it started with.
    */
   toughness: Toughness;
+  /**
+   * Reminders (Matt, Nov 21 2026): when the app opens, a window the person must close says it is time
+   * to weigh in / log an activity, once none has been logged for this many days. Each on or off.
+   */
+  weighReminder: boolean;
+  weighReminderDays: number;
+  activityReminder: boolean;
+  activityReminderDays: number;
 }
+/** Reminder days: the defaults Matt chose (weigh in 7, activity 3) and the range a person may pick. */
+export const REMINDER_DEFAULT_DAYS = { weighIn: 7, activity: 3 } as const;
+export const REMINDER_DAYS_MIN = 1;
+export const REMINDER_DAYS_MAX = 60;
 export type Toughness = "standard" | "tough" | "brutal";
 export const TOUGHNESS: readonly { id: Toughness; label: string; mult: number }[] = [
   { id: "standard", label: "Standard", mult: 1 },
@@ -95,7 +107,7 @@ export const TOUGHNESS: readonly { id: Toughness; label: string; mult: number }[
 export const toughnessMult = (t: Toughness | undefined): number => TOUGHNESS.find((x) => x.id === t)?.mult ?? 1;
 export const toughnessOf = (mult: number | undefined): (typeof TOUGHNESS)[number] => TOUGHNESS.find((x) => x.mult === mult) ?? TOUGHNESS[0];
 
-export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false, toughness: "standard" };
+export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false, toughness: "standard", weighReminder: true, weighReminderDays: REMINDER_DEFAULT_DAYS.weighIn, activityReminder: true, activityReminderDays: REMINDER_DEFAULT_DAYS.activity };
 
 export interface UserInfo {
   id: Id;

@@ -8,6 +8,7 @@
  */
 import type Database from "better-sqlite3";
 import { z } from "zod";
+import { remindersDue, type Reminder } from "../../shared/reminders.js";
 import { KG, SIZES, type Activity, type ActivityInput, type Day, type Id, type Overview, type Splurge, type SplurgeInput, type WeighIn } from "../../shared/types.js";
 import type { Goals } from "./goals.js";
 import type { Users } from "./users.js";
@@ -125,6 +126,19 @@ export class Log {
   weighInsBetween(owner: Id, from: Day, to: Day): WeighIn[] {
     if (!realDay(from) || !realDay(to)) throw new UserError("Which days?");
     return this.db.prepare("SELECT day, pounds FROM weigh_ins WHERE user_id = ? AND day BETWEEN ? AND ? ORDER BY day").all(owner, from, to) as WeighIn[];
+  }
+
+  // ---------------------------------------------------------------- reminders as the app opens (Nov 21 2026)
+  /** The weigh-in and activity reminders that are due today (see shared/reminders.ts). Reads only. */
+  reminders(owner: Id, today: unknown): { due: Reminder[] } {
+    if (!realDay(today)) throw new UserError("Which day is it?");
+    const settings = this.users.settings(owner);
+    const weigh = this.db.prepare("SELECT day FROM weigh_ins WHERE user_id = ? AND day <= ? ORDER BY day DESC LIMIT 1").get(owner, today) as { day: Day } | undefined;
+    const act = this.db.prepare("SELECT day, what FROM activities WHERE user_id = ? AND day <= ? ORDER BY day DESC, time DESC, created_at DESC LIMIT 1").get(owner, today) as { day: Day; what: string } | undefined;
+    // never logged: count from the day the person was added (never later than today)
+    const added = this.users.addedOn(owner) ?? today;
+    const since = added < today ? added : today;
+    return { due: remindersDue(settings, today, { weighIn: weigh?.day ?? null, activity: act?.day ?? null, activityWhat: act?.what }, since) };
   }
 
   // ---------------------------------------------------------------- what the home screen needs, in one call

@@ -2,7 +2,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { DEFAULT_EXAMPLES, DEFAULT_QUICK_PICKS, QUICK_PICK_MAX, SIZE_LABEL, SIZES, TOUGHNESS, type Size, type Toughness, type UserSettings } from "../../../shared/types";
+import { Minus, Plus } from "lucide-react";
+import { DEFAULT_EXAMPLES, DEFAULT_QUICK_PICKS, QUICK_PICK_MAX, REMINDER_DAYS_MAX, REMINDER_DAYS_MIN, SIZE_LABEL, SIZES, TOUGHNESS, type Size, type Toughness, type UserSettings } from "../../../shared/types";
 import { Card, cx, Input, Segmented, SIZE_DOT, Toggle } from "../components/ui";
 import { api } from "../lib/api";
 
@@ -56,6 +57,13 @@ export function YouSettings() {
         </div>
       </Card>
 
+      <ReminderCard title="Weigh-in reminder" what="weigh-in" s={s}
+        on={s?.weighReminder} days={s?.weighReminderDays}
+        onToggle={(v) => void save({ weighReminder: v })} onDays={(n) => void save({ weighReminderDays: n }, true)} />
+      <ReminderCard title="Activity reminder" what="activity" s={s}
+        on={s?.activityReminder} days={s?.activityReminderDays}
+        onToggle={(v) => void save({ activityReminder: v })} onDays={(n) => void save({ activityReminderDays: n }, true)} />
+
       <Card className="space-y-3 p-4">
         <h2 className="text-[15px] font-extrabold">When the app opens</h2>
         <p className="text-sm text-mute">Where you land each time you open Craving Crusher. You can still switch any time from the menu under your initials.</p>
@@ -102,5 +110,61 @@ export function YouSettings() {
         ) : <div className="h-28 animate-pulse rounded-xl bg-surface-2" />}
       </Card>
     </>
+  );
+}
+
+/**
+ * A reminder's entry (Matt, Nov 21 2026): on or off, and how many days without a weigh-in / an activity
+ * before the reminder window comes up as the app opens.
+ */
+function ReminderCard({ title, what, s, on, days, onToggle, onDays }: {
+  title: string; what: "weigh-in" | "activity"; s: UserSettings | undefined; on: boolean | undefined; days: number | undefined;
+  onToggle: (v: boolean) => void; onDays: (n: number) => void;
+}) {
+  const [text, setText] = useState("");
+  useEffect(() => { if (days !== undefined) setText(String(days)); }, [days]);
+  const set = (n: number) => {
+    const v = Math.min(REMINDER_DAYS_MAX, Math.max(REMINDER_DAYS_MIN, Math.round(n)));
+    setText(String(v));
+    if (v !== days) onDays(v);
+  };
+  const typed = () => {
+    const n = Number(text.trim());
+    if (!Number.isFinite(n) || text.trim() === "") { setText(String(days ?? "")); toast.error(`Type a number of days from ${REMINDER_DAYS_MIN} to ${REMINDER_DAYS_MAX}.`); return; }
+    set(n);
+  };
+  const n = days ?? 0;
+  const thing = what === "weigh-in" ? "a weigh-in" : "an activity";
+  return (
+    <Card className="space-y-2 p-4">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-[15px] font-extrabold">{title}</h2>
+        {s && on !== undefined ? <Toggle label={title} checked={on} onChange={onToggle} /> : null}
+      </div>
+      {!s ? <div className="h-11 animate-pulse rounded-xl bg-surface-2" /> : on ? (
+        <>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-sm font-semibold">Remind me after</span>
+            <div className="flex items-center gap-1.5">
+              <button type="button" aria-label="One day fewer" disabled={n <= REMINDER_DAYS_MIN} onClick={() => set(n - 1)}
+                className="grid size-11 place-items-center rounded-xl bg-surface-2 text-ink disabled:opacity-40"><Minus className="size-4" /></button>
+              <div className="w-16">
+                <Input value={text} inputMode="numeric" aria-label={`${title}: days`} className="h-11 px-1 text-center text-[17px] font-bold"
+                  onChange={(e) => setText(e.target.value.replace(/[^0-9]/g, "").slice(0, 2))} onBlur={typed}
+                  onKeyDown={(e) => { if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }} />
+              </div>
+              <button type="button" aria-label="One day more" disabled={n >= REMINDER_DAYS_MAX} onClick={() => set(n + 1)}
+                className="grid size-11 place-items-center rounded-xl bg-surface-2 text-ink disabled:opacity-40"><Plus className="size-4" /></button>
+              <span className="w-9 text-sm font-semibold">{n === 1 ? "day" : "days"}</span>
+            </div>
+          </div>
+          <p className="text-sm text-mute">
+            {n === 1
+              ? `When you open Craving Crusher and there's no ${what} today, a reminder comes up. It keeps coming up each time you open the app until you log ${thing}.`
+              : `When you open Craving Crusher and there's been no ${what} today or in the ${n - 1 === 1 ? "day" : `${n - 1} days`} before, a reminder comes up. It keeps coming up each time you open the app until you log ${thing}.`}
+          </p>
+        </>
+      ) : <p className="text-sm text-mute">Off: no reminder to log {thing}.</p>}
+    </Card>
   );
 }

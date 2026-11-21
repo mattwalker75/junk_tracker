@@ -230,6 +230,14 @@ usual example.
 things you do most (Hike, Peloton, Tennis…). Leave a box empty for the usual one (Walk, Run,
 Bike, Gym, Swim, Yoga).
 
+**Weigh-in reminder** and **Activity reminder** — each one on or off, and how many days to wait
+(7 for weighing in and 3 for activity, to start with; anything from 1 to 60 with − and + or by typing).
+When you open the app and you haven't weighed in — or logged an activity — today or in the days
+before that, a window comes up over the app saying so. It has **Weigh in now** / **Log an activity
+now**, and it only goes away with its **Close** button. It comes back every time you open the app
+(or come back to it after half an hour away) until you log one. Someone just added isn't reminded
+until those days have gone by. Weigh-ins in the future don't count.
+
 **When the app opens** — **Tracker** (Home) or **Calorie Crusher** (the game). It only decides
 where you land when you open the app; the menu under your initials still switches any time, and a
 bookmarked page opens where it points.

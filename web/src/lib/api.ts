@@ -1,5 +1,6 @@
 /** Every call to the server. Errors come back as plain sentences (the server writes them). */
 import type { AutoResult, Bet, GameView, HallView, Mode, PowerUp, SyncResult } from "../../../shared/game/types";
+import type { Reminder } from "../../../shared/reminders";
 import type { Activity, ActivityInput, AuthState, CustomTheme, Day, Goal, GoalInput, GoalList, Id, Overview, Splurge, SplurgeInput, UserInfo, UserSettings, WeighIn } from "../../../shared/types";
 
 export class ApiError extends Error {
@@ -45,6 +46,7 @@ export const api = {
   disableUsers: () => call<AuthState>("POST", "/api/auth/disable", { confirm: "TURN OFF" }),
 
   overview: (today: Day) => call<Overview>("GET", `/api/overview?today=${today}`),
+  reminders: (today: Day) => call<{ due: Reminder[] }>("GET", `/api/reminders?today=${today}`),
   splurges: (from: Day, to: Day) => call<Splurge[]>("GET", `/api/splurges?from=${from}&to=${to}`),
   addSplurge: (s: SplurgeInput) => call<Splurge>("POST", "/api/splurges", s),
   saveSplurge: (id: Id, s: SplurgeInput) => call<Splurge>("PUT", `/api/splurges/${id}`, s),

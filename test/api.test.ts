@@ -117,7 +117,7 @@ describe("splurges", () => {
     expect(o.last.what).toBe("Cheeseburger & fries"); // not the one dated after today
     expect(o.splurges.map((x: { day: string }) => x.day)).toEqual(["2026-10-11", "2026-10-03"]); // the 40-day window
     expect(o.recent.map((x: { what: string }) => x.what)).toEqual(["Future cake", "Cheeseburger & fries", "Pizza"]); // one "pizza", newest first
-    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false, toughness: "standard" });
+    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false, toughness: "standard", weighReminder: true, weighReminderDays: 7, activityReminder: true, activityReminderDays: 3 });
   });
 });
 

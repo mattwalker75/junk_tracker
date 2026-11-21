@@ -2,7 +2,15 @@
 
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
-## [Unreleased]
+## [1.6.0] — 2026-11-21
+### Added
+- 2026-11-21: **Reminders to weigh in and to log an activity.** Settings → You has a **Weigh-in
+  reminder** and an **Activity reminder**, each with its own on/off switch and number of days (7 and
+  3 to start with, 1 to 60). When you open the app and nothing has been logged today or in the days
+  before, a window comes up over the app with **Weigh in now** / **Log an activity now**. It closes
+  only with its **Close** button (not a tap outside, not Esc), and it comes back each time you open
+  the app until you log one. Both start on, for everyone.
+
 ### Changed
 - 2026-11-15: While a monster's hit is still waiting to be played in the fight, the title screen,
   the map and Choose your fight keep showing the hearts you had. The heart goes when you see the hit.

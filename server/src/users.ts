@@ -20,7 +20,8 @@ import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
 import type Database from "better-sqlite3";
 import type { Request } from "express";
-import { DEFAULT_QUICK_PICKS, DEFAULT_USER_SETTINGS, QUICK_PICK_MAX, SIZES, type AuthState, type Id, type UserInfo, type UserSettings } from "../../shared/types.js";
+import { reminderDays } from "../../shared/reminders.js";
+import { DEFAULT_QUICK_PICKS, DEFAULT_USER_SETTINGS, QUICK_PICK_MAX, REMINDER_DEFAULT_DAYS, SIZES, type AuthState, type Id, type UserInfo, type UserSettings } from "../../shared/types.js";
 import type { Config } from "./config.js";
 import { newId, now, UserError } from "./util.js";
 
@@ -253,6 +254,11 @@ export class Users {
     if (session(req).actingAs === id) this.switchBack(req);
   }
 
+  /** the day a person was added ("2026-10-16"), where their reminders count from before anything is logged */
+  addedOn(id: Id): string | null {
+    return this.byId(id)?.created_at.slice(0, 10) ?? null;
+  }
+
   // ---------------------------------------------------------------- each person's own settings
   settings(id: Id): UserSettings {
     const u = this.byId(id);
@@ -267,6 +273,11 @@ export class Users {
       openIn: saved.openIn === "game" ? "game" : "tracker",
       autoStart: saved.autoStart === true,
       toughness: saved.toughness === "tough" || saved.toughness === "brutal" ? saved.toughness : "standard",
+      // reminders (Nov 21 2026): on, with 7 / 3 days, unless the person changed them
+      weighReminder: saved.weighReminder !== false,
+      weighReminderDays: reminderDays(saved.weighReminderDays, REMINDER_DEFAULT_DAYS.weighIn),
+      activityReminder: saved.activityReminder !== false,
+      activityReminderDays: reminderDays(saved.activityReminderDays, REMINDER_DEFAULT_DAYS.activity),
     };
   }
 

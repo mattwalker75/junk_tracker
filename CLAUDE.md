@@ -127,6 +127,13 @@ The person using it is not a developer — every message the page shows is a pla
     - **Keep the monsters coming** (`autoStart`, Settings → You, off by default): the first game open of
       a day (once a day per person, on the server) starts the next fight — never on a day one went
       down — or a new run when the last one had already ended.
+12. **Reminders** (Matt, Nov 21 2026): Settings → You has a **Weigh-in reminder** and an **Activity
+    reminder**, independent, each on/off with its own days (`weighReminder(Days)` / `activityReminder(Days)`,
+    defaults ON with 7 / 3, 1–60 — `REMINDER_DEFAULT_DAYS` in `shared/types.ts`). Due = nothing logged today or
+    on the N − 1 days before (`shared/reminders.ts`, pure; never logged = counted from the day the person was
+    added). `GET /api/reminders?today=` reads only. The window (`ReminderWindow.tsx`) comes up when the app
+    opens (page load, or back after 30+ min away; not on Switch to) and closes ONLY with its Close button —
+    Matt wants it acknowledged. Don't make it dismissable by a tap outside or Esc.
 
 ## Working rules
 - Commit locally per feature with a dated CHANGELOG entry; `git add` explicit paths.

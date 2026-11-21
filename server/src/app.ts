@@ -11,7 +11,8 @@ import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
 import type Database from "better-sqlite3";
 import { z } from "zod";
-import { QUICK_PICK_MAX } from "../../shared/types.js";
+import { QUICK_PICK_MAX, REMINDER_DAYS_MAX, REMINDER_DAYS_MIN } from "../../shared/types.js";
+const REMINDER_DAYS_ERROR = `A reminder waits ${REMINDER_DAYS_MIN} to ${REMINDER_DAYS_MAX} days (a whole number).`;
 import { Config, ROOT } from "./config.js";
 import { openDatabase } from "./db.js";
 import { Game } from "./game.js";
@@ -67,6 +68,10 @@ const userSettingsSchema = z.object({
   openIn: z.enum(["tracker", "game"], { error: "Open in the tracker or in game mode." }),
   autoStart: z.boolean({ error: "Keep the monsters coming is on or off." }),
   toughness: z.enum(["standard", "tough", "brutal"], { error: "Pick Standard, Tough or Brutal." }),
+  weighReminder: z.boolean({ error: "The weigh-in reminder is on or off." }),
+  activityReminder: z.boolean({ error: "The activity reminder is on or off." }),
+  weighReminderDays: z.number({ error: REMINDER_DAYS_ERROR }).int(REMINDER_DAYS_ERROR).min(REMINDER_DAYS_MIN, REMINDER_DAYS_ERROR).max(REMINDER_DAYS_MAX, REMINDER_DAYS_ERROR),
+  activityReminderDays: z.number({ error: REMINDER_DAYS_ERROR }).int(REMINDER_DAYS_ERROR).min(REMINDER_DAYS_MIN, REMINDER_DAYS_ERROR).max(REMINDER_DAYS_MAX, REMINDER_DAYS_ERROR),
   quickPicks: z.array(z.string().max(QUICK_PICK_MAX, `Keep each quick pick under ${QUICK_PICK_MAX} characters.`), { error: "The quick picks are six names." }).max(6, "There are six quick picks."),
 }).partial().strict();
 
@@ -126,6 +131,8 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
 
   // ---------------------------------------------------------------- the log of the person on screen
   app.get("/api/overview", h((req) => log.overview(owner(req), req.query.today)));
+  // which reminders to show as the app opens (reads only)
+  app.get("/api/reminders", h((req) => log.reminders(owner(req), req.query.today)));
   app.get("/api/splurges", h((req) => log.splurgesBetween(owner(req), String(req.query.from || ""), String(req.query.to || ""))));
   app.post("/api/splurges", h((req) => log.addSplurge(owner(req), req.body)));
   app.put("/api/splurges/:id", h((req) => log.updateSplurge(owner(req), param(req, "id"), req.body)));

@@ -63,6 +63,21 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 - Mockups: canvas rounds 6 and 7. Round 7 has the 60-level map, World 2 up close, Start a run,
   Knocked back, the game-styled sheets, the bottom buttons and five New monsters pages.
 
+## Growing to 120 levels (Nov 21 2026) — decided, not built yet
+Matt: "double the size of the monsters and the map … an additional 60 monsters and 6 additional worlds …
+a total of 120 monsters to fight". Decided with Matt:
+- **Worlds 7–12 come after world 6** (levels 61–120). Today's 60 levels stay exactly as they are; The
+  Midnight Snacker becomes world 6's boss, and a new final boss waits at level 120.
+- **Difficulty keeps climbing gently:** HP keeps the same rate (100 + 15 × (level − 1), boss × 1.3, so
+  about 1,000 → 1,900 and the final boss ~2,450), and deadlines grow a little (8–10 days) so a monster
+  still takes about a week of good days. Monster toughness still multiplies on top.
+- **60 new abilities** — every new monster gets its own, like today's.
+- **A run that had beaten all 60 carries on at level 61**, with its score, hearts and power-ups. Runs
+  that ended any other way stay ended.
+- The database refuses levels above 60 today (`game_fights.level` CHECK): growing needs one database
+  upgrade (a copy of the file is saved first, as always).
+- Mockups first, world by world: canvas **Round 9** has twelve world ideas (A–L) to pick six from.
+
 ## Where it lives
 - **Switch:** the initials menu (MW) gets a **Game mode** item, with a gamepad icon, above Goals, Settings and Sign out. In the game the same item reads **Back to tracker**. Mockup: `GameMenuSwitch`.
 - **Logging:** the game has no logging of its own. It reads the person's real log: activities, splurges, clean days.

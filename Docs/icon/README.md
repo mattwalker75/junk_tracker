@@ -29,8 +29,8 @@ doesn't fit under the icon.
 
 `options/` holds the 14 drawings shown on the mockups canvas, Round 8
 (https://claude.ai/artifact/JaQKDBbcdYyzDybDBx2eXS): 1–9 drawn like Calorie Crusher's monsters (dark plum
-outlines, the game's colours), 10–14 in the tracker's look (white on the tracker's blue). Until one is picked,
-`icon.svg` is the old burger, made full-bleed.
+outlines, the game's colours), 10–14 in the tracker's look (white on the tracker's blue). Matt picked
+**9, `09-cc-game.svg`** (Nov 21 2026), so `icon.svg` is a copy of it.
 
 ## For a real iPhone or Android app later
 

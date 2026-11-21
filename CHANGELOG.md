@@ -2,6 +2,13 @@
 
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
+## [1.7.1] — 2026-11-21
+### Changed
+- 2026-11-21: **The new app icon** (Matt's pick, idea 9 of Round 8): two chunky letter Cs, cream and
+  yellow with dark outlines on a red burst, drawn like Calorie Crusher. Every icon file was remade from
+  it with `node scripts/make_icons.mjs`. A phone that already has the link on its home screen keeps the
+  old burger: remove it and add it again.
+
 ## [1.7.0] — 2026-11-21
 ### Added
 - 2026-11-21: **Ready for a phone's home screen.** Saving the link on an iPhone (Share → Add to Home

@@ -17,7 +17,9 @@ It draws with the Mac's Google Chrome (headless) — no packages — and writes:
 | `web/public/icon-192.png`, `icon-512.png` | 192, 512 | Android home screen and splash (from `manifest.webmanifest`) |
 | `web/public/icon-maskable-512.png` | 512 | Android launchers that cut icons to a shape: the drawing shrunk into the safe zone |
 | `web/public/icon.svg` | any | the browser tab (rounded corners) |
-| `Docs/icon/icon-1024.png` | 1024 | the master for a future iPhone / Android app |
+| `Docs/icon/icon-1024.png` | 1024 | the master for the iPhone / Android apps and their stores |
+| `app_ports/ios/CravingCrusher/Assets.xcassets/AppIcon.appiconset/icon-1024.png` | 1024 | the iPhone app's icon (a copy) |
+| `app_ports/android/app/src/main/res/drawable-nodpi/cc_icon.png` | 512 | the Android app's launcher picture (a copy) |
 
 Every file is committed, so updating stays stop → git pull → start.
 
@@ -32,10 +34,15 @@ doesn't fit under the icon.
 outlines, the game's colours), 10–14 in the tracker's look (white on the tracker's blue). Matt picked
 **9, `09-cc-game.svg`** (Nov 21 2026), so `icon.svg` is a copy of it.
 
-## For a real iPhone or Android app later
+## In the iPhone and Android apps (app_ports/)
+
+The iPhone app's icon is the 1024 copy; Xcode makes every size from it. The Android app's icon is an
+*adaptive icon* (`res/mipmap-anydpi-v26/ic_launcher.xml`): the background layer is the colour `cc_icon_bg`
+(`res/values/colors.xml` — keep it the same as the drawing's first `<rect>`), the foreground is the 512 copy
+shrunk into the middle of the layer, so the phone can cut it to a circle or a rounded square.
+
+## For the stores
 
 - **iPhone (App Store):** Xcode takes one 1024 × 1024 PNG with no transparency — `icon-1024.png` is that.
-- **Android (Play Store):** a 512 × 512 PNG (`web/public/icon-512.png`), and an *adaptive icon* — two layers,
-  108 dp square, the picture inside the middle 66 dp. Make the layers from `icon.svg` at that time: the first
-  full-size `<rect>` is the background layer, the rest is the foreground (shrink it to fit the 66 dp).
-  Android 13's themed icons want a one-colour version too.
+- **Android (Play Store):** a 512 × 512 PNG, `web/public/icon-512.png`. Android 13's themed icons want a
+  one-colour version too (not made yet: without it the phone shows the icon in its own colours).

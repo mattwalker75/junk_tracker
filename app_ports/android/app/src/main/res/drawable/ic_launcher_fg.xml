@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- the 108 dp icon layer shows only its middle 72 dp: the picture goes there -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/cc_icon"
+    android:inset="16.67%" />

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android's adaptive icon: the phone cuts it to its own shape (circle, rounded square…). The picture is
+     cc_icon.png (copied from the web app's icon by scripts/make_icons.mjs), shrunk into the middle of the layer. -->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/cc_icon_bg" />
+    <foreground android:drawable="@drawable/ic_launcher_fg" />
+</adaptive-icon>

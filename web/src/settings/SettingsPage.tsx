@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import type { AuthState } from "../../../shared/types";
 import { Button, Card, ErrorLine, Field, initials, Input, Sheet } from "../components/ui";
 import { api } from "../lib/api";
+import { PHONE_APP } from "../lib/phone";
 import { AppearanceSettings } from "./AppearanceSettings";
 import { NetworkSettings } from "./NetworkSettings";
 import { SignInSettings } from "./SignInSettings";
@@ -35,8 +36,8 @@ export function SettingsPage({ section, state }: { section: string | null; state
           </p>
         ) : null}
         {sub === "appearance" ? <AppearanceSettings /> : null}
-        {sub === "signin" ? <SignInSettings state={state} /> : null}
-        {sub === "network" ? <NetworkSettings /> : null}
+        {sub === "signin" && !PHONE_APP ? <SignInSettings state={state} /> : null}
+        {sub === "network" && !PHONE_APP ? <NetworkSettings /> : null}
         {sub === "about" ? <About /> : null}
         {!sub ? <Main state={state} /> : null}
       </div>
@@ -67,8 +68,9 @@ function Main({ state }: { state: Ok }) {
       {state.loginEnabled ? <UsersSettings /> : null}
       <Card className="px-4 py-1">
         <Row href="#/settings/appearance" label="Appearance" value={themeName} />
-        <Row href="#/settings/signin" label="Users and sign-in" value={state.loginEnabled ? `On · ${state.users} ${state.users === 1 ? "user" : "users"}` : "Off · just you"} />
-        <Row href="#/settings/network" label="Network access" value={c ? (c.server.allowNetwork ? "Other devices too" : "This computer only") : ""} />
+        {/* the phone app keeps one person's log on the phone: no sign-in, no network */}
+        {PHONE_APP ? null : <Row href="#/settings/signin" label="Users and sign-in" value={state.loginEnabled ? `On · ${state.users} ${state.users === 1 ? "user" : "users"}` : "Off · just you"} />}
+        {PHONE_APP ? null : <Row href="#/settings/network" label="Network access" value={c ? (c.server.allowNetwork ? "Other devices too" : "This computer only") : ""} />}
         <Row href="#/settings/about" label="About" value={app.data ? `Version ${app.data.version}` : ""} last />
       </Card>
     </>
@@ -109,6 +111,13 @@ function Row({ href, label, value, last }: { href: string; label: string; value:
 function About() {
   const app = useQuery({ queryKey: ["settings"], queryFn: api.settings });
   if (!app.data) return null;
+  if (PHONE_APP) return (
+    <Card className="space-y-3 p-4 text-sm">
+      <div><div className="font-bold">Craving Crusher {app.data.version}</div><div className="text-mute">Track your junk food, activity and weight.</div></div>
+      <div><div className="text-xs font-bold text-mute">Your log</div>
+        <div>Kept on this phone, in the app's own storage, and nowhere else. It goes with the phone's own backups (iCloud or Google). Removing the app removes the log.</div></div>
+    </Card>
+  );
   return (
     <Card className="space-y-3 p-4 text-sm">
       <div><div className="font-bold">Craving Crusher {app.data.version}</div><div className="text-mute">Track your junk food, activity and weight.</div></div>

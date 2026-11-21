@@ -12,6 +12,8 @@
  *   web/public/icon-maskable-512.png 512  Android icons cut to a circle / squircle: the picture inside the safe zone
  *   web/public/icon.svg                   the browser tab (rounded corners)
  *   Docs/icon/icon-1024.png         1024  the master for a future iPhone / Android app (App Store size)
+ *   …and the same files copied into the phone apps (app_ports/): the iPhone app's icon (1024) and the
+ *   Android app's launcher picture (512)
  *
  * Draws with Google Chrome (headless), already on this Mac; no packages needed. Set CHROME=<path> for another.
  */
@@ -92,6 +94,16 @@ try {
   fs.writeFileSync(path.join(ROOT, "web/public/icon.svg"),
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n} ${n}"><defs><clipPath id="cc-round"><rect width="${n}" height="${n}" rx="${Math.round(n * 0.22)}"/></clipPath></defs><g clip-path="url(#cc-round)">${inner}</g></svg>\n`);
   console.log("web/public/icon.svg  (rounded, for the browser tab)");
+
+  // the phone apps (app_ports/) use the same pictures
+  for (const [from, to] of [
+    ["Docs/icon/icon-1024.png", "app_ports/ios/CravingCrusher/Assets.xcassets/AppIcon.appiconset/icon-1024.png"],
+    ["web/public/icon-512.png", "app_ports/android/app/src/main/res/drawable-nodpi/cc_icon.png"],
+  ]) {
+    fs.mkdirSync(path.dirname(path.join(ROOT, to)), { recursive: true });
+    fs.copyFileSync(path.join(ROOT, from), path.join(ROOT, to));
+    console.log(`${to}  (copy of ${from})`);
+  }
   done(0);
 } catch (e) {
   console.error(e.message || e);

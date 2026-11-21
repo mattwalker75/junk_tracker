@@ -1,0 +1,9 @@
+{
+  "name": "craving-crusher-phone",
+  "private": true,
+  "type": "module",
+  "description": "What the iPhone and Android apps both run: Craving Crusher's page with its log kept on the phone.",
+  "dependencies": {
+    "sql.js": "1.15.2"
+  }
+}

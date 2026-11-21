@@ -1,0 +1,5 @@
+<resources>
+    <style name="CC" parent="android:Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:windowBackground">@color/cc_page</item>
+    </style>
+</resources>

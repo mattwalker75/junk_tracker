@@ -2,11 +2,22 @@
 
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
-## [Unreleased]
+## [1.8.0] — 2026-11-21
 ### Added
-- 2026-11-21: A new `app_ports/` folder for the future iPhone and Android versions of Craving Crusher
-  (`app_ports/ios/`, `app_ports/android/`). Nothing is built there yet; `app_ports/README.md` lists what a
-  port starts from (the name, the icon, the shared game engine).
+- 2026-11-21: **Craving Crusher as an iPhone and an Android app, with the log kept on the phone** (no server,
+  no network, no sign-in). `app_ports/ios/BUILD_APP.sh` and `app_ports/android/BUILD_APP.sh` check what is
+  needed (and say what to install), build the app into each one's `BUILD/` folder, and say where it is and how
+  to try it: on this Mac in the iPhone Simulator / the Android Emulator (`--run`) or on a phone (`--open` /
+  `--device` for an iPhone, `--install` or the .apk for Android). The app is the web app's page; its requests
+  are answered inside the app by the server's own code on a SQLite file the phone keeps (and backs up). How it
+  works: `app_ports/README.md`. Android also has `--release` for the Play Store and `--install-tools`.
+- 2026-11-21: The `app_ports/` folder for the phone apps (`ios/`, `android/`, `shared/`).
+
+### Changed
+- 2026-11-21: In the phone apps, Settings leaves out Users and sign-in and Network access, and About says the
+  log is on the phone. The web app is unchanged. (Under the hood: the database's tables moved to
+  `server/src/migrations.ts` and the settings checks to `server/src/settingsSchemas.ts`, so the apps share them.)
+- 2026-11-21: `scripts/make_icons.mjs` also writes the iPhone and Android apps' icons.
 
 ## [1.7.1] — 2026-11-21
 ### Changed

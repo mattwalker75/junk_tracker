@@ -1,0 +1,18 @@
+# what the builds make (BUILD_APP.sh) — never committed
+ios/BUILD/
+ios/CravingCrusher/web/
+ios/CravingCrusher.xcodeproj/xcuserdata/
+ios/CravingCrusher.xcodeproj/project.xcworkspace/xcuserdata/
+android/BUILD/
+android/.gradle/
+android/.kotlin/
+android/build/
+android/app/build/
+android/app/src/main/assets/web/
+android/local.properties
+shared/dist/
+# signing keys never go in git
+*.jks
+*.keystore
+*.p12
+*.mobileprovision

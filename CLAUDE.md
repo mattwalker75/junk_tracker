@@ -25,8 +25,8 @@ The person using it is not a developer — every message the page shows is a pla
   (the initials menu), `GoalsPage.tsx`, `GoalSheet.tsx`, `LogSheet.tsx`, `ActivitySheet.tsx` (Log activity), `WeighSheet.tsx`,
   `DaySheet.tsx`, `CalendarPage.tsx`; `web/src/settings/` — Settings pages; `web/src/lib/stats.ts` — the numbers
   on the home screen (pure, tested).
-- `app_ports/` — future phone-app versions, one folder each (`ios/`, `android/`); empty for now, never
-  built by `TRACKER.sh` (Matt, Nov 21 2026). `app_ports/README.md` says what a port starts from.
+- `app_ports/` — the iPhone and Android apps (`ios/`, `android/`, each with `BUILD_APP.sh`) and what both run
+  (`shared/`); never built by `TRACKER.sh`. `app_ports/README.md` says how they work (rule 14).
 
 ## Rules that exist for a reason
 1. **Matt's chosen design** (mockups artifact JaQKDBbcdYyzDybDBx2eXS, round 2 "E/F"): home =
@@ -142,6 +142,18 @@ The person using it is not a developer — every message the page shows is a pla
     `icon.svg` and `Docs/icon/icon-1024.png` — all committed, rule 8). The name under the icon is exactly
     **Craving Crusher** (`apple-mobile-web-app-title` in `web/index.html`, `name`/`short_name` in
     `web/public/manifest.webmanifest`). Never hand-edit the PNGs; change the drawing and rerun. Options: `Docs/icon/options/`.
+    The phone apps' icons (`app_ports/ios/…/AppIcon.appiconset/icon-1024.png`, `app_ports/android/…/cc_icon.png`) are
+    written by the same script.
+14. **Phone apps** (Matt, Nov 21 2026: "standalone, data on the phone"): `app_ports/ios` and `app_ports/android` are
+    the web app's page inside a native shell, with the log kept on the phone (one SQLite file; no server, no
+    sign-in, one person). The page's `/api` calls are answered in the page by `app_ports/shared/src/backend.ts`,
+    which runs the server's OWN `log.ts` / `goals.ts` / `game.ts` / `users.ts` on sql.js — so keep those free of
+    Node-only code (they only take `type Database`), keep the tables in `server/src/migrations.ts` and the
+    settings checks in `server/src/settingsSchemas.ts`, and when a route changes in `app.ts` change `backend.ts`
+    too (its test fails when a call in `web/src/lib/api.ts` has no answer). The page knows it's in the app only
+    by `PHONE_APP` (`web/src/lib/phone.ts`: Settings hides Users and sign-in and Network access). Build with
+    `app_ports/<platform>/BUILD_APP.sh` (`--check`, `--run`, …); its `BUILD/` and the built page are never
+    committed, nor signing keys. Not yet: moving a log between the phone and the web app.
 
 ## Working rules
 - Commit locally per feature with a dated CHANGELOG entry; `git add` explicit paths.

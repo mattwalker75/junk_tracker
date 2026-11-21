@@ -1,0 +1,7 @@
+<resources>
+    <!-- the page's background colour (the bg token in web/src/index.css), shown before the page paints -->
+    <color name="cc_page">#f6f7f9</color>
+    <color name="cc_page_dark">#0f1115</color>
+    <!-- the icon's background (the first rect in Docs/icon/icon.svg): Android shows it around the picture -->
+    <color name="cc_icon_bg">#e0264b</color>
+</resources>

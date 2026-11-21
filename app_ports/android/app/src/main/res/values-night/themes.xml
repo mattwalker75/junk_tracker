@@ -1,0 +1,6 @@
+<resources>
+    <!-- dark mode: the page follows the phone (its System theme), so the window does too -->
+    <style name="CC" parent="android:Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@color/cc_page_dark</item>
+    </style>
+</resources>

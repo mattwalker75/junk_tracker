@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Craving Crusher icon: today's burger, cracked in two">
+<rect width="512" height="512" fill="#1d5fd1"/>
+<path d="M112 240 H400" fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M128 240 A128 88 0 0 1 384 240" fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M112 304 H400 L376 376 H136 Z" fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M270 120 L236 200 L284 238 L230 300 L268 340 L246 400" fill="none" stroke="#1d5fd1" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="328" cy="430" r="11" fill="#ffffff"/><circle cx="176" cy="438" r="8" fill="#ffffff"/><circle cx="380" cy="112" r="9" fill="#ffffff"/>
+</svg>

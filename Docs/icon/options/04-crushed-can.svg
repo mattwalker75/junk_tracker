@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Craving Crusher icon: a crushed soda can, dizzy">
+<rect width="512" height="512" fill="#fff7e6"/>
+<polygon points="496.0,270.0 427.6,304.1 477.7,361.8 401.5,367.2 425.7,439.7 353.2,415.5 347.8,491.7 290.1,441.6 256.0,510.0 221.9,441.6 164.2,491.7 158.8,415.5 86.3,439.7 110.5,367.2 34.3,361.8 84.4,304.1 16.0,270.0 84.4,235.9 34.3,178.2 110.5,172.8 86.3,100.3 158.8,124.5 164.2,48.3 221.9,98.4 256.0,30.0 290.1,98.4 347.8,48.3 353.2,124.5 425.7,100.3 401.5,172.8 477.7,178.2 427.6,235.9" fill="#ffe9a8"/>
+<ellipse cx="256" cy="446" rx="130" ry="16" fill="#2b1d3a" opacity="0.2"/>
+<path d="M168 330 L344 318 L348 420 Q348 440 328 440 L184 440 Q164 440 164 420 Z" fill="#3d8be0" stroke="#2b1d3a" stroke-width="16" stroke-linejoin="round"/>
+<path d="M160 262 L352 250 L330 278 L356 300 L344 322 L168 334 L186 306 L156 288 Z" fill="#2f6fc0" stroke="#2b1d3a" stroke-width="16" stroke-linejoin="round"/>
+<path d="M176 286 L340 276" stroke="#9ccaf5" stroke-width="8" stroke-linecap="round"/>
+<g transform="rotate(-6 256 180)"><path d="M170 120 L342 120 L346 262 L166 262 Z" fill="#3d8be0" stroke="#2b1d3a" stroke-width="16" stroke-linejoin="round"/>
+<ellipse cx="256" cy="120" rx="88" ry="22" fill="#c9d3db" stroke="#2b1d3a" stroke-width="16"/>
+<ellipse cx="256" cy="116" rx="52" ry="10" fill="#93a2ae"/>
+<rect x="166" y="214" width="180" height="26" fill="#fff7e6" stroke="#2b1d3a" stroke-width="8"/>
+<path d="M218 176 m0 -4 a4 4 0 1 1 -4 4 a10 10 0 1 1 10 10 a18 18 0 1 1 -18 -18" fill="none" stroke="#2b1d3a" stroke-width="7" stroke-linecap="round"/><path d="M296 176 m0 -4 a4 4 0 1 1 -4 4 a10 10 0 1 1 10 10 a18 18 0 1 1 -18 -18" fill="none" stroke="#2b1d3a" stroke-width="7" stroke-linecap="round"/>
+
+</g>
+<circle cx="376" cy="92" r="14" fill="#ffffff" stroke="#2b1d3a" stroke-width="6"/><circle cx="402" cy="54" r="10" fill="#ffffff" stroke="#2b1d3a" stroke-width="6"/><circle cx="350" cy="52" r="8" fill="#ffffff" stroke="#2b1d3a" stroke-width="6"/>
+<polygon points="118.0,92.0 125.4,109.8 144.6,111.3 130.0,123.9 134.5,142.7 118.0,132.6 101.5,142.7 106.0,123.9 91.4,111.3 110.6,109.8" fill="#ffc93c" stroke="#2b1d3a" stroke-width="10" stroke-linejoin="round"/>
+<polygon points="402.0,176.0 408.3,191.3 424.8,192.6 412.3,203.3 416.1,219.4 402.0,210.8 387.9,219.4 391.7,203.3 379.2,192.6 395.7,191.3" fill="#ffc93c" stroke="#2b1d3a" stroke-width="10" stroke-linejoin="round"/>
+</svg>

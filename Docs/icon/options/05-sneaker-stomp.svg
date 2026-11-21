@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Craving Crusher icon: a sneaker stomping on fries">
+<rect width="512" height="512" fill="#7bd36b"/>
+<polygon points="513.1,438.9 423.5,465.8 470.8,546.5 378.4,532.0 385.9,625.2 309.0,572.0 275.3,659.3 229.1,578.0 160.9,642.0 154.5,548.7 65.3,576.8 100.1,489.9 7.5,476.5 76.5,413.4 -1.1,361.1 88.5,334.2 41.2,253.5 133.6,268.0 126.1,174.8 203.0,228.0 236.7,140.7 282.9,222.0 351.1,158.0 357.5,251.3 446.7,223.2 411.9,310.1 504.5,323.5 435.5,386.6" fill="#a6e596"/>
+<rect x="85" y="284" width="22" height="92" rx="7" fill="#ffd34d" stroke="#2b1d3a" stroke-width="8" transform="rotate(-62 96 330)"/>
+<rect x="129" y="224" width="22" height="92" rx="7" fill="#ffd34d" stroke="#2b1d3a" stroke-width="8" transform="rotate(-38 140 270)"/>
+<rect x="381" y="216" width="22" height="92" rx="7" fill="#ffd34d" stroke="#2b1d3a" stroke-width="8" transform="rotate(40 392 262)"/>
+<rect x="417" y="290" width="22" height="92" rx="7" fill="#ffd34d" stroke="#2b1d3a" stroke-width="8" transform="rotate(64 428 336)"/>
+<rect x="239" y="254" width="22" height="92" rx="7" fill="#ffd34d" stroke="#2b1d3a" stroke-width="8" transform="rotate(6 250 300)"/>
+<path d="M154 372 L358 372 L346 448 L166 448 Z" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="16" stroke-linejoin="round"/>
+<path d="M226 392 l12 24 l26 3 l-19 18 l5 26" fill="none"/>
+<polygon points="256.0,386.0 262.9,402.5 280.7,404.0 267.1,415.6 271.3,433.0 256.0,423.7 240.7,433.0 244.9,415.6 231.3,404.0 249.1,402.5" fill="#ffc93c" stroke="#2b1d3a" stroke-width="8" stroke-linejoin="round"/>
+<path d="M98 268 C98 196 150 160 208 168 L286 196 C330 208 392 220 414 266 L418 296 L98 296 Z" fill="#6ec6ff" stroke="#2b1d3a" stroke-width="16" stroke-linejoin="round"/>
+<path d="M98 230 C130 226 160 240 170 268" fill="none" stroke="#2b1d3a" stroke-width="10" stroke-linecap="round"/>
+<path d="M340 214 C380 222 410 244 416 270 L418 296 L350 296 C352 262 348 236 340 214 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="12" stroke-linejoin="round"/>
+<path d="M100 196 L80 176 Q74 168 84 164 L118 172" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="10" stroke-linejoin="round"/>
+<path d="M150 276 C200 236 262 236 312 270" fill="none" stroke="#ff4d6d" stroke-width="16" stroke-linecap="round"/>
+<path d="M300 226 C340 232 372 246 386 268" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
+<line x1="196" y1="186" x2="230" y2="200" stroke="#fff7e6" stroke-width="10" stroke-linecap="round"/><line x1="226" y1="200" x2="260" y2="214" stroke="#fff7e6" stroke-width="10" stroke-linecap="round"/><line x1="254" y1="214" x2="288" y2="228" stroke="#fff7e6" stroke-width="10" stroke-linecap="round"/>
+<rect x="88" y="290" width="340" height="42" rx="21" fill="#fff7e6" stroke="#2b1d3a" stroke-width="16"/>
+<path d="M110 312 H404" stroke="#e8d7b4" stroke-width="8" stroke-dasharray="20 14"/>
+<line x1="150" y1="70" x2="150" y2="130" stroke="#2b1d3a" stroke-width="12" stroke-linecap="round"/>
+<line x1="256" y1="50" x2="256" y2="120" stroke="#2b1d3a" stroke-width="12" stroke-linecap="round"/>
+<line x1="362" y1="70" x2="362" y2="130" stroke="#2b1d3a" stroke-width="12" stroke-linecap="round"/>
+</svg>

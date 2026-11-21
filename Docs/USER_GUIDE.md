@@ -281,6 +281,20 @@ changes the address (after a restart).
 
 **About** — the version, and where the settings file and the database are.
 
+## On your phone's home screen
+Open the app in the phone's browser, then:
+- **iPhone / iPad (Safari):** the Share button → **Add to Home Screen** → **Add**.
+- **Android (Chrome):** the ⋮ menu → **Add to Home screen** (or **Install app**).
+
+It appears as **Craving Crusher** with its own icon and opens full screen, without the browser's bars
+(the phone may shorten the name with "…"). Good to know:
+- On an iPhone the home-screen copy keeps its own sign-in: with users and sign-in on, sign in once more
+  the first time you open it from the home screen.
+- Android only opens it full screen when the address starts with `https://` (or it is this computer);
+  over plain `http://` on your network it is a shortcut that opens in Chrome.
+- A phone keeps the icon it got when you added it. After the icon changes, remove the home-screen copy
+  and add it again.
+
 ## Running it
 | | |
 |---|---|

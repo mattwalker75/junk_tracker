@@ -134,6 +134,12 @@ The person using it is not a developer — every message the page shows is a pla
     added). `GET /api/reminders?today=` reads only. The window (`ReminderWindow.tsx`) comes up when the app
     opens (page load, or back after 30+ min away; not on Switch to) and closes ONLY with its Close button —
     Matt wants it acknowledged. Don't make it dismissable by a tap outside or Esc.
+13. **App icon + home screen** (Matt, Nov 21 2026): ONE drawing, `Docs/icon/icon.svg` (full square, no
+    transparency, picture inside the middle 80% circle), makes every icon file via `node scripts/make_icons.mjs`
+    (headless Chrome; writes `web/public/apple-touch-icon.png`, `icon-192/512.png`, `icon-maskable-512.png`,
+    `icon.svg` and `Docs/icon/icon-1024.png` — all committed, rule 8). The name under the icon is exactly
+    **Craving Crusher** (`apple-mobile-web-app-title` in `web/index.html`, `name`/`short_name` in
+    `web/public/manifest.webmanifest`). Never hand-edit the PNGs; change the drawing and rerun. Options: `Docs/icon/options/`.
 
 ## Working rules
 - Commit locally per feature with a dated CHANGELOG entry; `git add` explicit paths.

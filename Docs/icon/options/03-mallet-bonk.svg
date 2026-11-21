@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Craving Crusher icon: a mallet squashing a burger">
+<rect width="512" height="512" fill="#ff4d6d"/>
+<polygon points="491.2,377.7 399.2,401.3 435.9,488.9 344.4,463.4 332.3,557.5 265.9,489.7 208.3,565.2 184.7,473.2 97.1,509.9 122.6,418.4 28.5,406.3 96.3,339.9 20.8,282.3 112.8,258.7 76.1,171.1 167.6,196.6 179.7,102.5 246.1,170.3 303.7,94.8 327.3,186.8 414.9,150.1 389.4,241.6 483.5,253.7 415.7,320.1" fill="#ff8197"/>
+<path d="M104 392 Q104 432 150 432 L362 432 Q408 432 408 392 Z" fill="#f0b46a" stroke="#2b1d3a" stroke-width="16" stroke-linejoin="round"/>
+<rect x="88" y="356" width="336" height="40" rx="20" fill="#7a3f22" stroke="#2b1d3a" stroke-width="16"/>
+<path d="M100 352 L130 336 L156 354 L184 336 L210 354 L238 336 L264 354 L292 336 L318 354 L346 336 L372 354 L400 336 L414 352 Z" fill="#7bd36b" stroke="#2b1d3a" stroke-width="10" stroke-linejoin="round"/>
+<path d="M150 356 L196 356 L174 392 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="8" stroke-linejoin="round"/>
+<path d="M112 334 Q112 286 256 286 Q400 286 400 334 Z" fill="#f0b46a" stroke="#2b1d3a" stroke-width="16" stroke-linejoin="round"/>
+<ellipse cx="190" cy="308" rx="9" ry="5" fill="#fff7e6" stroke="#2b1d3a" stroke-width="3" transform="rotate(-10 190 308)"/><ellipse cx="240" cy="300" rx="9" ry="5" fill="#fff7e6" stroke="#2b1d3a" stroke-width="3" transform="rotate(5 240 300)"/><ellipse cx="296" cy="304" rx="9" ry="5" fill="#fff7e6" stroke="#2b1d3a" stroke-width="3" transform="rotate(15 296 304)"/><ellipse cx="340" cy="316" rx="9" ry="5" fill="#fff7e6" stroke="#2b1d3a" stroke-width="3" transform="rotate(-5 340 316)"/><ellipse cx="160" cy="322" rx="9" ry="5" fill="#fff7e6" stroke="#2b1d3a" stroke-width="3" transform="rotate(20 160 322)"/>
+<g transform="rotate(-14 266 225) translate(0 -14)"><rect x="246" y="10" width="40" height="250" rx="14" fill="#c98b4b" stroke="#2b1d3a" stroke-width="16"/>
+<rect x="146" y="170" width="240" height="110" rx="26" fill="#d9a066" stroke="#2b1d3a" stroke-width="16"/>
+<rect x="146" y="170" width="44" height="110" rx="16" fill="#c9d3db" stroke="#2b1d3a" stroke-width="16"/>
+<rect x="342" y="170" width="44" height="110" rx="16" fill="#c9d3db" stroke="#2b1d3a" stroke-width="16"/>
+<path d="M206 192 H326" stroke="#ffffff" stroke-width="10" stroke-linecap="round" opacity="0.55"/></g>
+<line x1="70" y1="250" x2="108" y2="262" stroke="#fff7e6" stroke-width="12" stroke-linecap="round"/>
+<line x1="60" y1="310" x2="100" y2="310" stroke="#fff7e6" stroke-width="12" stroke-linecap="round"/>
+<line x1="442" y1="250" x2="404" y2="262" stroke="#fff7e6" stroke-width="12" stroke-linecap="round"/>
+<line x1="452" y1="310" x2="412" y2="310" stroke="#fff7e6" stroke-width="12" stroke-linecap="round"/>
+<path d="M84 164 Q84 186 106 186 Q84 186 84 208 Q84 186 62 186 Q84 186 84 164Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="8" stroke-linejoin="round"/>
+<path d="M430 158 Q430 178 450 178 Q430 178 430 198 Q430 178 410 178 Q430 178 430 158Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="8" stroke-linejoin="round"/>
+</svg>

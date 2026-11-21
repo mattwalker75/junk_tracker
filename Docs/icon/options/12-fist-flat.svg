@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Craving Crusher icon: a fist, flat">
+<rect width="512" height="512" fill="#1d5fd1"/>
+<rect x="196" y="40" width="128" height="90" rx="14" fill="#ffffff"/>
+<rect x="160" y="118" width="200" height="118" rx="44" fill="#ffffff"/>
+<rect x="160" y="186" width="50" height="96" rx="25" fill="#ffffff" stroke="#1d5fd1" stroke-width="12"/><rect x="210" y="186" width="50" height="96" rx="25" fill="#ffffff" stroke="#1d5fd1" stroke-width="12"/><rect x="260" y="186" width="50" height="96" rx="25" fill="#ffffff" stroke="#1d5fd1" stroke-width="12"/><rect x="310" y="186" width="50" height="96" rx="25" fill="#ffffff" stroke="#1d5fd1" stroke-width="12"/>
+<rect x="136" y="146" width="64" height="108" rx="32" fill="#ffffff" stroke="#1d5fd1" stroke-width="12" transform="rotate(-28 168 200)"/>
+<rect x="196" y="104" width="128" height="14" fill="#1d5fd1"/>
+<path d="M140 336 L176 306 M256 352 V306 M372 336 L336 306" fill="none" stroke="#ffffff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="150" cy="404" r="14" fill="#ffffff"/><circle cx="214" cy="430" r="10" fill="#ffffff"/><circle cx="268" cy="400" r="16" fill="#ffffff"/><circle cx="330" cy="432" r="11" fill="#ffffff"/><circle cx="376" cy="396" r="13" fill="#ffffff"/><circle cx="246" cy="456" r="8" fill="#ffffff"/>
+</svg>

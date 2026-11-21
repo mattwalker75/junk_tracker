@@ -2,6 +2,15 @@
 
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
+## [1.7.0] — 2026-11-21
+### Added
+- 2026-11-21: **Ready for a phone's home screen.** Saving the link on an iPhone (Share → Add to Home
+  Screen) or Android (Add to Home screen / Install app) now gives an icon and the name **Craving
+  Crusher**, and it opens full screen. The icon files are made from one drawing, `Docs/icon/icon.svg`, by
+  `node scripts/make_icons.mjs`, with a 1024 × 1024 master kept for a future iPhone / Android app
+  (`Docs/icon/README.md`). The drawing is still the burger until a new icon is picked — 14 ideas are on
+  the mockups canvas (Round 8) and in `Docs/icon/options/`.
+
 ## [1.6.0] — 2026-11-21
 ### Added
 - 2026-11-21: **Reminders to weigh in and to log an activity.** Settings → You has a **Weigh-in

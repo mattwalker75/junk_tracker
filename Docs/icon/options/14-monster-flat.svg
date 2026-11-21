@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Craving Crusher icon: a junk-food monster, beaten">
+<rect width="512" height="512" fill="#1d5fd1"/>
+<path d="M136 420 C110 420 104 396 108 360 C114 300 118 230 150 180 C176 140 214 124 256 124 C298 124 336 140 362 180 C394 230 398 300 404 360 C408 396 402 420 376 420 L340 420 L320 396 L298 420 L278 396 L256 420 L234 396 L214 420 L192 396 L172 420 Z" fill="#ffffff"/>
+<path d="M176 150 L192 70 L228 136 M284 136 L320 70 L336 150" fill="#ffffff" stroke="#ffffff" stroke-width="14" stroke-linejoin="round"/>
+<g stroke="#1d5fd1" stroke-width="20" stroke-linecap="round"><path d="M182 224 L222 264 M222 224 L182 264"/><path d="M290 224 L330 264 M330 224 L290 264"/></g>
+<path d="M206 322 Q256 296 306 322" fill="none" stroke="#1d5fd1" stroke-width="18" stroke-linecap="round"/>
+<path d="M238 312 L250 340 L262 308" fill="#ffffff" stroke="#1d5fd1" stroke-width="8" stroke-linejoin="round"/>
+<path d="M110 102 L116 114 L128 120 L116 126 L110 138 L104 126 L92 120 L104 114 Z" fill="#ffc93c"/><path d="M406 114 L412 126 L424 132 L412 138 L406 150 L400 138 L388 132 L400 126 Z" fill="#ffc93c"/><path d="M420 52 L426 64 L438 70 L426 76 L420 88 L414 76 L402 70 L414 64 Z" fill="#ffc93c"/>
+</svg>

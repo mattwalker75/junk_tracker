@@ -33,7 +33,7 @@ the web app's `data/junk.db` (the same tables, from `server/src/migrations.ts`).
 | `shared/src/sqlite.ts` | the parts of better-sqlite3 the server's code uses, on sql.js |
 | `shared/src/store.ts` | where the file is kept: the iPhone app, the Android app, or (in a desktop browser) IndexedDB |
 | `shared/vite.config.ts`, `shared/build_page.sh` | build the page for the apps (the BUILD scripts run them) |
-| `shared/test/` | the phone code's tests (`npx vitest run --config app_ports/shared/vitest.config.ts`; the BUILD scripts run them) |
+| `shared/test/` | the phone code's tests (`npx vitest run --config APP_PORTS/shared/vitest.config.ts`; the BUILD scripts run them) |
 | `ios/CravingCrusher/*.swift` | the iPhone app: shows the page, serves its files, keeps the log file |
 | `android/app/src/main/java/…/MainActivity.java` | the Android app: the same |
 

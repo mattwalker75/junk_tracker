@@ -3,7 +3,7 @@
  * which answers its /api requests inside the app (backend.ts). Run by ios/BUILD_APP.sh and
  * android/BUILD_APP.sh:
  *
- *   CC_PHONE_OUT=<folder> node_modules/.bin/vite build --config app_ports/shared/vite.config.ts
+ *   CC_PHONE_OUT=<folder> node_modules/.bin/vite build --config APP_PORTS/shared/vite.config.ts
  */
 import path from "node:path";
 import { readFileSync } from "node:fs";
@@ -24,7 +24,7 @@ const phonePage = (): Plugin => ({
   transformIndexHtml: {
     order: "pre",
     handler(html) {
-      if (!html.includes('src="/src/main.tsx"')) throw new Error("web/index.html no longer starts at /src/main.tsx — update app_ports/shared/vite.config.ts.");
+      if (!html.includes('src="/src/main.tsx"')) throw new Error("web/index.html no longer starts at /src/main.tsx — update APP_PORTS/shared/vite.config.ts.");
       // a home-screen manifest means nothing inside an installed app
       return html.replace('src="/src/main.tsx"', 'src="/@cc-phone/boot"').replace(/\s*<link rel="manifest"[^>]*>/, "");
     },

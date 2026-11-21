@@ -1,6 +1,6 @@
 /**
  * What the page may save in the settings, each checked (the first problem becomes the sentence the
- * person sees). Kept apart from app.ts so the phone apps (app_ports/) check settings the same way.
+ * person sees). Kept apart from app.ts so the phone apps (APP_PORTS/) check settings the same way.
  */
 import { z } from "zod";
 import { QUICK_PICK_MAX, REMINDER_DAYS_MAX, REMINDER_DAYS_MIN } from "../../shared/types.js";

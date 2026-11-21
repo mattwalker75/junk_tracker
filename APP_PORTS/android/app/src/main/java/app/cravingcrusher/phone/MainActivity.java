@@ -32,13 +32,13 @@ import java.util.Map;
 
 /**
  * Craving Crusher for Android: the web app's page (built into assets/web by BUILD_APP.sh), shown full screen,
- * with its log kept on the phone. The page does all the work (app_ports/shared/); this screen only shows it,
+ * with its log kept on the phone. The page does all the work (APP_PORTS/shared/); this screen only shows it,
  * hands it its files and keeps the log file:
  *
  *  - the files are served at https://appassets.androidplatform.net/… from assets/web (Android's own address for
  *    an app's files, so the page gets a normal web origin);
  *  - the log is one SQLite file, files/junk.db (in the phone's backup), read and written through the
- *    window.CCAndroid bridge (app_ports/shared/src/store.ts). The copy before the last change is junk.db.prev.
+ *    window.CCAndroid bridge (APP_PORTS/shared/src/store.ts). The copy before the last change is junk.db.prev.
  */
 public class MainActivity extends Activity {
     static final String HOST = "appassets.androidplatform.net";
@@ -136,7 +136,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    /** What the page asks of the app (app_ports/shared/src/store.ts and boot.ts). */
+    /** What the page asks of the app (APP_PORTS/shared/src/store.ts and boot.ts). */
     final class Bridge {
         private final File file = new File(getFilesDir(), "junk.db");
 

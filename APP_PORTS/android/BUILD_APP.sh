@@ -13,7 +13,7 @@
 #                       CC_KEYSTORE, CC_KEYSTORE_PASSWORD, CC_KEY_ALIAS, CC_KEY_PASSWORD   your signing key, for --release
 #                       JAVA_HOME / ANDROID_HOME   where Java and the Android SDK are, if not found by themselves
 #
-# The app is the web app's page with its log kept on the phone (app_ports/README.md). Nothing here touches the
+# The app is the web app's page with its log kept on the phone (APP_PORTS/README.md). Nothing here touches the
 # web app or its data.
 set -euo pipefail
 
@@ -113,7 +113,7 @@ install_tools() {
   ok "Installed."
 }
 
-page() { "$REPO/app_ports/shared/build_page.sh" "$PAGE" --test; }
+page() { "$REPO/APP_PORTS/shared/build_page.sh" "$PAGE" --test; }
 version()  { node -p "require('$REPO/package.json').version"; }
 buildnum() { git -C "$REPO" rev-list --count HEAD 2>/dev/null || echo 1; }
 

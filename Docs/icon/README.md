@@ -18,8 +18,8 @@ It draws with the Mac's Google Chrome (headless) — no packages — and writes:
 | `web/public/icon-maskable-512.png` | 512 | Android launchers that cut icons to a shape: the drawing shrunk into the safe zone |
 | `web/public/icon.svg` | any | the browser tab (rounded corners) |
 | `Docs/icon/icon-1024.png` | 1024 | the master for the iPhone / Android apps and their stores |
-| `app_ports/ios/CravingCrusher/Assets.xcassets/AppIcon.appiconset/icon-1024.png` | 1024 | the iPhone app's icon (a copy) |
-| `app_ports/android/app/src/main/res/drawable-nodpi/cc_icon.png` | 512 | the Android app's launcher picture (a copy) |
+| `APP_PORTS/ios/CravingCrusher/Assets.xcassets/AppIcon.appiconset/icon-1024.png` | 1024 | the iPhone app's icon (a copy) |
+| `APP_PORTS/android/app/src/main/res/drawable-nodpi/cc_icon.png` | 512 | the Android app's launcher picture (a copy) |
 
 Every file is committed, so updating stays stop → git pull → start.
 
@@ -34,7 +34,7 @@ doesn't fit under the icon.
 outlines, the game's colours), 10–14 in the tracker's look (white on the tracker's blue). Matt picked
 **9, `09-cc-game.svg`** (Nov 21 2026), so `icon.svg` is a copy of it.
 
-## In the iPhone and Android apps (app_ports/)
+## In the iPhone and Android apps (APP_PORTS/)
 
 The iPhone app's icon is the 1024 copy; Xcode makes every size from it. The Android app's icon is an
 *adaptive icon* (`res/mipmap-anydpi-v26/ic_launcher.xml`): the background layer is the colour `cc_icon_bg`

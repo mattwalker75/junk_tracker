@@ -14,7 +14,7 @@
 #                       CC_SIMULATOR="iPhone 17" which Simulator --run uses
 #                       CC_DEVICE=<id>          which iPhone --device installs on (xcrun devicectl list devices)
 #
-# The app is the web app's page with its log kept on the phone (app_ports/README.md). Nothing here touches the
+# The app is the web app's page with its log kept on the phone (APP_PORTS/README.md). Nothing here touches the
 # web app or its data.
 set -euo pipefail
 
@@ -72,7 +72,7 @@ requirements() {
   return $missing
 }
 
-page() { "$REPO/app_ports/shared/build_page.sh" "$PAGE" "${1:-}"; }
+page() { "$REPO/APP_PORTS/shared/build_page.sh" "$PAGE" "${1:-}"; }
 
 version()  { node -p "require('$REPO/package.json').version"; }
 buildnum() { git -C "$REPO" rev-list --count HEAD 2>/dev/null || echo 1; }

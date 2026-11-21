@@ -1,6 +1,6 @@
 /**
  * The database's tables, as the steps that build them. Kept apart from db.ts (which opens the file with
- * better-sqlite3) so the phone apps (app_ports/) build the very same tables. Add a step at the end —
+ * better-sqlite3) so the phone apps (APP_PORTS/) build the very same tables. Add a step at the end —
  * never edit one that has shipped.
  */
 export const MIGRATIONS: readonly string[] = [

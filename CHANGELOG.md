@@ -2,16 +2,20 @@
 
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
+## [Unreleased]
+### Changed
+- 2026-11-21: The phone apps' folder is now `APP_PORTS/` (it was `app_ports/`).
+
 ## [1.8.0] — 2026-11-21
 ### Added
 - 2026-11-21: **Craving Crusher as an iPhone and an Android app, with the log kept on the phone** (no server,
-  no network, no sign-in). `app_ports/ios/BUILD_APP.sh` and `app_ports/android/BUILD_APP.sh` check what is
+  no network, no sign-in). `APP_PORTS/ios/BUILD_APP.sh` and `APP_PORTS/android/BUILD_APP.sh` check what is
   needed (and say what to install), build the app into each one's `BUILD/` folder, and say where it is and how
   to try it: on this Mac in the iPhone Simulator / the Android Emulator (`--run`) or on a phone (`--open` /
   `--device` for an iPhone, `--install` or the .apk for Android). The app is the web app's page; its requests
   are answered inside the app by the server's own code on a SQLite file the phone keeps (and backs up). How it
-  works: `app_ports/README.md`. Android also has `--release` for the Play Store and `--install-tools`.
-- 2026-11-21: The `app_ports/` folder for the phone apps (`ios/`, `android/`, `shared/`).
+  works: `APP_PORTS/README.md`. Android also has `--release` for the Play Store and `--install-tools`.
+- 2026-11-21: The `APP_PORTS/` folder for the phone apps (`ios/`, `android/`, `shared/`).
 
 ### Changed
 - 2026-11-21: In the phone apps, Settings leaves out Users and sign-in and Network access, and About says the

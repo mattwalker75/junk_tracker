@@ -96,7 +96,7 @@ final class LocalFiles: NSObject, WKURLSchemeHandler {
     func webView(_ webView: WKWebView, stop task: WKURLSchemeTask) {}
 }
 
-/// Keeps the log: the page sends the whole SQLite file after each change (app_ports/shared/src/store.ts).
+/// Keeps the log: the page sends the whole SQLite file after each change (APP_PORTS/shared/src/store.ts).
 /// The copy before the last change is kept beside it as junk.db.prev.
 final class LogStore: NSObject, WKScriptMessageHandlerWithReply {
     private let file: URL = {

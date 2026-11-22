@@ -37,8 +37,10 @@ the web app's `data/junk.db` (the same tables, from `server/src/migrations.ts`).
 | `ios/CravingCrusher/*.swift` | the iPhone app: shows the page, serves its files, keeps the log file |
 | `android/app/src/main/java/…/MainActivity.java` | the Android app: the same |
 
-**What the phone app leaves out on purpose:** there is one person and no sign-in, so Settings hides *Users and
-sign-in* and *Network access* (`web/src/lib/phone.ts`), and About says where the log is. The look
+**What the phone app leaves out on purpose:** it is for one person, on their own phone or tablet, with no sign-in
+of any kind (Matt, Nov 22 2026). So Settings hides *Users and sign-in* and *Network access* (`web/src/lib/phone.ts`),
+there is never a sign-in screen or a *Switched to* strip, the Hall of Heroes lists only your own runs (no names, no
+*My runs* tab), `backend.ts` refuses adding users, passwords and Switch to, and About says where the log is. The look
 (Appearance) is kept in the database, as there is no config.json.
 
 ## Keep apart from the web app

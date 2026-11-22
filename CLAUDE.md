@@ -151,7 +151,12 @@ The person using it is not a developer — every message the page shows is a pla
     Node-only code (they only take `type Database`), keep the tables in `server/src/migrations.ts` and the
     settings checks in `server/src/settingsSchemas.ts`, and when a route changes in `app.ts` change `backend.ts`
     too (its test fails when a call in `web/src/lib/api.ts` has no answer). The page knows it's in the app only
-    by `PHONE_APP` (`web/src/lib/phone.ts`: Settings hides Users and sign-in and Network access). Build with
+    by `PHONE_APP` (`web/src/lib/phone.ts`: Settings hides Users and sign-in and Network access). **The phone apps
+    are single-user, with no sign-in of any kind** (Matt, Nov 22 2026: "does not require ANY multi-user functionality
+    or require any forms of signing in" — ONLY the iPhone/Android apps; the web app keeps all of it): no sign-in or
+    setup screen, no Switch to strip, no Users list, and the Hall of Heroes lists only your own runs (no names, no
+    My runs tab). Every app change also keeps the phone apps in step: phone tests, a new migration run on the
+    phone, both apps rebuilt. Build with
     `APP_PORTS/<platform>/BUILD_APP.sh` (`--check`, `--run`, …); its `BUILD/` and the built page are never
     committed, nor signing keys. Not yet: moving a log between the phone and the web app.
 

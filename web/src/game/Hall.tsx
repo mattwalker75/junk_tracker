@@ -2,13 +2,15 @@
  * The Hall of Heroes (mockup MonHall), from GET /api/game/hall: your best run up top, then the tabs
  * All time · This month · My runs · Hardcore (skull), and the five badges (badges.ts, worked out
  * from your stored fights). Several users means separation, not privacy, so everyone's runs are
- * listed.
+ * listed. In the phone app (one person, no sign-in) every list is your own runs: no names, no YOU tag and no
+ * My runs tab (All time already is them), with each row showing the run's mode and date.
  */
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { LEVEL_COUNT, levelInfo, type Badge, type HallRun, type HallView } from "../../../shared/game";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
+import { PHONE_APP } from "../lib/phone";
 import { BadgeArt, Crown, ShieldBlue, Skull } from "./icons";
 import { shortDate } from "./logic";
 import { GameBg, GameMenu, GameNote } from "./parts";
@@ -17,7 +19,8 @@ import { useGame } from "./state";
 const fmt = (n: number) => n.toLocaleString("en-US");
 const portrait = (slug: string) => `/monsters/${slug}.svg`;
 type Tab = "allTime" | "thisMonth" | "mine" | "hardcore";
-const TABS: { id: Tab; label: string }[] = [{ id: "allTime", label: "All time" }, { id: "thisMonth", label: "This month" }, { id: "mine", label: "My runs" }, { id: "hardcore", label: "Hardcore" }];
+const ALL_TABS: { id: Tab; label: string }[] = [{ id: "allTime", label: "All time" }, { id: "thisMonth", label: "This month" }, { id: "mine", label: "My runs" }, { id: "hardcore", label: "Hardcore" }];
+const TABS = PHONE_APP ? ALL_TABS.filter((t) => t.id !== "mine") : ALL_TABS;
 
 /** "Reached Baron Fryer", or "Crushed all 60" for a finished run. */
 export const reachedText = (h: Pick<HallRun, "level" | "endReason">): string =>
@@ -62,7 +65,7 @@ function Body({ h, tab, setTab, today }: { h: HallView; tab: Tab; setTab: (t: Ta
             <span className="truncate text-[14px] font-black text-[#4a2f00]">{reachedText(best)}</span>
           </div>
           <div className="flex shrink-0 flex-col items-end gap-1">
-            {bestRank ? <span className="rounded-full bg-[#2b1d3a] px-2 py-0.5 font-game text-[13px] text-[#ffc93c]">#{bestRank} all time</span> : null}
+            {bestRank && !PHONE_APP ? <span className="rounded-full bg-[#2b1d3a] px-2 py-0.5 font-game text-[13px] text-[#ffc93c]">#{bestRank} all time</span> : null}
             <span className="text-[13px] font-black text-[#4a2f00]">Run #{best.number}</span>
           </div>
         </section>
@@ -72,7 +75,7 @@ function Body({ h, tab, setTab, today }: { h: HallView; tab: Tab; setTab: (t: Ta
         </GameNote>
       )}
 
-      <div role="tablist" aria-label="Which runs" className="mx-4 mt-3.5 grid grid-cols-4 gap-1 rounded-[18px] bg-[#1a1024] p-1.5">
+      <div role="tablist" aria-label="Which runs" className={cx("mx-4 mt-3.5 grid gap-1 rounded-[18px] bg-[#1a1024] p-1.5", PHONE_APP ? "grid-cols-3" : "grid-cols-4")}>
         {TABS.map((t) => (
           <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
             className={cx("flex h-10 items-center justify-center gap-1 rounded-xl px-1 font-game text-[14px] leading-none whitespace-nowrap", tab === t.id ? "bg-g-yellow text-[#2b1d3a] shadow-[0_3px_0_#0e0817]" : "text-[#d9c9f0]")}>
@@ -82,7 +85,7 @@ function Body({ h, tab, setTab, today }: { h: HallView; tab: Tab; setTab: (t: Ta
       </div>
 
       <ol role="tabpanel" aria-label={TABS.find((t) => t.id === tab)?.label} className="mt-3 flex flex-col gap-2.5">
-        {list.length ? list.map((r, i) => <Row key={`${r.userId}-${r.number}`} r={r} rank={i + 1} mine={tab === "mine"} />) : (
+        {list.length ? list.map((r, i) => <Row key={`${r.userId}-${r.number}`} r={r} rank={i + 1} mine={tab === "mine" || PHONE_APP} crown={i === 0 && tab !== "mine"} />) : (
           <li className="g-panel mx-4 px-4 py-3 text-[15px] font-bold">
             {tab === "hardcore" ? "No Hardcore runs yet. Brave enough? Start one and pick Hardcore." : tab === "thisMonth" ? `No runs this month (${shortDate(today).slice(4, 7)}) yet.` : tab === "mine" ? "You haven't started a run yet." : "No runs yet."}
           </li>
@@ -94,14 +97,15 @@ function Body({ h, tab, setTab, today }: { h: HallView; tab: Tab; setTab: (t: Ta
   );
 }
 
-function Row({ r, rank, mine }: { r: HallRun; rank: number; mine: boolean }) {
+/** `mine`: shown as one of your own runs (Run #, mode, date) rather than a person's; `crown`: the top of a ranking. */
+function Row({ r, rank, mine, crown }: { r: HallRun; rank: number; mine: boolean; crown: boolean }) {
   const lv = levelInfo(Math.max(1, Math.min(LEVEL_COUNT, r.level)));
   const when = r.endedOn ?? r.startedOn;
   const state = !r.endReason ? "going" : r.endReason === "defeated" ? "defeated" : r.endReason === "finished" ? "finished" : "ended early";
   const medal = rank === 1 ? "#ffc93c" : rank === 2 ? "#e0e6f0" : rank === 3 ? "#e0a868" : "#ffffff";
   return (
     <li className="relative mx-4">
-      {rank === 1 && !mine ? <Crown className="absolute -top-3 left-[70px] z-[1] h-7 w-9 -rotate-12" /> : null}
+      {crown ? <Crown className="absolute -top-3 left-[70px] z-[1] h-7 w-9 -rotate-12" /> : null}
       <div className={cx("flex items-center gap-2.5 rounded-[20px] border-[3px] px-3 py-2.5 text-[#2b1d3a] shadow-[0_5px_0_#1a1024]", r.isYou && !mine ? "border-[#ffc93c] bg-[#fff1c2]" : "border-[#1a1024] bg-[#fff7e6]")}>
         <span className="grid size-9 shrink-0 place-items-center rounded-full border-[3px] border-[#2b1d3a] font-game text-[17px]" style={{ background: medal }}>{rank}</span>
         <span className="grid size-[54px] shrink-0 place-items-center overflow-hidden rounded-full border-[3px] border-[#2b1d3a] bg-[#ffd2b0]"><img src={portrait(lv.slug)} alt="" loading="lazy" className="mt-1 size-[54px]" /></span>

@@ -3,7 +3,14 @@
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
 ## [Unreleased]
+
+## [1.8.1] — 2026-11-22
 ### Changed
+- 2026-11-22: **The iPhone and Android apps are for one person, with no sign-in of any kind** (Matt: they run only
+  on the person's own phone or tablet). Besides Settings having no *Users and sign-in* or *Network access*, the
+  apps never show a sign-in or setup screen or a *Switched to* strip, and the Hall of Heroes lists only your own
+  runs: no names or YOU tags, and no *My runs* tab (All time already is them). The web app is unchanged and keeps
+  users, sign-in and Switch to.
 - 2026-11-21: The phone apps' folder is now `APP_PORTS/` (it was `app_ports/`).
 
 ## [1.8.0] — 2026-11-21

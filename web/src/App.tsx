@@ -19,6 +19,7 @@ import { GamePage } from "./game/GamePage";
 import { SettingsPage } from "./settings/SettingsPage";
 import { ActionsContext, type Actions } from "./lib/actions";
 import { api } from "./lib/api";
+import { PHONE_APP } from "./lib/phone";
 import { useRoute } from "./lib/route";
 import { applyTheme, onSystemThemeChange, rememberTheme } from "./lib/theme";
 
@@ -74,7 +75,10 @@ export function App() {
   if (me.isPending) return <div className="min-h-dvh" />;
   if (me.isError) return <div className="grid min-h-dvh place-items-center p-6 text-center text-mute">{me.error.message}</div>;
   const st = me.data;
-  if (st.status !== "ok") return <AuthScreen mode={st.status} />;
+  // the phone app has one person and no sign-in (Matt, Nov 22 2026): never a sign-in or setup screen there
+  if (st.status !== "ok") return PHONE_APP
+    ? <div className="grid min-h-dvh place-items-center p-6 text-center text-mute">Craving Crusher couldn't open its log on this phone. Close the app and open it again.</div>
+    : <AuthScreen mode={st.status} />;
 
   // the person whose log is on screen: changing it starts every screen afresh
   const owner = st.acting?.id ?? st.me.id;
@@ -82,7 +86,7 @@ export function App() {
   return (
     <ActionsContext.Provider value={actions}>
       <div key={owner} className="mx-auto min-h-dvh w-full max-w-xl">
-        {st.acting ? <SwitchedStrip acting={st.acting.name} me={st.me.name} /> : null}
+        {st.acting && !PHONE_APP ? <SwitchedStrip acting={st.acting.name} me={st.me.name} /> : null}
         {route.page === "home" ? <Home who={st.acting?.name ?? st.me.name} loginEnabled={st.loginEnabled} /> : null}
         {route.page === "calendar" ? <CalendarPage month={route.month} /> : null}
         {route.page === "goals" ? <GoalsPage /> : null}

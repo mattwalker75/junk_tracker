@@ -380,9 +380,9 @@ describe("review fixes (Oct 16 2026)", () => {
   });
 
   it("the server ends a sign-in after security.sessionDays, even if the cookie is kept", async () => {
-    s = await scratch();
+    // a server started with a 1-day sign-in (the length is read at start-up: it counts after a restart)
+    s = await scratch({ security: { loginEnabled: false, sessionDays: 1 } });
     const b = await withUsers();
-    s.handle.config.update({ security: { sessionDays: 1 } });
     const real = Date.now();
     const spy = vi.spyOn(Date, "now").mockReturnValue(real + 2 * 86_400_000);
     try { expect((await b.call("GET", "/api/auth/me")).body).toEqual({ status: "signin" }); }

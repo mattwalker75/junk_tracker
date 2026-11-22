@@ -3,13 +3,14 @@
 #
 #   ./BUILD_APP.sh            build for the iPhone Simulator on this Mac      → BUILD/Simulator/CravingCrusher.app
 #   ./BUILD_APP.sh --run      build it, then open it in the iPhone Simulator
-#   ./BUILD_APP.sh --device   build for a real iPhone (needs CC_TEAM_ID)     → BUILD/iPhone/CravingCrusher.app
+#   ./BUILD_APP.sh --team ABCDE12345   save your Apple developer team once (in CravingCrusher/Local.xcconfig, which git ignores)
+#   ./BUILD_APP.sh --device   build for a real iPhone (needs your team)      → BUILD/iPhone/CravingCrusher.app
 #                             and put it on the iPhone plugged into this Mac, if there is one
 #   ./BUILD_APP.sh --open     build the page, then open the project in Xcode (Run it on your iPhone from there)
 #   ./BUILD_APP.sh --check    only check that everything needed is installed
 #   ./BUILD_APP.sh --clean    remove what the builds made (BUILD/ and the built page)
 #
-# Settings (optional):  CC_TEAM_ID=ABCDE12345   your Apple developer team (Xcode → Settings → Accounts)
+# Settings (optional):  CC_TEAM_ID=ABCDE12345   your Apple developer team for this run (or save it with --team)
 #                       CC_BUNDLE_ID=…          the app's id (default app.cravingcrusher.phone); change it if Apple says it's taken
 #                       CC_SIMULATOR="iPhone 17" which Simulator --run uses
 #                       CC_DEVICE=<id>          which iPhone --device installs on (xcrun devicectl list devices)
@@ -66,16 +67,24 @@ requirements() {
     bad "Node.js 22.12 or newer (builds the page)"; note "Install it from https://nodejs.org or run: brew install node"; missing=1
   fi
 
-  if [[ -n "${CC_TEAM_ID:-}" ]]; then ok "for a real iPhone: Apple developer team $CC_TEAM_ID"
+  if [[ -n "$(team)" ]]; then ok "for a real iPhone: Apple developer team $(team)"
   else info "· for a real iPhone only: your Apple ID added in Xcode → Settings → Accounts (a free one works),"
-       note "and its team id as CC_TEAM_ID (or pick the team in Xcode — see --open)"; fi
+       note "and its team id saved once: ./BUILD_APP.sh --team <id>"; fi
   return $missing
 }
 
-page() { "$REPO/APP_PORTS/shared/build_page.sh" "$PAGE" "${1:-}"; }
+page() { "$REPO/APP_PORTS/shared/build_page.sh" "$PAGE" "${1:-}"; versions; }
+
+# your team: CC_TEAM_ID for this run, else the one saved with --team (Local.xcconfig, untracked — never the project file)
+LOCAL_XC="$HERE/CravingCrusher/Local.xcconfig"
+team() { if [[ -n "${CC_TEAM_ID:-}" ]]; then echo "$CC_TEAM_ID"; elif [[ -f "$LOCAL_XC" ]]; then sed -nE 's/^DEVELOPMENT_TEAM *= *([A-Z0-9]+).*/\1/p' "$LOCAL_XC" | head -n 1; fi; }
+# the version for Xcode's own builds too (▶ in Xcode), in the untracked Version.xcconfig
+versions() { printf '// written by BUILD_APP.sh — not in git\nMARKETING_VERSION = %s\nCURRENT_PROJECT_VERSION = %s\n' "$(version)" "$(buildnum)" >"$HERE/CravingCrusher/Version.xcconfig"; }
 
 version()  { node -p "require('$REPO/package.json').version"; }
-buildnum() { git -C "$REPO" rev-list --count HEAD 2>/dev/null || echo 1; }
+# the build number comes from the version (1.11.0 → 11100), so it only ever goes up and is the same on any
+# Mac or clone (it was the git commit count, which a fresh or shallow clone makes lower: Android then refuses the update)
+buildnum() { node -p "const [a, b, c] = require('$REPO/package.json').version.split('.').map(Number); a * 10000 + b * 100 + c"; }
 
 # xcodebuild into BUILD/DerivedData; the log goes to BUILD/xcodebuild.log
 xcode() {
@@ -125,11 +134,13 @@ callout_simulator() {
   info "  The Simulator build only runs in the Simulator. For your iPhone:"
   info "  1. Plug the iPhone into this Mac, unlock it and tap Trust."
   info "  2. On the iPhone: Settings → Privacy & Security → Developer Mode → On (it restarts)."
-  info "  3. ./BUILD_APP.sh --open, then in Xcode: click CravingCrusher (top left) → Signing & Capabilities →"
-  info "     Team → your Apple ID (add it in Xcode → Settings → Accounts; a free one works)."
-  info "  4. Pick your iPhone at the top of Xcode and press ▶ (Run)."
+  info "  3. Once: ./BUILD_APP.sh --team <your team id>. Find the id in Xcode → Settings → Accounts → your Apple ID"
+  info "     (add it there first; a free one works). It is saved where git doesn't look, so pulls stay clean."
+  info "  4. ./BUILD_APP.sh --device puts it on the iPhone plugged in. Or ./BUILD_APP.sh --open, pick the iPhone"
+  info "     at the top of Xcode and press ▶. Don't pick the Team in Xcode's Signing box: that writes it into the project."
   info "  5. The first time: on the iPhone, Settings → General → VPN & Device Management → trust your Apple ID."
-  info "  Or without Xcode's window: CC_TEAM_ID=<your team id> ./BUILD_APP.sh --device"
+  info "  Updating: build and install again the same way. The log on the iPhone stays; an older log is upgraded"
+  info "  and kept beside it as junk.db.before-v<N>."
   info "  With a free Apple ID the app runs for 7 days, then press Run again (your log stays)."
   info "  A paid Apple Developer account (99 USD a year) is needed for TestFlight and the App Store."
   echo
@@ -158,7 +169,15 @@ case "$cmd" in
     requirements >/dev/null || { requirements || true; die "Install what is marked ✗ first."; }
     page --test
     open "$PROJECT"
-    ok "Opened the project in Xcode. Pick the team (Signing & Capabilities), your iPhone at the top, then ▶."
+    if [[ -n "$(team)" ]]; then ok "Opened the project in Xcode (team $(team)). Pick your iPhone at the top, then ▶."
+    else ok "Opened the project in Xcode. For an iPhone, save your team first: ./BUILD_APP.sh --team <id>, then ▶ in Xcode."; fi
+    exit 0 ;;
+
+  --team)
+    id="${2:-}"
+    [[ "$id" =~ ^[A-Z0-9]{10}$ ]] || die "Give your 10-character team id: ./BUILD_APP.sh --team ABCDE12345 (Xcode → Settings → Accounts → your Apple ID)."
+    printf '// your Apple developer team — saved by ./BUILD_APP.sh --team; not in git\nDEVELOPMENT_TEAM = %s\n' "$id" >"$LOCAL_XC"
+    ok "Saved team $id in CravingCrusher/Local.xcconfig (git ignores it). ./BUILD_APP.sh --device or --open uses it."
     exit 0 ;;
 
   build|--build|--run)
@@ -198,11 +217,11 @@ case "$cmd" in
 
   --device)
     requirements >/dev/null || { requirements || true; die "Install what is marked ✗, then run ./BUILD_APP.sh --device again."; }
-    [[ -n "${CC_TEAM_ID:-}" ]] || die "A real iPhone needs your Apple developer team: CC_TEAM_ID=<team id> ./BUILD_APP.sh --device
-      (Xcode → Settings → Accounts → your Apple ID → the team's id; or use ./BUILD_APP.sh --open and pick the team in Xcode)."
-    bold "Building Craving Crusher for iPhone $(version) (a real iPhone, team $CC_TEAM_ID)"
+    [[ -n "$(team)" ]] || die "A real iPhone needs your Apple developer team. Save it once: ./BUILD_APP.sh --team <team id>
+      (Xcode → Settings → Accounts → your Apple ID → the team's id)."
+    bold "Building Craving Crusher for iPhone $(version) (a real iPhone, team $(team))"
     page --test
-    xcode iphoneos DEVELOPMENT_TEAM="$CC_TEAM_ID" CODE_SIGN_STYLE=Automatic -allowProvisioningUpdates
+    xcode iphoneos DEVELOPMENT_TEAM="$(team)" CODE_SIGN_STYLE=Automatic -allowProvisioningUpdates
     copy_app iphoneos iPhone
     ok "Built: $BUILD/iPhone/CravingCrusher.app"
     device="${CC_DEVICE:-}"

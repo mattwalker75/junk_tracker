@@ -123,5 +123,16 @@ export class Database {
     return bytes;
   }
 
+  /**
+   * Put the whole database back as these bytes (a change the phone failed to save is undone, so what the
+   * page shows is always what the phone keeps). Statements prepare on each use, so nothing else holds the old one.
+   */
+  restore(bytes: Uint8Array): void {
+    this.raw.close();
+    this.raw = new this.SQL.Database(bytes);
+    this.depth = 0;
+    this.connectionSettings();
+  }
+
   close(): void { this.raw.close(); }
 }

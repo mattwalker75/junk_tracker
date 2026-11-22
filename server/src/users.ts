@@ -47,7 +47,11 @@ const session = (req: Request) => (req.session ?? {}) as SessionData;
 export class Users {
   private decoy: string | null = null;
 
-  constructor(private readonly db: Database.Database, private readonly config: Config) {}
+  /** how long a sign-in lasts, as it was when the server started (security.sessionDays is "after a restart") */
+  private readonly sessionDays: number;
+  constructor(private readonly db: Database.Database, private readonly config: Config) {
+    this.sessionDays = config.get().security.sessionDays;
+  }
 
   private loginOn(): boolean { return !!this.config.get().security.loginEnabled; }
   private all(): Row[] { return this.db.prepare("SELECT * FROM users ORDER BY created_at, name").all() as Row[]; }
@@ -61,7 +65,9 @@ export class Users {
     const s = session(req);
     if (this.loginOn()) {
       const u = this.byId(s.userId);
-      const days = Math.max(1, this.config.get().security.sessionDays || 30);
+      // as the page says, a new sign-in length counts after a restart (it read the live value, so choosing
+      // 1 day signed everyone out at once, the person saving too — review, Nov 22 2026)
+      const days = Math.max(1, this.sessionDays || 30);
       if (!s.at || Date.now() - s.at > days * 86_400_000) return null;
       return u && u.password_hash && s.tag === tagOf(u.password_hash) ? u : null;
     }
@@ -143,9 +149,14 @@ export class Users {
 
   /** Turn sign-in off: only with one person left (no log is lost); their password goes. */
   disable(): void {
-    if (this.count() > 1) throw new UserError(`There are ${this.count()} users. Remove everyone but yourself in Settings → Users first — with sign-in off there is only one log.`, 409);
-    this.db.prepare("UPDATE users SET password_hash = ''").run();
+    this.checkCanDisable();
+    this.clearPasswords();
   }
+  checkCanDisable(): void {
+    if (this.count() > 1) throw new UserError(`There are ${this.count()} users. Remove everyone but yourself in Settings → Users first — with sign-in off there is only one log.`, 409);
+  }
+  /** back to no passwords (sign-in off), also when turning it on could not be finished */
+  clearPasswords(): void { this.db.prepare("UPDATE users SET password_hash = ''").run(); }
 
   /** `recheck` runs after the (slow) hashing, right before the write, so a request that raced past the first checks is refused. */
   private async nameAndPassword(u: Row, name: unknown, password: unknown, recheck: () => void = () => {}): Promise<Row> {
@@ -254,9 +265,17 @@ export class Users {
     if (session(req).actingAs === id) this.switchBack(req);
   }
 
-  /** the day a person was added ("2026-10-16"), where their reminders count from before anything is logged */
-  addedOn(id: Id): string | null {
-    return this.byId(id)?.created_at.slice(0, 10) ?? null;
+  /**
+   * The day a person was added, on the phone's calendar ("2026-10-16"), where their reminders count from before
+   * anything is logged. `tzOffset` is the phone's Date.getTimezoneOffset() in minutes (rule 3: the phone's day,
+   * not the server's UTC one — added at 7:30 PM in Chicago is still that day there).
+   */
+  addedOn(id: Id, tzOffset = 0): string | null {
+    const at = this.byId(id)?.created_at;
+    if (!at) return null;
+    const t = Date.parse(at);
+    if (!Number.isFinite(t)) return at.slice(0, 10);
+    return new Date(t - tzOffset * 60_000).toISOString().slice(0, 10);
   }
 
   // ---------------------------------------------------------------- each person's own settings

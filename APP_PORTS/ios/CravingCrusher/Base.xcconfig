@@ -1,0 +1,9 @@
+// Craving Crusher's build settings, outside the project file so nothing personal is ever written into git:
+// - the version and build number: Version.xcconfig, written by BUILD_APP.sh on every build (untracked);
+// - your Apple developer team: Local.xcconfig, written by ./BUILD_APP.sh --team <id> (untracked).
+// Don't pick the Team in Xcode's Signing box: that saves it into project.pbxproj, which git tracks.
+MARKETING_VERSION = 1.0
+CURRENT_PROJECT_VERSION = 1
+DEVELOPMENT_TEAM =
+#include? "Version.xcconfig"
+#include? "Local.xcconfig"

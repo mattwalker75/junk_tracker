@@ -114,8 +114,34 @@ final class LogStore: NSObject, WKScriptMessageHandlerWithReply {
             return
         }
         switch op {
-        case "load":
-            replyHandler((try? Data(contentsOf: file))?.base64EncodedString() ?? "", nil)
+        case "load", "loadPrev":
+            // "" only when there is no file; one that is there but can't be read is an error, so the page never
+            // starts a new log and saves it over this one
+            let f = op == "load" ? file : file.appendingPathExtension("prev")
+            guard FileManager.default.fileExists(atPath: f.path) else { replyHandler("", nil); return }
+            do { replyHandler(try Data(contentsOf: f).base64EncodedString(), nil) }
+            catch { replyHandler(nil, "The iPhone could not read \(f.lastPathComponent) (\(error.localizedDescription))") }
+        case "setAside":
+            // a damaged log moves to junk.db.damaged, so the next save doesn't turn it into junk.db.prev
+            let fm = FileManager.default
+            guard fm.fileExists(atPath: file.path) else { replyHandler("ok", nil); return }
+            let damaged = file.appendingPathExtension("damaged")
+            do {
+                if fm.fileExists(atPath: damaged.path) { try fm.removeItem(at: damaged) }
+                try fm.moveItem(at: file, to: damaged)
+                replyHandler("ok", nil)
+            } catch { replyHandler(nil, "The iPhone could not move the damaged log aside (\(error.localizedDescription))") }
+        case "keepCopy":
+            // a copy kept for good, only as junk.db.before-v<N> (the log from before an upgrade)
+            guard let name = body["name"] as? String, name.range(of: #"^junk\.db\.before-v\d{1,3}$"#, options: .regularExpression) != nil,
+                  let b64 = body["data"] as? String, let data = Data(base64Encoded: b64), !data.isEmpty else {
+                replyHandler(nil, "That copy was not understood.")
+                return
+            }
+            do {
+                try data.write(to: file.deletingLastPathComponent().appendingPathComponent(name), options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
+                replyHandler("ok", nil)
+            } catch { replyHandler(nil, "The iPhone would not keep the copy (\(error.localizedDescription))") }
         case "save":
             guard let b64 = body["data"] as? String, let data = Data(base64Encoded: b64), !data.isEmpty else {
                 replyHandler(nil, "There was nothing to save.")

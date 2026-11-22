@@ -95,7 +95,7 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   // ---------------------------------------------------------------- the log of the person on screen
   app.get("/api/overview", h((req) => log.overview(owner(req), req.query.today)));
   // which reminders to show as the app opens (reads only)
-  app.get("/api/reminders", h((req) => log.reminders(owner(req), req.query.today)));
+  app.get("/api/reminders", h((req) => log.reminders(owner(req), req.query.today, req.query.tz)));
   app.get("/api/splurges", h((req) => log.splurgesBetween(owner(req), String(req.query.from || ""), String(req.query.to || ""))));
   app.post("/api/splurges", h((req) => log.addSplurge(owner(req), req.body)));
   app.put("/api/splurges/:id", h((req) => log.updateSplurge(owner(req), param(req, "id"), req.body)));
@@ -136,16 +136,25 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.put("/api/users/:id/password", passwordLimiter, h(async (req) => { await users.setPassword(req, param(req, "id"), req.body?.password); }));
   app.put("/api/users/:id/name", h((req) => users.rename(param(req, "id"), req.body?.name)));
   // users and sign-in on: you get a name and password and this browser signs in; off: back to one log
+  // the two halves (the password in the database, the switch in config.json) change together or not at all:
+  // a settings file that can't be saved used to leave sign-in half on (review, Nov 22 2026)
   app.post("/api/auth/enable", setupLimiter, h(async (req) => {
     await users.enable(req, req.body?.name, req.body?.password);
-    config.update({ security: { loginEnabled: true } });
+    try { config.update({ security: { loginEnabled: true } }); }
+    catch (e) {
+      users.clearPasswords();
+      throw new UserError(`The settings file could not be saved (${(e as Error).message}), so users and sign-in stay off. Try again.`, 500);
+    }
     return users.state(req);
   }));
   app.post("/api/auth/disable", h((req) => {
     if (req.body?.confirm !== "TURN OFF") throw new UserError("Type TURN OFF to confirm.");
     if (!config.get().security.loginEnabled) return users.state(req);
-    users.disable();
-    config.update({ security: { loginEnabled: false } });
+    users.checkCanDisable();
+    try { config.update({ security: { loginEnabled: false } }); }
+    catch (e) { throw new UserError(`The settings file could not be saved (${(e as Error).message}), so users and sign-in stay on. Try again.`, 500); }
+    try { users.disable(); }
+    catch (e) { config.update({ security: { loginEnabled: true } }); throw e; }
     return users.state(req);
   }));
   app.post("/api/users/switch-back", h((req) => { users.switchBack(req); return users.state(req); }));

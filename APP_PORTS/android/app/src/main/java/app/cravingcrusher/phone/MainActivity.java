@@ -140,14 +140,49 @@ public class MainActivity extends Activity {
     final class Bridge {
         private final File file = new File(getFilesDir(), "junk.db");
 
-        /** the log file as base64, or "" when there is none yet */
+        /** the log file as base64, "" when there is none yet, or "!" + a sentence when it is there but can't be read
+         *  (never "" then: the page would start a new log and save it over this one) */
         @JavascriptInterface
-        public synchronized String load() {
-            if (!file.exists()) return "";
+        public synchronized String load() { return read(file); }
+
+        /** the copy from before the last save, the same way */
+        @JavascriptInterface
+        public synchronized String loadPrev() { return read(new File(getFilesDir(), "junk.db.prev")); }
+
+        private String read(File f) {
+            if (!f.exists()) return "";
             try {
-                return Base64.encodeToString(Files.readAllBytes(file.toPath()), Base64.NO_WRAP);
+                return Base64.encodeToString(Files.readAllBytes(f.toPath()), Base64.NO_WRAP);
+            } catch (IOException | OutOfMemoryError e) {
+                return "!The phone could not read " + f.getName() + " (" + e.getMessage() + ")";
+            }
+        }
+
+        /** a damaged log moves to junk.db.damaged, so the next save doesn't turn it into junk.db.prev */
+        @JavascriptInterface
+        public synchronized String setAside() {
+            if (!file.exists()) return "ok";
+            try {
+                Files.move(file.toPath(), new File(getFilesDir(), "junk.db.damaged").toPath(), StandardCopyOption.REPLACE_EXISTING);
+                return "ok";
             } catch (IOException e) {
-                return "";
+                return "The phone could not move the damaged log aside (" + e.getMessage() + ")";
+            }
+        }
+
+        /** a copy kept for good, only as junk.db.before-v<N> (the log from before an upgrade) */
+        @JavascriptInterface
+        public synchronized String keepCopy(String name, String b64) {
+            if (name == null || !name.matches("junk\\.db\\.before-v\\d{1,3}")) return "Not a copy name";
+            byte[] data;
+            try { data = Base64.decode(b64, Base64.DEFAULT); } catch (IllegalArgumentException e) { return "The app was sent something it could not read"; }
+            File tmp = new File(getFilesDir(), name + ".tmp");
+            try {
+                try (FileOutputStream out = new FileOutputStream(tmp)) { out.write(data); out.getFD().sync(); }
+                Files.move(tmp.toPath(), new File(getFilesDir(), name).toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                return "ok";
+            } catch (IOException e) {
+                return "The phone would not keep the copy (" + e.getMessage() + ")";
             }
         }
 

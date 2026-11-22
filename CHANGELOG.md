@@ -3,6 +3,27 @@
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
 ## [Unreleased]
+### Fixed (the Nov 22 2026 deep review)
+- 2026-11-22: **Phone apps keep the log safe.** A save the phone can't make (a full phone) is undone at once, so
+  the screen shows only what the phone kept and Try again can't log it twice. A log file that can't be read stops
+  the app with the reason instead of being replaced by a new empty one. A damaged log is set aside
+  (`junk.db.damaged`) and the copy from before the last change is opened, with a message saying so.
+- 2026-11-22: **Phone app updates.** Installing a new build over the old one keeps the log; an older log is
+  upgraded and kept for good as `junk.db.before-v<N>` (it lasted only until the next change). Build numbers come
+  from the version (1.11.0 → 11100), so they only go up on any Mac. Android says plainly when an update is refused
+  (a different signing key, or a newer version on the phone) and that uninstalling would erase the log.
+- 2026-11-22: Your Apple team id for an iPhone is saved with `ios/BUILD_APP.sh --team <id>` in a file git ignores,
+  not in the tracked Xcode project; Xcode's own builds now show the app's real version.
+- 2026-11-22: An update no longer reinstalls every package (and fails without internet): `TRACKER.sh` compares the
+  packages themselves, not file dates, and puts the old packages back if an install fails.
+- 2026-11-22: Turning users and sign-in on or off changes both halves (the password and the settings file) or
+  neither, with a plain message, when the settings file can't be saved.
+- 2026-11-22: A new sign-in length counts after a restart, as the page says (it signed people out at once).
+- 2026-11-22: The first reminder for someone who has never logged counts from the phone's day they were added,
+  not the server's UTC day.
+- 2026-11-22: Each database upgrade keeps a fresh copy (`junk.db.before-v<N>`, an older one kept with its date),
+  written under a temporary name first; the database's `-wal` and `-shm` files are private from the first start.
+- 2026-11-22: A malformed request gets a plain sentence instead of the checker's own words.
 
 ## [1.11.0] — 2026-11-22
 ### Added

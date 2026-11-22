@@ -46,7 +46,8 @@ export const api = {
   disableUsers: () => call<AuthState>("POST", "/api/auth/disable", { confirm: "TURN OFF" }),
 
   overview: (today: Day) => call<Overview>("GET", `/api/overview?today=${today}`),
-  reminders: (today: Day) => call<{ due: Reminder[] }>("GET", `/api/reminders?today=${today}`),
+  // tz: the phone's offset from UTC, so the day someone was added is the phone's day (rule 3)
+  reminders: (today: Day) => call<{ due: Reminder[] }>("GET", `/api/reminders?today=${today}&tz=${new Date().getTimezoneOffset()}`),
   splurges: (from: Day, to: Day) => call<Splurge[]>("GET", `/api/splurges?from=${from}&to=${to}`),
   addSplurge: (s: SplurgeInput) => call<Splurge>("POST", "/api/splurges", s),
   saveSplurge: (id: Id, s: SplurgeInput) => call<Splurge>("PUT", `/api/splurges/${id}`, s),
@@ -86,6 +87,10 @@ export const api = {
   switchTo: (id: Id) => call<AuthState>("POST", `/api/users/${id}/switch`),
   switchBack: () => call<AuthState>("POST", "/api/users/switch-back"),
   removeUser: (id: Id) => call<{ ok: true }>("DELETE", `/api/users/${id}`, { confirm: "DELETE" }),
+
+  // the phone apps only (APP_PORTS/shared/src/backend.ts); the web server has no such routes
+  phoneNotice: () => call<{ notice: string | null }>("GET", "/api/phone/notice"),
+  phoneNoticeSeen: () => call<{ ok: true }>("POST", "/api/phone/notice/seen"),
 
   settings: () => call<AppSettings>("GET", "/api/settings"),
   saveSettings: (patch: unknown) => call<Omit<AppSettings, "version">>("PUT", "/api/settings", patch),

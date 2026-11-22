@@ -12,6 +12,7 @@ import { DaySheet } from "./components/DaySheet";
 import { GoalsPage } from "./components/GoalsPage";
 import { Home } from "./components/Home";
 import { LogSheet } from "./components/LogSheet";
+import { PhoneNotice } from "./components/PhoneNotice";
 import { ReminderWindow } from "./components/ReminderWindow";
 import { SwitchedStrip } from "./components/SwitchedStrip";
 import { WeighSheet } from "./components/WeighSheet";
@@ -96,6 +97,7 @@ export function App() {
         <ActivitySheet open={!!activityOpen} onOpenChange={closeActivity} day={activityOpen?.day} edit={activityOpen?.edit} skin={skin} />
         <DaySheet day={dayOpen} onClose={() => setDayOpen(null)} />
         <ReminderWindow />
+        {PHONE_APP ? <PhoneNotice /> : null}
         <WeighSheet open={weighOpen !== undefined} day={weighOpen ?? undefined} onOpenChange={(o) => { if (!o) setWeighOpen(undefined); }} />
       </div>
     </ActionsContext.Provider>

@@ -130,13 +130,14 @@ export class Log {
 
   // ---------------------------------------------------------------- reminders as the app opens (Nov 21 2026)
   /** The weigh-in and activity reminders that are due today (see shared/reminders.ts). Reads only. */
-  reminders(owner: Id, today: unknown): { due: Reminder[] } {
+  reminders(owner: Id, today: unknown, tz?: unknown): { due: Reminder[] } {
     if (!realDay(today)) throw new UserError("Which day is it?");
     const settings = this.users.settings(owner);
     const weigh = this.db.prepare("SELECT day FROM weigh_ins WHERE user_id = ? AND day <= ? ORDER BY day DESC LIMIT 1").get(owner, today) as { day: Day } | undefined;
     const act = this.db.prepare("SELECT day, what FROM activities WHERE user_id = ? AND day <= ? ORDER BY day DESC, time DESC, created_at DESC LIMIT 1").get(owner, today) as { day: Day; what: string } | undefined;
     // never logged: count from the day the person was added (never later than today)
-    const added = this.users.addedOn(owner) ?? today;
+    const offset = Number(tz);
+    const added = this.users.addedOn(owner, Number.isInteger(offset) && Math.abs(offset) <= 14 * 60 ? offset : 0) ?? today;
     const since = added < today ? added : today;
     return { due: remindersDue(settings, today, { weighIn: weigh?.day ?? null, activity: act?.day ?? null, activityWhat: act?.what }, since) };
   }

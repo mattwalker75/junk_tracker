@@ -19,6 +19,7 @@
 		CC1000000000000000000012 /* PhoneWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneWebView.swift; sourceTree = "<group>"; };
 		CC1000000000000000000013 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC1000000000000000000014 /* web */ = {isa = PBXFileReference; lastKnownFileType = folder; path = web; sourceTree = "<group>"; };
+		CC1000000000000000000015 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +56,7 @@
 				CC1000000000000000000012 /* PhoneWebView.swift */,
 				CC1000000000000000000013 /* Assets.xcassets */,
 				CC1000000000000000000014 /* web */,
+				CC1000000000000000000015 /* Base.xcconfig */,
 			);
 			path = CravingCrusher;
 			sourceTree = "<group>";
@@ -203,11 +205,10 @@
 		};
 		CC1000000000000000000044 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CC1000000000000000000015 /* Base.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Craving Crusher";
@@ -221,7 +222,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.cravingcrusher.phone;
 				PRODUCT_NAME = CravingCrusher;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -235,11 +235,10 @@
 		};
 		CC1000000000000000000045 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CC1000000000000000000015 /* Base.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Craving Crusher";
@@ -253,7 +252,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.cravingcrusher.phone;
 				PRODUCT_NAME = CravingCrusher;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

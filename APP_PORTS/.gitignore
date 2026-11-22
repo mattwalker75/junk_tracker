@@ -16,3 +16,6 @@ shared/dist/
 *.keystore
 *.p12
 *.mobileprovision
+# your Apple team id and the generated version (ios/CravingCrusher/Base.xcconfig includes them)
+ios/CravingCrusher/Local.xcconfig
+ios/CravingCrusher/Version.xcconfig

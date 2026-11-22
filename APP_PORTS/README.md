@@ -24,9 +24,23 @@ server" (`/api/…`), but in the app those requests are answered inside the page
 - **Android:** the app's `files/junk.db` (Google backs it up with the phone)
 
 The copy before the last change is kept beside it as `junk.db.prev`. The file is the same SQLite database as
-the web app's `data/junk.db` (the same tables, from `server/src/migrations.ts`). When a new version of the app opens an older log, it
-upgrades it (the same steps as the web app) and saves it at once, so `junk.db.prev` is then the log as the
-older version left it.
+the web app's `data/junk.db` (the same tables, from `server/src/migrations.ts`). How the log is kept safe
+(`shared/src/open.ts`, tested in `shared/test/keeping.test.ts`):
+
+- **A save that fails** (a full phone) is undone in the app at once: the page says it wasn't saved and shows
+  only what the phone kept, so Try again can't log it twice.
+- **A log the phone can't read** stops the app with the reason. Nothing is ever saved over it: a new, empty
+  log never replaces one the phone failed to read.
+- **A damaged log** is moved aside to `junk.db.damaged` and `junk.db.prev` is opened instead; the person is
+  told once that the last thing they logged may be missing.
+- **Updating the app** keeps the log: installing a new build over the old one (the same app id and signing)
+  never touches the app's files. When a new version opens an older log it upgrades it (the same steps as the
+  web app), keeps the older one for good as `junk.db.before-v<N>`, and saves the upgraded one at once.
+- **Build numbers** come from the version (1.11.0 → 11100), so they only go up, on any Mac. Android refuses an
+  update signed with another key (a release build after debug ones, or a build from another Mac): `BUILD_APP.sh`
+  says so, and that uninstalling would erase the log. Build updates on the same Mac, in the same mode.
+- **Your Apple team** for an iPhone is saved with `ios/BUILD_APP.sh --team <id>` in `ios/CravingCrusher/Local.xcconfig`,
+  which git ignores (don't pick it in Xcode's Signing box: that writes it into the tracked project file).
 
 | File | What it does |
 |---|---|
@@ -34,6 +48,7 @@ older version left it.
 | `shared/src/backend.ts` | the same routes as `server/src/app.ts`, on the server's own code |
 | `shared/src/sqlite.ts` | the parts of better-sqlite3 the server's code uses, on sql.js |
 | `shared/src/store.ts` | where the file is kept: the iPhone app, the Android app, or (in a desktop browser) IndexedDB |
+| `shared/src/open.ts` | opening the log (backup, damaged file, upgrade copy) and undoing a change the phone failed to save |
 | `shared/vite.config.ts`, `shared/build_page.sh` | build the page for the apps (the BUILD scripts run them) |
 | `shared/test/` | the phone code's tests (`npx vitest run --config APP_PORTS/shared/vitest.config.ts`; the BUILD scripts run them) |
 | `ios/CravingCrusher/*.swift` | the iPhone app: shows the page, serves its files, keeps the log file |

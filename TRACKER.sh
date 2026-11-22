@@ -80,12 +80,40 @@ build() {
   info "Building Craving Crusher…"
   if npm run build >"$HERE/data/build.log" 2>&1; then touch dist/.built; ok "Built."; else err "The build failed — see data/build.log"; tail -n 25 "$HERE/data/build.log"; return 1; fi
 }
-# After a git pull that changed the package list, install the packages again (npm keeps its own copy
-# of the list it installed in node_modules/.package-lock.json), so stop → pull → start is all an update needs.
-needs_install() { [[ -d node_modules && ( ! -f node_modules/.package-lock.json || package-lock.json -nt node_modules/.package-lock.json ) ]]; }
+# After a git pull that changed the package list, install the packages again, so stop → pull → start is all an
+# update needs. "Changed" means the packages themselves: npm keeps the list it installed in
+# node_modules/.package-lock.json, and each package's version must match package-lock.json (a release only
+# changes the lockfile's own version line, and a pull gives it a new date: neither is a change — comparing dates
+# reinstalled everything on every update, and failed with no internet; review, Nov 22 2026). Optional packages for
+# other kinds of computer are in the list but never installed here, so only the ones that are must match.
+needs_install() {
+  [[ -d node_modules ]] || return 1
+  [[ -f node_modules/.package-lock.json ]] || return 0
+  node -e '
+    const want = require("./package-lock.json").packages || {}, have = require("./node_modules/.package-lock.json").packages || {};
+    for (const [k, p] of Object.entries(want)) {
+      if (!k) continue;
+      if (!have[k]) { if (p.optional || p.devOptional || p.peer) continue; process.exit(0); }
+      if (have[k].version !== p.version) process.exit(0);
+    }
+    for (const k of Object.keys(have)) if (k && !want[k]) process.exit(0);
+    process.exit(1);' 2>/dev/null
+}
+# npm ci empties node_modules first: the old packages are kept aside and put back if the install fails (no
+# internet, say), so the tracker still starts on the packages it had
 install_packages() {
   info "The app's packages changed — installing them (a minute or so)…"
-  if npm ci --no-audit --no-fund >"$HERE/data/install.log" 2>&1; then ok "Packages installed."; else err "The packages did not install — see data/install.log, or run ./INSTALL_APP.sh"; return 1; fi
+  rm -rf node_modules.before-install
+  [[ -d node_modules ]] && mv node_modules node_modules.before-install
+  if npm ci --no-audit --no-fund >"$HERE/data/install.log" 2>&1; then
+    rm -rf node_modules.before-install; ok "Packages installed."
+  else
+    rm -rf node_modules
+    [[ -d node_modules.before-install ]] && mv node_modules.before-install node_modules
+    err "The packages did not install (no internet?) — see data/install.log. The ones it had are back; try again later or run ./INSTALL_APP.sh"
+    [[ -d node_modules/express && -d node_modules/better-sqlite3 ]] && { info "Starting on the packages it had."; return 0; }
+    return 1
+  fi
 }
 prereqs() {
   node_ok || { err "Node.js 22.12 or newer is needed. Run ./INSTALL_APP.sh"; return 1; }

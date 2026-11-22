@@ -26,6 +26,8 @@ import { parse, UserError } from "../../../server/src/util";
 import { Database } from "./sqlite";
 
 export interface Answer { status: number; body: unknown }
+/** the log is from a newer app: never fall back to an older copy, never save over it */
+export class NewerLogError extends Error {}
 type Ctx = { params: Record<string, string>; query: Record<string, string>; body: Record<string, unknown> };
 
 const ONE_PERSON = "On this phone Craving Crusher keeps one person's log, so there are no other users or passwords.";
@@ -36,6 +38,8 @@ export class Backend {
   readonly db: Database;
   /** the database version an existing log was upgraded from as it opened (null: new, or already current) */
   readonly upgradedFrom: number | null;
+  /** a sentence the person must see once (the log was recovered from its backup); the page asks for it */
+  notice: string | null = null;
   private readonly users: Users;
   private readonly log: Log;
   private readonly goals: Goals;
@@ -47,7 +51,7 @@ export class Backend {
   constructor(SQL: SqlJsStatic, bytes: Uint8Array | null, readonly version: string, serverDay?: () => string) {
     this.db = new Database(SQL, bytes);
     const at = Number(this.db.pragma("user_version", { simple: true }) ?? 0);
-    if (at > SCHEMA_VERSION) throw new Error(`This log was saved by a newer Craving Crusher (database version ${at}; this app knows ${SCHEMA_VERSION}). Update the app.`);
+    if (at > SCHEMA_VERSION) throw new NewerLogError(`This log was saved by a newer Craving Crusher (database version ${at}; this app knows ${SCHEMA_VERSION}). Update the app.`);
     this.upgradedFrom = at > 0 && at < SCHEMA_VERSION ? at : null;
     for (let v = at; v < SCHEMA_VERSION; v++) {
       this.db.transaction(() => { this.db.exec(MIGRATIONS[v]); this.db.pragma(`user_version = ${v + 1}`); })();
@@ -97,6 +101,9 @@ export class Backend {
     const refuse = () => { throw new UserError(ONE_PERSON, 409); };
 
     this.on("GET", "/api/health", () => ({ ok: true, app: "craving-crusher-phone", version: this.version }));
+    // phone only (the web app has no such thing): a sentence the person must see once, then it's gone
+    this.on("GET", "/api/phone/notice", () => ({ notice: this.notice }));
+    this.on("POST", "/api/phone/notice/seen", () => { this.notice = null; return { ok: true }; });
     this.on("GET", "/api/auth/me", () => this.users.state(this.req));
     this.on("GET", "/api/appearance", () => this.appearance());
     this.on("POST", "/api/auth/setup", refuse);
@@ -106,7 +113,7 @@ export class Backend {
     this.on("POST", "/api/auth/disable", () => this.users.state(this.req));
 
     this.on("GET", "/api/overview", (c) => this.log.overview(o(), c.query.today));
-    this.on("GET", "/api/reminders", (c) => this.log.reminders(o(), c.query.today));
+    this.on("GET", "/api/reminders", (c) => this.log.reminders(o(), c.query.today, c.query.tz));
     this.on("GET", "/api/splurges", (c) => this.log.splurgesBetween(o(), c.query.from ?? "", c.query.to ?? ""));
     this.on("POST", "/api/splurges", (c) => this.log.addSplurge(o(), c.body));
     this.on("PUT", "/api/splurges/:id", (c) => this.log.updateSplurge(o(), c.params.id, c.body));

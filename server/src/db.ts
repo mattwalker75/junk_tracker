@@ -16,6 +16,9 @@ export { MIGRATIONS, SCHEMA_VERSION };
 
 export function openDatabase(file: string): Database.Database {
   fs.mkdirSync(path.dirname(file), { recursive: true });
+  // the database and its -wal / -shm files are made private from the start: the WAL holds most of the data,
+  // password hashes included, until a clean stop (it was readable by other accounts on the Mac, 0644)
+  process.umask(0o077);
   const db = new Database(file);
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");
@@ -27,12 +30,20 @@ export function openDatabase(file: string): Database.Database {
   }
   // an upgrade (after a git pull, say) first keeps a copy of the file as it was, so going back to the
   // older app — which refuses a newer database — never strands anyone's log
+  // (each upgrade makes its own copy: an earlier one of the same name is kept, renamed with its date, so going
+  // back to the older app and upgrading again never leaves only the stale copy; written to a temporary name
+  // first, so a copy cut short by a crash is never taken for a good one — review, Nov 22 2026)
   if (at > 0 && at < SCHEMA_VERSION) {
     const copy = `${file}.before-v${SCHEMA_VERSION}`;
-    if (!fs.existsSync(copy)) {
-      db.exec(`VACUUM INTO '${copy.replaceAll("'", "''")}'`);
-      try { fs.chmodSync(copy, 0o600); } catch {}
+    const tmp = `${copy}.tmp`;
+    fs.rmSync(tmp, { force: true });
+    db.exec(`VACUUM INTO '${tmp.replaceAll("'", "''")}'`);
+    try { fs.chmodSync(tmp, 0o600); } catch {}
+    if (fs.existsSync(copy)) {
+      const stamp = fs.statSync(copy).mtime.toISOString().replace(/\.\d+Z$/, "").replaceAll(":", "-");
+      fs.renameSync(copy, `${copy}.${stamp}`);
     }
+    fs.renameSync(tmp, copy);
   }
   for (let v = at; v < SCHEMA_VERSION; v++) {
     db.transaction(() => { db.exec(MIGRATIONS[v]); db.pragma(`user_version = ${v + 1}`); })();

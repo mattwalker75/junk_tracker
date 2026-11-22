@@ -115,7 +115,9 @@ install_tools() {
 
 page() { "$REPO/APP_PORTS/shared/build_page.sh" "$PAGE" --test; }
 version()  { node -p "require('$REPO/package.json').version"; }
-buildnum() { git -C "$REPO" rev-list --count HEAD 2>/dev/null || echo 1; }
+# the build number comes from the version (1.11.0 → 11100), so it only ever goes up and is the same on any
+# Mac or clone (it was the git commit count, which a fresh or shallow clone makes lower: Android then refuses the update)
+buildnum() { node -p "const [a, b, c] = require('$REPO/package.json').version.split('.').map(Number); a * 10000 + b * 100 + c"; }
 
 gradle() {
   export JAVA_HOME ANDROID_HOME
@@ -187,6 +189,27 @@ boot_emulator() {
 
 # ------------------------------------------------------------------ the commands
 cmd="${1:-build}"
+# Put the app on a phone or the emulator as an UPDATE (the log stays). When Android refuses it, say why in plain
+# words: an app signed with another key (a release build, or one built on another Mac) or a newer one is already
+# there, and uninstalling it would erase its log.
+install_on() {
+  local out
+  out="$(adb_ "$1" "$2" install -r "$3" 2>&1)" && return 0
+  case "$out" in
+    *INSTALL_FAILED_UPDATE_INCOMPATIBLE*|*signatures\ do\ not\ match*)
+      bad "This phone already has Craving Crusher signed with a different key (a release build, or one built on another Mac), so Android won't update it."
+      info "  Build it on the Mac (and in the mode, debug or --release) the phone's copy came from, and it updates with the log kept."
+      info "  Uninstalling it first would let this one in, but it ERASES the log on the phone. Don't, unless that log doesn't matter." ;;
+    *INSTALL_FAILED_VERSION_DOWNGRADE*)
+      bad "The phone has a newer Craving Crusher than this one ($(version)). Android won't go back to an older version."
+      info "  git pull to get the newer code, build again, and it updates with the log kept." ;;
+    *)
+      bad "The phone would not take it. Is it unlocked, and did you tap Allow?"
+      info "  What Android said: $(echo "$out" | tail -n 1)" ;;
+  esac
+  return 1
+}
+
 case "$cmd" in
   -h|--help|help) sed -n '2,19p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
 
@@ -210,7 +233,7 @@ case "$cmd" in
       --run)
         ensure_avd; boot_emulator
         info "Putting it on the emulator…"
-        adb_ -e install -r "$apk" >/dev/null
+        install_on -e "$apk" || exit 1
         adb_ -e shell am start -n "$APP_ID/app.cravingcrusher.phone.MainActivity" >/dev/null
         ok "Craving Crusher is open in the emulator. Its icon is in the emulator's apps too." ;;
       --install)
@@ -218,7 +241,7 @@ case "$cmd" in
         [[ -n "$phones" ]] || die "No Android phone is plugged in with USB debugging on (adb devices lists none). The steps are below; or send the .apk to the phone. $(callout "$apk")"
         [[ "$(echo "$phones" | wc -l | tr -d ' ')" == 1 ]] || die "Several phones are plugged in. Unplug all but one."
         info "Putting it on the phone…"
-        adb_ -s "$phones" install -r "$apk" >/dev/null || die "The phone would not take it. Is it unlocked, and did you tap Allow?"
+        install_on -s "$phones" "$apk" || exit 1
         adb_ -s "$phones" shell am start -n "$APP_ID/app.cravingcrusher.phone.MainActivity" >/dev/null
         ok "Craving Crusher is on the phone and open." ;;
     esac

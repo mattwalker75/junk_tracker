@@ -67,11 +67,13 @@ Created from `config.example.json` on first start. Settings edits the same file.
 everyone out. Delete it to sign everyone out.
 
 ## Data
-SQLite with WAL; the schema version is `PRAGMA user_version` (now 5). A newer database than the
-app knows is refused. Add a migration to `MIGRATIONS` in `db.ts` for any change. Before upgrading
-a database that already has data, the app saves a copy beside it as `junk.db.before-v<new version>`
-(made once; delete it when you no longer need it). To go back to an older app, stop it and put that
-copy back as `junk.db`.
+SQLite with WAL; the schema version is `PRAGMA user_version` (see `SCHEMA_VERSION` in
+`server/src/migrations.ts`; 7 as of 1.11). A newer database than the app knows is refused. Add a migration to
+`MIGRATIONS` in `migrations.ts` for any change (the phone apps run the same list). Before upgrading a database
+that already has data, the app saves a copy beside it as `junk.db.before-v<new version>` (written to a temporary
+name first; an older copy of the same name is kept, renamed with its date; delete them when you no longer need
+them). To go back to an older app, stop it and put that copy back as `junk.db`. The database and its `-wal` /
+`-shm` files are private to your account (0600).
 
 - `users(id, name UNIQUE NOCASE, password_hash, settings_json, created_at, last_used_at)` —
   `settings_json` holds `{units, trendDays, weekStart, examples, quickPicks}` — `quickPicks` is

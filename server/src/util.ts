@@ -23,8 +23,21 @@ export class UserError extends Error {
 /** Check a request body against a schema; the first problem becomes the UserError the person sees. */
 export function parse<T>(schema: z.ZodType<T>, body: unknown): T {
   const r = schema.safeParse(body);
-  if (!r.success) throw new UserError(r.error.issues[0]?.message || "Something in that is not right.");
+  if (!r.success) throw new UserError(plainIssue(r.error.issues[0]));
   return r.data;
+}
+
+/**
+ * Our own sentences pass through; zod's built-in ones ("Invalid input: expected string, received null") become a
+ * plain sentence naming the field (every message the page shows is a plain sentence — review, Nov 22 2026).
+ */
+function plainIssue(issue: z.core.$ZodIssue | undefined): string {
+  const msg = issue?.message ?? "";
+  if (msg && !/^invalid\b|expected .*received|^unrecognized key|^too (big|small)/i.test(msg)) return msg;
+  const field = issue?.path.filter((p) => typeof p === "string").at(-1);
+  if (!field) return "Something in that is not right.";
+  const words = String(field).replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase();
+  return `The ${words} in that is not right.`;
 }
 
 /** A real calendar day "YYYY-MM-DD" ("2026-02-30" is not one). */

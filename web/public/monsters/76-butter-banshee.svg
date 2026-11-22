@@ -1,21 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Butter Banshee, a wailing ghost of melted movie-theater butter with a pump nozzle on its head and popcorn flying around it">
-  <ellipse cx="100" cy="190" rx="54" ry="6" fill="#2b1d3a" opacity="0.14"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="54" ry="6" fill="#2b1d3a" opacity="0.14"/>
+  <g class="cc-fig">
   <!-- pump nozzle -->
+  <g class="cc-hat" style="transform-origin:100px 32px">
   <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <rect x="88" y="10" width="24" height="22" rx="5" fill="#c9ced8"/>
     <path d="M112 16 L136 16 Q144 16 144 24 L144 30" fill="none" stroke-width="8" stroke-linecap="round"/>
     <path d="M112 16 L136 16 Q144 16 144 24 L144 30" fill="none" stroke="#c9ced8" stroke-width="3" stroke-linecap="round"/>
   </g>
   <path d="M144 34 Q148 42 146 46 Q142 50 139 46 Q138 40 144 34 Z" fill="#ffd84a" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  </g>
   <!-- the ghost -->
   <path d="M40 120 Q34 32 100 30 Q166 32 160 120 L170 176 Q156 168 148 182 Q138 166 126 184 Q114 168 100 186 Q86 168 74 184 Q62 166 52 182 Q44 168 30 176 Z" fill="#fff1a8" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M134 44 Q158 70 156 120 L166 170 Q158 166 150 176 Q148 120 128 46 Z" fill="#ffdd6e"/>
   <path d="M56 70 Q64 48 84 40" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
   <!-- wispy arms up -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#fff1a8">
-    <path d="M44 100 Q14 92 8 64 Q24 70 30 62 Q34 82 46 86 Z"/>
-    <path d="M156 100 Q186 92 192 64 Q176 70 170 62 Q166 82 154 86 Z"/>
-  </g>
+  <g class="cc-arm-l" style="transform-origin:46px 94px"><path d="M44 100 Q14 92 8 64 Q24 70 30 62 Q34 82 46 86 Z" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#fff1a8"/></g>
+  <g class="cc-arm-r" style="transform-origin:154px 94px"><path d="M156 100 Q186 92 192 64 Q176 70 170 62 Q166 82 154 86 Z" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#fff1a8"/></g>
   <!-- drips -->
   <g fill="#ffd84a" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
     <path d="M58 140 Q62 152 60 158 Q56 162 53 158 Q52 150 58 140 Z"/>
@@ -30,11 +31,14 @@
   <ellipse cx="100" cy="132" rx="9" ry="8" fill="#ff7fa2"/>
   <ellipse cx="62" cy="104" rx="7" ry="4" fill="#ffb3a0"/><ellipse cx="138" cy="104" rx="7" ry="4" fill="#ffb3a0"/>
   <!-- popcorn flying -->
+  <g class="cc-orbit" style="transform-origin:100px 100px">
   <g stroke="#2b1d3a" stroke-width="2.5" fill="#fffaf0">
     <path d="M22 130 q-4 -8 4 -10 q4 -6 10 0 q8 2 4 10 q-2 6 -10 4 q-8 2 -8 -4z"/>
     <path d="M170 126 q-4 -8 4 -10 q4 -6 10 0 q8 2 4 10 q-2 6 -10 4 q-8 2 -8 -4z"/>
     <path d="M30 34 q-3 -6 3 -8 q3 -5 8 0 q6 2 3 8 q-2 5 -8 3 q-6 2 -6 -3z"/>
   </g>
   <g fill="#ffd84a"><circle cx="30" cy="128" r="2.2"/><circle cx="178" cy="124" r="2.2"/></g>
+  </g>
   <g stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"><path d="M70 148 l-6 6 M130 148 l6 6 M100 152 l0 8"/></g>
+  </g>
 </svg>

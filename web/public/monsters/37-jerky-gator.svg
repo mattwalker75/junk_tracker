@@ -1,9 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Jerky Gator, a beef-jerky alligator with leathery strips">
-  <ellipse cx="104" cy="186" rx="78" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <ellipse class="cc-shadow" cx="104" cy="186" rx="78" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <g class="cc-fig">
+  <g class="cc-tail" style="transform-origin:148px 136px">
   <path d="M146 124 Q178 120 186 92 L192 80 L190 94 L198 90 L192 104 Q186 136 150 150 Z" fill="#b2582f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M152 146 Q182 134 190 106 Q188 128 160 148 Z" fill="#83391c"/>
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"><path d="M132 150 L128 176 L150 176 L150 150 Z" fill="#83391c"/><path d="M60 146 L54 176 L78 176 L80 146 Z" fill="#83391c"/></g>
-  <g fill="#fff7e6" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"><path d="M128 176 l3 6 l3 -6 Z M136 176 l3 6 l3 -6 Z M144 176 l3 6 l3 -6 Z M54 176 l3 6 l3 -6 Z M62 176 l3 6 l3 -6 Z M70 176 l3 6 l3 -6 Z"/></g>
+  </g>
+  <g class="cc-leg-r" style="transform-origin:141px 150px">
+    <path d="M132 150 L128 176 L150 176 L150 150 Z" fill="#83391c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M128 176 l3 6 l3 -6 Z M136 176 l3 6 l3 -6 Z M144 176 l3 6 l3 -6 Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  </g>
+  <g class="cc-leg-l" style="transform-origin:70px 148px">
+    <path d="M60 146 L54 176 L78 176 L80 146 Z" fill="#83391c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M54 176 l3 6 l3 -6 Z M62 176 l3 6 l3 -6 Z M70 176 l3 6 l3 -6 Z" fill="#fff7e6" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  </g>
   <path d="M78 98 L90 88 L98 98 L110 86 L120 98 L132 88 L140 100 L152 92 L156 106 Q170 132 154 154 L138 158 L124 154 L108 160 L92 154 L76 158 L62 152 Q50 128 62 104 Z" fill="#b2582f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M156 112 Q166 136 152 152 L138 156 L124 152 L108 158 L94 152 Q140 148 156 112 Z" fill="#83391c"/>
   <g fill="none" stroke="#83391c" stroke-width="3" stroke-linecap="round"><path d="M80 116 Q104 110 132 118 T152 122"/><path d="M74 134 Q100 128 128 136 T154 138"/></g>
@@ -21,4 +30,5 @@
   <circle cx="85.2" cy="78" r="2.4" fill="#fff"/><circle cx="119.2" cy="88" r="2.4" fill="#fff"/>
   <path d="M70 62 L98 72 M136 72 L112 80" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
   <circle cx="64" cy="112" r="5" fill="#ff8f7a" opacity="0.55"/><circle cx="136" cy="108" r="5" fill="#ff8f7a" opacity="0.55"/>
+  </g>
 </svg>

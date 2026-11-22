@@ -18,7 +18,8 @@
       <path d="M-5 2 L5 2 L0 8 Z" fill="#ff9a3c" stroke="#2b1d3a" stroke-width="2.2" stroke-linejoin="round"/>
     </g>
   </defs>
-  <ellipse cx="100" cy="190" rx="88" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="88" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- the back row (there are more of them back there) -->
   <use xlink:href="#pizza-roll-pack-one" href="#pizza-roll-pack-one" transform="translate(48 84) scale(0.8)"/>
   <use xlink:href="#pizza-roll-pack-one" href="#pizza-roll-pack-one" transform="translate(100 74) scale(0.8)"/>
@@ -36,5 +37,6 @@
   <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M26 26 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M128 24 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

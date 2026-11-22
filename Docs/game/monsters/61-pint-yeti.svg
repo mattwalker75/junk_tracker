@@ -4,15 +4,11 @@
       <circle cx="100" cy="126" r="54"/><circle cx="52" cy="104" r="20"/><circle cx="148" cy="104" r="20"/><circle cx="58" cy="152" r="20"/><circle cx="142" cy="152" r="20"/><circle cx="100" cy="76" r="36"/><circle cx="74" cy="52" r="17"/><circle cx="126" cy="52" r="17"/><circle cx="100" cy="40" r="19"/>
     </clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="72" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="72" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- feet -->
-  <g stroke="#2b1d3a" stroke-width="4" fill="#bfe6ff"><ellipse cx="72" cy="180" rx="21" ry="10"/><ellipse cx="128" cy="180" rx="21" ry="10"/></g>
-  <!-- the giant spoon, behind the arm -->
-  <path d="M158 156 L176 58" stroke="#2b1d3a" stroke-width="15" stroke-linecap="round"/>
-  <path d="M158 156 L176 58" stroke="#d7dde8" stroke-width="7" stroke-linecap="round"/>
-  <ellipse cx="179" cy="40" rx="15" ry="21" fill="#d7dde8" stroke="#2b1d3a" stroke-width="4" transform="rotate(10 179 40)"/>
-  <ellipse cx="178" cy="40" rx="9" ry="13" fill="#7a4a2a" transform="rotate(10 178 40)"/>
-  <ellipse cx="174" cy="34" rx="3" ry="5" fill="#a8704a" transform="rotate(10 174 34)"/>
+  <g class="cc-leg-l" style="transform-origin:72px 172px"><ellipse cx="72" cy="180" rx="21" ry="10" stroke="#2b1d3a" stroke-width="4" fill="#bfe6ff"/></g>
+  <g class="cc-leg-r" style="transform-origin:128px 172px"><ellipse cx="128" cy="180" rx="21" ry="10" stroke="#2b1d3a" stroke-width="4" fill="#bfe6ff"/></g>
   <!-- shaggy fur: outline pass, then fill pass -->
   <g fill="#2b1d3a">
     <circle cx="100" cy="126" r="58"/><circle cx="52" cy="104" r="24"/><circle cx="148" cy="104" r="24"/><circle cx="58" cy="152" r="24"/><circle cx="142" cy="152" r="24"/><circle cx="100" cy="76" r="40"/><circle cx="74" cy="52" r="21"/><circle cx="126" cy="52" r="21"/><circle cx="100" cy="40" r="23"/>
@@ -34,6 +30,7 @@
   <!-- chocolate on its chin -->
   <path d="M112 102 q8 2 6 10 q-3 4 -5 -2 q-3 -4 -1 -8z" fill="#7a4a2a"/>
   <ellipse cx="76" cy="94" rx="5" ry="3" fill="#ff9db8"/><ellipse cx="124" cy="94" rx="5" ry="3" fill="#ff9db8"/>
+  <g class="cc-arm-l" style="transform-origin:64px 128px">
   <!-- the pint, hugged in front -->
   <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <path d="M26 114 L74 114 L69 170 L31 170 Z" fill="#ff9ec4"/>
@@ -43,9 +40,20 @@
   <path d="M42 112 q2 12 6 2 M60 112 q2 10 5 1" fill="none" stroke="#7a4a2a" stroke-width="5" stroke-linecap="round"/>
   <ellipse cx="40" cy="100" rx="6" ry="3" fill="#a8704a"/>
   <circle cx="50" cy="143" r="4" fill="#ff4d6d"/>
-  <!-- paws -->
-  <g fill="#f4fbff" stroke="#2b1d3a" stroke-width="4"><circle cx="72" cy="142" r="13"/><circle cx="158" cy="150" r="14"/></g>
-  <path d="M66 136 l0 8 M72 134 l0 9 M152 144 l0 8 M158 142 l0 9" stroke="#c4e0f2" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="72" cy="142" r="13" fill="#f4fbff" stroke="#2b1d3a" stroke-width="4"/>
+    <path d="M66 136 l0 8 M72 134 l0 9" stroke="#c4e0f2" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:150px 140px">
+  <!-- the giant spoon, behind the arm -->
+  <path d="M158 156 L176 58" stroke="#2b1d3a" stroke-width="15" stroke-linecap="round"/>
+  <path d="M158 156 L176 58" stroke="#d7dde8" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="179" cy="40" rx="15" ry="21" fill="#d7dde8" stroke="#2b1d3a" stroke-width="4" transform="rotate(10 179 40)"/>
+  <ellipse cx="178" cy="40" rx="9" ry="13" fill="#7a4a2a" transform="rotate(10 178 40)"/>
+  <ellipse cx="174" cy="34" rx="3" ry="5" fill="#a8704a" transform="rotate(10 174 34)"/>
+    <circle cx="158" cy="150" r="14" fill="#f4fbff" stroke="#2b1d3a" stroke-width="4"/>
+    <path d="M152 144 l0 8 M158 142 l0 9" stroke="#c4e0f2" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  </g>
   <!-- snowflake sparkles -->
   <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M22 40 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>

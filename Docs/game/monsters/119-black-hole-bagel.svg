@@ -3,7 +3,8 @@
     <clipPath id="black-hole-bagel-ring"><path d="M16 106 A84 78 0 1 0 184 106 A84 78 0 1 0 16 106 Z"/></clipPath>
     <clipPath id="black-hole-bagel-hole"><ellipse cx="100" cy="106" rx="36" ry="30"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="70" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="70" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- the bagel ring -->
   <path d="M16 106 A84 78 0 1 0 184 106 A84 78 0 1 0 16 106 Z" fill="#e8a94e" stroke="#2b1d3a" stroke-width="4"/>
   <g clip-path="url(#black-hole-bagel-ring)">
@@ -20,19 +21,23 @@
   <!-- the black hole -->
   <ellipse cx="100" cy="106" rx="36" ry="30" fill="#1a1030"/>
   <g clip-path="url(#black-hole-bagel-hole)" fill="none" stroke-linecap="round">
+    <g class="cc-orbit" style="transform-origin:100px 106px">
     <path d="M136 106 A36 30 0 0 1 100 136 A27 22 0 0 1 73 108 A19 15 0 0 1 100 92 A11 9 0 0 1 110 104" stroke="#8a4fc0" stroke-width="5"/>
     <path d="M64 106 A36 30 0 0 1 100 76 A27 22 0 0 1 127 104 A19 15 0 0 1 100 120 A11 9 0 0 1 90 108" stroke="#39a0ff" stroke-width="4"/>
     <path d="M118 82 A26 22 0 0 1 124 122" stroke="#ff8fc8" stroke-width="2.5"/>
     <circle cx="100" cy="106" r="6" fill="#000000" stroke="none"/>
+    </g>
   </g>
   <ellipse cx="100" cy="106" rx="33" ry="27" fill="none" stroke="#b28dff" stroke-width="2.5" opacity="0.8"/>
   <ellipse cx="100" cy="106" rx="36" ry="30" fill="none" stroke="#2b1d3a" stroke-width="4"/>
   <!-- snacks being pulled in -->
+  <g class="cc-orbit" style="transform-origin:100px 106px">
   <path d="M74 92 L88 86 L84 100 Z" fill="#f2bb4f" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
   <rect x="112" y="112" width="16" height="5" rx="1.5" fill="#ffd34d" stroke="#2b1d3a" stroke-width="2" transform="rotate(-35 120 114)"/>
   <rect x="110" y="86" width="9" height="3.5" rx="1.7" fill="#ff8fc8" stroke="#2b1d3a" stroke-width="1.5" transform="rotate(30 114 88)"/>
   <g fill="#e8a94e" stroke="#2b1d3a" stroke-width="1.5"><circle cx="92" cy="124" r="2.5"/><circle cx="68" cy="116" r="2"/><circle cx="132" cy="98" r="2.2"/></g>
   <path d="M60 130 q6 4 12 2 M140 82 q-6 -4 -12 -2" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+  </g>
   <!-- face on the ring -->
   <path d="M66 38 L92 46 M134 38 L108 46" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
   <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="82" cy="58" r="11" fill="#ffffff"/><circle cx="118" cy="58" r="11" fill="#ffffff"/></g>
@@ -41,6 +46,7 @@
   <ellipse cx="62" cy="72" rx="5.5" ry="3.2" fill="#ff9db8"/><ellipse cx="138" cy="72" rx="5.5" ry="3.2" fill="#ff9db8"/>
   <path d="M72 146 Q100 174 128 146 Q100 156 72 146 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   <path d="M80 149 l4 6 4 -5z M93 152 l4 6 4 -6z M106 152 l4 5 4 -6z M118 149 l3 5 4 -6z" fill="#ffffff"/>
+  </g>
   <!-- sparkles -->
   <g stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M22 14 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#ffc93c"/>

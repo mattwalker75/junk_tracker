@@ -2,7 +2,8 @@
   <defs>
     <clipPath id="pizza-saucer-band"><path d="M12 122 L12 134 A88 26 0 0 0 188 134 L188 122 Z"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="50" ry="6" fill="#2b1d3a" opacity="0.12"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="50" ry="6" fill="#2b1d3a" opacity="0.12"/>
+  <g class="cc-fig">
   <!-- tractor beam -->
   <path d="M86 158 L50 186 Q100 196 150 186 L114 158 Z" fill="#b8f5ff" opacity="0.45"/>
   <path d="M86 158 L50 186 M114 158 L150 186" stroke="#e8fdff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 5"/>
@@ -25,6 +26,7 @@
   <g fill="none" stroke="#3a7d2c" stroke-width="2.5"><ellipse cx="46" cy="112" rx="3.5" ry="2.2"/><ellipse cx="156" cy="112" rx="3.5" ry="2.2"/></g>
   <!-- alien pilot -->
   <ellipse cx="100" cy="128" rx="26" ry="12" fill="#fff27a" stroke="#2b1d3a" stroke-width="3.5"/>
+  <g class="cc-head" style="transform-origin:100px 120px">
   <path d="M90 78 L82 66 M110 78 L118 66" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"/>
   <g fill="#7bd36b" stroke="#2b1d3a" stroke-width="2.5"><circle cx="82" cy="66" r="4"/><circle cx="118" cy="66" r="4"/></g>
   <circle cx="100" cy="96" r="24" fill="#fff27a" stroke="#2b1d3a" stroke-width="4"/>
@@ -38,12 +40,14 @@
   <path d="M89 108 Q100 120 111 108 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M92 109 l2.5 4 2.5 -4z M108 109 l-2.5 4 -2.5 -4z" fill="#ffffff"/>
   <ellipse cx="80" cy="108" rx="3.8" ry="2.4" fill="#ff9db8"/><ellipse cx="120" cy="108" rx="3.8" ry="2.4" fill="#ff9db8"/>
+  </g>
   <!-- glass dome -->
   <path d="M44 122 A56 66 0 0 1 156 122 A56 15 0 0 1 44 122 Z" fill="#cdefff" fill-opacity="0.16" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M60 92 Q66 72 84 62" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
   <circle cx="56" cy="104" r="2.6" fill="#ffffff"/>
   <path d="M44 122 A56 15 0 0 0 156 122" fill="none" stroke="#2b1d3a" stroke-width="10" stroke-linecap="round"/>
   <path d="M44 122 A56 15 0 0 0 156 122" fill="none" stroke="#c4cddb" stroke-width="5" stroke-linecap="round"/>
+  </g>
   <!-- sparkles -->
   <g stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M22 34 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#ffc93c"/>

@@ -14,7 +14,8 @@
       <path d="M-10 -5 Q-6 -9 0 -9" fill="none" stroke="#fff1c8" stroke-width="2.5" stroke-linecap="round"/>
     </g>
   </defs>
-  <ellipse cx="100" cy="190" rx="86" ry="7" fill="#2b1d3a" opacity="0.2"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="86" ry="7" fill="#2b1d3a" opacity="0.2"/>
+  <g class="cc-fig">
   <!-- the coiled body: red joints, gold spines, takeout-box segments -->
   <g fill="none" stroke-linecap="round">
     <path d="M100 98 C70 96 44 98 30 120 C16 146 36 170 72 170 C104 170 140 172 160 164 C178 152 178 124 164 108" stroke="#2b1d3a" stroke-width="30"/>
@@ -26,8 +27,10 @@
   <use href="#the-takeout-dragon-spike" transform="translate(163 162) rotate(-41)"/>
   <use href="#the-takeout-dragon-spike" transform="translate(174 136) rotate(-90)"/>
   <!-- tail flame tuft -->
+  <g class="cc-tail" style="transform-origin:164px 112px">
   <path d="M156 114 Q146 92 162 80 Q162 94 172 88 Q178 102 172 114 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   <path d="M160 108 Q156 98 162 90" fill="none" stroke="#fff1a8" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
   <use href="#the-takeout-dragon-box" transform="translate(172 121) rotate(-109)"/>
   <use href="#the-takeout-dragon-box" transform="translate(171 150) rotate(-69)"/>
   <use href="#the-takeout-dragon-box" transform="translate(150 167) rotate(-13)"/>
@@ -45,26 +48,36 @@
   <use href="#the-takeout-dragon-horn" transform="translate(72 26) rotate(-55)"/>
   <use href="#the-takeout-dragon-horn" transform="translate(128 26) rotate(55)"/>
   <!-- arms: lantern in the left claw, chopsticks in the right -->
-  <g fill="none" stroke-linecap="round">
-    <path d="M78 104 Q56 100 42 74 M122 104 Q146 100 160 72" stroke="#2b1d3a" stroke-width="15"/>
-    <path d="M78 104 Q56 100 42 74 M122 104 Q146 100 160 72" stroke="#e2384d" stroke-width="8"/>
+  <g class="cc-arm-l" style="transform-origin:78px 104px">
+    <g fill="none" stroke-linecap="round">
+      <path d="M78 104 Q56 100 42 74" stroke="#2b1d3a" stroke-width="15"/>
+      <path d="M78 104 Q56 100 42 74" stroke="#e2384d" stroke-width="8"/>
+    </g>
+    <path d="M38 66 L36 76" stroke="#2b1d3a" stroke-width="2.5"/>
+    <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
+      <rect x="24" y="74" width="24" height="6" rx="2" fill="#ffc93c"/>
+      <ellipse cx="36" cy="92" rx="18" ry="14" fill="#e2384d"/>
+      <rect x="24" y="104" width="24" height="6" rx="2" fill="#ffc93c"/>
+    </g>
+    <path d="M36 78 Q24 92 36 106 M36 78 Q48 92 36 106" fill="none" stroke="#a81e30" stroke-width="2.5"/>
+    <path d="M24 86 Q26 82 30 80" fill="none" stroke="#ff8a9a" stroke-width="3" stroke-linecap="round"/>
+    <path d="M36 110 L36 124 M32 112 L31 122 M40 112 L41 122" stroke="#ffc93c" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="40" cy="70" r="8" fill="#e2384d" stroke="#2b1d3a" stroke-width="3.5"/>
+    <path d="M34 66 l4 3" stroke="#2b1d3a" stroke-width="2" stroke-linecap="round"/>
   </g>
-  <path d="M38 66 L36 76" stroke="#2b1d3a" stroke-width="2.5"/>
-  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
-    <rect x="24" y="74" width="24" height="6" rx="2" fill="#ffc93c"/>
-    <ellipse cx="36" cy="92" rx="18" ry="14" fill="#e2384d"/>
-    <rect x="24" y="104" width="24" height="6" rx="2" fill="#ffc93c"/>
+  <g class="cc-arm-r" style="transform-origin:122px 104px">
+    <g fill="none" stroke-linecap="round">
+      <path d="M122 104 Q146 100 160 72" stroke="#2b1d3a" stroke-width="15"/>
+      <path d="M122 104 Q146 100 160 72" stroke="#e2384d" stroke-width="8"/>
+    </g>
+    <g stroke-linecap="round">
+      <path d="M154 92 L178 22 M162 94 L188 28" stroke="#2b1d3a" stroke-width="8"/>
+      <path d="M154 92 L178 22 M162 94 L188 28" stroke="#d9a35a" stroke-width="3.5"/>
+      <path d="M154 92 L158 80 M162 94 L166 82" stroke="#e2384d" stroke-width="3.5"/>
+    </g>
+    <circle cx="162" cy="70" r="8" fill="#e2384d" stroke="#2b1d3a" stroke-width="3.5"/>
+    <path d="M162 63 l-2 5 M168 66 l-4 3" stroke="#2b1d3a" stroke-width="2" stroke-linecap="round"/>
   </g>
-  <path d="M36 78 Q24 92 36 106 M36 78 Q48 92 36 106" fill="none" stroke="#a81e30" stroke-width="2.5"/>
-  <path d="M24 86 Q26 82 30 80" fill="none" stroke="#ff8a9a" stroke-width="3" stroke-linecap="round"/>
-  <path d="M36 110 L36 124 M32 112 L31 122 M40 112 L41 122" stroke="#ffc93c" stroke-width="2.5" stroke-linecap="round"/>
-  <g stroke-linecap="round">
-    <path d="M154 92 L178 22 M162 94 L188 28" stroke="#2b1d3a" stroke-width="8"/>
-    <path d="M154 92 L178 22 M162 94 L188 28" stroke="#d9a35a" stroke-width="3.5"/>
-    <path d="M154 92 L158 80 M162 94 L166 82" stroke="#e2384d" stroke-width="3.5"/>
-  </g>
-  <g fill="#e2384d" stroke="#2b1d3a" stroke-width="3.5"><circle cx="40" cy="70" r="8"/><circle cx="162" cy="70" r="8"/></g>
-  <path d="M34 66 l4 3 M162 63 l-2 5 M168 66 l-4 3" stroke="#2b1d3a" stroke-width="2" stroke-linecap="round"/>
   <!-- head -->
   <path d="M62 62 Q62 26 100 26 Q138 26 138 62 Q138 76 128 82 L72 82 Q62 76 62 62 Z" fill="#e2384d" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <g clip-path="url(#the-takeout-dragon-skull)"><path d="M120 26 Q146 52 128 84 L140 84 L140 20 Z" fill="#b8243a"/></g>
@@ -91,5 +104,6 @@
     <path d="M146 10 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M70 128 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M132 130 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

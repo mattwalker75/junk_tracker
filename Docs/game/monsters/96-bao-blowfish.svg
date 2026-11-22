@@ -2,10 +2,13 @@
   <defs>
     <clipPath id="bao-blowfish-body"><circle cx="96" cy="106" r="60"/></clipPath>
   </defs>
-  <ellipse cx="98" cy="190" rx="66" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="98" cy="190" rx="66" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- tail -->
+  <g class="cc-tail" style="transform-origin:152px 107px">
   <path d="M150 100 L186 76 Q194 106 186 136 L150 114 Z" fill="#ffd6a8" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M164 98 L182 88 M166 107 L186 107 M164 116 L182 126" stroke="#f0a868" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
   <!-- soft spikes -->
   <path d="M148 129 Q166 155 136 147 Z M130 152 Q132 184 110 161 Z M102 163 Q89 192 80 161 Z M73 158 Q47 176 55 146 Z M50 140 Q18 142 41 120 Z M39 112 Q10 99 41 90 Z M44 83 Q26 57 56 65 Z M136 65 Q166 57 148 83 Z" fill="#fbf6ee" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   <!-- the bao -->
@@ -17,9 +20,11 @@
   <g fill="none" stroke="#d9cbb8" stroke-width="3" stroke-linecap="round">
     <path d="M96 52 Q78 54 66 66"/><path d="M96 52 Q86 60 82 72"/><path d="M96 52 Q106 60 110 72"/><path d="M96 52 Q114 54 126 66"/>
   </g>
+  <g class="cc-hat" style="transform-origin:96px 54px">
   <path d="M82 56 Q86 38 96 38 Q106 38 110 56 Q96 50 82 56 Z" fill="#fbf6ee" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   <path d="M90 52 Q94 44 96 40 M102 52 Q98 44 96 40" fill="none" stroke="#d9cbb8" stroke-width="2.5" stroke-linecap="round"/>
   <circle cx="96" cy="36" r="5.5" fill="#e2384d" stroke="#2b1d3a" stroke-width="2.5"/>
+  </g>
   <!-- puffed cheeks -->
   <g fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"><path d="M50 116 Q46 132 60 138"/><path d="M142 116 Q146 132 132 138"/></g>
   <ellipse cx="60" cy="124" rx="9" ry="6" fill="#ff9db8"/><ellipse cx="132" cy="124" rx="9" ry="6" fill="#ff9db8"/>
@@ -32,14 +37,18 @@
   <path d="M80 126 Q96 144 112 126 Q96 131 80 126 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M85 128 l3 5 3 -4z M93 129 l3 5 3 -5z M101 129 l3 4 3 -5z" fill="#ffffff"/>
   <!-- little fins -->
-  <g fill="#ffd6a8" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
-    <path d="M70 146 Q52 140 46 154 Q56 164 72 154 Z"/>
-    <path d="M122 146 Q140 140 146 154 Q136 164 120 154 Z"/>
+  <g class="cc-arm-l" style="transform-origin:71px 150px">
+    <path d="M70 146 Q52 140 46 154 Q56 164 72 154 Z" fill="#ffd6a8" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M58 150 L52 156" stroke="#f0a868" stroke-width="2" stroke-linecap="round"/>
   </g>
-  <path d="M58 150 L52 156 M134 150 L140 156" stroke="#f0a868" stroke-width="2" stroke-linecap="round"/>
+  <g class="cc-arm-r" style="transform-origin:121px 150px">
+    <path d="M122 146 Q140 140 146 154 Q136 164 120 154 Z" fill="#ffd6a8" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M134 150 L140 156" stroke="#f0a868" stroke-width="2" stroke-linecap="round"/>
+  </g>
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M28 28 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M168 30 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M178 160 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

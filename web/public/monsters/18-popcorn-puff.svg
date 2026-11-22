@@ -1,6 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Popcorn Puff, a grinning cloud of popping popcorn">
   <defs><clipPath id="popcorn-puff-cloud"><circle cx="100" cy="100" r="52"/><circle cx="100" cy="48" r="22"/><circle cx="127" cy="53" r="18"/><circle cx="148" cy="68" r="24"/><circle cx="160" cy="88" r="19"/><circle cx="160" cy="112" r="23"/><circle cx="148" cy="132" r="17"/><circle cx="127" cy="147" r="22"/><circle cx="100" cy="152" r="20"/><circle cx="73" cy="147" r="24"/><circle cx="52" cy="132" r="18"/><circle cx="40" cy="112" r="21"/><circle cx="40" cy="88" r="19"/><circle cx="52" cy="68" r="23"/><circle cx="73" cy="53" r="18"/></clipPath></defs>
-  <ellipse cx="100" cy="190" rx="46" ry="6" fill="#2b1d3a" opacity="0.15"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="46" ry="6" fill="#2b1d3a" opacity="0.15"/>
+  <g class="cc-fig">
+  <!-- popping kernels flying round it -->
+  <g class="cc-orbit" style="transform-origin:100px 100px">
   <g stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round" fill="none">
     <path d="M40 22 l6 -8 M12 30 l-9 -2"/>
     <path d="M160 22 l-6 -8 M188 30 l9 -2"/>
@@ -30,8 +33,16 @@
     <g fill="#fffaf0"><circle cx="-6" cy="2" r="6.5"/><circle cx="3" cy="-5" r="7"/><circle cx="7" cy="5" r="5.5"/><circle cx="-1" cy="8" r="4.5"/></g>
     <path d="M1 2 q4 -3 6 2 q-2 4 -6 2 z" fill="#ffd45e"/><path d="M-8 -1 q2 -3 5 -2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
   </g>
-  <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="7"><circle cx="28" cy="132" r="10"/><circle cx="16" cy="122" r="8"/><circle cx="172" cy="132" r="10"/><circle cx="184" cy="122" r="8"/></g>
-  <g fill="#fffaf0"><circle cx="28" cy="132" r="10"/><circle cx="16" cy="122" r="8"/><circle cx="172" cy="132" r="10"/><circle cx="184" cy="122" r="8"/></g>
+  </g>
+  <!-- little side puffs -->
+  <g class="cc-arm-l" style="transform-origin:42px 128px">
+    <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="7"><circle cx="28" cy="132" r="10"/><circle cx="16" cy="122" r="8"/></g>
+    <g fill="#fffaf0"><circle cx="28" cy="132" r="10"/><circle cx="16" cy="122" r="8"/></g>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:158px 128px">
+    <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="7"><circle cx="172" cy="132" r="10"/><circle cx="184" cy="122" r="8"/></g>
+    <g fill="#fffaf0"><circle cx="172" cy="132" r="10"/><circle cx="184" cy="122" r="8"/></g>
+  </g>
   <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="8"><circle cx="100" cy="100" r="52"/><circle cx="100" cy="48" r="22"/><circle cx="127" cy="53" r="18"/><circle cx="148" cy="68" r="24"/><circle cx="160" cy="88" r="19"/><circle cx="160" cy="112" r="23"/><circle cx="148" cy="132" r="17"/><circle cx="127" cy="147" r="22"/><circle cx="100" cy="152" r="20"/><circle cx="73" cy="147" r="24"/><circle cx="52" cy="132" r="18"/><circle cx="40" cy="112" r="21"/><circle cx="40" cy="88" r="19"/><circle cx="52" cy="68" r="23"/><circle cx="73" cy="53" r="18"/></g>
   <g fill="#fffaf0"><circle cx="100" cy="100" r="52"/><circle cx="100" cy="48" r="22"/><circle cx="127" cy="53" r="18"/><circle cx="148" cy="68" r="24"/><circle cx="160" cy="88" r="19"/><circle cx="160" cy="112" r="23"/><circle cx="148" cy="132" r="17"/><circle cx="127" cy="147" r="22"/><circle cx="100" cy="152" r="20"/><circle cx="73" cy="147" r="24"/><circle cx="52" cy="132" r="18"/><circle cx="40" cy="112" r="21"/><circle cx="40" cy="88" r="19"/><circle cx="52" cy="68" r="23"/><circle cx="73" cy="53" r="18"/></g>
   <g clip-path="url(#popcorn-puff-cloud)">
@@ -56,4 +67,5 @@
   <path d="M66 110 Q100 150 134 110 Q100 122 66 110 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M90 128 Q100 138 112 128 Q100 124 90 128 Z" fill="#ff6f91"/>
   <path d="M74 114 l4 8 l4 -6 z M118 116 l4 6 l4 -8 z M94 118 l4 7 l4 -6 z" fill="#fff"/>
+  </g>
 </svg>

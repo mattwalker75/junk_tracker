@@ -1,7 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Twisty, a pretzel-knot snake that ties itself in loops">
-  <ellipse cx="100" cy="188" rx="72" ry="6" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="188" rx="72" ry="6" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
+  <!-- tail -->
+  <g class="cc-tail" style="transform-origin:132px 174px">
   <path d="M132 166 Q166 176 184 150 Q190 168 172 180 Q152 190 128 182 Z" fill="#d4843f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M184 150 l4 -10 l4 10 z" fill="#a65a26" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  </g>
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path d="M100 140 C96 118 108 104 102 80" stroke="#2b1d3a" stroke-width="30"/>
     <path d="M100 140 C96 118 108 104 102 80" stroke="#a65a26" stroke-width="22"/>
@@ -36,6 +40,8 @@
     <rect x="165" y="109" width="6" height="6" rx="1.2" transform="rotate(47 168 112)"/>
   </g>
   </g>
+  <!-- head -->
+  <g class="cc-head" style="transform-origin:102px 88px">
   <path d="M58 56 C58 30 80 18 102 18 C126 18 146 32 146 56 C146 78 126 88 102 88 C78 88 58 80 58 56 Z" fill="#d4843f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M140 66 C132 82 112 86 92 84 C116 80 134 72 142 52 Z" fill="#a65a26"/>
   <path d="M68 44 Q76 28 94 24" fill="none" stroke="#f3b46c" stroke-width="6" stroke-linecap="round"/>
@@ -57,4 +63,6 @@
   <path d="M96 82 C96 92 94 100 88 104 M96 82 C98 92 100 100 104 106" fill="none" stroke="#ff6f91" stroke-width="3" stroke-linecap="round"/>
   <path d="M84 78 L88 88 L92 80 Z M112 80 L116 88 L120 78 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
   <circle cx="68" cy="68" r="5" fill="#ff8f7a" opacity="0.6"/><circle cx="136" cy="68" r="5" fill="#ff8f7a" opacity="0.6"/>
+  </g>
+  </g>
 </svg>

@@ -3,9 +3,10 @@
     <radialGradient id="the-snackularity-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff3a8" stop-opacity="0.7"/><stop offset="0.6" stop-color="#ff8fc8" stop-opacity="0.3"/><stop offset="1" stop-color="#b28dff" stop-opacity="0"/></radialGradient>
     <clipPath id="the-snackularity-body"><path d="M100 46 C140 46 164 76 164 112 C164 140 154 158 142 170 Q130 160 122 174 Q112 162 100 178 Q88 162 78 174 Q70 160 58 170 C46 158 36 140 36 112 C36 76 60 46 100 46 Z"/></clipPath>
   </defs>
+  <ellipse class="cc-shadow" cx="100" cy="192" rx="50" ry="5" fill="#2b1d3a" opacity="0.12"/>
+  <g class="cc-fig">
   <!-- glow and aura ring -->
   <ellipse cx="100" cy="108" rx="98" ry="90" fill="url(#the-snackularity-glow)"/>
-  <ellipse cx="100" cy="192" rx="50" ry="5" fill="#2b1d3a" opacity="0.12"/>
   <ellipse cx="100" cy="108" rx="86" ry="80" fill="none" stroke="#2b1d3a" stroke-width="10"/>
   <ellipse cx="100" cy="108" rx="86" ry="80" fill="none" stroke="#ffe28a" stroke-width="5"/>
   <ellipse cx="100" cy="108" rx="86" ry="80" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="6 14"/>
@@ -44,6 +45,7 @@
   <path d="M71 129 l4 8 5 -6z M88 132 l4 11 4 -10z M104 132 l4 11 4 -11z M121 129 l4 7 4 -8z" fill="#ffffff"/>
   <path d="M92 150 Q100 144 108 150 Q100 155 92 150 Z" fill="#ff6f9f"/>
   <ellipse cx="48" cy="124" rx="6" ry="3.5" fill="#ff9db8"/><ellipse cx="152" cy="124" rx="6" ry="3.5" fill="#ff9db8"/>
+  <g class="cc-orbit" style="transform-origin:100px 108px">
   <!-- orbiting snacks -->
   <g stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
     <!-- chip -->
@@ -67,6 +69,8 @@
   <g stroke-width="2" stroke-linecap="round"><path d="M166 50 l2 -2" stroke="#ffffff"/><path d="M176 48 l3 1" stroke="#6ec6ff"/><path d="M181 54 l1 3" stroke="#ffe066"/></g>
   <g fill="#5a3424"><circle cx="153" cy="170" r="2.2"/><circle cx="162" cy="168" r="2"/><circle cx="159" cy="179" r="2.2"/><circle cx="165" cy="176" r="1.6"/></g>
   <path d="M16 120 L19 140" stroke="#fff1a8" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  </g>
   <!-- gold sparkles -->
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M22 10 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>

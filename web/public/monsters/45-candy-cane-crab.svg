@@ -3,50 +3,60 @@
     <clipPath id="candy-cane-crab-shell"><path d="M40 136 C38 96 66 78 100 78 C134 78 162 96 160 136 Q100 154 40 136 Z"/></clipPath>
     <clipPath id="candy-cane-crab-claw"><path d="M32 96 C12 92 6 66 18 50 C28 36 50 34 60 46 L42 60 L64 64 C62 84 50 98 32 96 Z"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="188" rx="62" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="188" rx="62" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- sugar sparkles -->
   <g fill="#ffffff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M100 6 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M178 150 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
   </g>
   <!-- legs: candy-cane striped stubs -->
-  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <g stroke="#2b1d3a" stroke-width="13">
-      <path d="M56 140 Q36 150 30 178"/><path d="M70 146 Q58 160 56 182"/><path d="M144 140 Q164 150 170 178"/><path d="M130 146 Q142 160 144 182"/>
+  <g class="cc-leg-l" style="transform-origin:62px 142px">
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g stroke="#2b1d3a" stroke-width="13"><path d="M56 140 Q36 150 30 178"/><path d="M70 146 Q58 160 56 182"/></g>
+      <g stroke="#ffffff" stroke-width="6"><path d="M56 140 Q36 150 30 178"/><path d="M70 146 Q58 160 56 182"/></g>
+      <g stroke="#e8304a" stroke-width="6" stroke-dasharray="5 5" stroke-linecap="butt"><path d="M56 140 Q36 150 30 178"/><path d="M70 146 Q58 160 56 182"/></g>
     </g>
-    <g stroke="#ffffff" stroke-width="6">
-      <path d="M56 140 Q36 150 30 178"/><path d="M70 146 Q58 160 56 182"/><path d="M144 140 Q164 150 170 178"/><path d="M130 146 Q142 160 144 182"/>
-    </g>
-    <g stroke="#e8304a" stroke-width="6" stroke-dasharray="5 5" stroke-linecap="butt">
-      <path d="M56 140 Q36 150 30 178"/><path d="M70 146 Q58 160 56 182"/><path d="M144 140 Q164 150 170 178"/><path d="M130 146 Q142 160 144 182"/>
+  </g>
+  <g class="cc-leg-r" style="transform-origin:138px 142px">
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g stroke="#2b1d3a" stroke-width="13"><path d="M144 140 Q164 150 170 178"/><path d="M130 146 Q142 160 144 182"/></g>
+      <g stroke="#ffffff" stroke-width="6"><path d="M144 140 Q164 150 170 178"/><path d="M130 146 Q142 160 144 182"/></g>
+      <g stroke="#e8304a" stroke-width="6" stroke-dasharray="5 5" stroke-linecap="butt"><path d="M144 140 Q164 150 170 178"/><path d="M130 146 Q142 160 144 182"/></g>
     </g>
   </g>
   <!-- arms up to the claws -->
-  <g fill="none" stroke-linecap="round">
-    <path d="M52 116 Q34 108 36 86" stroke="#2b1d3a" stroke-width="14"/>
-    <path d="M148 116 Q166 108 164 86" stroke="#2b1d3a" stroke-width="14"/>
-    <path d="M52 116 Q34 108 36 86" stroke="#ffffff" stroke-width="7"/>
-    <path d="M148 116 Q166 108 164 86" stroke="#ffffff" stroke-width="7"/>
-    <path d="M52 116 Q34 108 36 86" stroke="#e8304a" stroke-width="7" stroke-dasharray="5 5" stroke-linecap="butt"/>
-    <path d="M148 116 Q166 108 164 86" stroke="#e8304a" stroke-width="7" stroke-dasharray="5 5" stroke-linecap="butt"/>
-  </g>
-  <!-- claws (left drawn, right mirrored) -->
-  <g>
-    <path d="M32 96 C12 92 6 66 18 50 C28 36 50 34 60 46 L42 60 L64 64 C62 84 50 98 32 96 Z" fill="#ffffff"/>
-    <g clip-path="url(#candy-cane-crab-claw)">
-      <g fill="#e8304a" transform="rotate(-35 36 66)"><rect x="-10" y="44" width="100" height="9"/><rect x="-10" y="62" width="100" height="9"/><rect x="-10" y="80" width="100" height="9"/><rect x="-10" y="26" width="100" height="9"/></g>
-      <path d="M8 80 Q30 104 64 78 L70 110 L0 110 Z" fill="#2b1d3a" opacity="0.16"/>
+  <g class="cc-arm-l" style="transform-origin:52px 116px">
+    <g fill="none" stroke-linecap="round">
+      <path d="M52 116 Q34 108 36 86" stroke="#2b1d3a" stroke-width="14"/>
+      <path d="M52 116 Q34 108 36 86" stroke="#ffffff" stroke-width="7"/>
+      <path d="M52 116 Q34 108 36 86" stroke="#e8304a" stroke-width="7" stroke-dasharray="5 5" stroke-linecap="butt"/>
     </g>
-    <path d="M32 96 C12 92 6 66 18 50 C28 36 50 34 60 46 L42 60 L64 64 C62 84 50 98 32 96 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
-    <path d="M18 64 Q20 52 30 46" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
-  </g>
-  <g transform="translate(200 0) scale(-1 1)">
-    <path d="M32 96 C12 92 6 66 18 50 C28 36 50 34 60 46 L42 60 L64 64 C62 84 50 98 32 96 Z" fill="#ffffff"/>
-    <g clip-path="url(#candy-cane-crab-claw)">
-      <g fill="#e8304a" transform="rotate(-35 36 66)"><rect x="-10" y="44" width="100" height="9"/><rect x="-10" y="62" width="100" height="9"/><rect x="-10" y="80" width="100" height="9"/><rect x="-10" y="26" width="100" height="9"/></g>
-      <path d="M8 80 Q30 104 64 78 L70 110 L0 110 Z" fill="#2b1d3a" opacity="0.16"/>
+    <!-- claws (left drawn, right mirrored) -->
+    <g>
+      <path d="M32 96 C12 92 6 66 18 50 C28 36 50 34 60 46 L42 60 L64 64 C62 84 50 98 32 96 Z" fill="#ffffff"/>
+      <g clip-path="url(#candy-cane-crab-claw)">
+        <g fill="#e8304a" transform="rotate(-35 36 66)"><rect x="-10" y="44" width="100" height="9"/><rect x="-10" y="62" width="100" height="9"/><rect x="-10" y="80" width="100" height="9"/><rect x="-10" y="26" width="100" height="9"/></g>
+        <path d="M8 80 Q30 104 64 78 L70 110 L0 110 Z" fill="#2b1d3a" opacity="0.16"/>
+      </g>
+      <path d="M32 96 C12 92 6 66 18 50 C28 36 50 34 60 46 L42 60 L64 64 C62 84 50 98 32 96 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M18 64 Q20 52 30 46" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
     </g>
-    <path d="M32 96 C12 92 6 66 18 50 C28 36 50 34 60 46 L42 60 L64 64 C62 84 50 98 32 96 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:148px 116px">
+    <g fill="none" stroke-linecap="round">
+      <path d="M148 116 Q166 108 164 86" stroke="#2b1d3a" stroke-width="14"/>
+      <path d="M148 116 Q166 108 164 86" stroke="#ffffff" stroke-width="7"/>
+      <path d="M148 116 Q166 108 164 86" stroke="#e8304a" stroke-width="7" stroke-dasharray="5 5" stroke-linecap="butt"/>
+    </g>
+    <g transform="translate(200 0) scale(-1 1)">
+      <path d="M32 96 C12 92 6 66 18 50 C28 36 50 34 60 46 L42 60 L64 64 C62 84 50 98 32 96 Z" fill="#ffffff"/>
+      <g clip-path="url(#candy-cane-crab-claw)">
+        <g fill="#e8304a" transform="rotate(-35 36 66)"><rect x="-10" y="44" width="100" height="9"/><rect x="-10" y="62" width="100" height="9"/><rect x="-10" y="80" width="100" height="9"/><rect x="-10" y="26" width="100" height="9"/></g>
+        <path d="M8 80 Q30 104 64 78 L70 110 L0 110 Z" fill="#2b1d3a" opacity="0.16"/>
+      </g>
+      <path d="M32 96 C12 92 6 66 18 50 C28 36 50 34 60 46 L42 60 L64 64 C62 84 50 98 32 96 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    </g>
   </g>
   <!-- eye stalks -->
   <g fill="none" stroke-linecap="round">
@@ -79,4 +89,5 @@
   <!-- mint leaf on one stalk -->
   <path d="M128 24 C134 12 150 12 154 18 C148 26 136 28 128 24 Z" fill="#7bd36b" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M132 23 Q142 19 150 18" fill="none" stroke="#4f9e5a" stroke-width="2" stroke-linecap="round"/>
+  </g>
 </svg>

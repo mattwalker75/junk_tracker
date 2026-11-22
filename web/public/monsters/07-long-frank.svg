@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Long Frank, a hot-dog serpent in a bun">
   <g transform="translate(9 4) scale(0.92)">
-  <ellipse cx="100" cy="190" rx="80" ry="6" fill="#2b1d3a" opacity="0.22"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="80" ry="6" fill="#2b1d3a" opacity="0.22"/>
+  <g class="cc-fig">
   <path d="M30 140 C30 114 66 112 100 112 C134 112 170 114 170 140 Z" fill="#f5c27a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M44 124 Q70 116 96 116" fill="none" stroke="#ffe0a8" stroke-width="5" stroke-linecap="round"/>
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -17,6 +18,8 @@
   <path d="M44 154 Q60 160 80 160" fill="none" stroke="#ffe0a8" stroke-width="4" stroke-linecap="round"/>
   <path d="M40 130 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6" fill="none" stroke="#2b1d3a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M40 130 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6" fill="none" stroke="#ffd23f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- the head, from the mustard tongue on -->
+  <g class="cc-head" style="transform-origin:150px 72px">
   <path d="M106 56 l-14 2 l-8 -6 m8 6 l-8 6" fill="none" stroke="#2b1d3a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M106 56 l-14 2 l-8 -6 m8 6 l-8 6" fill="none" stroke="#ffd23f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M104 50 C104 30 128 24 150 28 C172 32 180 48 172 62 C164 76 128 78 112 70 C104 66 104 58 104 50 Z" fill="#d9573f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
@@ -30,5 +33,7 @@
   <path d="M116 62 L118 69 L122 63 Z M132 64 L135 70 L138 63 Z" fill="#fff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
   <circle cx="150" cy="54" r="5" fill="#ff9e8a" opacity="0.7"/>
   <circle cx="110" cy="46" r="1.8" fill="#2b1d3a"/>
+  </g>
+  </g>
   </g>
 </svg>

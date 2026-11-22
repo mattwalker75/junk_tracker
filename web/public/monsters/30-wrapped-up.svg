@@ -1,19 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Wrapped Up, a burrito mummy whose tortilla wraps are coming loose">
-  <ellipse cx="104" cy="188" rx="66" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <ellipse class="cc-shadow" cx="104" cy="188" rx="66" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <g class="cc-fig">
   <!-- filling bursting out the top -->
+  <g class="cc-hat" style="transform-origin:100px 50px">
   <g stroke="#2b1d3a" stroke-width="8">
     <circle cx="70" cy="44" r="11" fill="#7bd36b"/><circle cx="86" cy="34" r="12" fill="#ff4d3a"/><circle cx="104" cy="30" r="12" fill="#fff7e6"/><circle cx="120" cy="36" r="11" fill="#7bd36b"/><circle cx="132" cy="46" r="10" fill="#ffc93c"/><circle cx="96" cy="44" r="10" fill="#8a4b2a"/>
   </g>
   <circle cx="70" cy="44" r="11" fill="#7bd36b"/><circle cx="86" cy="34" r="12" fill="#ff4d3a"/><circle cx="104" cy="30" r="12" fill="#fff7e6"/><circle cx="120" cy="36" r="11" fill="#7bd36b"/><circle cx="132" cy="46" r="10" fill="#ffc93c"/><circle cx="96" cy="44" r="10" fill="#8a4b2a"/>
   <g fill="#2b1d3a" opacity="0.25"><circle cx="100" cy="26" r="2"/><circle cx="108" cy="32" r="2"/></g>
   <path d="M80 30 q4 -4 8 -2" fill="none" stroke="#ff9b8a" stroke-width="3" stroke-linecap="round"/>
-  <!-- legs -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#f5d896">
-    <rect x="70" y="166" width="22" height="18" rx="6"/><rect x="108" y="166" width="22" height="18" rx="6"/>
   </g>
-  <path d="M72 176 L90 172 M110 172 L128 177" stroke="#d9ad5c" stroke-width="3" stroke-linecap="round"/>
+  <!-- legs -->
+  <g class="cc-leg-l" style="transform-origin:81px 168px">
+    <rect x="70" y="166" width="22" height="18" rx="6" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#f5d896"/>
+    <path d="M72 176 L90 172" stroke="#d9ad5c" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g class="cc-leg-r" style="transform-origin:119px 168px">
+    <rect x="108" y="166" width="22" height="18" rx="6" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#f5d896"/>
+    <path d="M110 172 L128 177" stroke="#d9ad5c" stroke-width="3" stroke-linecap="round"/>
+  </g>
   <!-- the unwinding strip trailing off to the floor -->
-  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <g class="cc-tail" style="transform-origin:140px 150px" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path d="M140 150 C168 146 180 160 168 172 C160 180 170 188 186 184" stroke="#2b1d3a" stroke-width="15"/>
     <path d="M140 150 C168 146 180 160 168 172 C160 180 170 188 186 184" stroke="#fbe6b4" stroke-width="8"/>
   </g>
@@ -40,17 +47,19 @@
   <path d="M90 112 L93 118 L96 112 Z M104 112 L107 118 L110 112 Z" fill="#fff"/>
   <circle cx="66" cy="112" r="5" fill="#ff8f7a" opacity="0.55"/><circle cx="134" cy="112" r="5" fill="#ff8f7a" opacity="0.55"/>
   <!-- zombie arms reaching out -->
-  <g fill="none" stroke-linecap="round">
-    <path d="M58 104 L22 92" stroke="#2b1d3a" stroke-width="17"/>
-    <path d="M58 104 L22 92" stroke="#f5d896" stroke-width="10"/>
-    <path d="M142 104 L178 92" stroke="#2b1d3a" stroke-width="17"/>
-    <path d="M142 104 L178 92" stroke="#f5d896" stroke-width="10"/>
+  <g class="cc-arm-l" style="transform-origin:60px 104px">
+    <path d="M58 104 L22 92" fill="none" stroke-linecap="round" stroke="#2b1d3a" stroke-width="17"/>
+    <path d="M58 104 L22 92" fill="none" stroke-linecap="round" stroke="#f5d896" stroke-width="10"/>
+    <path d="M46 94 L42 108 M34 90 L30 104" stroke="#d9ad5c" stroke-width="3" stroke-linecap="round"/>
+    <path d="M18 92 Q12 104 18 114 L22 108 Q18 102 24 96 Z" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round" fill="#fbe6b4"/>
   </g>
-  <path d="M46 94 L42 108 M34 90 L30 104 M154 94 L158 108 M166 90 L170 104" stroke="#d9ad5c" stroke-width="3" stroke-linecap="round"/>
-  <g stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round" fill="#fbe6b4">
-    <path d="M18 92 Q12 104 18 114 L22 108 Q18 102 24 96 Z"/>
-    <path d="M182 92 Q190 102 186 116 L180 110 Q184 102 176 96 Z"/>
+  <g class="cc-arm-r" style="transform-origin:140px 104px">
+    <path d="M142 104 L178 92" fill="none" stroke-linecap="round" stroke="#2b1d3a" stroke-width="17"/>
+    <path d="M142 104 L178 92" fill="none" stroke-linecap="round" stroke="#f5d896" stroke-width="10"/>
+    <path d="M154 94 L158 108 M166 90 L170 104" stroke="#d9ad5c" stroke-width="3" stroke-linecap="round"/>
+    <path d="M182 92 Q190 102 186 116 L180 110 Q184 102 176 96 Z" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round" fill="#fbe6b4"/>
   </g>
   <!-- bean peeking through a gap -->
   <ellipse cx="128" cy="142" rx="4" ry="3" fill="#8a4b2a" stroke="#2b1d3a" stroke-width="2"/>
+  </g>
 </svg>

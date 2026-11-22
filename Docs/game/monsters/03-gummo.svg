@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Gummo, a wobbly gummy-bear blob">
-  <ellipse cx="100" cy="188" rx="56" ry="7" fill="#2b1d3a" opacity="0.2"/>
+  <ellipse class="cc-shadow" cx="100" cy="188" rx="56" ry="7" fill="#2b1d3a" opacity="0.2"/>
   <path d="M40 186 Q100 176 160 186" fill="none" stroke="#ff5c8a" stroke-width="5" stroke-linecap="round" opacity="0.5"/>
+  <g class="cc-fig">
   <g fill="#2b1d3a" stroke="#2b1d3a" stroke-width="8" stroke-linejoin="round">
     <circle cx="66" cy="46" r="15"/><circle cx="134" cy="46" r="15"/>
     <circle cx="100" cy="80" r="42"/>
@@ -36,5 +37,6 @@
   <g fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round">
     <path d="M30 84 q-8 12 0 24"/><path d="M20 78 q-10 18 0 36"/>
     <path d="M170 84 q8 12 0 24"/><path d="M180 78 q10 18 0 36"/>
+  </g>
   </g>
 </svg>

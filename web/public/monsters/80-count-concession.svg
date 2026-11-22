@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Count Concession, a vampire boss in a red velvet theater-curtain cape with gold tassels, holding a tray of nachos and a jumbo soda, a ticket-stub bow tie and fangs">
-  <ellipse cx="100" cy="192" rx="86" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <ellipse class="cc-shadow" cx="100" cy="192" rx="86" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <g class="cc-fig">
   <!-- the curtain cape, high collar -->
   <path d="M22 186 L40 70 L100 60 L160 70 L178 186 Q100 194 22 186 Z" fill="#b3203f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <g fill="none" stroke="#7a1430" stroke-width="4" stroke-linecap="round"><path d="M44 90 Q40 140 34 182 M60 92 Q58 140 56 186 M140 92 Q142 140 144 186 M156 90 Q160 140 166 182"/></g>
@@ -19,6 +20,7 @@
   </g>
   <path d="M84 106 L84 112 M116 106 L116 112" stroke="#2b1d3a" stroke-width="1.5" stroke-dasharray="2 2"/>
   <!-- head -->
+  <g class="cc-head" style="transform-origin:100px 98px">
   <path d="M64 62 Q64 22 100 22 Q136 22 136 62 Q136 98 100 100 Q64 98 64 62 Z" fill="#d6cfe6" stroke="#2b1d3a" stroke-width="4"/>
   <path d="M120 30 Q138 50 132 80 Q126 94 112 98 Q130 70 118 32 Z" fill="#bdb3d4"/>
   <!-- slick hair, widow's peak -->
@@ -33,14 +35,18 @@
   <!-- grin with fangs -->
   <path d="M84 80 Q100 92 116 80 Q100 86 84 80 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M89 82 l3 8 3 -7z M111 82 l-3 8 -3 -7z" fill="#ffffff" stroke="#2b1d3a" stroke-width="1.2" stroke-linejoin="round"/>
+  </g>
   <!-- the nachos tray (left) -->
+  <g class="cc-arm-l" style="transform-origin:54px 140px">
   <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
     <path d="M6 132 L54 132 L50 146 L10 146 Z" fill="#ffffff"/>
     <path d="M12 132 L20 114 L28 132 Z M24 132 L34 110 L42 132 Z M36 132 L46 116 L52 132 Z" fill="#f2bb4f"/>
   </g>
   <path d="M16 126 Q30 118 48 126 L46 134 Q30 128 16 134 Z" fill="#ffc93c"/>
   <circle cx="48" cy="150" r="9" fill="#d6cfe6" stroke="#2b1d3a" stroke-width="3.5"/>
+  </g>
   <!-- the jumbo soda (right) -->
+  <g class="cc-arm-r" style="transform-origin:148px 144px">
   <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
     <path d="M150 112 L190 112 L184 176 L156 176 Z" fill="#ffffff"/>
     <path d="M152 132 L188 132 L186 148 L154 148 Z" fill="#e2384d"/>
@@ -49,9 +55,11 @@
   </g>
   <path d="M174 112 L182 84" stroke="#ffc93c" stroke-width="3" stroke-linecap="round"/>
   <circle cx="152" cy="156" r="9" fill="#d6cfe6" stroke="#2b1d3a" stroke-width="3.5"/>
+  </g>
   <!-- gold sparkles -->
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M14 50 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
     <path d="M184 46 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+  </g>
   </g>
 </svg>

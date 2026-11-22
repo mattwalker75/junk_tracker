@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Pretzel Python, a soft-pretzel snake tied in a salty pretzel knot, rearing up with a mustard forked tongue">
-  <ellipse cx="100" cy="190" rx="80" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="80" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- the pretzel knot body: outline, bake, shine -->
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path d="M50 172 C10 160 16 104 60 104 C96 104 104 150 100 168 C96 150 104 104 140 104 C184 104 190 160 150 172 Q100 186 50 172" stroke="#2b1d3a" stroke-width="30"/>
@@ -19,6 +20,7 @@
     <rect x="72" y="176" width="5" height="4" rx="1"/><rect x="108" y="124" width="5" height="4" rx="1"/>
   </g>
   <!-- head -->
+  <g class="cc-head" style="transform-origin:106px 84px">
   <ellipse cx="104" cy="60" rx="38" ry="28" fill="#b8692e" stroke="#2b1d3a" stroke-width="4"/>
   <path d="M78 46 Q90 36 106 36" fill="none" stroke="#d98b45" stroke-width="5" stroke-linecap="round"/>
   <g fill="#ffffff" stroke="#2b1d3a" stroke-width="1.2"><rect x="96" y="38" width="5" height="4" rx="1"/><rect x="122" y="44" width="5" height="4" rx="1"/></g>
@@ -32,8 +34,10 @@
   <path d="M74 42 L96 48 M134 42 L112 48" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
   <path d="M90 76 Q104 84 118 76" fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"/>
   <ellipse cx="76" cy="68" rx="5" ry="3" fill="#ff9db8"/><ellipse cx="132" cy="68" rx="5" ry="3" fill="#ff9db8"/>
+  </g>
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M28 40 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M168 26 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

@@ -2,14 +2,19 @@
   <defs>
     <clipPath id="gelatin-glorp-body"><path d="M30 176 Q22 122 50 94 Q70 74 100 74 Q130 74 150 94 Q178 122 170 176 Q100 188 30 176 Z"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="188" rx="78" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="188" rx="78" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- eye stalks -->
-  <g fill="none" stroke-linecap="round">
+  <g class="cc-arm-l" style="transform-origin:84px 72px" fill="none" stroke-linecap="round">
     <path d="M84 70 Q70 58 56 46" stroke="#2b1d3a" stroke-width="13"/>
-    <path d="M100 64 L100 40" stroke="#2b1d3a" stroke-width="13"/>
-    <path d="M116 70 Q130 58 144 46" stroke="#2b1d3a" stroke-width="13"/>
     <path d="M84 70 Q70 58 56 46" stroke="#8fe04a" stroke-width="6"/>
+  </g>
+  <g class="cc-head" style="transform-origin:100px 66px" fill="none" stroke-linecap="round">
+    <path d="M100 64 L100 40" stroke="#2b1d3a" stroke-width="13"/>
     <path d="M100 64 L100 40" stroke="#8fe04a" stroke-width="6"/>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:116px 72px" fill="none" stroke-linecap="round">
+    <path d="M116 70 Q130 58 144 46" stroke="#2b1d3a" stroke-width="13"/>
     <path d="M116 70 Q130 58 144 46" stroke="#6fc63a" stroke-width="6"/>
   </g>
   <!-- the wobbly dome -->
@@ -40,10 +45,24 @@
   <path d="M38 132 Q40 108 56 96" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
   <path d="M76 72 Q80 66 86 64" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
   <!-- three eyes on stalks -->
-  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="52" cy="40" r="14" fill="#ffffff"/><circle cx="100" cy="30" r="15" fill="#ffffff"/><circle cx="148" cy="40" r="14" fill="#ffffff"/></g>
-  <circle cx="55" cy="43" r="7.5" fill="#2b1d3a"/><circle cx="100" cy="33" r="8" fill="#2b1d3a"/><circle cx="145" cy="43" r="7.5" fill="#2b1d3a"/>
-  <circle cx="58" cy="40" r="2.6" fill="#ffffff"/><circle cx="103" cy="30" r="2.8" fill="#ffffff"/><circle cx="148" cy="40" r="2.6" fill="#ffffff"/>
-  <path d="M38 26 L62 32 M162 26 L138 32 M86 16 L100 22 L114 16" fill="none" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g class="cc-arm-l" style="transform-origin:84px 72px">
+  <circle cx="52" cy="40" r="14" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5"/>
+  <circle cx="55" cy="43" r="7.5" fill="#2b1d3a"/>
+  <circle cx="58" cy="40" r="2.6" fill="#ffffff"/>
+  <path d="M38 26 L62 32" fill="none" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g class="cc-head" style="transform-origin:100px 66px">
+  <circle cx="100" cy="30" r="15" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5"/>
+  <circle cx="100" cy="33" r="8" fill="#2b1d3a"/>
+  <circle cx="103" cy="30" r="2.8" fill="#ffffff"/>
+  <path d="M86 16 L100 22 L114 16" fill="none" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:116px 72px">
+  <circle cx="148" cy="40" r="14" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5"/>
+  <circle cx="145" cy="43" r="7.5" fill="#2b1d3a"/>
+  <circle cx="148" cy="40" r="2.6" fill="#ffffff"/>
+  <path d="M162 26 L138 32" fill="none" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
   <!-- toothy grin -->
   <path d="M66 118 Q100 150 134 118 Q100 130 66 118 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   <path d="M74 121 l4 7 4 -6z M89 125 l4 7 4 -7z M103 125 l4 6 4 -7z M117 121 l3 6 4 -7z" fill="#ffffff"/>
@@ -52,6 +71,7 @@
   <g fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round">
     <path d="M16 118 q-6 10 0 20"/><path d="M10 124 q-3 6 0 12"/>
     <path d="M184 118 q6 10 0 20"/><path d="M190 124 q3 6 0 12"/>
+  </g>
   </g>
   <!-- sparkles -->
   <g stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">

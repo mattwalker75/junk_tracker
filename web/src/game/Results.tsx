@@ -16,7 +16,8 @@ import { Arena, Burst, Confetti, worldLook } from "./art";
 import { ClockSmall, HeartBroken, HeartEmpty, HeartFull, Hero, Home, Padlock, PlayDark, Potion, Replay, Shield, Skull, Star, Sword, Trophy, Wind } from "./icons";
 import { worldOf } from "./layout";
 import { dayExample, daysFrom, dueText, hpLeft, hpText, shortDate } from "./logic";
-import { GameMenu, HpBar } from "./parts";
+import { LiveMonster } from "./LiveMonster";
+import { GameMenu, HpBar, Monster } from "./parts";
 import { countUp, victoryBreakdown, waitsForBattle, type Result } from "./outcomes";
 import { dropToast, markShown, nextResult, clearResults, useGame, useResults, useToasts } from "./state";
 
@@ -175,7 +176,7 @@ function KoScene({ level, title, caption, replayKey }: { level: number; title: s
       <Confetti className="pointer-events-none absolute inset-0" />
       <h2 className="g-anim-pop absolute inset-x-2 top-2.5 text-center font-game text-[34px] leading-none font-normal text-[#ffc93c]" style={{ WebkitTextStroke: "5px #2b1d3a", paintOrder: "stroke fill", textShadow: "0 4px 0 #2b1d3a" }}>{title}</h2>
       <div className="absolute inset-x-0 top-[62px] flex justify-center">
-        <img src={portrait(lv.slug)} alt={lv.name} className="g-anim-ko h-[170px] w-[170px] origin-[50%_85%]" />
+        <LiveMonster slug={lv.slug} name={`${lv.name}, knocked out`} act="ko" className="h-[170px] w-[170px]" />
       </div>
       <Burst text="K.O.!" className="g-anim-burst absolute top-[88px] right-3 w-[104px]" />
       <svg viewBox="0 0 80 30" aria-hidden className="absolute top-[64px] left-1/2 w-[86px] -translate-x-[70%] g-anim-spin-fast" style={{ transformOrigin: "50% 50%" }}>
@@ -313,7 +314,7 @@ function Strike({ r, view, today }: { r: Extract<Result, { kind: "strike" }>; vi
         <div aria-hidden className="absolute inset-0 bg-[#ff4d6d]/25" />
         <h2 className="g-anim-pop absolute inset-x-2 top-2.5 text-center font-game text-[34px] leading-none font-normal text-white" style={{ WebkitTextStroke: "5px #2b1d3a", paintOrder: "stroke fill", textShadow: "0 4px 0 #2b1d3a" }}>{lv.name} strikes!</h2>
         <div className="absolute inset-x-0 bottom-2 flex justify-center">
-          <img src={`/monsters/${lv.slug}${lv.slug === "05-fry-hydra" ? "-strike" : ""}.svg`} alt={lv.name} className="g-anim-lunge h-[180px] w-[180px] origin-[50%_85%]" />
+          <Monster slug={lv.slug} name={lv.name} pose="strike" motion="strike" className="h-[180px] w-[180px]" />
         </div>
         <Burst text="WHAM!" fill="#ffc93c" className="g-anim-burst absolute top-[70px] left-3 w-[110px]" />
       </section>
@@ -400,7 +401,7 @@ function LifeUsed({ r, view }: { r: Extract<Result, { kind: "life" }>; view: Gam
       <p className="mx-5 mt-2 text-center text-[15px] leading-snug font-extrabold text-[#fff7e6]">{lv.name} took your last heart, but you had an extra life. You stay right here: a full set of hearts, and {lv.name} again from the top.</p>
       <section className="relative mx-4 mt-3 h-[190px] overflow-hidden rounded-[24px] border-[3px] border-[#1a1024] shadow-[0_5px_0_#1a1024]">
         <Arena world={lv.world} className="g-art absolute inset-0 size-full" />
-        <img src={portrait(lv.slug)} alt={lv.name} className="absolute bottom-1 left-3 h-[140px] w-[140px]" />
+        <LiveMonster slug={lv.slug} name={`${lv.name}, gloating`} act="win" className="absolute bottom-1 left-3 h-[140px] w-[140px]" />
         <Hero className="g-anim-pop absolute right-10 bottom-6 h-[78px] w-[66px]" />
         <span className="absolute top-3 right-4 -rotate-6 font-game text-[28px] text-[#7bd36b]" style={{ WebkitTextStroke: "3px #2b1d3a", paintOrder: "stroke fill" }}>1UP!</span>
       </section>
@@ -445,7 +446,7 @@ function Knockback({ r, view }: { r: Extract<Result, { kind: "knockback" }>; vie
       <section className="relative mx-4 mt-3 h-[200px] overflow-hidden rounded-[24px] border-[3px] border-[#1a1024] shadow-[0_5px_0_#1a1024]" style={{ background: "linear-gradient(180deg, #ffd0a0, #f6a25c 70%, #d9562f 70%)" }}>
         <span className="absolute top-3 left-3 max-w-[54%] rounded-2xl border-[3px] border-[#2b1d3a] bg-white px-2.5 py-1 text-[13px] leading-tight font-extrabold text-[#2b1d3a]">Boop! See you soon.</span>
         <span className="absolute top-3 right-4 -rotate-6 font-game text-[28px] text-[#ffc93c]" style={{ WebkitTextStroke: "3px #2b1d3a", paintOrder: "stroke fill" }}>BOING!</span>
-        <img src={portrait(by.slug)} alt={by.name} className="absolute bottom-1 left-3 h-[140px] w-[140px]" />
+        <LiveMonster slug={by.slug} name={`${by.name}, gloating`} act="win" className="absolute bottom-1 left-3 h-[140px] w-[140px]" />
         <Hero ko className="g-anim-boing absolute right-10 bottom-8 h-[70px] w-[60px]" />
       </section>
       <Panel>
@@ -564,6 +565,9 @@ function RunFacts({ view, endedOn }: { view: GameView; endedOn: string }) {
   );
 }
 
+/** your helmet, in the monster drawing's 200 x 200 units, sitting on its head (it used to be laid over the picture) */
+const HELMET = '<g transform="translate(57.33 8) scale(2.1333) rotate(-6 20 10)"><path d="M4 18 a16 16 0 0 1 32 0 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="2.6" stroke-linejoin="round"/><path d="M20 3 C22 -1 27 -1 28 1" fill="none" stroke="#ff4d6d" stroke-width="3" stroke-linecap="round"/></g>';
+
 function Defeat({ r, view, today }: { r: Extract<Result, { kind: "defeat" }>; view: GameView; today: string }) {
   const lv = levelInfo(Number(r.defeat.data.level));
   const run = view.run;
@@ -579,12 +583,11 @@ function Defeat({ r, view, today }: { r: Extract<Result, { kind: "defeat" }>; vi
         <svg viewBox="0 0 360 40" aria-hidden className="absolute inset-x-0 top-0 w-full"><path d="M0 6 Q180 34 360 6" fill="none" stroke="#2b1d3a" strokeWidth="2.4" />
           {[30, 80, 130, 180, 230, 280, 330].map((x, i) => <path key={x} d={`M${x - 10} ${10 + Math.sin(i) * 2 + (i === 3 ? 8 : i === 2 || i === 4 ? 6 : 2)} l10 16 l10 -16 z`} fill={["#ff4d6d", "#ffc93c", "#6ec6ff", "#7bd36b"][i % 4]} stroke="#2b1d3a" strokeWidth="2" />)}
         </svg>
-        <img src={portrait(party[0].slug)} alt="" className="g-anim-bob absolute bottom-3 left-2 size-[96px]" />
-        <img src={portrait(party[1]?.slug ?? levelInfo(3).slug)} alt="" className="g-anim-bob absolute right-2 bottom-3 size-[96px]" style={{ animationDelay: "-.6s" }} />
+        <span aria-hidden className="absolute bottom-3 left-2"><LiveMonster slug={party[0].slug} name="" act="win" className="size-[96px]" /></span>
+        <span aria-hidden className="absolute right-2 bottom-3"><LiveMonster slug={party[1]?.slug ?? levelInfo(3).slug} name="" act="win" className="size-[96px]" /></span>
         <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-          <img src={portrait(lv.slug)} alt={lv.name} className="size-[150px]" />
-          {/* your helmet, on its head */}
-          <svg viewBox="0 0 40 20" aria-hidden className="absolute top-[6px] left-1/2 w-[64px] -translate-x-1/2 -rotate-6"><path d="M4 18 a16 16 0 0 1 32 0 Z" fill="#ffc93c" stroke="#2b1d3a" strokeWidth="2.6" strokeLinejoin="round" /><path d="M20 3 C22 -1 27 -1 28 1" fill="none" stroke="#ff4d6d" strokeWidth="3" strokeLinecap="round" /></svg>
+          {/* it beats you (its own win move), wearing your helmet: the helmet moves with its body */}
+          <LiveMonster slug={lv.slug} name={`${lv.name}, wearing your helmet`} act="win" className="size-[150px]" extra={HELMET} />
         </div>
         <span className="absolute top-7 right-3 max-w-[40%] rounded-2xl border-[3px] border-[#2b1d3a] bg-white px-2 py-1 text-[12px] leading-tight font-extrabold text-[#2b1d3a]">Fits great. Can I keep it?</span>
       </section>

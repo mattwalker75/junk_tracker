@@ -2,12 +2,11 @@
   <defs>
     <clipPath id="sandwich-seal-body"><path d="M100 30 Q152 30 156 100 Q162 158 132 176 L68 176 Q38 158 44 100 Q48 30 100 30 Z"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="70" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="70" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- tail flippers -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#4a2a1c">
-    <path d="M70 170 Q50 178 46 190 Q66 192 84 178 Z"/>
-    <path d="M130 170 Q150 178 154 190 Q134 192 116 178 Z"/>
-  </g>
+  <g class="cc-leg-l" style="transform-origin:76px 172px"><path d="M70 170 Q50 178 46 190 Q66 192 84 178 Z" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#4a2a1c"/></g>
+  <g class="cc-leg-r" style="transform-origin:124px 172px"><path d="M130 170 Q150 178 154 190 Q134 192 116 178 Z" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#4a2a1c"/></g>
   <!-- the cookie coat -->
   <path d="M100 30 Q152 30 156 100 Q162 158 132 176 L68 176 Q38 158 44 100 Q48 30 100 30 Z" fill="#5a3424" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <g clip-path="url(#sandwich-seal-body)">
@@ -40,12 +39,13 @@
   <g stroke="#fffaf0" stroke-width="2.2" stroke-linecap="round"><path d="M80 100 l-14 -3 M80 105 l-14 2 M120 100 l14 -3 M120 105 l14 2"/></g>
   <path d="M94 110 Q100 116 106 110" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
   <!-- flippers: one clapping up -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#4a2a1c">
-    <path d="M48 118 Q20 116 14 136 Q34 146 52 136 Z"/>
-    <path d="M150 116 Q176 104 182 84 Q164 80 148 100 Z"/>
+  <g class="cc-arm-l" style="transform-origin:50px 126px"><path d="M48 118 Q20 116 14 136 Q34 146 52 136 Z" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#4a2a1c"/></g>
+  <g class="cc-arm-r" style="transform-origin:150px 110px">
+    <path d="M150 116 Q176 104 182 84 Q164 80 148 100 Z" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#4a2a1c"/>
+    <g stroke="#ffc93c" stroke-width="3" stroke-linecap="round"><path d="M184 66 l4 -8 M190 80 l8 -2 M172 64 l-2 -8"/></g>
   </g>
-  <g stroke="#ffc93c" stroke-width="3" stroke-linecap="round"><path d="M184 66 l4 -8 M190 80 l8 -2 M172 64 l-2 -8"/></g>
   <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M24 46 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+  </g>
   </g>
 </svg>

@@ -2,12 +2,16 @@
   <defs>
     <clipPath id="french-toast-toucan-beak"><path d="M108 44 Q154 32 186 66 Q192 84 182 92 Q148 90 110 88 Z"/></clipPath>
   </defs>
-  <ellipse cx="96" cy="190" rx="74" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="96" cy="190" rx="74" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- toast tail -->
+  <g class="cc-tail" style="transform-origin:50px 158px">
   <path d="M44 150 L14 172 Q14 182 26 182 L56 166 Z" fill="#b8692e" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M42 156 L22 172 L28 176 L50 164 Z" fill="#f0b354"/>
+  </g>
   <!-- feet -->
-  <g fill="#ff9d3c" stroke="#2b1d3a" stroke-width="3.5"><ellipse cx="64" cy="182" rx="13" ry="6"/><ellipse cx="100" cy="182" rx="13" ry="6"/></g>
+  <g class="cc-leg-l" style="transform-origin:64px 177px" fill="#ff9d3c" stroke="#2b1d3a" stroke-width="3.5"><ellipse cx="64" cy="182" rx="13" ry="6"/></g>
+  <g class="cc-leg-r" style="transform-origin:100px 177px" fill="#ff9d3c" stroke="#2b1d3a" stroke-width="3.5"><ellipse cx="100" cy="182" rx="13" ry="6"/></g>
   <!-- stacked French-toast body, bottom first -->
   <g stroke="#2b1d3a" stroke-width="4"><rect x="32" y="146" width="96" height="31" rx="11" fill="#b8692e"/></g>
   <rect x="37" y="150" width="86" height="21" rx="8" fill="#f0b354"/><rect x="108" y="150" width="15" height="21" rx="6" fill="#dd963a"/>
@@ -20,6 +24,7 @@
     <path d="M42 152 q10 -3 20 0 q8 3 16 0 q2 4 -8 5 q-14 1 -28 -1z"/><path d="M52 126 q10 -3 20 0 q8 3 16 0 q2 4 -8 5 q-14 1 -28 -1z"/><path d="M44 100 q10 -3 20 0 q8 3 16 0 q2 4 -8 5 q-14 1 -28 -1z"/>
     <circle cx="98" cy="160" r="1.8"/><circle cx="110" cy="136" r="1.8"/><circle cx="64" cy="112" r="1.6"/><circle cx="96" cy="108" r="1.8"/><circle cx="50" cy="164" r="1.6"/>
   </g>
+  <g class="cc-head" style="transform-origin:76px 96px">
   <!-- toast-slice head -->
   <path d="M34 98 L34 56 Q26 30 50 30 Q76 14 102 30 Q126 30 118 56 L118 98 Z" fill="#b8692e" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M40 92 L40 56 Q34 37 52 36 Q76 22 100 36 Q118 37 112 56 L112 92 Z" fill="#f0b354"/>
@@ -41,19 +46,23 @@
   <path d="M110 64 Q150 62 186 80 Q150 74 110 72 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M116 66 l3 5 3 -5z M130 66 l3 5 3 -5z M144 67 l3 5 3 -5z M158 70 l3 5 3 -4z" fill="#ffffff"/>
   <!-- berries on its head -->
+  <g class="cc-hat" style="transform-origin:70px 32px">
   <g stroke="#2b1d3a" stroke-width="3"><circle cx="56" cy="26" r="7" fill="#4a5bd4"/><circle cx="70" cy="18" r="7" fill="#4a5bd4"/><circle cx="86" cy="24" r="8" fill="#e2384d"/></g>
   <g fill="#ffffff"><circle cx="54" cy="24" r="1.8"/><circle cx="68" cy="16" r="1.8"/></g>
   <g fill="#ff8a9e"><circle cx="83" cy="21" r="1.5"/><circle cx="89" cy="24" r="1.5"/><circle cx="85" cy="28" r="1.5"/></g>
+  </g>
   <!-- eyes -->
   <g stroke="#2b1d3a" stroke-width="4"><circle cx="58" cy="64" r="12" fill="#ffffff"/><circle cx="90" cy="64" r="12" fill="#ffffff"/></g>
   <circle cx="61" cy="67" r="6.5" fill="#2b1d3a"/><circle cx="91" cy="67" r="6.5" fill="#2b1d3a"/>
   <circle cx="63" cy="63" r="2.5" fill="#ffffff"/><circle cx="93" cy="63" r="2.5" fill="#ffffff"/>
   <path d="M42 46 L68 54 M106 46 L80 54" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
   <ellipse cx="50" cy="83" rx="6" ry="3.5" fill="#ff9db8"/><ellipse cx="98" cy="83" rx="6" ry="3.5" fill="#ff9db8"/>
+  </g>
   <!-- sparkles -->
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M16 60 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
     <path d="M168 18 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M168 138 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

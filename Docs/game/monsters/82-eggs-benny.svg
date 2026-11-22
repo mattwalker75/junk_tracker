@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Eggs Benny, twin poached eggs on toasted English-muffin halves with pink ham, hollandaise dripping over them, one smug and one grumpy">
-  <ellipse cx="100" cy="190" rx="86" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="86" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <g transform="translate(100 184) scale(1.14) translate(-96 -184)">
   <!-- one twin; the other is the same drawing shifted right -->
   <g id="eggs-benny-twin">
@@ -43,6 +44,7 @@
     <path d="M100 30 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
     <path d="M22 44 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M170 46 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
   </g>
 </svg>

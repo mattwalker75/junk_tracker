@@ -3,7 +3,8 @@
     <clipPath id="astronaut-ice-cream-block"><rect x="70" y="36" width="60" height="58" rx="8"/></clipPath>
     <clipPath id="astronaut-ice-cream-suit"><path d="M58 114 Q56 104 70 104 L130 104 Q144 104 142 114 L146 158 L54 158 Z"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="50" ry="6" fill="#2b1d3a" opacity="0.12"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="50" ry="6" fill="#2b1d3a" opacity="0.12"/>
+  <g class="cc-fig">
   <!-- jetpack puffs -->
   <g fill="#ffffff" stroke="#2b1d3a" stroke-width="3">
     <circle cx="36" cy="182" r="6"/><circle cx="57" cy="183" r="5"/>
@@ -22,11 +23,16 @@
   </g>
   <path d="M41 130 L41 150" stroke="#ffb3b3" stroke-width="4" stroke-linecap="round"/>
   <!-- arms: left one waving -->
+  <g class="cc-arm-l" style="transform-origin:62px 120px">
   <path d="M62 122 Q40 116 30 92" fill="none" stroke="#2b1d3a" stroke-width="24" stroke-linecap="round"/>
   <path d="M62 122 Q40 116 30 92" fill="none" stroke="#d7dde8" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="29" cy="84" r="11" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:138px 124px">
   <path d="M138 124 Q160 130 168 112" fill="none" stroke="#2b1d3a" stroke-width="24" stroke-linecap="round"/>
   <path d="M138 124 Q160 130 168 112" fill="none" stroke="#b9c2d2" stroke-width="16" stroke-linecap="round"/>
-  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="4"><circle cx="29" cy="84" r="11"/><circle cx="170" cy="104" r="11"/></g>
+  <circle cx="170" cy="104" r="11" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
+  </g>
   <!-- foil pouch suit with a crimped seal -->
   <path d="M58 114 Q56 104 70 104 L130 104 Q144 104 142 114 L146 158 l-4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 L54 158 Z" fill="#d7dde8" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <g clip-path="url(#astronaut-ice-cream-suit)">
@@ -62,6 +68,7 @@
   <path d="M68 40 Q76 28 92 24" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
   <circle cx="63" cy="50" r="3" fill="#ffffff"/>
   <path d="M138 78 Q136 90 128 98" fill="none" stroke="#9fd8f5" stroke-width="3" stroke-linecap="round"/>
+  </g>
   <!-- star sparkles -->
   <g stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M24 22 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#ffc93c"/>

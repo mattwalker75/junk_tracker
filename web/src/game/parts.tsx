@@ -4,6 +4,7 @@ import { START_HEARTS } from "../../../shared/game/types";
 import { cx } from "../components/ui";
 import { UserMenu } from "../components/UserMenu";
 import { HeartEmpty, HeartFull } from "./icons";
+import { LiveMonster } from "./LiveMonster";
 
 /** Who is playing, for the menu. */
 export const PlayerContext = createContext<{ who: string; loginEnabled: boolean }>({ who: "", loginEnabled: false });
@@ -47,16 +48,24 @@ export function Hearts({ hearts, className }: { hearts: number; className?: stri
   );
 }
 
-/** A monster drawing. Fry Hydra has its own hurt and strike drawings; every monster gets the CSS motion. */
+/**
+ * A monster on screen. It moves (LiveMonster: its own idle, strike, defeated and beats-you moves); a hit or a
+ * heal shakes or pulses the whole drawing on top of that. Fry Hydra keeps its own hurt and strike drawings.
+ */
 export function Monster({ slug, name, pose = "normal", motion = "idle", className, motionKey }: {
-  slug: string; name: string; pose?: "normal" | "hurt" | "strike"; motion?: "idle" | "hurt" | "heal" | "strike" | "still"; className?: string; motionKey?: number;
+  slug: string; name: string; pose?: "normal" | "hurt" | "strike";
+  motion?: "idle" | "hurt" | "heal" | "strike" | "still" | "ko" | "win"; className?: string; motionKey?: number;
 }) {
   const own = slug === "05-fry-hydra" && pose !== "normal";
-  const src = `/monsters/${slug}${own ? `-${pose}` : ""}.svg`;
-  const inner = motion === "hurt" ? "g-anim-hurt" : motion === "heal" ? "g-anim-heal" : motion === "strike" ? "g-anim-lunge" : "";
+  if (own) {
+    const inner = motion === "hurt" ? "g-anim-hurt" : motion === "heal" ? "g-anim-heal" : motion === "strike" ? "g-anim-lunge" : "";
+    return <img key={motionKey} src={`/monsters/${slug}-${pose}.svg`} alt={name} draggable={false} className={cx("block origin-[50%_85%] select-none", inner, className)} />;
+  }
+  const outer = motion === "hurt" ? "g-anim-hurt" : motion === "heal" ? "g-anim-heal" : "";
+  const act = motion === "strike" || motion === "still" || motion === "ko" || motion === "win" ? motion : "idle";
   return (
-    <div className={cx(motion === "idle" && "g-anim-bob")}>
-      <img key={motionKey} src={src} alt={name} draggable={false} className={cx("block origin-[50%_85%] select-none", inner, className)} />
+    <div key={motionKey} className={cx("origin-[50%_85%]", outer)}>
+      <LiveMonster slug={slug} name={name} act={act} play={motionKey} className={className} />
     </div>
   );
 }

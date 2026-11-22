@@ -14,6 +14,7 @@ import { Check, HeartFull, Info, PlayDark, ShieldBlue, Skull } from "./icons";
 import { dueText, hpLeft, hpText } from "./logic";
 import { GameBg, GameHeader } from "./parts";
 import { applyResult, startedRun, useGame } from "./state";
+import { LiveMonster } from "./LiveMonster";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
@@ -58,7 +59,7 @@ export function StartRun() {
       <GameHeader kicker="CALORIE CRUSHER · NEW RUN" title={<span className="text-g-yellow">Start Run #{next}</span>} back={{ href: "#/game", label: "Back to the title screen" }} />
 
       <section aria-label="Crumbs says hi" className="relative z-[2] flex h-32 items-end gap-1 px-4">
-        <div className="relative h-[124px] w-[124px] shrink-0"><div className="g-anim-sway"><img src={`/monsters/${crumbs.slug}.svg`} alt="Crumbs" className="w-[124px]" /></div></div>
+        <div className="relative h-[124px] w-[124px] shrink-0"><LiveMonster slug={crumbs.slug} name="Crumbs" className="size-[124px]" /></div>
         <div className="g-anim-rise relative mb-11 flex-1 rounded-[18px] border-[3px] border-g-line bg-white px-3 py-2 text-[15px] leading-snug font-black text-[#2b1d3a] shadow-[0_4px_0_var(--g-line)]">
           {next > 1 ? "Hi again! I've been practising. How brave are we feeling this time?" : "Hi, I'm Crumbs, your first monster! How brave are we feeling?"}
         </div>
@@ -155,7 +156,7 @@ function Begins({ begun }: { begun: { number: number; mode: Mode; fight: FightVi
           {begun.mode === "hardcore" ? <Skull className="size-5" /> : <ShieldBlue className="size-5" />}{begun.mode === "hardcore" ? "HARDCORE RUN" : "NORMAL RUN"}
         </span>
         <span className="flex gap-1.5">{[0, 1, 2].map((i) => <HeartFull key={i} className="h-8 w-9" />)}</span>
-        <img src={`/monsters/${lv.slug}.svg`} alt="" className="g-anim-bob w-[140px]" />
+        <span aria-hidden><LiveMonster slug={lv.slug} name="" className="size-[140px]" /></span>
         <span className="rounded-full border-[3px] border-g-line bg-[#fff7e6] px-3.5 py-1.5 text-sm font-black">{lv.name} · {f ? `${hpText(hpLeft(f), f.max)} HP · due ${dueText(f.deadlineOn)}` : `${lv.hp} HP · ${lv.days}-day deadline`}</span>
         <span className="text-[13px] font-extrabold text-[#1a3d1f]">{begun.mode === "hardcore" ? "All points ×1.25 · no checkpoints · tap to go" : "A checkpoint at every world · tap to go"}</span>
       </button>

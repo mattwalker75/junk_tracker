@@ -2,10 +2,13 @@
   <defs>
     <clipPath id="takeout-box-turtle-box"><path d="M64 88 L188 88 L174 164 L78 164 Z"/></clipPath>
   </defs>
-  <ellipse cx="114" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="114" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- far legs and tail -->
   <g fill="#4f9a3c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <rect x="106" y="150" width="22" height="30" rx="10"/>
+  </g>
+  <g class="cc-tail" style="transform-origin:174px 148px" fill="#4f9a3c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <path d="M176 140 L192 152 L174 156 Z"/>
   </g>
   <!-- wire handle -->
@@ -37,11 +40,15 @@
   <path d="M74 84 L84 72" stroke="#f0f0f8" stroke-width="3" stroke-linecap="round"/>
   <path d="M76 116 L74 140" stroke="#f4f1f8" stroke-width="4" stroke-linecap="round"/>
   <!-- near legs -->
-  <g fill="#5fb84a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
-    <rect x="80" y="154" width="26" height="30" rx="11"/>
-    <rect x="146" y="154" width="26" height="30" rx="11"/>
+  <g class="cc-leg-l" style="transform-origin:93px 158px">
+    <rect x="80" y="154" width="26" height="30" rx="11" fill="#5fb84a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M86 180 l0 -5 M93 181 l0 -5" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
   </g>
-  <path d="M86 180 l0 -5 M93 181 l0 -5 M152 180 l0 -5 M159 181 l0 -5" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  <g class="cc-leg-r" style="transform-origin:159px 158px">
+    <rect x="146" y="154" width="26" height="30" rx="11" fill="#5fb84a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M152 180 l0 -5 M159 181 l0 -5" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <g class="cc-head" style="transform-origin:80px 130px">
   <!-- neck and head -->
   <path d="M78 130 Q62 130 56 120" fill="none" stroke="#2b1d3a" stroke-width="26" stroke-linecap="round"/>
   <path d="M78 130 Q62 130 56 120" fill="none" stroke="#5fb84a" stroke-width="18" stroke-linecap="round"/>
@@ -57,8 +64,10 @@
   <rect x="28" y="122" width="30" height="10" rx="4" fill="#ffffff" stroke="#2b1d3a" stroke-width="3"/>
   <path d="M35.5 122 l0 10 M43 122 l0 10 M50.5 122 l0 10 M28 127 l30 0" stroke="#2b1d3a" stroke-width="2"/>
   <ellipse cx="17" cy="122" rx="5" ry="3" fill="#ff9db8"/><ellipse cx="68" cy="120" rx="4" ry="3" fill="#ff9db8"/>
+  </g>
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M30 30 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M182 26 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

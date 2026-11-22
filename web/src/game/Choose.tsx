@@ -16,6 +16,7 @@ import { Ability, Flame, Potion, Shield, Star, Wind } from "./icons";
 import { betPlan, dueText, hpLeft, shortDate } from "./logic";
 import { GameBg, GameMenu, GameNote, Hearts, HpBar, HpNumbers } from "./parts";
 import { applyResult, useGame, useHeldHearts } from "./state";
+import { LiveMonster } from "./LiveMonster";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 const CARD: Record<string, { fill: string; tint: string; ring: string; note: string }> = {
@@ -109,7 +110,7 @@ export function Choose() {
       <section aria-label={`Next monster: ${subj.name}`} className="relative mx-4 mt-2 flex items-center gap-1 rounded-[20px] border-[3px] border-g-line pt-4 pb-2.5 pr-3 pl-1 text-[#2b1d3a] shadow-[0_4px_0_#1a1024]"
         style={{ background: "radial-gradient(90% 90% at 25% 60%, #ffe3a1 0%, #fff7e6 60%)" }}>
         <span className="absolute -top-3 left-3 rounded-full bg-[#2b1d3a] px-2.5 py-0.5 font-game text-[13px] tracking-[0.04em] text-g-yellow">{waiting ? (waiting.rematch ? "REMATCH" : "UP NEXT") : ko ? "NEXT UP" : "THIS FIGHT"} · LEVEL {subj.level} OF {LEVEL_COUNT}{subj.boss ? " · BOSS" : ""}</span>
-        <div className="g-anim-bob shrink-0"><img src={`/monsters/${subj.slug}.svg`} alt={subj.name} className="w-[120px]" /></div>
+        <div className="shrink-0"><LiveMonster slug={subj.slug} name={subj.name} className="size-[120px]" /></div>
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <div className="flex flex-col">
             <span className="truncate text-[11px] font-black tracking-[0.04em] text-[#c2410c]">WORLD {subj.world} · {subj.worldName.toUpperCase()}</span>

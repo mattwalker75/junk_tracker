@@ -148,7 +148,7 @@ function Between({ run, next, autoStart, head }: { run: RunView; next: NextFight
           {!scene ? <span className="shrink-0 -rotate-2 rounded-full border-2 border-[#2b1d3a] bg-g-yellow px-2.5 py-0.5 font-game text-[15px] text-[#2b1d3a]">{next.rematch ? "REMATCH" : "UP NEXT"}</span> : null}
         </div>
         <div className="pointer-events-none absolute inset-x-0 bottom-1 flex justify-center">
-          {scene?.kind === "ko" && shown ? <img src={`/monsters/${shown.slug}.svg`} alt={`${shown.name}, knocked out`} className="g-anim-ko h-[160px] w-[160px] origin-[50%_85%]" />
+          {scene?.kind === "ko" && shown ? <Monster key={`ko-${shown.slug}`} slug={shown.slug} name={`${shown.name}, knocked out`} motion="ko" className="h-[160px] w-[160px]" />
             : <Monster slug={shown?.slug ?? next.slug} name={shown?.name ?? next.name} pose={scene ? "strike" : "normal"} motion={scene ? "strike" : "idle"} className="h-[160px] w-[160px]" />}
         </div>
         {scene?.kind === "ko" ? <>
@@ -271,7 +271,7 @@ function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightVie
           </div>
         </div>
         <div className="pointer-events-none absolute inset-x-0 bottom-1 flex justify-center">
-          {ko ? <img src={`/monsters/${ko.slug}.svg`} alt={`${ko.name}, knocked out`} className="g-anim-ko h-[170px] w-[170px] origin-[50%_85%]" />
+          {ko ? <Monster key={`ko-${ko.slug}`} slug={ko.slug} name={`${ko.name}, knocked out`} motion="ko" className="h-[170px] w-[170px]" />
             : <Monster slug={strikeBy?.slug ?? fight.slug} name={strikeBy?.name ?? fight.name} pose={struck ? "strike" : fx?.kind === "hit" ? "hurt" : "normal"}
               motion={struck ? "strike" : fx ? (fx.kind === "hit" ? "hurt" : "heal") : "idle"} motionKey={fx?.n} className="h-[170px] w-[170px]" />}
         </div>

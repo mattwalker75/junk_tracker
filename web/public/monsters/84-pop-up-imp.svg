@@ -1,20 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Pop-Up Imp, a pink-frosted toaster pastry imp with rainbow sprinkles and little horns popping out of a chrome toaster, waving its tiny arms">
-  <ellipse cx="100" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- toaster top and slot -->
   <rect x="30" y="104" width="140" height="22" rx="11" fill="#eef1f6" stroke="#2b1d3a" stroke-width="4"/>
   <rect x="58" y="108" width="84" height="10" rx="5" fill="#2b1d3a"/>
   <!-- steam -->
   <g fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" opacity="0.95"><path d="M46 98 q-5 -7 0 -14 q5 -7 0 -14"/><path d="M154 98 q5 -7 0 -14 q-5 -7 0 -14"/></g>
   <g fill="none" stroke="#9aa6ba" stroke-width="2" stroke-linecap="round"><path d="M40 96 q-4 -5 0 -10"/><path d="M160 96 q4 -5 0 -10"/></g>
+  <g class="cc-head" style="transform-origin:100px 114px">
   <!-- horns -->
   <g fill="#e2384d" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"><path d="M70 30 L60 6 L84 24 Z"/><path d="M130 30 L140 6 L116 24 Z"/></g>
   <!-- waving arms -->
-  <g fill="none" stroke-linecap="round">
-    <path d="M66 80 Q46 74 38 54" stroke="#2b1d3a" stroke-width="11"/><path d="M134 80 Q154 74 162 54" stroke="#2b1d3a" stroke-width="11"/>
-    <path d="M66 80 Q46 74 38 54" stroke="#f0c27a" stroke-width="5"/><path d="M134 80 Q154 74 162 54" stroke="#f0c27a" stroke-width="5"/>
+  <g class="cc-arm-l" style="transform-origin:66px 80px">
+    <path d="M66 80 Q46 74 38 54" fill="none" stroke="#2b1d3a" stroke-width="11" stroke-linecap="round"/>
+    <path d="M66 80 Q46 74 38 54" fill="none" stroke="#f0c27a" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="37" cy="48" r="8" fill="#f0c27a" stroke="#2b1d3a" stroke-width="3.5"/>
+    <path d="M31 44 l-4 -6 M37 40 l0 -7 M43 43 l3 -6" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
   </g>
-  <g fill="#f0c27a" stroke="#2b1d3a" stroke-width="3.5"><circle cx="37" cy="48" r="8"/><circle cx="163" cy="48" r="8"/></g>
-  <path d="M31 44 l-4 -6 M37 40 l0 -7 M43 43 l3 -6 M169 44 l4 -6 M163 40 l0 -7 M157 43 l-3 -6" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <g class="cc-arm-r" style="transform-origin:134px 80px">
+    <path d="M134 80 Q154 74 162 54" fill="none" stroke="#2b1d3a" stroke-width="11" stroke-linecap="round"/>
+    <path d="M134 80 Q154 74 162 54" fill="none" stroke="#f0c27a" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="163" cy="48" r="8" fill="#f0c27a" stroke="#2b1d3a" stroke-width="3.5"/>
+    <path d="M169 44 l4 -6 M163 40 l0 -7 M157 43 l-3 -6" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  </g>
   <!-- pastry -->
   <rect x="62" y="22" width="76" height="98" rx="9" fill="#f0c27a" stroke="#2b1d3a" stroke-width="4"/>
   <path d="M128 26 Q136 26 136 36 L136 118 L128 118 Z" fill="#d9a050"/>
@@ -35,6 +43,7 @@
   <path d="M84 76 Q100 94 116 76 Q100 82 84 76 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M89 78 l3 5 3 -4z M100 79 l-2.5 5 -2.5 -5z M105 79 l2.5 5 2.5 -5z M111 78 l-3 5 -3 -4z" fill="#ffffff"/>
   <ellipse cx="78" cy="76" rx="4.5" ry="2.8" fill="#ff5c8a" opacity="0.7"/><ellipse cx="122" cy="76" rx="4.5" ry="2.8" fill="#ff5c8a" opacity="0.7"/>
+  </g>
   <!-- slot front lip, then the chrome front -->
   <rect x="56" y="112" width="88" height="6" rx="3" fill="#c9d1de"/>
   <g fill="#3d3150" stroke="#2b1d3a" stroke-width="3"><rect x="42" y="174" width="20" height="10" rx="4"/><rect x="138" y="174" width="20" height="10" rx="4"/></g>
@@ -51,5 +60,6 @@
     <path d="M22 84 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
     <path d="M176 82 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M100 4 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z"/>
+  </g>
   </g>
 </svg>

@@ -3,11 +3,12 @@
     <clipPath id="shake-ooze-cup"><path d="M60 112 L140 112 L131 186 L69 186 Z"/></clipPath>
     <clipPath id="shake-ooze-blob"><path d="M52 116 C46 74 64 44 100 44 C136 44 154 74 148 116 Z"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="46" ry="6" fill="#2b1d3a" opacity="0.15"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="46" ry="6" fill="#2b1d3a" opacity="0.15"/>
+  <g class="cc-fig">
   <!-- left slime arm drooping over the side -->
-  <path d="M60 92 C36 94 28 110 30 132 C30 140 38 140 38 132 C40 138 46 138 46 130 C50 134 54 130 52 122 C50 110 56 104 64 104 Z" fill="#ff9ecb" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g class="cc-arm-l" style="transform-origin:62px 98px"><path d="M60 92 C36 94 28 110 30 132 C30 140 38 140 38 132 C40 138 46 138 46 130 C50 134 54 130 52 122 C50 110 56 104 64 104 Z" fill="#ff9ecb" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/></g>
   <!-- right slime arm waving -->
-  <path d="M142 90 C156 84 164 68 162 52 C160 44 168 40 172 46 C176 40 184 44 180 52 C186 54 186 62 178 62 C176 84 168 100 146 104 Z" fill="#ff9ecb" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g class="cc-arm-r" style="transform-origin:144px 97px"><path d="M142 90 C156 84 164 68 162 52 C160 44 168 40 172 46 C176 40 184 44 180 52 C186 54 186 62 178 62 C176 84 168 100 146 104 Z" fill="#ff9ecb" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/></g>
   <!-- straw (behind the cream) -->
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path d="M118 60 L132 22 Q136 14 146 14 L166 14" stroke="#2b1d3a" stroke-width="15"/>
@@ -30,6 +31,7 @@
   <path d="M64 116 v16 a5 5 0 0 0 10 0 v-12 M92 116 v24 a5.5 5.5 0 0 0 11 0 v-20 M124 116 v12 a5 5 0 0 0 10 0 v-8" fill="#ff9ecb" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <rect x="54" y="110" width="92" height="8" rx="4" fill="#ff9ecb"/>
   <!-- whipped cream hair: outline pass, fill pass -->
+  <g class="cc-hat" style="transform-origin:100px 58px">
   <g fill="#ffffff" stroke="#2b1d3a" stroke-width="8">
     <circle cx="74" cy="50" r="14"/><circle cx="92" cy="40" r="16"/><circle cx="112" cy="40" r="15"/><circle cx="128" cy="50" r="13"/><circle cx="102" cy="26" r="12"/><circle cx="108" cy="13" r="7"/>
   </g>
@@ -45,6 +47,7 @@
     <rect x="114" y="34" width="8" height="3.5" rx="1.75" fill="#7bd36b" transform="rotate(25 118 36)"/>
     <rect x="70" y="46" width="8" height="3.5" rx="1.75" fill="#6ec6ff" transform="rotate(60 74 48)"/>
   </g>
+  </g>
   <!-- face -->
   <path d="M72 58 L92 64 M128 58 L108 64" stroke="#2b1d3a" stroke-width="4.5" stroke-linecap="round"/>
   <ellipse cx="84" cy="76" rx="12" ry="13" fill="#ffffff" stroke="#2b1d3a" stroke-width="4"/>
@@ -58,4 +61,5 @@
   <ellipse cx="62" cy="84" rx="4" ry="8" fill="#ffd3e6" transform="rotate(15 62 84)"/>
   <!-- loose bubbles -->
   <g fill="#ff9ecb" stroke="#2b1d3a" stroke-width="2.5"><circle cx="30" cy="154" r="5"/><circle cx="22" cy="144" r="3"/></g>
+  </g>
 </svg>

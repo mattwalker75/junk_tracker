@@ -1,6 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Noodle Noggin, a mac-and-cheese bowl brute with a mohawk of elbow noodles">
-  <ellipse cx="100" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <g class="cc-fig">
   <!-- noodle mohawk -->
+  <g class="cc-hat" style="transform-origin:104px 50px">
   <g fill="none" stroke-linecap="round">
     <g stroke="#2b1d3a" stroke-width="14">
       <path d="M76 50 Q70 34 80 24"/><path d="M90 44 Q84 24 96 12"/><path d="M106 42 Q102 20 116 10"/><path d="M122 48 Q120 30 132 22"/>
@@ -13,16 +15,22 @@
     <ellipse cx="81" cy="23" rx="4.5" ry="3" transform="rotate(-40 81 23)"/><ellipse cx="97" cy="11" rx="4.5" ry="3" transform="rotate(-40 97 11)"/><ellipse cx="117" cy="9" rx="4.5" ry="3" transform="rotate(-50 117 9)"/><ellipse cx="133" cy="21" rx="4.5" ry="3" transform="rotate(-50 133 21)"/>
   </g>
   <g fill="#e89a1c"><ellipse cx="81" cy="23" rx="2" ry="1.2" transform="rotate(-40 81 23)"/><ellipse cx="97" cy="11" rx="2" ry="1.2" transform="rotate(-40 97 11)"/><ellipse cx="117" cy="9" rx="2" ry="1.2" transform="rotate(-50 117 9)"/><ellipse cx="133" cy="21" rx="2" ry="1.2" transform="rotate(-50 133 21)"/></g>
-  <!-- big brute arms, knuckles down -->
-  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M40 118 Q14 124 18 168" stroke="#2b1d3a" stroke-width="28"/>
-    <path d="M40 118 Q14 124 18 168" stroke="#ffc23a" stroke-width="20"/>
-    <path d="M160 118 Q186 124 182 168" stroke="#2b1d3a" stroke-width="28"/>
-    <path d="M160 118 Q186 124 182 168" stroke="#ffc23a" stroke-width="20"/>
   </g>
-  <path d="M20 132 Q14 142 16 154 M180 132 Q186 142 184 154" fill="none" stroke="#e89a1c" stroke-width="4" stroke-linecap="round"/>
-  <g stroke="#2b1d3a" stroke-width="4"><ellipse cx="20" cy="174" rx="16" ry="12" fill="#ffc23a"/><ellipse cx="180" cy="174" rx="16" ry="12" fill="#ffc23a"/></g>
-  <path d="M10 170 q4 -4 8 0 M20 170 q4 -4 8 0 M172 170 q4 -4 8 0 M182 170 q4 -4 8 0" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <!-- big brute arms, knuckles down -->
+  <g class="cc-arm-l" style="transform-origin:42px 118px">
+    <path d="M40 118 Q14 124 18 168" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#2b1d3a" stroke-width="28"/>
+    <path d="M40 118 Q14 124 18 168" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#ffc23a" stroke-width="20"/>
+    <path d="M20 132 Q14 142 16 154" fill="none" stroke="#e89a1c" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="20" cy="174" rx="16" ry="12" fill="#ffc23a" stroke="#2b1d3a" stroke-width="4"/>
+    <path d="M10 170 q4 -4 8 0 M20 170 q4 -4 8 0" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:158px 118px">
+    <path d="M160 118 Q186 124 182 168" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#2b1d3a" stroke-width="28"/>
+    <path d="M160 118 Q186 124 182 168" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#ffc23a" stroke-width="20"/>
+    <path d="M180 132 Q186 142 184 154" fill="none" stroke="#e89a1c" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="180" cy="174" rx="16" ry="12" fill="#ffc23a" stroke="#2b1d3a" stroke-width="4"/>
+    <path d="M172 170 q4 -4 8 0 M182 170 q4 -4 8 0" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  </g>
   <!-- cheesy mound (the head) -->
   <path d="M38 118 Q34 52 100 44 Q166 52 162 118 Z" fill="#ffc23a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M148 80 Q160 98 158 118 L130 118 Q150 100 148 80 Z" fill="#f0a020"/>
@@ -48,4 +56,5 @@
   <path d="M80 174 H120 V182 Q100 186 80 182 Z" fill="#3653b0" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   <!-- cheese drips over the rim -->
   <path d="M56 110 Q60 126 54 128 Q48 126 50 112 Z M132 110 Q136 130 130 132 Q124 130 126 112 Z" fill="#ffc23a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  </g>
 </svg>

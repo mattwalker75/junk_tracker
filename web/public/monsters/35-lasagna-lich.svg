@@ -1,5 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Lasagna Lich, a floating layered-lasagna wizard in a hooded cheese-drip robe with a glowing meatball staff">
-  <ellipse cx="96" cy="192" rx="46" ry="5" fill="#2b1d3a" opacity="0.2"/>
+  <ellipse class="cc-shadow" cx="96" cy="192" rx="46" ry="5" fill="#2b1d3a" opacity="0.2"/>
+  <g class="cc-fig">
+  <g class="cc-arm-r" style="transform-origin:146px 118px">
   <!-- staff -->
   <path d="M158 46 L150 184" stroke="#2b1d3a" stroke-width="12" stroke-linecap="round"/>
   <path d="M158 46 L150 184" stroke="#a8673a" stroke-width="6" stroke-linecap="round"/>
@@ -8,6 +10,10 @@
   <circle cx="160" cy="32" r="13" fill="#9e4a2a" stroke="#2b1d3a" stroke-width="4"/>
   <circle cx="155" cy="27" r="3.5" fill="#d07a52"/>
   <g fill="#6b2e18"><circle cx="164" cy="36" r="1.8"/><circle cx="158" cy="38" r="1.4"/></g>
+  <path d="M146 118 Q154 116 156 108" fill="none" stroke="#2b1d3a" stroke-width="12" stroke-linecap="round"/>
+  <path d="M146 118 Q154 116 156 108" fill="none" stroke="#fff3c4" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="155" cy="104" r="7" fill="#fff3c4" stroke="#2b1d3a" stroke-width="4"/>
+  </g>
   <!-- lasagna body: stacked layers -->
   <path d="M48 96 L144 96 L150 172 Q140 180 132 172 Q122 182 112 172 Q100 182 90 172 Q78 182 68 172 Q58 180 46 172 Z" fill="#f2b84b" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M48 112 Q96 120 145 112 L146 124 Q96 132 47 124 Z" fill="#d8352a"/>
@@ -30,17 +36,19 @@
   <path d="M40 98 Q96 90 152 98 L152 106 Q148 118 144 108 Q140 124 134 110 Q128 116 122 108 Q116 128 108 110 Q100 116 92 108 Q86 124 78 108 Q72 114 66 108 Q60 126 54 108 Q48 116 42 106 Z" fill="#fff3c4" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   <path d="M50 100 Q96 94 142 100" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
   <!-- bony little hands -->
+  <g class="cc-arm-l" style="transform-origin:48px 120px">
   <path d="M48 120 Q30 120 26 132" fill="none" stroke="#2b1d3a" stroke-width="12" stroke-linecap="round"/>
   <path d="M48 120 Q30 120 26 132" fill="none" stroke="#fff3c4" stroke-width="5" stroke-linecap="round"/>
   <circle cx="25" cy="136" r="7" fill="#fff3c4" stroke="#2b1d3a" stroke-width="4"/>
-  <path d="M146 118 Q154 116 156 108" fill="none" stroke="#2b1d3a" stroke-width="12" stroke-linecap="round"/>
-  <path d="M146 118 Q154 116 156 108" fill="none" stroke="#fff3c4" stroke-width="5" stroke-linecap="round"/>
-  <circle cx="155" cy="104" r="7" fill="#fff3c4" stroke="#2b1d3a" stroke-width="4"/>
+  </g>
   <!-- spooky basil wisps -->
+  <g class="cc-orbit" style="transform-origin:100px 110px">
   <g fill="#7bd36b" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
     <path d="M22 60 Q30 48 40 54 Q32 66 22 60 Z"/>
     <path d="M178 86 Q188 78 194 88 Q184 96 178 86 Z"/>
     <path d="M26 170 Q32 160 40 166 Q34 176 26 170 Z"/>
   </g>
   <g fill="#b8ff7a"><circle cx="34" cy="86" r="2.5"/><circle cx="182" cy="130" r="2"/><circle cx="16" cy="112" r="1.8"/></g>
+  </g>
+  </g>
 </svg>

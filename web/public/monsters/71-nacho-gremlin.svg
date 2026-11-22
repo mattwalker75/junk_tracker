@@ -1,20 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Nacho Gremlin, a tortilla-chip gremlin with huge chip ears, melted cheese dripping over its head and jalapeño spots">
-  <ellipse cx="100" cy="190" rx="70" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="70" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- feet -->
-  <g fill="#e0a43a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"><path d="M58 172 L46 188 L80 188 L76 172 Z"/><path d="M142 172 L154 188 L120 188 L124 172 Z"/></g>
+  <g class="cc-leg-l" style="transform-origin:67px 172px"><path d="M58 172 L46 188 L80 188 L76 172 Z" fill="#e0a43a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/></g>
+  <g class="cc-leg-r" style="transform-origin:133px 172px"><path d="M142 172 L154 188 L120 188 L124 172 Z" fill="#e0a43a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/></g>
   <!-- big chip ears -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
-    <path d="M70 84 L8 52 Q6 70 14 82 L66 112 Z" fill="#f2bb4f"/>
-    <path d="M130 84 L192 52 Q194 70 186 82 L134 112 Z" fill="#f2bb4f"/>
+  <g class="cc-arm-l" style="transform-origin:70px 98px">
+    <path d="M70 84 L8 52 Q6 70 14 82 L66 112 Z" fill="#f2bb4f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M60 92 L22 68 L24 76 L58 100 Z" fill="#ff9db8"/>
   </g>
-  <path d="M60 92 L22 68 L24 76 L58 100 Z M140 92 L178 68 L176 76 L142 100 Z" fill="#ff9db8"/>
+  <g class="cc-arm-r" style="transform-origin:130px 98px">
+    <path d="M130 84 L192 52 Q194 70 186 82 L134 112 Z" fill="#f2bb4f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M140 92 L178 68 L176 76 L142 100 Z" fill="#ff9db8"/>
+  </g>
   <!-- the chip body -->
   <path d="M100 26 Q110 26 116 36 L172 160 Q176 176 160 176 L40 176 Q24 176 28 160 L84 36 Q90 26 100 26 Z" fill="#f2bb4f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M120 44 L170 158 Q172 170 160 172 L148 172 Z" fill="#d99a2e"/>
   <g fill="#c9862a"><circle cx="70" cy="150" r="2.2"/><circle cx="86" cy="162" r="1.8"/><circle cx="124" cy="158" r="2"/><circle cx="140" cy="146" r="1.8"/><circle cx="100" cy="166" r="2"/></g>
   <!-- cheese over the top -->
+  <g class="cc-hat" style="transform-origin:100px 44px">
   <path d="M84 40 Q100 24 116 40 L130 70 Q124 86 118 72 Q114 96 106 76 Q100 88 94 74 Q88 100 80 72 Q74 84 70 70 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   <path d="M92 38 Q98 32 106 32" fill="none" stroke="#fff1a8" stroke-width="4" stroke-linecap="round"/>
+  </g>
   <!-- jalapeño spots -->
   <g stroke="#2b1d3a" stroke-width="2.5"><circle cx="62" cy="146" r="8" fill="#4caf50"/><circle cx="140" cy="128" r="7" fill="#4caf50"/></g>
   <g fill="#c8f0a0"><circle cx="62" cy="146" r="4"/><circle cx="140" cy="128" r="3.5"/></g>
@@ -31,5 +38,6 @@
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M28 20 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M170 18 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

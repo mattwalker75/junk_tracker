@@ -4,21 +4,32 @@
       <circle cx="100" cy="84" r="40"/><circle cx="72" cy="56" r="18"/><circle cx="100" cy="44" r="20"/><circle cx="128" cy="56" r="18"/><circle cx="64" cy="90" r="20"/><circle cx="136" cy="90" r="20"/>
     </clipPath>
   </defs>
-  <ellipse cx="100" cy="188" rx="66" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="188" rx="66" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- body: one big marshmallow behind the head -->
   <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <rect x="28" y="104" width="144" height="74" rx="28" fill="#fffaf2"/>
   </g>
   <path d="M140 108 Q168 110 168 140 Q168 174 142 175 Q156 140 140 108 Z" fill="#efdcc8"/>
   <!-- marshmallow legs -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#fffaf2">
-    <rect x="74" y="156" width="26" height="30" rx="10" fill="#efdcc8"/><rect x="100" y="156" width="26" height="30" rx="10" fill="#efdcc8"/>
-    <rect x="38" y="152" width="34" height="34" rx="12"/>
-    <rect x="128" y="152" width="34" height="34" rx="12"/>
+  <g class="cc-leg-l" style="transform-origin:66px 156px">
+    <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#fffaf2">
+      <rect x="74" y="156" width="26" height="30" rx="10" fill="#efdcc8"/>
+      <rect x="38" y="152" width="34" height="34" rx="12"/>
+    </g>
+    <g fill="#f3b66a" stroke="#2b1d3a" stroke-width="2.5"><ellipse cx="55" cy="182" rx="12" ry="3.5"/></g>
   </g>
-  <g fill="#f3b66a" stroke="#2b1d3a" stroke-width="2.5"><ellipse cx="55" cy="182" rx="12" ry="3.5"/><ellipse cx="145" cy="182" rx="12" ry="3.5"/></g>
+  <g class="cc-leg-r" style="transform-origin:134px 156px">
+    <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#fffaf2">
+      <rect x="100" y="156" width="26" height="30" rx="10" fill="#efdcc8"/>
+      <rect x="128" y="152" width="34" height="34" rx="12"/>
+    </g>
+    <g fill="#f3b66a" stroke="#2b1d3a" stroke-width="2.5"><ellipse cx="145" cy="182" rx="12" ry="3.5"/></g>
+  </g>
   <!-- tail tuft -->
-  <g fill="#fffaf2" stroke="#2b1d3a" stroke-width="3.5"><circle cx="174" cy="132" r="7"/><circle cx="182" cy="126" r="5"/></g>
+  <g class="cc-tail" style="transform-origin:170px 134px">
+    <g fill="#fffaf2" stroke="#2b1d3a" stroke-width="3.5"><circle cx="174" cy="132" r="7"/><circle cx="182" cy="126" r="5"/></g>
+  </g>
   <!-- big floppy ears -->
   <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <path d="M60 70 C36 56 12 66 14 96 C16 120 40 130 60 114 Z" fill="#fffaf2"/>
@@ -78,5 +89,6 @@
   <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M34 30 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M166 32 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

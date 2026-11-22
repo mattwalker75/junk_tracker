@@ -5,12 +5,14 @@
  * Level N" (Matt wants to see the art). Tapping a card opens its page: big art, the bio, HP, days
  * and the ability.
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { abilityFor, bioFor, LEVEL_COUNT, LEVELS, LEVELS_PER_WORLD, WORLDS, type FightView, type GameView, type Level, type MapStatus } from "../../../shared/game";
 import { Sheet } from "../components/ui";
 import { worldMap } from "./art";
 import { Crown } from "./icons";
 import { countdown, hpLeft, hpText, shortDate } from "./logic";
+import { LiveMonster } from "./LiveMonster";
+import type { MonsterAct } from "./moves";
 import { GameBg, GameHeader, GameNote, HpBar } from "./parts";
 import { useGame } from "./state";
 
@@ -107,7 +109,14 @@ function Card({ lv, status, fight, onOpen }: { lv: Level; status: MapStatus; fig
   );
 }
 
+const MOVE_BUTTONS: readonly (readonly [MonsterAct, string, string])[] = [
+  ["idle", "Idle", "#ffffff"], ["strike", "Takes a heart", "#ff9ec4"], ["ko", "Defeated", "#7bd36b"], ["win", "Beats you", "#ffc93c"],
+];
+
 function MonsterSheet({ lv, view, onClose }: { lv: Level | null; view: GameView | undefined; onClose: () => void }) {
+  const [act, setAct] = useState<{ act: MonsterAct; n: number }>({ act: "idle", n: 0 });
+  // each monster's page opens idling
+  useEffect(() => { setAct({ act: "idle", n: 0 }); }, [lv?.level]);
   const status = lv ? statusOf(view, lv.level) : "locked";
   const fight = lv ? fightAt(view, lv.level) : null;
   const ab = lv ? abilityFor(lv.level) : null;
@@ -118,8 +127,18 @@ function MonsterSheet({ lv, view, onClose }: { lv: Level | null; view: GameView 
       {lv && ab ? (
         <div className="pb-5">
           <div className="relative mx-auto grid h-[220px] place-items-center overflow-hidden rounded-[22px] border-[3px] border-g-line" style={{ background: worldMap(lv.world).banner }}>
-            <img src={portrait(lv.slug)} alt={lv.name} className="g-anim-bob h-[200px] w-[200px]" />
-            {status === "beaten" ? <span className="absolute bottom-3 left-3"><span className="relative block"><Stamp big /></span></span> : null}
+            <LiveMonster key={lv.slug} slug={lv.slug} name={lv.name} act={act.act} play={act.n} className="h-[200px] w-[200px]" />
+            {status === "beaten" && act.act === "idle" ? <span className="absolute bottom-3 left-3"><span className="relative block"><Stamp big /></span></span> : null}
+          </div>
+          {/* its own moves, to watch (Matt, Nov 22 2026) */}
+          <div className="mt-2" role="group" aria-labelledby="book-moves">
+            <span id="book-moves" className="block text-[12px] font-black tracking-[0.06em] text-g-mute">WATCH ITS MOVES</span>
+            <div className="mt-1 grid grid-cols-2 gap-2">
+              {MOVE_BUTTONS.map(([a, label, bg]) => (
+                <button key={a} type="button" aria-pressed={act.act === a} onClick={() => setAct((p) => ({ act: a, n: p.n + 1 }))}
+                  className="g-btn h-10 rounded-xl px-2 text-[14px] font-black text-[#2b1d3a]" style={{ background: bg }}>{label}</button>
+              ))}
+            </div>
           </div>
           <p className="mt-1.5 text-[12px] font-black tracking-[0.06em]" style={{ color: worldMap(lv.world).ink }}>WORLD {lv.world} · {lv.worldName.toUpperCase()}{lv.boss ? " · BOSS" : ""}</p>
           <p className="mt-1 text-[17px] leading-snug font-extrabold italic">"{bioFor(lv.level)}"</p>

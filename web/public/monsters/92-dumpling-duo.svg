@@ -3,7 +3,8 @@
     <clipPath id="dumpling-duo-left"><path d="M10 152 Q4 104 32 84 Q58 68 84 84 Q112 104 106 152 Q58 166 10 152 Z"/></clipPath>
     <clipPath id="dumpling-duo-right"><path d="M94 152 Q88 104 116 84 Q142 68 168 84 Q196 104 190 152 Q142 166 94 152 Z"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="80" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="80" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- steam over the steamed one -->
   <g fill="none" stroke="#c9bfdc" stroke-width="3.5" stroke-linecap="round"><path d="M46 44 q-6 -8 0 -16 q6 -8 0 -16"/><path d="M64 46 q-6 -8 0 -16"/></g>
   <!-- pan-fried dumpling (right) -->
@@ -46,5 +47,6 @@
     <path d="M178 24 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M100 30 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M18 34 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

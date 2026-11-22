@@ -2,22 +2,34 @@
   <defs>
     <clipPath id="jumbo-cup-jellyfish-bell"><path d="M30 112 Q30 32 100 32 Q170 32 170 112 Q152 124 134 112 Q117 124 100 112 Q83 124 66 112 Q48 124 30 112 Z"/></clipPath>
   </defs>
+  <g class="cc-fig">
   <!-- tentacles: striped straws -->
-  <g fill="none" stroke-linecap="round">
-    <g stroke="#2b1d3a" stroke-width="12">
-      <path d="M48 116 Q38 140 52 156 Q64 172 50 190"/><path d="M78 120 Q70 146 84 162 Q94 176 86 192"/><path d="M122 120 Q130 146 116 162 Q106 176 114 192"/><path d="M152 116 Q162 140 148 156 Q136 172 150 190"/>
-    </g>
-    <g stroke="#ffffff" stroke-width="6">
-      <path d="M48 116 Q38 140 52 156 Q64 172 50 190"/><path d="M78 120 Q70 146 84 162 Q94 176 86 192"/><path d="M122 120 Q130 146 116 162 Q106 176 114 192"/><path d="M152 116 Q162 140 148 156 Q136 172 150 190"/>
-    </g>
-    <g stroke="#ff4d6d" stroke-width="6" stroke-dasharray="7 7" stroke-linecap="butt">
-      <path d="M48 116 Q38 140 52 156 Q64 172 50 190"/><path d="M78 120 Q70 146 84 162 Q94 176 86 192"/><path d="M122 120 Q130 146 116 162 Q106 176 114 192"/><path d="M152 116 Q162 140 148 156 Q136 172 150 190"/>
-    </g>
+  <g class="cc-arm-l" style="transform-origin:48px 114px" fill="none" stroke-linecap="round">
+    <path d="M48 116 Q38 140 52 156 Q64 172 50 190" stroke="#2b1d3a" stroke-width="12"/>
+    <path d="M48 116 Q38 140 52 156 Q64 172 50 190" stroke="#ffffff" stroke-width="6"/>
+    <path d="M48 116 Q38 140 52 156 Q64 172 50 190" stroke="#ff4d6d" stroke-width="6" stroke-dasharray="7 7" stroke-linecap="butt"/>
+  </g>
+  <g class="cc-leg-l" style="transform-origin:78px 118px" fill="none" stroke-linecap="round">
+    <path d="M78 120 Q70 146 84 162 Q94 176 86 192" stroke="#2b1d3a" stroke-width="12"/>
+    <path d="M78 120 Q70 146 84 162 Q94 176 86 192" stroke="#ffffff" stroke-width="6"/>
+    <path d="M78 120 Q70 146 84 162 Q94 176 86 192" stroke="#ff4d6d" stroke-width="6" stroke-dasharray="7 7" stroke-linecap="butt"/>
+  </g>
+  <g class="cc-leg-r" style="transform-origin:122px 118px" fill="none" stroke-linecap="round">
+    <path d="M122 120 Q130 146 116 162 Q106 176 114 192" stroke="#2b1d3a" stroke-width="12"/>
+    <path d="M122 120 Q130 146 116 162 Q106 176 114 192" stroke="#ffffff" stroke-width="6"/>
+    <path d="M122 120 Q130 146 116 162 Q106 176 114 192" stroke="#ff4d6d" stroke-width="6" stroke-dasharray="7 7" stroke-linecap="butt"/>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:152px 114px" fill="none" stroke-linecap="round">
+    <path d="M152 116 Q162 140 148 156 Q136 172 150 190" stroke="#2b1d3a" stroke-width="12"/>
+    <path d="M152 116 Q162 140 148 156 Q136 172 150 190" stroke="#ffffff" stroke-width="6"/>
+    <path d="M152 116 Q162 140 148 156 Q136 172 150 190" stroke="#ff4d6d" stroke-width="6" stroke-dasharray="7 7" stroke-linecap="butt"/>
   </g>
   <!-- the straw -->
+  <g class="cc-hat" style="transform-origin:118px 40px">
   <g transform="rotate(14 124 30)">
     <rect x="116" y="-4" width="14" height="50" rx="4" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5"/>
     <path d="M118 6 L128 0 M118 18 L128 12 M118 30 L128 24" stroke="#39a0ff" stroke-width="4"/>
+  </g>
   </g>
   <!-- the bell: a jumbo cup lid -->
   <g clip-path="url(#jumbo-cup-jellyfish-bell)">
@@ -38,4 +50,5 @@
   <ellipse cx="62" cy="76" rx="6" ry="3.5" fill="#ff9db8"/><ellipse cx="138" cy="76" rx="6" ry="3.5" fill="#ff9db8"/>
   <!-- fizz -->
   <g fill="#ffffff" stroke="#2b1d3a" stroke-width="2.5"><circle cx="22" cy="60" r="6"/><circle cx="16" cy="40" r="4"/><circle cx="180" cy="64" r="5"/><circle cx="186" cy="88" r="3.5"/><circle cx="100" cy="150" r="4"/></g>
+  </g>
 </svg>

@@ -1,9 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Candy Box Goblin, a green goblin living in a tall red movie-theater candy box, flaps open on top, holding up one last candy">
-  <ellipse cx="100" cy="190" rx="66" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="66" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- legs and boots -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
-    <rect x="70" y="164" width="16" height="18" fill="#7bd36b"/><rect x="114" y="164" width="16" height="18" fill="#7bd36b"/>
+  <g class="cc-leg-l" style="transform-origin:78px 166px" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <rect x="70" y="164" width="16" height="18" fill="#7bd36b"/>
     <path d="M62 180 Q62 170 78 172 Q92 172 90 188 L62 188 Z" fill="#6b3f26"/>
+  </g>
+  <g class="cc-leg-r" style="transform-origin:122px 166px" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <rect x="114" y="164" width="16" height="18" fill="#7bd36b"/>
     <path d="M138 180 Q138 170 122 172 Q108 172 110 188 L138 188 Z" fill="#6b3f26"/>
   </g>
   <!-- ears out the sides -->
@@ -17,7 +21,7 @@
   <rect x="48" y="134" width="104" height="22" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5"/>
   <g fill="#ffffff"><circle cx="64" cy="145" r="3"/><circle cx="80" cy="145" r="3"/><circle cx="96" cy="145" r="3"/><circle cx="112" cy="145" r="3"/><circle cx="128" cy="145" r="3"/></g>
   <!-- flaps open on top -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+  <g class="cc-hat" style="transform-origin:100px 44px" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <path d="M48 44 L30 18 L84 30 L100 44 Z" fill="#ffc93c"/>
     <path d="M152 44 L170 18 L116 30 L100 44 Z" fill="#ffc93c"/>
   </g>
@@ -31,6 +35,7 @@
   <path d="M78 110 Q100 124 122 110" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
   <path d="M86 112 l3 6 3 -5z M110 112 l-3 6 -3 -5z" fill="#ffffff" stroke="#2b1d3a" stroke-width="1.5" stroke-linejoin="round"/>
   <!-- an arm up with the last candy -->
+  <g class="cc-arm-r" style="transform-origin:150px 112px">
   <g fill="none" stroke-linecap="round">
     <path d="M150 112 Q176 100 172 66" stroke="#2b1d3a" stroke-width="14"/>
     <path d="M150 112 Q176 100 172 66" stroke="#7bd36b" stroke-width="7"/>
@@ -38,7 +43,9 @@
   <ellipse cx="172" cy="52" rx="12" ry="8" fill="#b96ad9" stroke="#2b1d3a" stroke-width="3.5"/>
   <ellipse cx="168" cy="50" rx="4" ry="2" fill="#e0b6f2"/>
   <circle cx="172" cy="64" r="7" fill="#7bd36b" stroke="#2b1d3a" stroke-width="3.5"/>
+  </g>
   <!-- rattle lines and spilled candies -->
   <g stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"><path d="M26 120 l-8 -2 M28 132 l-9 2 M30 144 l-7 5"/></g>
   <g stroke="#2b1d3a" stroke-width="2.5"><ellipse cx="34" cy="176" rx="7" ry="5" fill="#ffc93c"/><ellipse cx="166" cy="180" rx="7" ry="5" fill="#39a0ff"/><ellipse cx="150" cy="186" rx="6" ry="4" fill="#ff4d6d"/></g>
+  </g>
 </svg>

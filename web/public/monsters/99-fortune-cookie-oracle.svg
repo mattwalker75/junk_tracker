@@ -2,14 +2,17 @@
   <defs>
     <clipPath id="fortune-cookie-oracle-cookie"><path d="M18 108 Q22 40 100 44 Q178 40 182 108 Q164 124 138 112 Q120 138 100 144 Q80 138 62 112 Q36 124 18 108 Z"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="60" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="60" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- mystic swirls -->
+  <g class="cc-orbit" style="transform-origin:100px 94px">
   <g fill="none" stroke="#a77bff" stroke-width="4" stroke-linecap="round">
     <path d="M36 28 Q100 0 164 28"/>
     <path d="M34 168 Q14 160 18 142 Q24 128 38 134 Q46 142 38 148"/>
     <path d="M178 176 Q192 164 186 150 Q178 140 168 148 Q164 156 172 158"/>
   </g>
   <g fill="#a77bff"><circle cx="12" cy="72" r="3"/><circle cx="62" cy="178" r="2.5"/><circle cx="188" cy="72" r="3"/></g>
+  </g>
   <!-- the paper fortune, stuck out like a tongue -->
   <g transform="rotate(-34 104 126)">
     <path d="M95 118 L113 118 L115 174 Q108 169 104 176 Q100 169 93 174 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
@@ -41,9 +44,10 @@
   <path d="M72 110 Q100 124 128 110 Q118 128 100 134 Q82 128 72 110 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M78 113 l3 6 3 -4z M88 117 l3 5 3 -4z M114 116 l3 4 3 -6z" fill="#ffffff"/>
   <path d="M100 124 L114 118 L120 128 L106 132 Z" fill="#ffffff"/>
-  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+  <g class="cc-orbit" style="transform-origin:100px 94px" fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M16 18 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M182 120 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M70 158 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

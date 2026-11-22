@@ -1,6 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Slider Trio, three tiny burger brothers stacked like acrobats">
-  <ellipse cx="100" cy="190" rx="50" ry="6" fill="#2b1d3a" opacity="0.18"/>
-  <g fill="#7a3e22" stroke="#2b1d3a" stroke-width="4"><ellipse cx="80" cy="186" rx="10" ry="5"/><ellipse cx="120" cy="186" rx="10" ry="5"/></g>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="50" ry="6" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
+  <!-- the bottom brother's feet -->
+  <g class="cc-leg-l" style="transform-origin:80px 182px"><ellipse cx="80" cy="186" rx="10" ry="5" fill="#7a3e22" stroke="#2b1d3a" stroke-width="4"/></g>
+  <g class="cc-leg-r" style="transform-origin:120px 182px"><ellipse cx="120" cy="186" rx="10" ry="5" fill="#7a3e22" stroke="#2b1d3a" stroke-width="4"/></g>
   <path d="M66 160 Q44 148 52 120" fill="none" stroke="#2b1d3a" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M66 160 Q44 148 52 120" fill="none" stroke="#c97a2e" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M134 160 Q156 148 148 120" fill="none" stroke="#2b1d3a" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
@@ -35,11 +38,17 @@
   <path d="M78 120 L76 132" fill="none" stroke="#c97a2e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M122 120 L124 132" fill="none" stroke="#2b1d3a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M122 120 L124 132" fill="none" stroke="#c97a2e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M72 104 Q50 104 36 90" fill="none" stroke="#2b1d3a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M72 104 Q50 104 36 90" fill="none" stroke="#c97a2e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M128 104 Q150 104 164 90" fill="none" stroke="#2b1d3a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M128 104 Q150 104 164 90" fill="none" stroke="#c97a2e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-  <g fill="#c97a2e" stroke="#2b1d3a" stroke-width="4"><circle cx="34" cy="88" r="7"/><circle cx="166" cy="88" r="7"/></g>
+  <!-- the middle brother's arms, out wide -->
+  <g class="cc-arm-l" style="transform-origin:72px 104px">
+    <path d="M72 104 Q50 104 36 90" fill="none" stroke="#2b1d3a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M72 104 Q50 104 36 90" fill="none" stroke="#c97a2e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="34" cy="88" r="7" fill="#c97a2e" stroke="#2b1d3a" stroke-width="4"/>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:128px 104px">
+    <path d="M128 104 Q150 104 164 90" fill="none" stroke="#2b1d3a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M128 104 Q150 104 164 90" fill="none" stroke="#c97a2e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="166" cy="88" r="7" fill="#c97a2e" stroke="#2b1d3a" stroke-width="4"/>
+  </g>
   <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <path d="M73.0 111.0 H127.0 V112.6 Q127.0 120.6 119.0 120.6 H81.0 Q73.0 120.6 73.0 112.6 Z" fill="#f2a64a"/>
     <rect x="68.0" y="100.0" width="64.0" height="14.0" rx="5.5" fill="#7a3e22"/>
@@ -66,6 +75,8 @@
   <path d="M103.5 95.1 l2.5 6 l3 -7 z" fill="#fff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"/>
   <circle cx="79.1" cy="93.1" r="3.5" fill="#ff6f6f" opacity="0.45"/><circle cx="120.9" cy="93.1" r="3.5" fill="#ff6f6f" opacity="0.45"/>
   <g fill="#c97a2e" stroke="#2b1d3a" stroke-width="4"><circle cx="52" cy="116" r="8"/><circle cx="148" cy="116" r="8"/></g>
+  <!-- the top brother, balancing -->
+  <g class="cc-head" style="transform-origin:100px 76px">
   <path d="M82 66 L80 77" fill="none" stroke="#2b1d3a" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M82 66 L80 77" fill="none" stroke="#c97a2e" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M118 66 L120 77" fill="none" stroke="#2b1d3a" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
@@ -100,7 +111,11 @@
   <path d="M91.5 42.8 Q100.0 52.8 108.5 42.8 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M94.0 43.3 l3 5 l3 -5 z M106.0 43.3 l-3 5 l-3 -5 z" fill="#fff"/>
   <circle cx="82.0" cy="44.4" r="3.0" fill="#ff6f6f" opacity="0.45"/><circle cx="118.0" cy="44.4" r="3.0" fill="#ff6f6f" opacity="0.45"/>
+  <g class="cc-hat" style="transform-origin:110px 32px">
   <path d="M110 32 L118 6" stroke="#2b1d3a" stroke-width="7" stroke-linecap="round"/><path d="M110 32 L118 6" stroke="#f6dfb4" stroke-width="3" stroke-linecap="round"/>
   <path d="M118 6 L138 12 L116 20 Z" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+  </g>
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"><path d="M26 52 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/><path d="M174 54 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/></g>
+  </g>
 </svg>

@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Hot Dog Usher, a hot dog standing in its bun like a usher's coat, with a red usher's cap, a mustard sash and a flashlight beam">
-  <ellipse cx="100" cy="190" rx="60" ry="7" fill="#2b1d3a" opacity="0.18"/>
-  <!-- flashlight beam -->
-  <path d="M152 112 L200 70 L200 150 Z" fill="#fff1a8" opacity="0.85"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="60" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- shoes -->
-  <g fill="#2b1d3a"><ellipse cx="80" cy="184" rx="16" ry="7"/><ellipse cx="120" cy="184" rx="16" ry="7"/></g>
+  <g class="cc-leg-l" style="transform-origin:80px 180px"><ellipse cx="80" cy="184" rx="16" ry="7" fill="#2b1d3a"/></g>
+  <g class="cc-leg-r" style="transform-origin:120px 180px"><ellipse cx="120" cy="184" rx="16" ry="7" fill="#2b1d3a"/></g>
   <!-- the sausage -->
   <rect x="70" y="34" width="60" height="150" rx="30" fill="#d9573a" stroke="#2b1d3a" stroke-width="4"/>
   <path d="M116 44 Q126 60 126 100 L126 170 Q122 176 116 178 Z" fill="#b8432c"/>
@@ -19,12 +19,14 @@
   <!-- bow tie -->
   <path d="M86 88 L100 94 L114 88 L114 100 L100 94 L86 100 Z" fill="#2b1d3a"/>
   <!-- usher's cap -->
+  <g class="cc-hat" style="transform-origin:100px 44px">
   <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <path d="M66 40 Q66 18 100 18 Q134 18 134 40 Z" fill="#e2384d"/>
     <rect x="64" y="36" width="72" height="10" rx="3" fill="#ffc93c"/>
     <path d="M100 46 L120 46 Q118 54 100 52 Z" fill="#2b1d3a"/>
   </g>
   <circle cx="100" cy="28" r="4" fill="#ffc93c" stroke="#2b1d3a" stroke-width="2"/>
+  </g>
   <!-- face -->
   <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="88" cy="62" r="9" fill="#ffffff"/><circle cx="112" cy="62" r="9" fill="#ffffff"/></g>
   <circle cx="89" cy="64" r="5" fill="#2b1d3a"/><circle cx="111" cy="64" r="5" fill="#2b1d3a"/>
@@ -33,13 +35,18 @@
   <path d="M92 78 L108 78" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
   <ellipse cx="78" cy="74" rx="5" ry="3" fill="#ff9a7a"/><ellipse cx="122" cy="74" rx="5" ry="3" fill="#ff9a7a"/>
   <!-- hand with the flashlight; other hand up: shh -->
-  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
-    <rect x="140" y="104" width="22" height="14" rx="3" fill="#39a0ff" transform="rotate(-24 150 112)"/>
-    <circle cx="142" cy="118" r="8" fill="#ffffff"/>
-    <circle cx="54" cy="112" r="8" fill="#ffffff"/>
+  <g class="cc-arm-r" style="transform-origin:144px 112px">
+    <!-- flashlight beam -->
+    <path d="M152 112 L200 70 L200 150 Z" fill="#fff1a8" opacity="0.85"/>
+    <rect x="140" y="104" width="22" height="14" rx="3" fill="#39a0ff" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round" transform="rotate(-24 150 112)"/>
+    <circle cx="142" cy="118" r="8" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   </g>
-  <path d="M40 92 L40 104" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
+  <g class="cc-arm-l" style="transform-origin:58px 108px">
+    <circle cx="54" cy="112" r="8" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M40 92 L40 104" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
+  </g>
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M30 40 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+  </g>
   </g>
 </svg>

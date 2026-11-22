@@ -3,12 +3,11 @@
     <clipPath id="snow-cone-owl-cup"><path d="M54 120 L146 120 L122 182 L78 182 Z"/></clipPath>
     <clipPath id="snow-cone-owl-ice"><path d="M46 126 Q34 50 100 42 Q166 50 154 126 Q146 134 138 126 Q130 136 120 128 Q110 138 100 128 Q90 138 80 128 Q70 136 62 126 Q54 134 46 126 Z"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="56" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="56" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- talons -->
-  <g fill="#ff9a3c" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
-    <path d="M80 180 l-6 10 6 -2 4 4 2 -6 4 4 0 -10 Z"/>
-    <path d="M120 180 l6 10 -6 -2 -4 4 -2 -6 -4 4 0 -10 Z"/>
-  </g>
+  <g class="cc-leg-l" style="transform-origin:84px 180px"><path d="M80 180 l-6 10 6 -2 4 4 2 -6 4 4 0 -10 Z" fill="#ff9a3c" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/></g>
+  <g class="cc-leg-r" style="transform-origin:116px 180px"><path d="M120 180 l6 10 -6 -2 -4 4 -2 -6 -4 4 0 -10 Z" fill="#ff9a3c" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/></g>
   <!-- the paper cone -->
   <path d="M54 120 L146 120 L122 182 L78 182 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <g clip-path="url(#snow-cone-owl-cup)" stroke="#6ec6ff" stroke-width="9"><path d="M40 110 L110 190 M70 110 L140 190 M100 110 L170 190"/></g>
@@ -29,10 +28,8 @@
   <path d="M46 126 Q34 50 100 42 Q166 50 154 126 Q146 134 138 126 Q130 136 120 128 Q110 138 100 128 Q90 138 80 128 Q70 136 62 126 Q54 134 46 126 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M60 58 Q70 48 84 48" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
   <!-- wings -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
-    <path d="M48 104 Q20 122 32 164 Q50 152 60 128 Z" fill="#ff4d6d"/>
-    <path d="M152 104 Q180 122 168 164 Q150 152 140 128 Z" fill="#ffd23c"/>
-  </g>
+  <g class="cc-arm-l" style="transform-origin:52px 108px"><path d="M48 104 Q20 122 32 164 Q50 152 60 128 Z" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/></g>
+  <g class="cc-arm-r" style="transform-origin:148px 108px"><path d="M152 104 Q180 122 168 164 Q150 152 140 128 Z" fill="#ffd23c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/></g>
   <!-- huge eyes: it sees every snack -->
   <g stroke="#2b1d3a" stroke-width="4"><circle cx="78" cy="88" r="22" fill="#fff7d6"/><circle cx="122" cy="88" r="22" fill="#fff7d6"/></g>
   <circle cx="78" cy="89" r="14" fill="#ffb020"/><circle cx="122" cy="89" r="14" fill="#ffb020"/>
@@ -43,5 +40,6 @@
   <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M24 70 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M176 76 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

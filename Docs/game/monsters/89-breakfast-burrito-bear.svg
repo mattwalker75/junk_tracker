@@ -2,7 +2,8 @@
   <defs>
     <clipPath id="breakfast-burrito-bear-wrap"><path d="M34 92 Q100 116 166 92 L164 164 Q100 192 36 164 Z"/></clipPath>
   </defs>
-  <ellipse cx="96" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="96" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- open end of the tortilla -->
   <ellipse cx="100" cy="92" rx="68" ry="20" fill="#e6c07a" stroke="#2b1d3a" stroke-width="4"/>
   <!-- filling peeking out -->
@@ -13,6 +14,7 @@
     <path d="M128 92 Q134 72 144 76 Q152 60 160 72 Q166 64 170 80" stroke="#d9534f" stroke-width="7"/>
     <path d="M131 88 Q136 76 144 79 Q152 66 160 75" stroke="#ffb3a6" stroke-width="2.5"/>
   </g>
+  <g class="cc-head" style="transform-origin:100px 98px">
   <!-- bear head -->
   <g stroke="#2b1d3a" stroke-width="4"><circle cx="70" cy="30" r="13" fill="#a8683a"/><circle cx="130" cy="30" r="13" fill="#a8683a"/></g>
   <circle cx="70" cy="30" r="6" fill="#e8b08a"/><circle cx="130" cy="30" r="6" fill="#e8b08a"/>
@@ -31,6 +33,7 @@
   <ellipse cx="100" cy="75" rx="7" ry="4.5" fill="#2b1d3a"/>
   <path d="M88 82 Q100 94 112 82 Q100 87 88 82 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M92 84 l2 4 2 -3z M98 85 l2 4 2 -4z M104 85 l2 3 2 -4z" fill="#ffffff"/>
+  </g>
   <!-- tortilla blanket -->
   <path d="M34 92 Q100 116 166 92 L164 164 Q100 192 36 164 Z" fill="#f7dfa6" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <g clip-path="url(#breakfast-burrito-bear-wrap)">
@@ -42,9 +45,15 @@
   <!-- melty cheese over the lip -->
   <path d="M74 102 Q90 108 110 106 L110 112 Q107 124 104 112 Q100 118 96 110 Q92 128 88 110 Q82 116 78 108 Z" fill="#ffb020" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <!-- paws out over the edge -->
-  <g fill="#a8683a" stroke="#2b1d3a" stroke-width="4"><ellipse cx="52" cy="104" rx="14" ry="12"/><ellipse cx="148" cy="104" rx="14" ry="12"/></g>
-  <path d="M46 108 l0 6 M52 109 l0 7 M58 108 l0 6 M142 108 l0 6 M148 109 l0 7 M154 108 l0 6" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
-  <path d="M44 98 Q48 94 54 94" fill="none" stroke="#d29a6c" stroke-width="3" stroke-linecap="round"/>
+  <g class="cc-arm-l" style="transform-origin:60px 114px">
+    <ellipse cx="52" cy="104" rx="14" ry="12" fill="#a8683a" stroke="#2b1d3a" stroke-width="4"/>
+    <path d="M46 108 l0 6 M52 109 l0 7 M58 108 l0 6" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M44 98 Q48 94 54 94" fill="none" stroke="#d29a6c" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:140px 114px">
+    <ellipse cx="148" cy="104" rx="14" ry="12" fill="#a8683a" stroke="#2b1d3a" stroke-width="4"/>
+    <path d="M142 108 l0 6 M148 109 l0 7 M154 108 l0 6" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
   <!-- salsa cup -->
   <path d="M152 160 L188 160 L184 184 L156 184 Z" fill="#f2f4f8" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   <ellipse cx="170" cy="160" rx="18" ry="5" fill="#e2384d" stroke="#2b1d3a" stroke-width="3"/>
@@ -55,5 +64,6 @@
     <path d="M24 28 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
     <path d="M172 22 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M18 150 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z"/>
+  </g>
   </g>
 </svg>

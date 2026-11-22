@@ -126,6 +126,11 @@ The person using it is not a developer — every message the page shows is a pla
       grew carries on (`run_continues`). The map's picture (`web/public/game-map-scenery.svg`, 5,216 tall) is drawn
       for 12 bands; a world added later would need its band on top (everything else moves down 426) and its
       `WORLD_LOOK` / `WORLD_MAP` colours in `art.tsx`.
+    - **Monster moves** (Matt, Nov 22 2026; `Docs/GAME_MODE.md` "Monster moves"): every monster moves — its own idle,
+      takes-a-heart, defeated and beats-you moves (`web/src/game/moves.ts`, drawn by `monster-moves.css`, played by
+      `LiveMonster.tsx`, which puts the SVG inline). Each drawing's parts are tagged (`cc-fig`, `cc-arm-l/r`, …, each
+      with a pivot) and must look exactly the same when still. A new monster needs its parts tagged and its mix
+      in `moves.ts` (`test/moves.test.ts`). Reduced motion stops them all.
     - **Monster toughness** (Matt, Nov 15 2026): Settings → You, Standard ×1 / Tough ×1.5 / Brutal ×2
       HP (`toughness`); deadlines unchanged. A fight keeps the multiplier it started with
       (`game_fights.hp_mult`); the person may change the setting at any time and it only counts for

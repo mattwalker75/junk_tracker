@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Baron Fryer, a deep-fryer-basket baron in a top hat">
-  <ellipse cx="100" cy="192" rx="84" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <ellipse class="cc-shadow" cx="100" cy="192" rx="84" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <g class="cc-fig">
   <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <path d="M50 92 L26 56 L72 84 Z" fill="#ffc93c"/>
     <path d="M150 92 L174 56 L128 84 Z" fill="#ffc93c"/>
@@ -28,6 +29,7 @@
     <ellipse cx="154" cy="98" rx="16" ry="9" fill="#ffc93c"/>
   </g>
   <path d="M32 104 v7 M38 106 v8 M44 107 v8 M50 107 v7 M150 107 v7 M156 107 v8 M162 106 v8 M168 104 v7" stroke="#ffc93c" stroke-width="3" stroke-linecap="round"/>
+  <g class="cc-hat" style="transform-origin:100px 80px">
   <g transform="translate(0 -5) rotate(-7 100 84)">
     <path d="M70 84 L74 22 Q100 16 126 22 L130 84 Z" fill="#3b2a55" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
     <ellipse cx="100" cy="22" rx="26" ry="5" fill="#544178" stroke="#2b1d3a" stroke-width="3.5"/>
@@ -36,6 +38,7 @@
     <path d="M116 30 L118 62" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
     <ellipse cx="100" cy="85" rx="50" ry="8" fill="#3b2a55" stroke="#2b1d3a" stroke-width="4"/>
     <rect x="94" y="68" width="12" height="10" rx="2" fill="#e5533d" stroke="#2b1d3a" stroke-width="2.5"/>
+  </g>
   </g>
   <path d="M62 110 Q72 102 92 108 M138 110 Q128 102 108 108" fill="none" stroke="#f2f2f2" stroke-width="7" stroke-linecap="round"/>
   <path d="M62 110 Q72 102 92 108 M138 110 Q128 102 108 108" fill="none" stroke="#2b1d3a" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
@@ -54,6 +57,8 @@
     <path d="M124 150 L132 166 L140 150 Z" fill="#e5533d" stroke-linejoin="round"/>
     <circle cx="132" cy="168" r="7" fill="#ffc93c"/>
   </g>
+  <!-- the left arm and its cane -->
+  <g class="cc-arm-l" style="transform-origin:52px 140px">
   <g stroke="#2b1d3a" stroke-linecap="round">
     <path d="M52 140 Q40 140 34 128" fill="none" stroke-width="12"/>
     <path d="M52 140 Q40 140 34 128" fill="none" stroke="#a3213f" stroke-width="5"/>
@@ -63,8 +68,10 @@
   <circle cx="28" cy="80" r="8" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5"/>
   <circle cx="26" cy="77" r="2.4" fill="#fff2c2"/>
   <circle cx="33" cy="126" r="8" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5"/>
+  </g>
   <g fill="#ffb238" stroke="#2b1d3a" stroke-width="2.5">
     <path d="M78 180 q4 7 0 10 q-4 -3 0 -10 z"/><path d="M110 181 q4 7 0 10 q-4 -3 0 -10 z"/><path d="M130 178 q3 6 0 8 q-3 -2 0 -8 z"/>
     <path d="M168 132 q4 7 0 10 q-4 -3 0 -10 z"/><path d="M180 152 q3 6 0 8 q-3 -2 0 -8 z"/>
+  </g>
   </g>
 </svg>

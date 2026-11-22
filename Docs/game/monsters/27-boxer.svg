@@ -1,18 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Boxer, a juice-box fighter with red boxing gloves and a bendy-straw antenna">
-  <ellipse cx="100" cy="188" rx="58" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <ellipse class="cc-shadow" cx="100" cy="188" rx="58" ry="7" fill="#2b1d3a" opacity="0.22"/>
+  <g class="cc-fig">
   <!-- bubbles -->
+  <g class="cc-orbit" style="transform-origin:100px 108px">
   <g fill="#dff4ff" stroke="#2b1d3a" stroke-width="2.5">
     <circle cx="26" cy="40" r="5"/><circle cx="38" cy="24" r="3"/><circle cx="178" cy="150" r="4"/><circle cx="16" cy="70" r="2.5"/>
   </g>
-  <!-- legs and sneakers -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
-    <rect x="74" y="160" width="16" height="20" rx="4" fill="#ffd9a8"/>
-    <rect x="110" y="160" width="16" height="20" rx="4" fill="#ffd9a8"/>
-    <path d="M62 184 Q62 174 76 174 L90 174 Q96 174 96 184 Z" fill="#fff"/>
-    <path d="M104 184 Q104 174 118 174 L128 174 Q140 174 140 184 Z" fill="#fff"/>
   </g>
-  <path d="M66 182 H94 M106 182 H136" stroke="#ff4d6d" stroke-width="3" stroke-linecap="round"/>
+  <!-- legs and sneakers -->
+  <g class="cc-leg-l" style="transform-origin:82px 160px">
+    <rect x="74" y="160" width="16" height="20" rx="4" fill="#ffd9a8" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M62 184 Q62 174 76 174 L90 174 Q96 174 96 184 Z" fill="#fff" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M66 182 H94" stroke="#ff4d6d" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g class="cc-leg-r" style="transform-origin:118px 160px">
+    <rect x="110" y="160" width="16" height="20" rx="4" fill="#ffd9a8" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M104 184 Q104 174 118 174 L128 174 Q140 174 140 184 Z" fill="#fff" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M106 182 H136" stroke="#ff4d6d" stroke-width="3" stroke-linecap="round"/>
+  </g>
   <!-- straw antenna -->
+  <g class="cc-hat" style="transform-origin:118px 56px">
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path d="M118 58 L118 30 L134 16" stroke="#2b1d3a" stroke-width="12"/>
     <path d="M118 58 L118 30 L134 16" stroke="#fff" stroke-width="6"/>
@@ -20,6 +27,7 @@
   </g>
   <circle cx="138" cy="12" r="7" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5"/>
   <circle cx="136" cy="10" r="2" fill="#fff"/>
+  </g>
   <!-- the box: top, side, front -->
   <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <path d="M54 62 L74 48 L158 48 L146 62 Z" fill="#ffc47a"/>
@@ -44,12 +52,9 @@
   <path d="M88 111 H112 L110 115 H90 Z" fill="#7bd3ff"/>
   <circle cx="68" cy="112" r="5" fill="#ff6f6f" opacity="0.5"/><circle cx="132" cy="112" r="5" fill="#ff6f6f" opacity="0.5"/>
   <!-- arms -->
-  <g fill="none" stroke-linecap="round">
-    <path d="M58 120 Q44 124 40 112" stroke="#2b1d3a" stroke-width="12"/>
-    <path d="M58 120 Q44 124 40 112" stroke="#ffd9a8" stroke-width="5"/>
-    <path d="M144 110 Q158 108 160 92" stroke="#2b1d3a" stroke-width="12"/>
-    <path d="M144 110 Q158 108 160 92" stroke="#ffd9a8" stroke-width="5"/>
-  </g>
+  <g class="cc-arm-l" style="transform-origin:58px 120px">
+  <path d="M58 120 Q44 124 40 112" fill="none" stroke-linecap="round" stroke="#2b1d3a" stroke-width="12"/>
+  <path d="M58 120 Q44 124 40 112" fill="none" stroke-linecap="round" stroke="#ffd9a8" stroke-width="5"/>
   <!-- left glove (guard) -->
   <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <rect x="26" y="112" width="24" height="12" rx="4" fill="#fff"/>
@@ -58,6 +63,10 @@
   </g>
   <path d="M30 82 Q36 78 44 80" fill="none" stroke="#ffb3c1" stroke-width="4" stroke-linecap="round"/>
   <path d="M44 96 Q52 100 56 96" fill="none" stroke="#c8304d" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g class="cc-arm-r" style="transform-origin:144px 110px">
+  <path d="M144 110 Q158 108 160 92" fill="none" stroke-linecap="round" stroke="#2b1d3a" stroke-width="12"/>
+  <path d="M144 110 Q158 108 160 92" fill="none" stroke-linecap="round" stroke="#ffd9a8" stroke-width="5"/>
   <!-- right glove (jab ready, higher) -->
   <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <rect x="150" y="90" width="24" height="12" rx="4" fill="#fff" transform="rotate(-10 162 96)"/>
@@ -65,6 +74,8 @@
     <path d="M180 76 C188 72 188 62 180 60" fill="#ff4d6d"/>
   </g>
   <path d="M154 60 Q160 56 168 58" fill="none" stroke="#ffb3c1" stroke-width="4" stroke-linecap="round"/>
+  </g>
   <!-- action lines -->
   <path d="M180 36 l8 -6 M184 46 l9 -1" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  </g>
 </svg>

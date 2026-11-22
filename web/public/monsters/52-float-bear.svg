@@ -3,7 +3,8 @@
     <clipPath id="float-bear-glass"><path d="M56 112 H144 L140 172 Q139 184 126 184 H74 Q61 184 60 172 Z"/></clipPath>
     <clipPath id="float-bear-scoop"><circle cx="100" cy="72" r="40"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="56" ry="6" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="56" ry="6" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- straw poking out behind the head -->
   <g fill="none" stroke-linecap="round">
     <path d="M128 96 L150 20" stroke="#2b1d3a" stroke-width="13"/>
@@ -24,21 +25,37 @@
     <rect x="74" y="116" width="4" height="40" rx="2" fill="#ffffff" opacity="0.4"/>
   </g>
   <path d="M56 112 H144 L140 172 Q139 184 126 184 H74 Q61 184 60 172 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
-  <!-- little paws hugging the mug -->
-  <g fill="#fff3d6" stroke="#2b1d3a" stroke-width="4">
-    <ellipse cx="58" cy="148" rx="10" ry="12"/><ellipse cx="142" cy="146" rx="9" ry="11"/>
+  <g class="cc-arm-l" style="transform-origin:62px 138px"><ellipse cx="58" cy="148" rx="10" ry="12" fill="#fff3d6" stroke="#2b1d3a" stroke-width="4"/><path d="M54 142 Q58 140 62 142" fill="none" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/></g>
+  <g class="cc-arm-r" style="transform-origin:138px 136px"><ellipse cx="142" cy="146" rx="9" ry="11" fill="#fff3d6" stroke="#2b1d3a" stroke-width="4"/><path d="M138 140 Q142 138 146 140" fill="none" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/></g>
+  <g class="cc-head" style="transform-origin:100px 110px">
+    <!-- ice-cream scoop head with bear ears -->
+    <g stroke="#2b1d3a" stroke-width="4">
+      <circle cx="68" cy="40" r="14" fill="#fff3d6"/><circle cx="132" cy="40" r="14" fill="#fff3d6"/>
+    </g>
+    <g fill="#ffc2d4"><circle cx="68" cy="40" r="7"/><circle cx="132" cy="40" r="7"/></g>
+    <circle cx="100" cy="72" r="40" fill="#fff3d6"/>
+    <g clip-path="url(#float-bear-scoop)">
+      <path d="M122 36 C150 54 148 96 120 112 L150 114 L150 30 Z" fill="#f3dcb0"/>
+    </g>
+    <circle cx="100" cy="72" r="40" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+    <path d="M68 56 Q74 40 90 36" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+    <!-- face -->
+    <ellipse cx="100" cy="88" rx="16" ry="11" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5"/>
+    <ellipse cx="100" cy="83" rx="6" ry="4.5" fill="#7a3e1e" stroke="#2b1d3a" stroke-width="2.5"/>
+    <path d="M90 92 Q100 102 110 92 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M93 93 l2 4 2 -3z M107 93 l-2 4 -2 -3z" fill="#ffffff"/>
+    <g stroke="#2b1d3a" stroke-width="4"><circle cx="82" cy="68" r="12" fill="#ffffff"/><circle cx="118" cy="68" r="12" fill="#ffffff"/></g>
+    <circle cx="84" cy="71" r="7" fill="#2b1d3a"/><circle cx="116" cy="71" r="7" fill="#2b1d3a"/>
+    <circle cx="87" cy="67" r="2.6" fill="#ffffff"/><circle cx="119" cy="67" r="2.6" fill="#ffffff"/><circle cx="82" cy="74" r="1.3" fill="#ffffff"/><circle cx="114" cy="74" r="1.3" fill="#ffffff"/>
+    <path d="M68 54 L92 60 M132 54 L108 60" stroke="#2b1d3a" stroke-width="4.5" stroke-linecap="round"/>
+    <ellipse cx="70" cy="86" rx="5.5" ry="3.5" fill="#ff9db8"/><ellipse cx="130" cy="86" rx="5.5" ry="3.5" fill="#ff9db8"/>
+    <g class="cc-hat" style="transform-origin:100px 40px">
+      <!-- cherry on its head -->
+      <path d="M102 34 Q104 20 116 14" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="100" cy="34" r="8" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="3.5"/>
+      <circle cx="97" cy="31" r="2.2" fill="#ffffff"/>
+    </g>
   </g>
-  <path d="M54 142 Q58 140 62 142 M138 140 Q142 138 146 140" fill="none" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- ice-cream scoop head with bear ears -->
-  <g stroke="#2b1d3a" stroke-width="4">
-    <circle cx="68" cy="40" r="14" fill="#fff3d6"/><circle cx="132" cy="40" r="14" fill="#fff3d6"/>
-  </g>
-  <g fill="#ffc2d4"><circle cx="68" cy="40" r="7"/><circle cx="132" cy="40" r="7"/></g>
-  <circle cx="100" cy="72" r="40" fill="#fff3d6"/>
-  <g clip-path="url(#float-bear-scoop)">
-    <path d="M122 36 C150 54 148 96 120 112 L150 114 L150 30 Z" fill="#f3dcb0"/>
-  </g>
-  <circle cx="100" cy="72" r="40" fill="none" stroke="#2b1d3a" stroke-width="4"/>
   <!-- the scoop's ruffled bottom edge, melting onto the foam -->
   <!-- foam collar -->
   <g fill="#2b1d3a">
@@ -50,23 +67,9 @@
   </g>
   <path d="M118 108 v16 a5 5 0 0 0 10 0 v-18" fill="#fff3d6" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"/>
   <path d="M119.8 110 h6.4" stroke="#fff3d6" stroke-width="6"/>
-  <path d="M68 56 Q74 40 90 36" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
-  <!-- face -->
-  <ellipse cx="100" cy="88" rx="16" ry="11" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5"/>
-  <ellipse cx="100" cy="83" rx="6" ry="4.5" fill="#7a3e1e" stroke="#2b1d3a" stroke-width="2.5"/>
-  <path d="M90 92 Q100 102 110 92 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M93 93 l2 4 2 -3z M107 93 l-2 4 -2 -3z" fill="#ffffff"/>
-  <g stroke="#2b1d3a" stroke-width="4"><circle cx="82" cy="68" r="12" fill="#ffffff"/><circle cx="118" cy="68" r="12" fill="#ffffff"/></g>
-  <circle cx="84" cy="71" r="7" fill="#2b1d3a"/><circle cx="116" cy="71" r="7" fill="#2b1d3a"/>
-  <circle cx="87" cy="67" r="2.6" fill="#ffffff"/><circle cx="119" cy="67" r="2.6" fill="#ffffff"/><circle cx="82" cy="74" r="1.3" fill="#ffffff"/><circle cx="114" cy="74" r="1.3" fill="#ffffff"/>
-  <path d="M68 54 L92 60 M132 54 L108 60" stroke="#2b1d3a" stroke-width="4.5" stroke-linecap="round"/>
-  <ellipse cx="70" cy="86" rx="5.5" ry="3.5" fill="#ff9db8"/><ellipse cx="130" cy="86" rx="5.5" ry="3.5" fill="#ff9db8"/>
-  <!-- cherry on its head -->
-  <path d="M102 34 Q104 20 116 14" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
-  <circle cx="100" cy="34" r="8" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="3.5"/>
-  <circle cx="97" cy="31" r="2.2" fill="#ffffff"/>
   <!-- fizz -->
   <g fill="#dff4ff" stroke="#2b1d3a" stroke-width="2.5">
     <circle cx="30" cy="120" r="5"/><circle cx="22" cy="104" r="3"/><circle cx="176" cy="96" r="4"/><circle cx="182" cy="80" r="2.5"/>
+  </g>
   </g>
 </svg>

@@ -5,13 +5,12 @@
     </clipPath>
   </defs>
   <!-- the puddle -->
-  <ellipse cx="100" cy="186" rx="70" ry="9" fill="#ffb07a" stroke="#2b1d3a" stroke-width="3"/>
-  <ellipse cx="78" cy="184" rx="14" ry="3" fill="#ffd4b0"/>
+  <g class="cc-shadow" style="transform-origin:100px 186px"><ellipse cx="100" cy="186" rx="70" ry="9" fill="#ffb07a" stroke="#2b1d3a" stroke-width="3"/>
+  <ellipse cx="78" cy="184" rx="14" ry="3" fill="#ffd4b0"/></g>
+  <g class="cc-fig">
   <!-- sticks for legs -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#e2b071">
-    <rect x="62" y="140" width="17" height="44" rx="7"/><rect x="121" y="140" width="17" height="44" rx="7"/>
-  </g>
-  <path d="M67 160 l7 0 M126 166 l7 0" stroke="#b9854a" stroke-width="2.5" stroke-linecap="round"/>
+  <g class="cc-leg-l" style="transform-origin:70px 146px"><rect x="62" y="140" width="17" height="44" rx="7" stroke="#2b1d3a" stroke-width="4" fill="#e2b071"/><path d="M67 160 l7 0" stroke="#b9854a" stroke-width="2.5" stroke-linecap="round"/></g>
+  <g class="cc-leg-r" style="transform-origin:130px 146px"><rect x="121" y="140" width="17" height="44" rx="7" stroke="#2b1d3a" stroke-width="4" fill="#e2b071"/><path d="M126 166 l7 0" stroke="#b9854a" stroke-width="2.5" stroke-linecap="round"/></g>
   <!-- the twin pop -->
   <g clip-path="url(#popsicle-pete-body)">
     <rect x="30" y="10" width="72" height="180" fill="#ff8a3d"/>
@@ -34,4 +33,5 @@
   <!-- a sweat drop (it's melting) -->
   <path d="M152 58 Q160 70 158 76 Q154 82 148 78 Q144 72 152 58 Z" fill="#9fdcff" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M30 70 Q36 80 34 86 Q30 90 26 86 Q24 80 30 70 Z" fill="#ff8a3d" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  </g>
 </svg>

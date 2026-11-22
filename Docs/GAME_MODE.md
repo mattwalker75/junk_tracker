@@ -105,17 +105,36 @@ a total of 120 monsters to fight". Decided with Matt:
 - **The phone apps must stay in step** (Matt, Nov 21 2026): the build includes the phone tests, the new
   database upgrade run on the phone, and both apps rebuilt (`APP_PORTS/*/BUILD_APP.sh`).
 
-## Monster moves (Nov 22 2026) — mockup, waiting for Matt's look
+## Monster moves (Nov 22 2026) — built for all 120
 Matt: "setup some animation to the monsters in game. have him move his arms some and possibly legs. then give
 them each a special animation that runs when they are defeated with another one when that take a heart off of you
 and another when they finally beat you". Decided with Matt:
 - **Each monster gets its own themed mix** of moves, built from a shared set and tuned to its body (Popsicle Pete
   melts, Lady Short Stack's crown flies off, The Snackularity implodes) — not 360 one-offs, not one set for all.
-- **Mock up six first** (canvas **Round 16**, board `MonsterMoves`, playable), then roll out to all 120.
-- How: each drawing gets its parts tagged (`cc-fig`, `cc-arm-l/r`, `cc-leg-l/r`, `cc-tail`, `cc-hat`, `cc-orbit`,
-  each with its pivot), the SVG is put inline in the page, and CSS plays `cc-idle` while a fight is on and
-  `cc-strike` / `cc-ko` / `cc-win` with the monster's own move name. "Beats you" = the last heart (a knock-back,
-  an extra life spent, or a Hardcore defeat). Reduced motion turns it all off.
+- **Six mocked up first** (canvas **Round 16**, board `MonsterMoves`, and a plain playable page); Matt: "I love the
+  animations. But lets make sure we do them for all 120 monsters" — so every monster has them.
+
+What a monster does, and when:
+- **Idle** (a fight is on, a monster is up next, the Monster Book): it breathes and moves its own arms, legs, tail,
+  hat, head or orbiting snacks. Its idle style is one of walk, float, flap (wings), wobble (jelly), hop, slither.
+- **Takes a heart** (the battle's strike scene and the Strike screen): its own attack, once (about 1.3 s), then idle.
+- **Defeated** (the KO in the arena and on the Victory screen): its own fall, once, and it stays down.
+- **Beats you** (your last heart: Knocked back, Extra life, Defeated): its own gloat, looping. On the Defeated
+  screen it wears your helmet and the helmet moves with it; the two monsters partying beside it gloat too.
+- **The Monster Book** shows each monster moving, with **Idle · Takes a heart · Defeated · Beats you** buttons.
+- A device set to reduce motion gets no monster animation at all (the game's other animations stop too).
+- Fry Hydra keeps its own hurt and strike drawings (they came first); its idle, defeat and gloat are moves.
+
+The moves (`web/src/game/monster-moves.css`; each monster's mix in `web/src/game/moves.ts`):
+- takes a heart: bonk, lasso, jab, punch, swipe, storm, spring, stomp, charge, chomp, spin, slam, swoop, puff
+- defeated: melt, topple, dizzy, knockout, collapse, implode, pop, flatten, crumble, poof, belly-up, sink, fizzle
+- beats you: eat, champ, flex, drum, dance, yeehaw, curtsy, overload, laugh, twirl, bounce, hover
+
+How it works: each drawing has its parts tagged (`cc-fig` around the whole monster, `cc-shadow`, `cc-arm-l/r`,
+`cc-leg-l/r`, `cc-tail`, `cc-hat`, `cc-head`, `cc-orbit`, each with its pivot) and looks exactly as it did when
+still. `LiveMonster.tsx` puts the drawing inline (an `<img>` can't be moved part by part) and sets the state class
+(`cc-idle` / `cc-strike` / `cc-ko` / `cc-win`) and the monster's move. A new monster needs its parts tagged and a
+line in `moves.ts`; `test/moves.test.ts` fails until it has both. Small pictures (the map, chips, lists) stay still.
 
 ## Where it lives
 - **Switch:** the initials menu (MW) gets a **Game mode** item, with a gamepad icon, above Goals, Settings and Sign out. In the game the same item reads **Back to tracker**. Mockup: `GameMenuSwitch`.

@@ -3,7 +3,8 @@
     <clipPath id="biscuit-badger-head"><rect x="44" y="30" width="112" height="98" rx="40"/></clipPath>
     <clipPath id="biscuit-badger-body"><rect x="26" y="102" width="148" height="76" rx="32"/></clipPath>
   </defs>
-  <ellipse cx="100" cy="190" rx="80" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="80" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- flying crumbs from the dig -->
   <g fill="#e0a347" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M14 132 l7 -3 3 6 -6 3z"/><path d="M22 112 l5 -1 1 5 -5 1z"/><path d="M180 128 l7 2 -2 6 -6 -2z"/><path d="M176 108 l5 1 -1 5 -5 -1z"/>
@@ -14,6 +15,7 @@
     <path d="M150 100 Q182 130 156 182 L180 182 L180 100 Z" fill="#d99a2e"/>
     <path d="M26 132 q16 -6 32 0 t32 0 t32 0 t32 0 t32 0 M26 156 q16 6 32 0 t32 0 t32 0 t32 0 t32 0" fill="none" stroke="#c9862a" stroke-width="3" stroke-linecap="round"/>
   </g>
+  <g class="cc-head" style="transform-origin:100px 122px">
   <!-- ears -->
   <g stroke="#2b1d3a" stroke-width="4"><circle cx="54" cy="40" r="14" fill="#e0a347"/><circle cx="146" cy="40" r="14" fill="#e0a347"/></g>
   <circle cx="54" cy="40" r="6.5" fill="#ff9db8"/><circle cx="146" cy="40" r="6.5" fill="#ff9db8"/>
@@ -40,18 +42,25 @@
   <ellipse cx="100" cy="100" rx="8" ry="5.5" fill="#2b1d3a"/>
   <path d="M84 108 Q100 126 116 108 Q100 115 84 108 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
   <path d="M89 110 l3 5 3 -4z M111 110 l-3 5 -3 -4z M98 113 l2 4 2 -4z" fill="#ffffff"/>
+  </g>
   <!-- sausage-patty paws digging -->
-  <g stroke="#2b1d3a" stroke-width="4"><ellipse cx="58" cy="172" rx="25" ry="13" fill="#9a5530"/><ellipse cx="142" cy="172" rx="25" ry="13" fill="#9a5530"/></g>
-  <g fill="#6e3a1e"><circle cx="50" cy="170" r="2"/><circle cx="62" cy="176" r="1.8"/><circle cx="66" cy="166" r="1.6"/><circle cx="134" cy="170" r="2"/><circle cx="148" cy="176" r="1.8"/><circle cx="150" cy="166" r="1.6"/></g>
-  <path d="M42 166 Q50 162 58 162 M126 166 Q134 162 142 162" fill="none" stroke="#c47a48" stroke-width="3" stroke-linecap="round"/>
-  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="2.2" stroke-linejoin="round">
-    <path d="M40 180 l-6 8 9 -3z M50 183 l-3 8 7 -5z M61 184 l0 8 5 -7z"/>
-    <path d="M160 180 l6 8 -9 -3z M150 183 l3 8 -7 -5z M139 184 l0 8 -5 -7z"/>
+  <g class="cc-leg-l" style="transform-origin:62px 162px">
+    <ellipse cx="58" cy="172" rx="25" ry="13" fill="#9a5530" stroke="#2b1d3a" stroke-width="4"/>
+    <g fill="#6e3a1e"><circle cx="50" cy="170" r="2"/><circle cx="62" cy="176" r="1.8"/><circle cx="66" cy="166" r="1.6"/></g>
+    <path d="M42 166 Q50 162 58 162" fill="none" stroke="#c47a48" stroke-width="3" stroke-linecap="round"/>
+    <path d="M40 180 l-6 8 9 -3z M50 183 l-3 8 7 -5z M61 184 l0 8 5 -7z" fill="#ffffff" stroke="#2b1d3a" stroke-width="2.2" stroke-linejoin="round"/>
+  </g>
+  <g class="cc-leg-r" style="transform-origin:138px 162px">
+    <ellipse cx="142" cy="172" rx="25" ry="13" fill="#9a5530" stroke="#2b1d3a" stroke-width="4"/>
+    <g fill="#6e3a1e"><circle cx="134" cy="170" r="2"/><circle cx="148" cy="176" r="1.8"/><circle cx="150" cy="166" r="1.6"/></g>
+    <path d="M126 166 Q134 162 142 162" fill="none" stroke="#c47a48" stroke-width="3" stroke-linecap="round"/>
+    <path d="M160 180 l6 8 -9 -3z M150 183 l3 8 -7 -5z M139 184 l0 8 -5 -7z" fill="#ffffff" stroke="#2b1d3a" stroke-width="2.2" stroke-linejoin="round"/>
   </g>
   <!-- sparkles -->
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M22 26 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
     <path d="M178 22 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M182 74 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z"/>
+  </g>
   </g>
 </svg>

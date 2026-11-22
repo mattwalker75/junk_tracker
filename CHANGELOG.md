@@ -4,6 +4,18 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+## [1.11.0] — 2026-11-22
+### Added
+- 2026-11-22: **The monsters move.** All 120 monsters breathe and move their own arms, legs, tails, hats and
+  orbiting snacks while a fight is on, and each has its own three moments: an attack when it takes a heart off you,
+  a fall when you defeat it (it melts, topples, pops, crumbles, sinks, fizzles…), and a gloat when it takes your
+  last heart (on the Knocked back, Extra life and Defeated screens; on Defeated it wears your helmet while it
+  gloats). Every monster has its own mix, picked for what it is.
+- 2026-11-22: The Monster Book shows each monster moving, with Idle, Takes a heart, Defeated and Beats you buttons
+  to watch its moves.
+### Changed
+- 2026-11-22: A device set to reduce motion still gets no monster animation.
+
 ## [1.10.0] — 2026-11-22
 ### Added
 - 2026-11-22: **Calorie Crusher is complete: 120 levels in 12 worlds.** Four more worlds after Concession Canyon:

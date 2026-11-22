@@ -1,13 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Garlic Bread Gargoyle, a toasted garlic-bread gargoyle with garlic-clove horns and melted butter wings, crouched on a stone block">
-  <ellipse cx="100" cy="192" rx="64" ry="5" fill="#2b1d3a" opacity="0.22"/>
+  <ellipse class="cc-shadow" cx="100" cy="192" rx="64" ry="5" fill="#2b1d3a" opacity="0.22"/>
+  <g class="cc-fig">
   <!-- butter wings -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
-    <path d="M62 96 Q40 50 8 44 Q18 62 14 74 Q24 76 26 88 Q36 88 38 102 Q48 100 56 116 Z" fill="#ffe680"/>
-    <path d="M138 96 Q160 50 192 44 Q182 62 186 74 Q176 76 174 88 Q164 88 162 102 Q152 100 144 116 Z" fill="#ffe680"/>
+  <g class="cc-arm-l" style="transform-origin:60px 104px">
+    <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+      <path d="M62 96 Q40 50 8 44 Q18 62 14 74 Q24 76 26 88 Q36 88 38 102 Q48 100 56 116 Z" fill="#ffe680"/>
+    </g>
+    <path d="M56 94 Q40 64 18 52" fill="none" stroke="#f0c230" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M30 60 Q40 62 48 74" fill="none" stroke="#fff8c8" stroke-width="3.5" stroke-linecap="round"/>
+    <g fill="#ffe680" stroke="#2b1d3a" stroke-width="3"><path d="M24 90 Q22 100 26 102 Q30 100 28 90 Z"/></g>
   </g>
-  <path d="M56 94 Q40 64 18 52 M144 94 Q160 64 182 52" fill="none" stroke="#f0c230" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M30 60 Q40 62 48 74 M170 60 Q160 62 152 74" fill="none" stroke="#fff8c8" stroke-width="3.5" stroke-linecap="round"/>
-  <g fill="#ffe680" stroke="#2b1d3a" stroke-width="3"><path d="M24 90 Q22 100 26 102 Q30 100 28 90 Z"/><path d="M176 90 Q178 100 174 102 Q170 100 172 90 Z"/></g>
+  <g class="cc-arm-r" style="transform-origin:140px 104px">
+    <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+      <path d="M138 96 Q160 50 192 44 Q182 62 186 74 Q176 76 174 88 Q164 88 162 102 Q152 100 144 116 Z" fill="#ffe680"/>
+    </g>
+    <path d="M144 94 Q160 64 182 52" fill="none" stroke="#f0c230" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M170 60 Q160 62 152 74" fill="none" stroke="#fff8c8" stroke-width="3.5" stroke-linecap="round"/>
+    <g fill="#ffe680" stroke="#2b1d3a" stroke-width="3"><path d="M176 90 Q178 100 174 102 Q170 100 172 90 Z"/></g>
+  </g>
   <!-- stone block -->
   <rect x="40" y="160" width="120" height="28" rx="5" fill="#a39cb0" stroke="#2b1d3a" stroke-width="4"/>
   <path d="M44 178 H156 V182 Q156 184 154 184 H46 Q44 184 44 182 Z" fill="#857d94"/>
@@ -23,11 +33,13 @@
   </g>
   <path d="M74 44 Q72 34 76 26 M126 44 Q128 34 124 26" fill="none" stroke="#e0d2b4" stroke-width="3" stroke-linecap="round"/>
   <!-- crouched legs + claws -->
-  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#b8682a">
-    <ellipse cx="62" cy="152" rx="18" ry="14"/><ellipse cx="138" cy="152" rx="18" ry="14"/>
+  <g class="cc-leg-l" style="transform-origin:62px 142px">
+    <ellipse cx="62" cy="152" rx="18" ry="14" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#b8682a"/>
+    <g fill="#fff7e6" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"><path d="M48 162 l3 8 l4 -7 Z M58 164 l3 8 l4 -7 Z"/></g>
   </g>
-  <g fill="#fff7e6" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
-    <path d="M48 162 l3 8 l4 -7 Z M58 164 l3 8 l4 -7 Z M136 164 l3 8 l4 -7 Z M146 162 l3 8 l4 -7 Z"/>
+  <g class="cc-leg-r" style="transform-origin:138px 142px">
+    <ellipse cx="138" cy="152" rx="18" ry="14" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#b8682a"/>
+    <g fill="#fff7e6" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"><path d="M136 164 l3 8 l4 -7 Z M146 162 l3 8 l4 -7 Z"/></g>
   </g>
   <!-- the toast slice body: crust then crumb -->
   <path d="M58 60 Q56 40 80 40 Q100 30 120 40 Q144 40 142 60 Q150 76 146 102 L148 142 Q148 160 130 160 H70 Q52 160 52 142 L54 102 Q50 76 58 60 Z" fill="#b8682a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
@@ -49,4 +61,5 @@
   <path d="M76 110 Q100 136 124 110 Q120 128 100 130 Q80 128 76 110 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
   <path d="M82 113 L86 122 L90 116 Z M110 116 L114 122 L118 113 Z" fill="#fff"/>
   <path d="M94 124 Q100 120 106 124 Q102 128 100 128 Q98 128 94 124 Z" fill="#ff6f8e"/>
+  </g>
 </svg>

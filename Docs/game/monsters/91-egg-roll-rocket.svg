@@ -35,14 +35,18 @@
       <ellipse cx="100" cy="122" rx="4.5" ry="2.5" fill="#ff9db8"/><ellipse cx="150" cy="120" rx="4" ry="2.5" fill="#ff9db8"/>
     </g>
   </defs>
-  <ellipse cx="100" cy="190" rx="64" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="64" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- the wingman, flying behind -->
-  <use href="#egg-roll-rocket-ship" transform="translate(4 -27) scale(0.5) rotate(-25 100 114)"/>
+  <g class="cc-orbit" style="transform-origin:100px 108px">
+    <use href="#egg-roll-rocket-ship" transform="translate(4 -27) scale(0.5) rotate(-25 100 114)"/>
+  </g>
   <!-- the lead rocket -->
   <use href="#egg-roll-rocket-ship" transform="translate(4 -6) rotate(-25 100 114)"/>
   <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
     <path d="M124 18 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M178 140 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M24 170 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

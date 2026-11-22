@@ -1,15 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Freezer Burn, a faded old ice cream tub crusted with frost, lid crooked like a hat, with frosty brows and an icicle beard, hands on its hips">
-  <ellipse cx="100" cy="190" rx="66" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <ellipse class="cc-shadow" cx="100" cy="190" rx="66" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <g class="cc-fig">
   <!-- one arm down, one shaking a fist -->
-  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M50 118 Q30 136 30 160" stroke="#2b1d3a" stroke-width="15"/>
-    <path d="M152 112 Q178 104 176 78" stroke="#2b1d3a" stroke-width="15"/>
-    <path d="M50 118 Q30 136 30 160" stroke="#a9bccf" stroke-width="8"/>
-    <path d="M152 112 Q178 104 176 78" stroke="#a9bccf" stroke-width="8"/>
+  <g class="cc-arm-l" style="transform-origin:52px 116px">
+    <path d="M50 118 Q30 136 30 160" fill="none" stroke="#2b1d3a" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M50 118 Q30 136 30 160" fill="none" stroke="#a9bccf" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="30" cy="164" r="10" fill="#a9bccf" stroke="#2b1d3a" stroke-width="3.5"/>
   </g>
-  <g fill="#a9bccf" stroke="#2b1d3a" stroke-width="3.5"><circle cx="30" cy="164" r="10"/><circle cx="176" cy="72" r="11"/></g>
-  <path d="M170 68 l8 0 M170 74 l9 0" stroke="#7f97b0" stroke-width="2.5" stroke-linecap="round"/>
-  <g stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"><path d="M186 56 l5 -6 M190 66 l7 -2 M176 54 l0 -8"/></g>
+  <g class="cc-arm-r" style="transform-origin:150px 112px">
+    <path d="M152 112 Q178 104 176 78" fill="none" stroke="#2b1d3a" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M152 112 Q178 104 176 78" fill="none" stroke="#a9bccf" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="176" cy="72" r="11" fill="#a9bccf" stroke="#2b1d3a" stroke-width="3.5"/>
+    <path d="M170 68 l8 0 M170 74 l9 0" stroke="#7f97b0" stroke-width="2.5" stroke-linecap="round"/>
+    <g stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"><path d="M186 56 l5 -6 M190 66 l7 -2 M176 54 l0 -8"/></g>
+  </g>
   <!-- the tub -->
   <path d="M44 70 L156 70 L148 174 Q100 184 52 174 Z" fill="#b9c7d6" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
   <path d="M136 74 L154 74 L146 172 Q138 175 128 176 Z" fill="#9fb0c3"/>
@@ -21,12 +25,14 @@
   <!-- rim, with frost -->
   <ellipse cx="100" cy="70" rx="56" ry="13" fill="#dbe5ef" stroke="#2b1d3a" stroke-width="4"/>
   <!-- the crooked lid -->
+  <g class="cc-hat" style="transform-origin:98px 60px">
   <g transform="rotate(-12 98 46)" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
     <path d="M46 46 L46 54 Q98 70 150 54 L150 46 Z" fill="#7f97b0"/>
     <ellipse cx="98" cy="46" rx="52" ry="12" fill="#93abc4"/>
   </g>
+  <path d="M62 34 Q70 24 84 28 Q96 22 106 30 Q116 26 120 34 Q106 40 92 36 Q78 42 62 34 Z" fill="#f2fbff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  </g>
   <g fill="#f2fbff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
-    <path d="M62 34 Q70 24 84 28 Q96 22 106 30 Q116 26 120 34 Q106 40 92 36 Q78 42 62 34 Z"/>
     <path d="M44 78 Q50 86 46 96 Q40 88 44 78 Z"/>
     <path d="M156 78 Q160 90 152 98 Q150 88 156 78 Z"/>
   </g>
@@ -49,5 +55,6 @@
     <path d="M26 46 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
     <path d="M172 26 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
     <path d="M178 170 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
   </g>
 </svg>

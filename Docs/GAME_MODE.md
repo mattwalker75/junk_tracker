@@ -77,6 +77,14 @@ a total of 120 monsters to fight". Decided with Matt:
 - The database refuses levels above 60 today (`game_fights.level` CHECK): growing needs one database
   upgrade (a copy of the file is saved first, as always).
 - Mockups first, world by world: canvas **Round 9** has twelve world ideas (A–L) to pick six from.
+- **The six worlds, in order** (Matt, Nov 21 2026): 7 **Freezer Tundra**, 8 **Concession Canyon**,
+  9 **Brunch Boulevard**, 10 **Takeout Temple**, 11 **Deep-Fry Volcano**, 12 **Calorie Cosmos** (final boss
+  The Snackularity at 120). Deadlines: 8 days (worlds 7–8), 9 (9–10), 10 (11–12); a boss +1.
+- World 7's ten monsters are drafted (canvas **Round 10**; drawings and roster in `Docs/game/drafts/world7/`),
+  waiting for Matt's yes. Three of their abilities need small engine additions when built: the fight's day
+  number (Slow Thaw, Frozen Solid) and a revive that can happen more than once (Three Crowns).
+- **The phone apps must stay in step** (Matt, Nov 21 2026): the build includes the phone tests, the new
+  database upgrade run on the phone, and both apps rebuilt (`APP_PORTS/*/BUILD_APP.sh`).
 
 ## Where it lives
 - **Switch:** the initials menu (MW) gets a **Game mode** item, with a gamepad icon, above Goals, Settings and Sign out. In the game the same item reads **Back to tracker**. Mockup: `GameMenuSwitch`.

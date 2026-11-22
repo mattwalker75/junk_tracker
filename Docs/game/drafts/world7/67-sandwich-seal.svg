@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Sandwich Seal, an ice cream sandwich seal with a chocolate-cookie coat, vanilla belly and a frosty cap still thawing, clapping a flipper">
+  <defs>
+    <clipPath id="sandwich-seal-body"><path d="M100 30 Q152 30 156 100 Q162 158 132 176 L68 176 Q38 158 44 100 Q48 30 100 30 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="70" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- tail flippers -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#4a2a1c">
+    <path d="M70 170 Q50 178 46 190 Q66 192 84 178 Z"/>
+    <path d="M130 170 Q150 178 154 190 Q134 192 116 178 Z"/>
+  </g>
+  <!-- the cookie coat -->
+  <path d="M100 30 Q152 30 156 100 Q162 158 132 176 L68 176 Q38 158 44 100 Q48 30 100 30 Z" fill="#5a3424" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#sandwich-seal-body)">
+    <g fill="#3e2218">
+      <rect x="54" y="64" width="6" height="4" rx="2"/><rect x="140" y="66" width="6" height="4" rx="2"/><rect x="50" y="96" width="6" height="4" rx="2"/><rect x="146" y="100" width="6" height="4" rx="2"/>
+      <rect x="54" y="132" width="6" height="4" rx="2"/><rect x="142" y="136" width="6" height="4" rx="2"/><rect x="60" y="160" width="6" height="4" rx="2"/><rect x="134" y="162" width="6" height="4" rx="2"/>
+    </g>
+    <!-- frosty cap, thawing -->
+    <path d="M30 20 L170 20 L170 62 Q160 70 150 62 Q140 74 128 64 Q116 72 104 62 Q92 72 80 62 Q68 72 58 62 Q46 70 30 60 Z" fill="#e6f6ff"/>
+    <path d="M140 40 Q154 60 150 100 Q160 160 120 180 L170 180 L170 40 Z" fill="#2b1d3a" opacity="0.18"/>
+  </g>
+  <path d="M100 30 Q152 30 156 100 Q162 158 132 176 L68 176 Q38 158 44 100 Q48 30 100 30 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M70 46 Q80 36 94 36" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <!-- melt drops -->
+  <g fill="#9fdcff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M58 64 Q62 74 60 78 Q56 82 53 78 Q52 72 58 64 Z"/>
+    <path d="M150 66 Q154 76 152 80 Q148 84 145 80 Q144 74 150 66 Z"/>
+  </g>
+  <!-- vanilla belly -->
+  <ellipse cx="100" cy="136" rx="38" ry="38" fill="#fffaf0" stroke="#2b1d3a" stroke-width="3.5"/>
+  <path d="M74 120 Q80 108 92 104" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- big seal eyes -->
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="80" cy="80" r="13" fill="#ffffff"/><circle cx="120" cy="80" r="13" fill="#ffffff"/></g>
+  <circle cx="81" cy="82" r="9" fill="#2b1d3a"/><circle cx="119" cy="82" r="9" fill="#2b1d3a"/>
+  <circle cx="84" cy="78" r="3" fill="#ffffff"/><circle cx="122" cy="78" r="3" fill="#ffffff"/>
+  <path d="M64 58 L90 66 M136 58 L110 66" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <!-- muzzle -->
+  <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="3"><ellipse cx="91" cy="102" rx="11" ry="8"/><ellipse cx="109" cy="102" rx="11" ry="8"/></g>
+  <path d="M94 94 Q100 90 106 94 Q104 100 100 100 Q96 100 94 94 Z" fill="#2b1d3a"/>
+  <g stroke="#fffaf0" stroke-width="2.2" stroke-linecap="round"><path d="M80 100 l-14 -3 M80 105 l-14 2 M120 100 l14 -3 M120 105 l14 2"/></g>
+  <path d="M94 110 Q100 116 106 110" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <!-- flippers: one clapping up -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#4a2a1c">
+    <path d="M48 118 Q20 116 14 136 Q34 146 52 136 Z"/>
+    <path d="M150 116 Q176 104 182 84 Q164 80 148 100 Z"/>
+  </g>
+  <g stroke="#ffc93c" stroke-width="3" stroke-linecap="round"><path d="M184 66 l4 -8 M190 80 l8 -2 M172 64 l-2 -8"/></g>
+  <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M24 46 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+  </g>
+</svg>

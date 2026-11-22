@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Emperor Neapolitan, a three-headed boss: chocolate, vanilla and strawberry scoops each wearing a gold crown, on a striped Neapolitan brick body in a royal cape, holding a cone sceptre">
+  <defs>
+    <clipPath id="emperor-neapolitan-brick"><rect x="52" y="104" width="96" height="70" rx="10"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="82" ry="7" fill="#2b1d3a" opacity="0.2"/>
+  <!-- royal cape -->
+  <path d="M28 184 L46 98 L154 98 L172 184 Q100 192 28 184 Z" fill="#6c3fc4" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M150 104 L166 180 Q156 183 146 184 Z" fill="#53309a"/>
+  <!-- boots -->
+  <g fill="#3e2218" stroke="#2b1d3a" stroke-width="3.5"><rect x="66" y="170" width="26" height="16" rx="7"/><rect x="108" y="170" width="26" height="16" rx="7"/></g>
+  <!-- the Neapolitan brick body -->
+  <g clip-path="url(#emperor-neapolitan-brick)">
+    <rect x="50" y="100" width="34" height="80" fill="#6b3f26"/>
+    <rect x="84" y="100" width="32" height="80" fill="#fff3d6"/>
+    <rect x="116" y="100" width="34" height="80" fill="#ff9ec4"/>
+    <g fill="#e2384d"><ellipse cx="128" cy="140" rx="3" ry="2"/><ellipse cx="138" cy="158" rx="3" ry="2"/></g>
+    <g fill="#3e2218"><rect x="62" y="132" width="5" height="3" rx="1.5"/><rect x="72" y="156" width="5" height="3" rx="1.5"/></g>
+    <g fill="#e8d6b0"><circle cx="96" cy="146" r="1.6"/><circle cx="104" cy="160" r="1.6"/></g>
+  </g>
+  <rect x="52" y="104" width="96" height="70" rx="10" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- ermine collar -->
+  <path d="M40 104 Q100 120 160 104 L160 94 Q100 108 40 94 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <g fill="#2b1d3a"><path d="M60 104 l2 5 2 -5z"/><path d="M84 108 l2 5 2 -5z"/><path d="M112 108 l2 5 2 -5z"/><path d="M138 104 l2 5 2 -5z"/></g>
+  <!-- three scoop heads -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M36 82 Q34 52 62 50 Q90 52 88 82 Q82 90 76 84 Q70 92 62 86 Q54 92 48 84 Q42 90 36 82 Z" fill="#7a4a2a"/>
+    <path d="M112 82 Q110 52 138 50 Q166 52 164 82 Q158 90 152 84 Q146 92 138 86 Q130 92 124 84 Q118 90 112 82 Z" fill="#ff9ec4"/>
+    <path d="M66 78 Q64 34 100 32 Q136 34 134 78 Q126 88 118 80 Q110 90 100 82 Q90 90 82 80 Q74 88 66 78 Z" fill="#fff3d6"/>
+  </g>
+  <path d="M76 44 Q84 38 94 38" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- three crowns -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
+    <path d="M48 52 L46 36 L54 44 L62 32 L70 44 L78 36 L76 52 Z"/>
+    <path d="M124 52 L122 36 L130 44 L138 32 L146 44 L154 36 L152 52 Z"/>
+    <path d="M80 36 L76 14 L88 26 L100 8 L112 26 L124 14 L120 36 Z"/>
+  </g>
+  <g fill="#e2384d" stroke="#2b1d3a" stroke-width="1.5"><circle cx="62" cy="45" r="3"/><circle cx="138" cy="45" r="3"/><circle cx="100" cy="27" r="4"/></g>
+  <g fill="#39a0ff" stroke="#2b1d3a" stroke-width="1.5"><circle cx="88" cy="31" r="2.5"/><circle cx="112" cy="31" r="2.5"/></g>
+  <!-- faces: smug, furious, sly -->
+  <g stroke="#2b1d3a" stroke-width="3"><circle cx="54" cy="66" r="6.5" fill="#ffffff"/><circle cx="70" cy="66" r="6.5" fill="#ffffff"/></g>
+  <circle cx="55" cy="67" r="3.5" fill="#2b1d3a"/><circle cx="71" cy="67" r="3.5" fill="#2b1d3a"/>
+  <path d="M47 66 A6.5 6.5 0 0 1 60 66 Z M64 66 A6.5 6.5 0 0 1 77 66 Z" fill="#5a3424" stroke="#2b1d3a" stroke-width="2.5"/>
+  <path d="M56 76 Q64 80 72 74" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="88" cy="56" r="10" fill="#ffffff"/><circle cx="112" cy="56" r="10" fill="#ffffff"/></g>
+  <circle cx="90" cy="58" r="5.5" fill="#2b1d3a"/><circle cx="110" cy="58" r="5.5" fill="#2b1d3a"/>
+  <circle cx="92" cy="55" r="2" fill="#ffffff"/><circle cx="112" cy="55" r="2" fill="#ffffff"/>
+  <path d="M74 42 L96 48 M126 42 L104 48" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M86 68 Q100 82 114 68 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M90 69 l3 5 3 -5z M110 69 l-3 5 -3 -5z" fill="#ffffff"/>
+  <ellipse cx="80" cy="68" rx="4" ry="2.5" fill="#ffc2d4"/><ellipse cx="120" cy="68" rx="4" ry="2.5" fill="#ffc2d4"/>
+  <g stroke="#2b1d3a" stroke-width="3"><circle cx="130" cy="66" r="6.5" fill="#ffffff"/><circle cx="146" cy="66" r="6.5" fill="#ffffff"/></g>
+  <circle cx="132" cy="67" r="3.5" fill="#2b1d3a"/><circle cx="148" cy="67" r="3.5" fill="#2b1d3a"/>
+  <path d="M124 58 L136 62 M152 58 L142 61" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M130 76 Q140 72 148 78" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <!-- cone sceptre -->
+  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M166 120 L186 120 L176 176 Z" fill="#e2a95a"/>
+    <circle cx="176" cy="112" r="13" fill="#9ee6c4"/>
+    <circle cx="176" cy="96" r="6" fill="#e2384d"/>
+  </g>
+  <path d="M170 132 L182 144 M182 132 L172 152" stroke="#b8732e" stroke-width="2"/>
+  <circle cx="160" cy="140" r="9" fill="#fff3d6" stroke="#2b1d3a" stroke-width="3.5"/>
+  <!-- gold sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M22 28 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+    <path d="M174 18 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M20 140 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

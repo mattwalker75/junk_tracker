@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Snow Cone Owl, a rainbow shaved-ice owl in a striped paper cone, with huge staring eyes and syrup wings">
+  <defs>
+    <clipPath id="snow-cone-owl-cup"><path d="M54 120 L146 120 L122 182 L78 182 Z"/></clipPath>
+    <clipPath id="snow-cone-owl-ice"><path d="M46 126 Q34 50 100 42 Q166 50 154 126 Q146 134 138 126 Q130 136 120 128 Q110 138 100 128 Q90 138 80 128 Q70 136 62 126 Q54 134 46 126 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="56" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- talons -->
+  <g fill="#ff9a3c" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
+    <path d="M80 180 l-6 10 6 -2 4 4 2 -6 4 4 0 -10 Z"/>
+    <path d="M120 180 l6 10 -6 -2 -4 4 -2 -6 -4 4 0 -10 Z"/>
+  </g>
+  <!-- the paper cone -->
+  <path d="M54 120 L146 120 L122 182 L78 182 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#snow-cone-owl-cup)" stroke="#6ec6ff" stroke-width="9"><path d="M40 110 L110 190 M70 110 L140 190 M100 110 L170 190"/></g>
+  <path d="M54 120 L146 120 L122 182 L78 182 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M116 130 Q120 148 114 160 Q110 166 108 158 Q110 146 110 130 Z" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- ear tufts -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M58 64 L50 24 L84 50 Z" fill="#ff4d6d"/>
+    <path d="M142 64 L150 24 L116 50 Z" fill="#ffd23c"/>
+  </g>
+  <!-- the shaved ice dome, three syrups -->
+  <g clip-path="url(#snow-cone-owl-ice)">
+    <rect x="30" y="30" width="54" height="120" fill="#ff4d6d"/>
+    <rect x="82" y="30" width="38" height="120" fill="#39a0ff"/>
+    <rect x="118" y="30" width="50" height="120" fill="#ffd23c"/>
+    <g fill="#ffffff" opacity="0.55"><circle cx="60" cy="60" r="2"/><circle cx="70" cy="112" r="2.4"/><circle cx="96" cy="52" r="1.8"/><circle cx="104" cy="118" r="2"/><circle cx="138" cy="64" r="2.2"/><circle cx="142" cy="110" r="1.8"/><circle cx="52" cy="92" r="1.6"/></g>
+  </g>
+  <path d="M46 126 Q34 50 100 42 Q166 50 154 126 Q146 134 138 126 Q130 136 120 128 Q110 138 100 128 Q90 138 80 128 Q70 136 62 126 Q54 134 46 126 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M60 58 Q70 48 84 48" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+  <!-- wings -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M48 104 Q20 122 32 164 Q50 152 60 128 Z" fill="#ff4d6d"/>
+    <path d="M152 104 Q180 122 168 164 Q150 152 140 128 Z" fill="#ffd23c"/>
+  </g>
+  <!-- huge eyes: it sees every snack -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="78" cy="88" r="22" fill="#fff7d6"/><circle cx="122" cy="88" r="22" fill="#fff7d6"/></g>
+  <circle cx="78" cy="89" r="14" fill="#ffb020"/><circle cx="122" cy="89" r="14" fill="#ffb020"/>
+  <circle cx="78" cy="89" r="8" fill="#2b1d3a"/><circle cx="122" cy="89" r="8" fill="#2b1d3a"/>
+  <circle cx="82" cy="85" r="3" fill="#ffffff"/><circle cx="126" cy="85" r="3" fill="#ffffff"/>
+  <path d="M56 62 L98 76 M144 62 L102 76" stroke="#2b1d3a" stroke-width="6" stroke-linecap="round"/>
+  <path d="M93 104 L107 104 L100 118 Z" fill="#ff9a3c" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M24 70 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M176 76 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

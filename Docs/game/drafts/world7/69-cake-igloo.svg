@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Cake Igloo, an igloo made of ice cream cake with fudge drips, frosting rosettes and a cherry, its doorway a mouth with icicle teeth">
+  <defs>
+    <clipPath id="cake-igloo-dome"><path d="M22 172 Q22 40 100 40 Q178 40 178 172 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="182" rx="88" ry="9" fill="#e6f6ff" stroke="#2b1d3a" stroke-width="3"/>
+  <!-- the dome, in cake layers -->
+  <g clip-path="url(#cake-igloo-dome)">
+    <rect x="0" y="0" width="200" height="200" fill="#fffaf2"/>
+    <rect x="0" y="138" width="200" height="40" fill="#5a3424"/>
+    <path d="M0 136 L200 136" stroke="#3e2218" stroke-width="6" stroke-dasharray="4 5"/>
+    <!-- ice blocks -->
+    <g fill="none" stroke="#e6d8c4" stroke-width="3"><path d="M20 112 Q100 104 180 112"/><path d="M30 86 Q100 78 170 86"/><path d="M60 86 L58 112 M100 82 L100 108 M140 86 L142 112 M80 60 L78 84 M122 60 L124 84"/></g>
+    <!-- fudge drip cap -->
+    <path d="M0 0 L200 0 L200 64 Q184 76 176 62 Q168 82 156 64 Q146 72 136 60 Q126 78 114 60 Q104 70 94 58 Q82 80 72 60 Q62 70 52 58 Q42 76 32 62 Q20 70 0 60 Z" fill="#6b3f26"/>
+    <path d="M150 40 Q172 70 170 140 L200 140 L200 30 Z" fill="#2b1d3a" opacity="0.12"/>
+  </g>
+  <path d="M22 172 Q22 40 100 40 Q178 40 178 172 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M60 52 Q74 44 88 44" fill="none" stroke="#a8704a" stroke-width="4" stroke-linecap="round"/>
+  <!-- rosettes and the cherry -->
+  <g fill="#ff9ec4" stroke="#2b1d3a" stroke-width="3"><circle cx="58" cy="58" r="8"/><circle cx="142" cy="58" r="8"/><circle cx="80" cy="44" r="8"/><circle cx="120" cy="44" r="8"/></g>
+  <g fill="none" stroke="#ffd3e0" stroke-width="2"><path d="M56 56 q3 -3 5 1 M78 42 q3 -3 5 1 M118 42 q3 -3 5 1 M140 56 q3 -3 5 1"/></g>
+  <path d="M102 30 Q108 16 120 12" fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="100" cy="32" r="10" fill="#e2384d" stroke="#2b1d3a" stroke-width="3.5"/>
+  <circle cx="97" cy="29" r="3" fill="#ff8fa0"/>
+  <!-- eyes -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="72" cy="98" r="14" fill="#ffffff"/><circle cx="128" cy="98" r="14" fill="#ffffff"/></g>
+  <circle cx="74" cy="101" r="8" fill="#2b1d3a"/><circle cx="126" cy="101" r="8" fill="#2b1d3a"/>
+  <circle cx="77" cy="97" r="3" fill="#ffffff"/><circle cx="129" cy="97" r="3" fill="#ffffff"/>
+  <path d="M54 80 L84 88 M146 80 L116 88" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="50" cy="120" rx="7" ry="4" fill="#ffc2d4"/><ellipse cx="150" cy="120" rx="7" ry="4" fill="#ffc2d4"/>
+  <!-- the doorway is its mouth -->
+  <path d="M72 174 L72 146 Q72 118 100 118 Q128 118 128 146 L128 174 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M76 140 L82 150 L86 132 L92 146 L96 124 L100 142 L104 124 L108 146 L114 132 L118 150 L124 140 Q122 126 100 124 Q78 126 76 140 Z" fill="#e6f6ff" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="100" cy="166" rx="14" ry="6" fill="#ff7fa2"/>
+  <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M24 30 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M176 24 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

@@ -4,7 +4,7 @@
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { LEVEL_COUNT, levelInfo, monsterHp, type FightView, type Mode } from "../../../shared/game";
+import { fightDays, LEVEL_COUNT, levelInfo, monsterHp, type FightView, type Mode, type NextFightView } from "../../../shared/game";
 import { toughnessOf } from "../../../shared/types";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
@@ -30,7 +30,7 @@ export function StartRun() {
   const [mode, setMode] = useState<Mode>("normal");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [begun, setBegun] = useState<{ number: number; mode: Mode; fight: FightView | null } | null>(null);
+  const [begun, setBegun] = useState<{ number: number; mode: Mode; fight: FightView | null; next: NextFightView | null } | null>(null);
   // a run still going ends when a new one starts: that takes a second tap
   const [sure, setSure] = useState(false);
   const run = view?.run ?? null;
@@ -48,7 +48,7 @@ export function StartRun() {
       // workout logged earlier today can KO Crumbs at once: its Victory comes up)
       applyResult(qc, today, { ...r, happened: startedRun(r) });
       void qc.invalidateQueries({ queryKey: ["game-hall"] });
-      setBegun({ number: r.view.run?.number ?? next, mode, fight: r.view.fight });
+      setBegun({ number: r.view.run?.number ?? next, mode, fight: r.view.fight, next: r.view.next });
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   };
@@ -137,10 +137,12 @@ export function StartRun() {
 }
 
 /** "Run #N begins!": the monster you fight first (Crumbs, or the next one if Crumbs went down at once). Tap, Enter or Esc to go. */
-function Begins({ begun }: { begun: { number: number; mode: Mode; fight: FightView | null } }) {
+function Begins({ begun }: { begun: { number: number; mode: Mode; fight: FightView | null; next: NextFightView | null } }) {
   const ref = useRef<HTMLButtonElement>(null);
   const f = begun.fight;
-  const lv = levelInfo(f?.level ?? 1);
+  // today's log may have beaten Crumbs already: then it is the monster up next (review, Nov 22 2026)
+  const up = begun.next;
+  const lv = levelInfo(f?.level ?? up?.level ?? 1);
   useEffect(() => {
     ref.current?.focus();
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") go("/game/battle"); };
@@ -157,7 +159,7 @@ function Begins({ begun }: { begun: { number: number; mode: Mode; fight: FightVi
         </span>
         <span className="flex gap-1.5">{[0, 1, 2].map((i) => <HeartFull key={i} className="h-8 w-9" />)}</span>
         <span aria-hidden><LiveMonster slug={lv.slug} name="" className="size-[140px]" /></span>
-        <span className="rounded-full border-[3px] border-g-line bg-[#fff7e6] px-3.5 py-1.5 text-sm font-black">{lv.name} · {f ? `${hpText(hpLeft(f), f.max)} HP · due ${dueText(f.deadlineOn)}` : `${lv.hp} HP · ${lv.days}-day deadline`}</span>
+        <span className="rounded-full border-[3px] border-g-line bg-[#fff7e6] px-3.5 py-1.5 text-sm font-black">{lv.name} · {f ? `${hpText(hpLeft(f), f.max)} HP · due ${dueText(f.deadlineOn)}` : up ? `${up.hp} HP · ${up.days}-day deadline · up next` : `${monsterHp(lv.level, 1)} HP · ${fightDays(lv.level)}-day deadline`}</span>
         <span className="text-[13px] font-extrabold text-[#1a3d1f]">{begun.mode === "hardcore" ? "All points ×1.25 · no checkpoints · tap to go" : "A checkpoint at every world · tap to go"}</span>
       </button>
     </div>

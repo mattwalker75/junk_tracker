@@ -4,7 +4,7 @@
  * crush; the adventure map; the monsters peeking over the hill.
  */
 import { useQuery } from "@tanstack/react-query";
-import { levelInfo } from "../../../shared/game";
+import { levelInfo, monsterHp } from "../../../shared/game";
 import { api } from "../lib/api";
 import { Clouds, Hill, LogoBurst, Sunburst } from "./art";
 import { Book, Fist, HeartFull, MapIcon, PadSmall, Play, Trophy } from "./icons";
@@ -77,7 +77,7 @@ export function TitleScreen() {
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
               <span className="font-game text-[26px] leading-none" style={{ color: "#fff", WebkitTextStroke: "2.5px #2b1d3a", paintOrder: "stroke fill" }}>Start a run</span>
               <span className="text-xs font-black text-[#4a2f00]">
-                {run ? `Run #${run.number} is over with ${fmt(run.score)} points. Run #${run.number + 1} starts with Crumbs.` : "Level 1 · Crumbs · 100 HP · 3 hearts"}
+                {run ? `Run #${run.number} is over with ${fmt(run.score)} points. Run #${run.number + 1} starts with Crumbs.` : `Level 1 · Crumbs · ${monsterHp(1, view?.hpMult ?? 1)} HP · 3 hearts`}
               </span>
             </span>
             <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-full border-[3px] border-g-line bg-g-red"><Play className="ml-0.5 h-[18px] w-4" /></span>

@@ -21,7 +21,7 @@ export const useActions = () => useContext(ActionsContext);
  * the Hall of Heroes too: a workout logged on the tracker can KO the monster, and the game screens
  * read again (and sync) the next time they show.
  */
-export const LOG_KEYS = [["overview"], ["month"], ["day"], ["game"], ["game-hall"]] as const;
+export const LOG_KEYS = [["overview"], ["month"], ["day"], ["goals"], ["game"], ["game-hall"]] as const;
 /** Everything that shows goals: the list, and the note and menu on Home. */
 export const GOAL_KEYS = [["goals"], ["overview"]] as const;
 /** Refetch everything under these keys, all at once. */

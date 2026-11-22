@@ -16,6 +16,8 @@ export function WeighSheet({ open, onOpenChange, day }: { open: boolean; onOpenC
   const today = useToday();
   const [d, setD] = useState<Day>(day ?? today);
   const [value, setValue] = useState("");
+  // what the person typed stays when they change the day (it was replaced by that day's reading — review, Nov 22 2026)
+  const [typed, setTyped] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const overview = useQuery({ queryKey: ["overview", today], queryFn: () => api.overview(today), enabled: open });
@@ -23,10 +25,10 @@ export function WeighSheet({ open, onOpenChange, day }: { open: boolean; onOpenC
   const unit = overview.data?.settings.units ?? "lb";
   const have = existing.data?.[0];
 
-  useEffect(() => { if (open) { setD(day ?? today); setError(null); setValue(""); } }, [open, day, today]);
+  useEffect(() => { if (open) { setD(day ?? today); setError(null); setValue(""); setTyped(false); } }, [open, day, today]);
   // the box shows the picked day's reading, or is empty when that day has none (never another day's)
   const loadedFor = existing.data ? d : null;
-  useEffect(() => { if (open && loadedFor) setValue(have ? String(inUnit(have.pounds, unit)) : ""); }, [open, loadedFor, have, unit]);
+  useEffect(() => { if (open && loadedFor && !typed) setValue(have ? String(inUnit(have.pounds, unit)) : ""); }, [open, loadedFor, have, unit, typed]);
 
   const refresh = () => void refetch(qc, LOG_KEYS);
   const save = async (e: FormEvent) => {
@@ -52,7 +54,7 @@ export function WeighSheet({ open, onOpenChange, day }: { open: boolean; onOpenC
     <Sheet open={open} onOpenChange={onOpenChange} title="Weigh in" subtitle={longDay(d, today)}>
       <form onSubmit={save} className="space-y-4 pb-2">
         <Field label={`Weight (${unit})`} required>
-          {(id) => <Input id={id} value={value} onChange={(e) => setValue(e.target.value)} inputMode="decimal" placeholder={unit === "lb" ? "187.4" : "85.0"} autoFocus className="tabular text-lg font-bold" />}
+          {(id) => <Input id={id} value={value} onChange={(e) => { setValue(e.target.value); setTyped(true); }} inputMode="decimal" placeholder={unit === "lb" ? "187.4" : "85.0"} autoFocus className="tabular text-lg font-bold" />}
         </Field>
         <DayPicker value={d} onChange={setD} today={today} weekStart={overview.data?.settings.weekStart ?? 0} />
         {have ? <p className="text-sm text-mute">{longDay(d, today)} already has {inUnit(have.pounds, unit)} {unit}; saving replaces it — one weigh-in a day.</p> : null}

@@ -53,8 +53,11 @@ export const betDays = (bet: Bet): number => (bet === 2 ? 2 : bet === 1.5 ? 1 : 
  * A fight's last day. The start day is day 1 — unless the fight began partway through it (after a
  * KO), when that part-day is a bonus and the days count from the next one.
  */
+/** a level's deadline in days before any bet, its ability's extra days included (Long Haul) — what every screen says */
+export const fightDays = (level: number): number => levelInfo(level).days + (abilityFor(level).extraDays ?? 0);
+
 export function deadlineFor(level: number, startedOn: Day, partDay: boolean, bet: Bet = 1): Day {
-  const days = levelInfo(level).days + (abilityFor(level).extraDays ?? 0) - betDays(bet);
+  const days = fightDays(level) - betDays(bet);
   return addDays(startedOn, partDay ? days : days - 1);
 }
 
@@ -316,19 +319,24 @@ function usedBeforeOf(st: RunState, f: FightData): Id[] | null {
  * puts the shield back up (it was never really used).
  */
 function shieldIn(st: RunState, f: FightData, log: GameLog, today: Day, usedBefore: Id[] | null): { blocked: string[]; shieldFrom: ArmPoint | null; voided: { block: EventData; from: ArmPoint } | null } {
-  const win = { startedOn: f.startedOn, startedAfter: f.startedAfter, deadlineOn: f.deadlineOn, usedBefore };
-  const stillCounts = (healId: string) => {
-    const src = healId.replace(/:later\d*$/, "");
-    if (src.includes(":")) return true; // the monster's own day-end heal
-    const s = log.splurges.find((x) => x.id === src);
-    return !!s && counts(s, win, today);
-  };
+  const blocks = st.events.filter((e) => e.fightId === f.id && isUse(e, "shield", "block"));
+  // a block still counts while the heal it blocked would still happen: the fight is worked out again with every
+  // block in place, and each one must still meet its heal. Looking up the blocked splurge missed the monster's own
+  // heals (a midnight +5, a "then 5 more" the next day) that a later change made go away (review, Nov 22 2026).
+  const happens = new Set<string>();
+  if (blocks.length) {
+    const sim = simulateFight({
+      level: f.level, startedOn: f.startedOn, startedAfter: f.startedAfter, usedBefore, deadlineOn: f.deadlineOn, today, hpMult: f.hpMult ?? 1,
+      splurges: log.splurges, activities: log.activities, potions: potionsOf(st, f), shieldFrom: null, blocked: blocks.map((b) => String(b.data.healId)),
+    });
+    for (const l of sim.lines) if (l.kind === "blocked" && l.sourceId) happens.add(l.sourceId);
+  }
+  const stillCounts = (healId: string) => happens.has(healId);
   const pointOf = (raise: EventData | undefined): ArmPoint => {
     if (!raise) return "start";
     if (isUse(raise, "shield", "back")) return (raise.data.from as ArmPoint | undefined) ?? "start";
     return raise.fightId === f.id ? { day: raise.day, time: String(raise.data.time ?? ""), at: raise.at } : "start";
   };
-  const blocks = st.events.filter((e) => e.fightId === f.id && isUse(e, "shield", "block"));
   const live = blocks.filter((b) => stillCounts(String(b.data.healId)));
   let lastRaise: EventData | undefined, lastRaiseAt = -1;
   st.events.forEach((e, i) => { if (isRaise(e)) { lastRaise = e; lastRaiseAt = i; } });
@@ -341,9 +349,10 @@ function shieldIn(st: RunState, f: FightData, log: GameLog, today: Day, usedBefo
 }
 
 /** The engine's input for one fight of a run: its window, the log, and its power-ups. */
+const potionsOf = (st: RunState, f: FightData) => st.events.filter((e) => e.fightId === f.id && isUse(e, "potion")).map((e) => ({ id: e.id, day: e.day, time: String(e.data.time ?? ""), at: e.at }));
+
 export function fightInputFor(st: RunState, f: FightData, log: GameLog, today: Day): FightInput {
-  const mine = st.events.filter((e) => e.fightId === f.id);
-  const potions = mine.filter((e) => isUse(e, "potion")).map((e) => ({ id: e.id, day: e.day, time: String(e.data.time ?? ""), at: e.at }));
+  const potions = potionsOf(st, f);
   const usedBefore = usedBeforeOf(st, f);
   const { blocked, shieldFrom } = shieldIn(st, f, log, today, usedBefore);
   return { level: f.level, startedOn: f.startedOn, startedAfter: f.startedAfter, usedBefore, deadlineOn: f.deadlineOn, today, hpMult: f.hpMult ?? 1, splurges: log.splurges, activities: log.activities, potions, shieldFrom, blocked };
@@ -431,7 +440,7 @@ function nextView(st: RunState, today: Day, hpMult: number): NextFightView | nul
   const partDay = !!koToday(st, today);
   return {
     level, attempt: st.fights.filter((x) => x.level === level).length + 1, name: lv.name, slug: lv.slug, world: lv.world, worldName: lv.worldName, boss: lv.boss,
-    ability: { id: ab.id, name: ab.name, text: ab.text }, hp: monsterHp(level, hpMult), days: lv.days + (ab.extraDays ?? 0),
+    ability: { id: ab.id, name: ab.name, text: ab.text }, hp: monsterHp(level, hpMult), days: fightDays(level),
     rematch: last.status === "struck", partDay,
     betOptions: BETS.map((b) => ({ bet: b, label: BET_LABEL[String(b)], deadlineOn: deadlineFor(level, today, partDay, b) })),
   };

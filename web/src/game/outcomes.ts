@@ -37,7 +37,11 @@ export function planResults(events: readonly EventView[]): { results: Result[]; 
       for (const x of [...rewards, ...(finish ? [finish] : [])]) used.add(x.id);
       results.push({ kind: finish ? "finish" : "victory", id: e.id, ko: e, rewards });
     } else if (e.kind === "strike") {
-      const end = later.find((x) => (x.kind === "knockback" || x.kind === "defeat" || x.kind === "life_used") && x.fightId === e.fightId);
+      // a fight's strikes all share its id now (a strike adds a day to the same fight), so the last-heart event
+      // belongs to the strike right before it: the next strike of this fight comes after it, not before
+      // (it went with the first strike, so "Knocked back!" came before the fight's other strikes — review, Nov 22 2026)
+      const nextStrike = later.findIndex((x) => x.kind === "strike" && x.fightId === e.fightId);
+      const end = later.find((x, j) => (x.kind === "knockback" || x.kind === "defeat" || x.kind === "life_used") && x.fightId === e.fightId && (nextStrike < 0 || j < nextStrike));
       if (end) used.add(end.id);
       if (end?.kind === "knockback") results.push({ kind: "knockback", id: e.id, strike: e, knockback: end });
       else if (end?.kind === "life_used") results.push({ kind: "life", id: e.id, strike: e, life: end });

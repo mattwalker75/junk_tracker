@@ -51,7 +51,7 @@ function saveSeen(): void {
 /** The game page says whose game is on screen; a different person starts with an empty queue. */
 export function setGamePerson(p: string): void {
   if (p === person) return;
-  person = p; runId = null; newest = null; ready = false;
+  person = p; runId = null; newest = null; ready = false; beforeStart = [];
   queue = []; toasts = []; seen = new Set();
 }
 
@@ -60,9 +60,19 @@ export function setGamePerson(p: string): void {
  * reload or a killed tab in the middle of a Victory). With nothing kept (the first time on this
  * phone), old history isn't replayed; it is only noted as seen.
  */
+/**
+ * What the daily check settled before the first view came in waits for startFrom: run first, it marked its events
+ * seen and then startFrom wound "seen" back, so a Victory closed on a Keep-the-monsters-coming day came back on
+ * every reload (review, Nov 22 2026).
+ */
+let beforeStart: (() => void)[] = [];
+const whenStarted = (fn: () => void) => { if (ready) fn(); else beforeStart.push(fn); };
+
 function startFrom(view: GameView): void {
   if (ready || !person) return;
   ready = true;
+  const waiting = beforeStart;
+  beforeStart = [];
   runId = view.run?.id ?? null;
   const events = view.events; // newest first
   const kept = readSeen(person);
@@ -83,6 +93,8 @@ function startFrom(view: GameView): void {
   for (const e of events) if (!fresh.includes(e)) seen.add(e.id);
   if (fresh.length) pushHappened([...fresh].reverse());
   else saveSeen();
+  // the daily check's news, now that "seen" is right (what this view already brought back is skipped)
+  for (const fn of waiting) fn();
 }
 
 /** Tell about what a game change settled: big results queue up one after another, the rest are toasts. */
@@ -189,7 +201,8 @@ function dailyCheck(today: Day): Promise<void> {
       // the setting is off: ask again next time (it may be turned on later today)
       if (!r.checked) checked.delete(key);
       if (!r.checked) return;
-      if (r.started !== "run") { pushHappened(r.happened); return; }
+      if (r.started !== "run") { whenStarted(() => pushHappened(r.happened)); return; }
+      // a new run starts the page's count afresh (startedRun), so nothing older can wind it back
       const rest = startedRun(r);
       const start = r.happened.find((e) => e.kind === "run_start");
       if (start) { toasts = [...toasts, start]; emit(); }

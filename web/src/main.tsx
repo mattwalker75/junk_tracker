@@ -15,7 +15,8 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={qc}>
       <App />
-      <Toaster position="top-center" richColors closeButton />
+      {/* on a phone, below the header, so a message never covers the initials menu (review, Nov 22 2026) */}
+      <Toaster position="top-center" richColors closeButton mobileOffset={{ top: "calc(env(safe-area-inset-top, 0px) + 76px)" }} />
     </QueryClientProvider>
   </StrictMode>,
 );

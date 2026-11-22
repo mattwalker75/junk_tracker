@@ -3,7 +3,9 @@
 All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
 
 ## [Unreleased]
-### Fixed (the Nov 22 2026 deep review)
+
+## [1.12.0] — 2026-11-22
+### Fixed (the Nov 22 2026 deep review: all 27 findings)
 - 2026-11-22: **Phone apps keep the log safe.** A save the phone can't make (a full phone) is undone at once, so
   the screen shows only what the phone kept and Try again can't log it twice. A log file that can't be read stops
   the app with the reason instead of being replaced by a new empty one. A damaged log is set aside
@@ -24,6 +26,21 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 - 2026-11-22: Each database upgrade keeps a fresh copy (`junk.db.before-v<N>`, an older one kept with its date),
   written under a temporary name first; the database's `-wal` and `-shm` files are private from the first start.
 - 2026-11-22: A malformed request gets a plain sentence instead of the checker's own words.
+- 2026-11-22: **Worlds 7 to 12 open up close** from the map and the world chips (they opened the world you're in).
+- 2026-11-22: After several missed days, the result screens come in order: each Strike, then Knocked back,
+  Extra life or Defeated last (the last-heart screen came first).
+- 2026-11-22: With Keep the monsters coming on, a Victory you closed no longer comes back on every reload.
+- 2026-11-22: A Veggie Shield whose blocked heal no longer happens goes back up, a monster's own heals too (a
+  midnight +5, a "then 5 more").
+- 2026-11-22: Weigh in keeps the weight you typed when you change the day (it was replaced by that day's reading).
+- 2026-11-22: The Goals page and the game screens refresh straight after a change; quick taps on the reminder
+  days' + and − all count; a message after saving no longer covers the initials menu on a phone.
+- 2026-11-22: The game's screens say what the fight will really be: the Strike screen at one heart says an extra
+  life is used when you hold one, Victory's next card and the title screen use your Monster toughness, Long Frank's
+  deadline is 5 days everywhere (Long Haul), the Strike screen shows bonus HP as "+N bonus", and "Run #N begins!"
+  names the monster actually up next.
+### Changed
+- 2026-11-22: The random play-through test of the game engine runs 80 games by default (`FUZZ_RUNS=300` for all).
 
 ## [1.11.0] — 2026-11-22
 ### Added

@@ -187,7 +187,9 @@ describe("the game's routes", () => {
   it("knows the map, a world, the book, the hall and how to crush", () => {
     expect(parse("#/game/map")).toEqual({ page: "game", screen: "map" });
     expect(parse("#/game/world/2")).toEqual({ page: "game", screen: "world", world: 2 });
-    expect(parse("#/game/world/9")).toEqual({ page: "game", screen: "world", world: undefined });
+    expect(parse("#/game/world/9")).toEqual({ page: "game", screen: "world", world: 9 });
+    expect(parse("#/game/world/12")).toEqual({ page: "game", screen: "world", world: 12 });
+    expect(parse("#/game/world/13")).toEqual({ page: "game", screen: "world", world: undefined });
     expect(parse("#/game/book")).toEqual({ page: "game", screen: "book" });
     expect(parse("#/game/hall")).toEqual({ page: "game", screen: "hall" });
     // only the game's own screens: names every object has are not screens

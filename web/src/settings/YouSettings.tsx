@@ -20,7 +20,9 @@ export function YouSettings() {
     try {
       const s = await api.saveMySettings(patch);
       qc.setQueryData(["me-settings"], s);
+      // Home, and the game (Keep the monsters coming, toughness, when the app opens) read these settings
       void qc.invalidateQueries({ queryKey: ["overview"] });
+      void qc.invalidateQueries({ queryKey: ["game"] });
       if (!quiet) toast.success("Saved.");
     } catch (e) { toast.error((e as Error).message); }
   };
@@ -122,18 +124,25 @@ function ReminderCard({ title, what, s, on, days, onToggle, onDays }: {
   onToggle: (v: boolean) => void; onDays: (n: number) => void;
 }) {
   const [text, setText] = useState("");
-  useEffect(() => { if (days !== undefined) setText(String(days)); }, [days]);
+  // quick taps count from the number on screen and save once they stop: each used to start from the saved
+  // number, so three fast taps on + went 3 → 5 (review, Nov 22 2026)
+  const pending = useRef<{ t: ReturnType<typeof setTimeout>; v: number } | null>(null);
+  useEffect(() => { if (days !== undefined && !pending.current) setText(String(days)); }, [days]);
+  useEffect(() => () => { const p = pending.current; if (p) { clearTimeout(p.t); onDays(p.v); } }, []);
   const set = (n: number) => {
     const v = Math.min(REMINDER_DAYS_MAX, Math.max(REMINDER_DAYS_MIN, Math.round(n)));
     setText(String(v));
-    if (v !== days) onDays(v);
+    if (pending.current) clearTimeout(pending.current.t);
+    if (v === days) { pending.current = null; return; }
+    pending.current = { v, t: setTimeout(() => { pending.current = null; onDays(v); }, 450) };
   };
   const typed = () => {
     const n = Number(text.trim());
     if (!Number.isFinite(n) || text.trim() === "") { setText(String(days ?? "")); toast.error(`Type a number of days from ${REMINDER_DAYS_MIN} to ${REMINDER_DAYS_MAX}.`); return; }
     set(n);
   };
-  const n = days ?? 0;
+  const shown = Number(text);
+  const n = text !== "" && Number.isFinite(shown) ? shown : days ?? 0;
   const thing = what === "weigh-in" ? "a weigh-in" : "an activity";
   return (
     <Card className="space-y-2 p-4">

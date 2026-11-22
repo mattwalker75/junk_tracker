@@ -4,6 +4,7 @@
  * #/game/world/2, #/game/book, #/game/hall, #/game/how. The phone's back button works.
  */
 import { useEffect, useState } from "react";
+import { WORLDS } from "../../../shared/game/levels";
 
 export type GameScreen = "title" | "start" | "battle" | "choose" | "map" | "world" | "book" | "hall" | "how";
 export type Route = { page: "home" } | { page: "calendar"; month: string | null } | { page: "goals" } | { page: "settings"; section: string | null }
@@ -23,7 +24,8 @@ export function parse(hash: string): Route {
     const screen = Object.hasOwn(GAME_SCREENS, name) ? GAME_SCREENS[name] : "title";
     if (screen === "world") {
       const n = Number(parts[2]);
-      return { page: "game", screen, world: Number.isInteger(n) && n >= 1 && n <= 6 ? n : undefined };
+      // every world (never a fixed count: rule 11 — worlds 7 to 12 used to open the current one instead)
+      return { page: "game", screen, world: Number.isInteger(n) && n >= 1 && n <= WORLDS.length ? n : undefined };
     }
     return { page: "game", screen };
   }

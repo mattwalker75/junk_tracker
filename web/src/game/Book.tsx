@@ -6,7 +6,7 @@
  * and the ability.
  */
 import { useEffect, useState } from "react";
-import { abilityFor, bioFor, LEVEL_COUNT, LEVELS, LEVELS_PER_WORLD, WORLDS, type FightView, type GameView, type Level, type MapStatus } from "../../../shared/game";
+import { abilityFor, bioFor, fightDays, LEVEL_COUNT, LEVELS, LEVELS_PER_WORLD, WORLDS, type FightView, type GameView, type Level, type MapStatus } from "../../../shared/game";
 import { Sheet } from "../components/ui";
 import { worldMap } from "./art";
 import { Crown } from "./icons";
@@ -95,7 +95,7 @@ function Card({ lv, status, fight, onOpen }: { lv: Level; status: MapStatus; fig
             {boss ? <span className="rounded-md border-2 border-[#2b1d3a] bg-g-yellow px-1.5 font-game text-[12px] leading-[18px] text-[#2b1d3a]">{lv.level === LEVEL_COUNT ? "FINAL BOSS" : "BOSS"}</span> : null}
             <span className="ml-auto rounded-full border-2 border-[#2b1d3a] px-2 text-[12px] leading-[20px] font-black" style={{ background: tag.bg, color: tag.fg }}>{status === "locked" ? `Up ahead · Level ${lv.level}` : tag.t}</span>
           </span>
-          <span className="text-[13px] font-extrabold text-g-mute">HP <b className="text-g-text">{lv.hp}</b> · Deadline <b className="text-g-text">{lv.days} days</b></span>
+          <span className="text-[13px] font-extrabold text-g-mute">HP <b className="text-g-text">{lv.hp}</b> · Deadline <b className="text-g-text">{fightDays(lv.level)} days</b></span>
           <span className="text-[13px] leading-snug font-extrabold"><b className="font-black">{ab.name}:</b> {ab.text}</span>
           {fight ? (
             <>
@@ -144,7 +144,7 @@ function MonsterSheet({ lv, view, onClose }: { lv: Level | null; view: GameView 
           <p className="mt-1 text-[17px] leading-snug font-extrabold italic">"{bioFor(lv.level)}"</p>
           <div className="mt-2.5 grid grid-cols-2 gap-2">
             <div className="rounded-2xl border-[3px] border-g-line bg-g-panel-2 px-3 py-2"><span className="block text-[11px] font-black tracking-[0.06em] text-g-mute">HP</span><span className="font-game text-[24px]">{fight ? hpText(hpLeft(fight), fight.max) : lv.hp}</span></div>
-            <div className="rounded-2xl border-[3px] border-g-line bg-g-panel-2 px-3 py-2"><span className="block text-[11px] font-black tracking-[0.06em] text-g-mute">DEADLINE</span><span className="font-game text-[24px]">{lv.days} days</span></div>
+            <div className="rounded-2xl border-[3px] border-g-line bg-g-panel-2 px-3 py-2"><span className="block text-[11px] font-black tracking-[0.06em] text-g-mute">DEADLINE</span><span className="font-game text-[24px]">{fightDays(lv.level)} days</span></div>
           </div>
           <div className="mt-2 rounded-2xl border-[3px] border-g-line bg-g-soft-yellow px-3 py-2">
             <span className="block font-game text-[18px]">{ab.name}</span>

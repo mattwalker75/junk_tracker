@@ -8,7 +8,7 @@
  */
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { abilityFor, LEVEL_COUNT, levelInfo, PLANNED_LEVELS, MAX_HEARTS, MAX_LIVES, monsterHp, POTION_DAMAGE, POTION_MINUTES, START_HEARTS, WEEK_ACTIVE_DAYS, WORLDS, type EventView, type GameView, type HallRun } from "../../../shared/game";
+import { abilityFor, fightDays, LEVEL_COUNT, levelInfo, PLANNED_LEVELS, MAX_HEARTS, MAX_LIVES, monsterHp, POTION_DAMAGE, POTION_MINUTES, START_HEARTS, WEEK_ACTIVE_DAYS, WORLDS, type EventView, type GameView, type HallRun } from "../../../shared/game";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
 import type { GameScreen } from "../lib/route";
@@ -17,7 +17,7 @@ import { ClockSmall, HeartBroken, HeartEmpty, HeartFull, Hero, Home, Padlock, Pl
 import { worldOf } from "./layout";
 import { dayExample, daysFrom, dueText, hpLeft, hpText, shortDate } from "./logic";
 import { LiveMonster } from "./LiveMonster";
-import { GameMenu, HpBar, Monster } from "./parts";
+import { GameMenu, HpBar, HpNumbers, Monster } from "./parts";
 import { countUp, victoryBreakdown, waitsForBattle, type Result } from "./outcomes";
 import { dropToast, markShown, nextResult, clearResults, useGame, useResults, useToasts } from "./state";
 
@@ -271,7 +271,8 @@ function Victory({ r, view }: { r: Extract<Result, { kind: "victory" }>; view: G
             <div className="min-w-0 flex-1">
               <span className="text-[12px] font-black tracking-[0.08em] text-[#c2410c]">NEXT · LEVEL {next.level}{next.world !== lv.world ? ` · NEW WORLD: ${WORLDS[next.world - 1].toUpperCase()}` : ""}</span>
               <h3 className="font-game text-[24px] leading-tight font-normal">{next.name}</h3>
-              <p className="text-[14px] font-black">{next.hp} HP · {next.days}-day deadline{next.boss ? " · BOSS" : ""}</p>
+              {/* as the fight will start: your Monster toughness, and its ability's extra day (review, Nov 22 2026) */}
+              <p className="text-[14px] font-black">{view.next?.level === next.level ? view.next.hp : monsterHp(next.level, view.hpMult)} HP · {view.next?.level === next.level ? view.next.days : fightDays(next.level)}-day deadline{next.boss ? " · BOSS" : ""}</p>
               <p className="text-[13px] leading-snug font-extrabold text-[#6b5a7a]"><b className="text-[#2b1d3a]">{ab.name}:</b> {ab.text}</p>
             </div>
           </div>
@@ -334,12 +335,13 @@ function Strike({ r, view, today }: { r: Extract<Result, { kind: "strike" }>; vi
         {gone
           ? <p className="text-[16px] leading-snug font-extrabold">The heart bought you <span className="text-[#c2410c]">one more day</span>, to the {dueText(due)}. That day went by too: see what happened next.</p>
           : <p className="text-[16px] leading-snug font-extrabold">The heart bought you <span className="text-[#c2410c]">one more day</span>. {lv.name} keeps the damage you did: finish it by the {dueText(due)}. <span className="text-[#2f9a2a]">You've got this.</span></p>}
-        <div className="mt-2 flex justify-between text-[13px] font-black"><span>{lv.name}</span><span>{left} / {max} HP</span></div>
-        <HpBar label={`${lv.name} hit points`} max={max} value={Math.min(left, max)} fillClass="rounded-full" gloss={false} className="mt-1 h-3" />
+        {/* bonus HP as the battle screen shows it: the violet bar and "+N bonus", never "120 / 100" */}
+        <div className="mt-2 flex justify-between text-[13px] font-black"><span>{lv.name}</span><span><HpNumbers hp={Math.min(left, max)} max={max} bonus={Math.max(0, left - max)} /> HP</span></div>
+        <HpBar label={`${lv.name} hit points`} max={max} value={left} fillClass="rounded-full" gloss={false} className="mt-1 h-3" />
         <span className="mt-2 inline-block rounded-full border-2 border-[#2b1d3a] bg-[#ffe3e8] px-2.5 py-0.5 text-[13px] font-black">{gone ? "Was due" : "Due"} {dueText(due)}</span>
         <p className="mt-2 text-[13px] font-black text-[#6b5a7a]">{left} HP {gone ? "were left" : "to go"} · {left} minutes of activity, or {fmt(left * 10)} calories, or a mix</p>
         <p className={cx("mt-1 text-[13px] leading-snug font-bold text-[#6b5a7a]", gone && "hidden")}>{after === 1
-          ? `That was your second-to-last heart. Miss this day too and ${run?.hardcore ? "the run is over (Hardcore)" : `you are knocked back to the start of ${lv.worldName}`}.`
+          ? `That was your second-to-last heart. Miss this day too and ${run?.hardcore ? "the run is over (Hardcore)" : run?.lives ? `an extra life is used: a full set of hearts and ${lv.name} again from the top` : `you are knocked back to the start of ${lv.worldName}`}.`
           : "Miss this day too and it costs another heart, for another day."}</p>
       </Panel>
       <Panel>

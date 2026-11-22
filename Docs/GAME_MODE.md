@@ -105,6 +105,18 @@ a total of 120 monsters to fight". Decided with Matt:
 - **The phone apps must stay in step** (Matt, Nov 21 2026): the build includes the phone tests, the new
   database upgrade run on the phone, and both apps rebuilt (`APP_PORTS/*/BUILD_APP.sh`).
 
+## Monster moves (Nov 22 2026) — mockup, waiting for Matt's look
+Matt: "setup some animation to the monsters in game. have him move his arms some and possibly legs. then give
+them each a special animation that runs when they are defeated with another one when that take a heart off of you
+and another when they finally beat you". Decided with Matt:
+- **Each monster gets its own themed mix** of moves, built from a shared set and tuned to its body (Popsicle Pete
+  melts, Lady Short Stack's crown flies off, The Snackularity implodes) — not 360 one-offs, not one set for all.
+- **Mock up six first** (canvas **Round 16**, board `MonsterMoves`, playable), then roll out to all 120.
+- How: each drawing gets its parts tagged (`cc-fig`, `cc-arm-l/r`, `cc-leg-l/r`, `cc-tail`, `cc-hat`, `cc-orbit`,
+  each with its pivot), the SVG is put inline in the page, and CSS plays `cc-idle` while a fight is on and
+  `cc-strike` / `cc-ko` / `cc-win` with the monster's own move name. "Beats you" = the last heart (a knock-back,
+  an extra life spent, or a Hardcore defeat). Reduced motion turns it all off.
+
 ## Where it lives
 - **Switch:** the initials menu (MW) gets a **Game mode** item, with a gamepad icon, above Goals, Settings and Sign out. In the game the same item reads **Back to tracker**. Mockup: `GameMenuSwitch`.
 - **Logging:** the game has no logging of its own. It reads the person's real log: activities, splurges, clean days.

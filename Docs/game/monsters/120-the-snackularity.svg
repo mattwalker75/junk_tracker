@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="The Snackularity, the final boss: a cosmic giant with a swirling galaxy body, three big eyes and a crown of stars, ringed by a glowing aura with a chip, a donut, fries, a soda cup and a cookie orbiting it">
+  <defs>
+    <radialGradient id="the-snackularity-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff3a8" stop-opacity="0.7"/><stop offset="0.6" stop-color="#ff8fc8" stop-opacity="0.3"/><stop offset="1" stop-color="#b28dff" stop-opacity="0"/></radialGradient>
+    <clipPath id="the-snackularity-body"><path d="M100 46 C140 46 164 76 164 112 C164 140 154 158 142 170 Q130 160 122 174 Q112 162 100 178 Q88 162 78 174 Q70 160 58 170 C46 158 36 140 36 112 C36 76 60 46 100 46 Z"/></clipPath>
+  </defs>
+  <!-- glow and aura ring -->
+  <ellipse cx="100" cy="108" rx="98" ry="90" fill="url(#the-snackularity-glow)"/>
+  <ellipse cx="100" cy="192" rx="50" ry="5" fill="#2b1d3a" opacity="0.12"/>
+  <ellipse cx="100" cy="108" rx="86" ry="80" fill="none" stroke="#2b1d3a" stroke-width="10"/>
+  <ellipse cx="100" cy="108" rx="86" ry="80" fill="none" stroke="#ffe28a" stroke-width="5"/>
+  <ellipse cx="100" cy="108" rx="86" ry="80" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="6 14"/>
+  <!-- the galaxy body -->
+  <path d="M100 46 C140 46 164 76 164 112 C164 140 154 158 142 170 Q130 160 122 174 Q112 162 100 178 Q88 162 78 174 Q70 160 58 170 C46 158 36 140 36 112 C36 76 60 46 100 46 Z" fill="#8a5fe0"/>
+  <g clip-path="url(#the-snackularity-body)" fill="none" stroke-linecap="round">
+    <path d="M160 120 A60 56 0 0 1 100 176 A46 42 0 0 1 54 128 A34 30 0 0 1 100 92 A22 20 0 0 1 120 116" stroke="#b28dff" stroke-width="12"/>
+    <path d="M40 104 A60 56 0 0 1 100 52 A46 42 0 0 1 146 100 A34 30 0 0 1 100 136 A22 20 0 0 1 80 112" stroke="#b28dff" stroke-width="12"/>
+    <path d="M158 132 A60 56 0 0 1 96 176 A46 42 0 0 1 52 136" stroke="#ff8fc8" stroke-width="5"/>
+    <path d="M42 92 A60 56 0 0 1 104 50 A46 42 0 0 1 148 86" stroke="#6ec6ff" stroke-width="5"/>
+    <path d="M118 46 C170 70 172 150 128 182 L172 182 L172 46 Z" fill="#2b1d3a" stroke="none" opacity="0.22"/>
+    <g fill="#ffffff" stroke="none"><circle cx="52" cy="104" r="1.8"/><circle cx="62" cy="150" r="1.5"/><circle cx="150" cy="140" r="1.8"/><circle cx="148" cy="80" r="1.5"/><circle cx="84" cy="160" r="1.4"/><circle cx="118" cy="166" r="1.8"/><circle cx="46" cy="132" r="1.3"/></g>
+  </g>
+  <path d="M100 46 C140 46 164 76 164 112 C164 140 154 158 142 170 Q130 160 122 174 Q112 162 100 178 Q88 162 78 174 Q70 160 58 170 C46 158 36 140 36 112 C36 76 60 46 100 46 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M44 100 Q48 74 66 60" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <!-- crown of stars on a gold circlet -->
+  <path d="M56 64 Q100 30 144 64" fill="none" stroke="#2b1d3a" stroke-width="9" stroke-linecap="round"/>
+  <path d="M56 64 Q100 30 144 64" fill="none" stroke="#ffc93c" stroke-width="4" stroke-linecap="round"/>
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
+    <path transform="translate(100 32)" d="M0 -16 L4.2 -5.8 L15.2 -4.9 L6.8 2.2 L9.4 12.9 L0 7.2 L-9.4 12.9 L-6.8 2.2 L-15.2 -4.9 L-4.2 -5.8 Z"/>
+    <path transform="translate(76 42) rotate(-15) scale(0.68)" d="M0 -16 L4.2 -5.8 L15.2 -4.9 L6.8 2.2 L9.4 12.9 L0 7.2 L-9.4 12.9 L-6.8 2.2 L-15.2 -4.9 L-4.2 -5.8 Z" stroke-width="4"/>
+    <path transform="translate(124 42) rotate(15) scale(0.68)" d="M0 -16 L4.2 -5.8 L15.2 -4.9 L6.8 2.2 L9.4 12.9 L0 7.2 L-9.4 12.9 L-6.8 2.2 L-15.2 -4.9 L-4.2 -5.8 Z" stroke-width="4"/>
+    <path transform="translate(57 56) rotate(-30) scale(0.5)" d="M0 -16 L4.2 -5.8 L15.2 -4.9 L6.8 2.2 L9.4 12.9 L0 7.2 L-9.4 12.9 L-6.8 2.2 L-15.2 -4.9 L-4.2 -5.8 Z" stroke-width="5"/>
+    <path transform="translate(143 56) rotate(30) scale(0.5)" d="M0 -16 L4.2 -5.8 L15.2 -4.9 L6.8 2.2 L9.4 12.9 L0 7.2 L-9.4 12.9 L-6.8 2.2 L-15.2 -4.9 L-4.2 -5.8 Z" stroke-width="5"/>
+  </g>
+  <circle cx="97" cy="27" r="2.5" fill="#fff3a8"/>
+  <!-- three eyes -->
+  <path d="M82 60 L100 68 L118 60" fill="none" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M50 82 L76 90 M150 82 L124 90" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="100" cy="84" r="15" fill="#ffffff"/><circle cx="67" cy="102" r="12.5" fill="#ffffff"/><circle cx="133" cy="102" r="12.5" fill="#ffffff"/></g>
+  <circle cx="100" cy="87" r="8.5" fill="#2b1d3a"/><circle cx="69" cy="104" r="7" fill="#2b1d3a"/><circle cx="131" cy="104" r="7" fill="#2b1d3a"/>
+  <g fill="#ffc93c"><circle cx="100" cy="87" r="3.2"/><circle cx="69" cy="104" r="2.6"/><circle cx="131" cy="104" r="2.6"/></g>
+  <g fill="#ffffff"><circle cx="104" cy="82" r="2.6"/><circle cx="72" cy="100" r="2.2"/><circle cx="134" cy="100" r="2.2"/></g>
+  <!-- fanged grin -->
+  <path d="M62 126 Q100 168 138 126 Q100 140 62 126 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M71 129 l4 8 5 -6z M88 132 l4 11 4 -10z M104 132 l4 11 4 -11z M121 129 l4 7 4 -8z" fill="#ffffff"/>
+  <path d="M92 150 Q100 144 108 150 Q100 155 92 150 Z" fill="#ff6f9f"/>
+  <ellipse cx="48" cy="124" rx="6" ry="3.5" fill="#ff9db8"/><ellipse cx="152" cy="124" rx="6" ry="3.5" fill="#ff9db8"/>
+  <!-- orbiting snacks -->
+  <g stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
+    <!-- chip -->
+    <path d="M12 70 L28 44 L42 68 Z" fill="#f2bb4f" transform="rotate(-15 27 61)"/>
+    <!-- donut -->
+    <path d="M158 58 a14 14 0 1 0 28 0 a14 14 0 1 0 -28 0 Z M167.5 58 a4.5 4.5 0 1 0 9 0 a4.5 4.5 0 1 0 -9 0 Z" fill="#e8a94e" fill-rule="evenodd"/>
+    <path d="M161 56 q3 -10 11 -9 q10 -2 11 9 q-2 4 -5 1 a4.5 4.5 0 0 0 -12 0 q-3 3 -5 -1z" fill="#ff8fc8" stroke-width="2"/>
+    <!-- fries -->
+    <rect x="12" y="114" width="9" height="32" rx="2" fill="#ffd34d" transform="rotate(-22 16 130)"/>
+    <rect x="24" y="118" width="8" height="26" rx="2" fill="#ffd34d" transform="rotate(12 28 131)"/>
+    <!-- soda cup -->
+    <path d="M178 112 L184 96" stroke-width="7" stroke-linecap="round"/>
+    <path d="M162 118 L186 118 L182 148 L166 148 Z" fill="#ff4d6d"/>
+    <rect x="160" y="111" width="28" height="7" rx="3" fill="#ffffff"/>
+    <!-- cookie -->
+    <circle cx="158" cy="174" r="12" fill="#d99a4e"/>
+  </g>
+  <path d="M178 112 L184 96" stroke="#6ec6ff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M164 128 L184 128 L183 136 L165 136 Z" fill="#ffffff" opacity="0.9"/>
+  <g fill="#c9862a"><circle cx="22" cy="62" r="1.8"/><circle cx="30" cy="54" r="1.6"/><circle cx="32" cy="66" r="1.6"/></g>
+  <g stroke-width="2" stroke-linecap="round"><path d="M166 50 l2 -2" stroke="#ffffff"/><path d="M176 48 l3 1" stroke="#6ec6ff"/><path d="M181 54 l1 3" stroke="#ffe066"/></g>
+  <g fill="#5a3424"><circle cx="153" cy="170" r="2.2"/><circle cx="162" cy="168" r="2"/><circle cx="159" cy="179" r="2.2"/><circle cx="165" cy="176" r="1.6"/></g>
+  <path d="M16 120 L19 140" stroke="#fff1a8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- gold sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M22 10 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+    <path d="M30 160 l3.5 8 8 3.5 -8 3.5 -3.5 8 -3.5 -8 -8 -3.5 8 -3.5z"/>
+    <path d="M182 82 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M176 6 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffffff"/>
+  </g>
+</svg>

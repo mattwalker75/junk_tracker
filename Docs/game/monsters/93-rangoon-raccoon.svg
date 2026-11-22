@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Rangoon Raccoon, a masked raccoon with a ringed tail whose body is a crispy golden four-point crab rangoon with cream cheese peeking out, hugging a stolen rangoon">
+  <defs>
+    <clipPath id="rangoon-raccoon-body"><path d="M100 96 Q126 124 166 140 Q126 158 100 186 Q74 158 34 140 Q74 124 100 96 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="74" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- ringed tail, behind -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M148 150 Q188 146 186 108 Q184 78 162 80" stroke="#2b1d3a" stroke-width="28"/>
+    <path d="M148 150 Q188 146 186 108 Q184 78 162 80" stroke="#a89fb8" stroke-width="20"/>
+    <path d="M148 150 Q188 146 186 108 Q184 78 162 80" stroke="#3e3350" stroke-width="20" stroke-linecap="butt" stroke-dasharray="10 12" stroke-dashoffset="-6"/>
+  </g>
+  <path d="M176 128 Q182 112 178 98" fill="none" stroke="#d6cfe2" stroke-width="3" stroke-linecap="round"/>
+  <!-- feet -->
+  <g fill="#7d7192" stroke="#2b1d3a" stroke-width="4"><ellipse cx="72" cy="180" rx="15" ry="9"/><ellipse cx="128" cy="180" rx="15" ry="9"/></g>
+  <!-- the crispy rangoon body -->
+  <path d="M100 96 Q126 124 166 140 Q126 158 100 186 Q74 158 34 140 Q74 124 100 96 Z" fill="#f0b048" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#rangoon-raccoon-body)">
+    <path d="M100 140 L170 140 L100 190 Z" fill="#d08a2a"/>
+    <g fill="#ffd98a"><circle cx="58" cy="138" r="2.4"/><circle cx="76" cy="150" r="2"/><circle cx="124" cy="132" r="2"/></g>
+    <g fill="#b8732e"><circle cx="140" cy="146" r="2"/><circle cx="112" cy="168" r="2"/></g>
+  </g>
+  <path d="M40 140 L80 140 M120 140 L160 140" stroke="#b8732e" stroke-width="3" stroke-linecap="round"/>
+  <path d="M44 136 Q60 128 74 126" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- cream cheese oozing from the seams -->
+  <g fill="#fff6e0" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
+    <path d="M42 138 Q50 128 60 134 Q64 144 58 150 Q52 146 50 154 Q44 150 42 138 Z"/>
+    <path d="M158 138 Q150 128 140 134 Q136 144 142 148 Q148 146 150 152 Q156 150 158 138 Z"/>
+  </g>
+  <!-- ears -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#a89fb8"><path d="M58 64 L56 26 L88 46 Z"/><path d="M142 64 L144 26 L112 46 Z"/></g>
+  <path d="M62 54 L62 36 L78 47 Z M138 54 L138 36 L122 47 Z" fill="#ff9db8"/>
+  <!-- head -->
+  <path d="M56 86 Q54 44 100 42 Q146 44 144 86 Q158 96 144 104 Q130 120 100 120 Q70 120 56 104 Q42 96 56 86 Z" fill="#a89fb8" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M130 50 Q146 64 144 88 Q154 96 142 104 Q130 116 112 118 Q140 96 130 50 Z" fill="#8d82a2"/>
+  <path d="M66 58 Q76 48 90 46" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- bandit mask -->
+  <path d="M54 84 Q70 64 100 76 Q130 64 146 84 Q140 100 122 98 Q108 96 100 102 Q92 96 78 98 Q60 100 54 84 Z" fill="#3e3350" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- muzzle -->
+  <ellipse cx="100" cy="106" rx="20" ry="12" fill="#f1ecf6" stroke="#2b1d3a" stroke-width="3"/>
+  <ellipse cx="100" cy="99" rx="5.5" ry="3.5" fill="#2b1d3a"/>
+  <path d="M86 106 Q100 120 114 106 Q100 111 86 106 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M90 107 l2.5 5 2.5 -4z M110 107 l-2.5 5 -2.5 -4z" fill="#ffffff"/>
+  <!-- eyes -->
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="80" cy="85" r="11" fill="#ffffff"/><circle cx="120" cy="85" r="11" fill="#ffffff"/></g>
+  <circle cx="83" cy="87" r="6" fill="#2b1d3a"/><circle cx="117" cy="87" r="6" fill="#2b1d3a"/>
+  <circle cx="85" cy="84" r="2.2" fill="#ffffff"/><circle cx="119" cy="84" r="2.2" fill="#ffffff"/>
+  <path d="M64 64 L90 72 M136 64 L110 72" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="66" cy="106" rx="5.5" ry="3" fill="#ff9db8"/><ellipse cx="134" cy="106" rx="5.5" ry="3" fill="#ff9db8"/>
+  <!-- the stolen rangoon, hugged -->
+  <path d="M100 134 Q110 148 128 156 Q110 164 100 180 Q90 164 72 156 Q90 148 100 134 Z" fill="#f6c25a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M100 156 L128 156 L100 180 Z" fill="#d99a3a"/>
+  <path d="M94 138 Q100 128 106 138 Q102 144 100 140 Q98 144 94 138 Z" fill="#fff6e0" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <g fill="#a89fb8" stroke="#2b1d3a" stroke-width="3.5"><circle cx="76" cy="152" r="10"/><circle cx="124" cy="152" r="10"/></g>
+  <path d="M71 147 l0 7 M77 145 l0 8 M123 145 l0 8 M129 147 l0 7" stroke="#3e3350" stroke-width="2.5" stroke-linecap="round"/>
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M24 30 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M176 30 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M24 168 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

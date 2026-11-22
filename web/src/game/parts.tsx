@@ -18,8 +18,8 @@ export function GameMenu() {
   return <UserMenu who={p.who} loginEnabled={p.loginEnabled} goals={undefined} place="game" />;
 }
 
-/** "CALORIE CRUSHER · WORLD 2 · LEVEL 11 OF 80" over a big outlined title, the menu on the right. */
-export function GameHeader({ kicker, title, back, children }: { kicker: string; title: ReactNode; back?: { href: string; label: string }; children?: ReactNode }) {
+/** "CALORIE CRUSHER · WORLD 2 · LEVEL 11 OF 120" over a big outlined title, the menu on the right. `dark`: the page behind is dark at the top (a night world), so the small line is light. */
+export function GameHeader({ kicker, title, back, dark, children }: { kicker: string; title: ReactNode; back?: { href: string; label: string }; dark?: boolean; children?: ReactNode }) {
   return (
     <header className="relative z-30 flex items-center gap-2.5 px-4 pt-3">
       {back ? (
@@ -28,7 +28,7 @@ export function GameHeader({ kicker, title, back, children }: { kicker: string; 
         </a>
       ) : null}
       <div className="flex min-w-0 flex-1 flex-col">
-        <span className="truncate font-game text-[12px] tracking-[0.08em] g-kicker opacity-80">{kicker}</span>
+        <span className={`truncate font-game text-[12px] tracking-[0.08em] opacity-80 ${dark ? "text-[#fff7e6]" : "g-kicker"}`}>{kicker}</span>
         <h1 className="g-stroke g-shadow-text truncate font-game text-[30px] leading-none font-normal">{title}</h1>
       </div>
       {children}

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Mooncake Moth, a moth whose round body is a golden mooncake with an embossed flower border, big dusky-lilac spotted wings and fuzzy antennae">
+  <defs>
+    <clipPath id="mooncake-moth-cake"><circle cx="100" cy="112" r="38"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="52" ry="6" fill="#2b1d3a" opacity="0.12"/>
+  <!-- fuzzy antennae -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M90 76 Q80 46 62 26" stroke="#2b1d3a" stroke-width="4"/>
+    <path d="M110 76 Q120 46 138 26" stroke="#2b1d3a" stroke-width="4"/>
+  </g>
+  <g stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round" fill="#f1e4ff">
+    <ellipse cx="64" cy="30" rx="8" ry="15" transform="rotate(-40 64 30)"/>
+    <ellipse cx="136" cy="30" rx="8" ry="15" transform="rotate(40 136 30)"/>
+  </g>
+  <path d="M58 28 l6 2 M62 22 l5 4 M66 36 l4 -1 M142 28 l-6 2 M138 22 l-5 4 M134 36 l-4 -1" stroke="#b28dff" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- lower wings -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M76 126 C44 130 18 158 36 176 C54 190 80 162 88 144 Z" fill="#c9a6e8"/>
+    <path d="M124 126 C156 130 182 158 164 176 C146 190 120 162 112 144 Z" fill="#a884d0"/>
+  </g>
+  <!-- upper wings -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M84 94 C50 40 14 38 12 72 C10 102 46 114 74 114 Z" fill="#c9a6e8"/>
+    <path d="M116 94 C150 40 186 38 188 72 C190 102 154 114 126 114 Z" fill="#a884d0"/>
+  </g>
+  <path d="M22 64 Q28 50 42 50" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- wing spots -->
+  <g stroke="#2b1d3a" stroke-width="2.5" fill="#fff0c4">
+    <circle cx="40" cy="80" r="11"/><circle cx="160" cy="80" r="11"/>
+    <circle cx="46" cy="162" r="7"/><circle cx="154" cy="162" r="7"/>
+  </g>
+  <g fill="#7a4fc0"><circle cx="41" cy="81" r="5"/><circle cx="159" cy="81" r="5"/><circle cx="46" cy="162" r="3"/><circle cx="154" cy="162" r="3"/></g>
+  <g fill="#e6d4f7"><circle cx="66" cy="64" r="4"/><circle cx="24" cy="98" r="3"/><circle cx="134" cy="64" r="4"/><circle cx="176" cy="98" r="3"/></g>
+  <!-- the mooncake: scalloped edge, outline pass then fill pass -->
+  <g fill="#2b1d3a">
+    <circle cx="100" cy="112" r="41.5"/>
+    <circle cx="138" cy="112" r="12.5"/><circle cx="132.9" cy="131" r="12.5"/><circle cx="119" cy="144.9" r="12.5"/><circle cx="100" cy="150" r="12.5"/><circle cx="81" cy="144.9" r="12.5"/><circle cx="67.1" cy="131" r="12.5"/><circle cx="62" cy="112" r="12.5"/><circle cx="67.1" cy="93" r="12.5"/><circle cx="81" cy="79.1" r="12.5"/><circle cx="100" cy="74" r="12.5"/><circle cx="119" cy="79.1" r="12.5"/><circle cx="132.9" cy="93" r="12.5"/>
+  </g>
+  <g fill="#e8a948">
+    <circle cx="100" cy="112" r="38"/>
+    <circle cx="138" cy="112" r="9"/><circle cx="132.9" cy="131" r="9"/><circle cx="119" cy="144.9" r="9"/><circle cx="100" cy="150" r="9"/><circle cx="81" cy="144.9" r="9"/><circle cx="67.1" cy="131" r="9"/><circle cx="62" cy="112" r="9"/><circle cx="67.1" cy="93" r="9"/><circle cx="81" cy="79.1" r="9"/><circle cx="100" cy="74" r="9"/><circle cx="119" cy="79.1" r="9"/><circle cx="132.9" cy="93" r="9"/>
+  </g>
+  <g fill="#c9822e"><circle cx="138" cy="112" r="7"/><circle cx="132.9" cy="131" r="7"/><circle cx="119" cy="144.9" r="7"/><circle cx="132.9" cy="93" r="7"/></g>
+  <g clip-path="url(#mooncake-moth-cake)"><path d="M126 70 C150 92 150 136 118 156 L150 156 L150 70 Z" fill="#d18f36"/></g>
+  <!-- embossed flower border -->
+  <circle cx="100" cy="112" r="30" fill="none" stroke="#b8742a" stroke-width="2.5"/>
+  <g fill="none" stroke="#b8742a" stroke-width="2.5" stroke-linecap="round">
+    <path d="M100 76 q-4 3 0 6 q4 -3 0 -6z"/><path d="M100 142 q-4 3 0 6 q4 -3 0 -6z"/>
+    <path d="M64 112 q3 -4 6 0 q-3 4 -6 0z"/><path d="M130 112 q3 -4 6 0 q-3 4 -6 0z"/>
+    <path d="M75 87 l4 4 M125 87 l-4 4 M75 137 l4 -4 M125 137 l-4 -4"/>
+  </g>
+  <path d="M72 96 Q78 84 90 80" fill="none" stroke="#ffe3a0" stroke-width="4" stroke-linecap="round"/>
+  <!-- face -->
+  <path d="M76 90 L95 97 M124 90 L105 97" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="88" cy="106" r="10.5" fill="#ffffff"/><circle cx="112" cy="106" r="10.5" fill="#ffffff"/></g>
+  <circle cx="90" cy="108" r="6" fill="#2b1d3a"/><circle cx="110" cy="108" r="6" fill="#2b1d3a"/>
+  <circle cx="92" cy="105" r="2.2" fill="#ffffff"/><circle cx="112" cy="105" r="2.2" fill="#ffffff"/>
+  <path d="M84 122 Q100 138 116 122 Q100 128 84 122 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M89 124 l3 5 3 -4z M98 126 l2 5 3 -5z M106 125 l3 4 2 -5z" fill="#ffffff"/>
+  <ellipse cx="77" cy="122" rx="4.5" ry="2.8" fill="#ff9db8"/><ellipse cx="123" cy="122" rx="4.5" ry="2.8" fill="#ff9db8"/>
+  <!-- sparkles -->
+  <g stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M100 6 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z" fill="#ffc93c"/>
+    <path d="M16 136 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffffff"/>
+    <path d="M180 132 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffc93c"/>
+  </g>
+</svg>

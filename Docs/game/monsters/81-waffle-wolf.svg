@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Waffle Wolf, a snarling wolf made of golden square waffles with pointed waffle ears, a melting pat of butter on its head, syrup drips and a fluffy tail">
+  <defs>
+    <pattern id="waffle-wolf-grid" width="20" height="20" patternUnits="userSpaceOnUse" x="40" y="50"><rect x="4" y="4" width="12" height="12" rx="2.5" fill="#d9952c"/></pattern>
+    <clipPath id="waffle-wolf-head"><rect x="38" y="48" width="124" height="104" rx="16"/></clipPath>
+    <clipPath id="waffle-wolf-body"><rect x="50" y="130" width="100" height="48" rx="12"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="74" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- fluffy tail -->
+  <path d="M140 168 C170 170 186 146 182 118 C192 112 192 98 184 94 C186 82 172 78 168 88 C158 84 154 98 162 104 C160 126 152 142 136 148 Z" fill="#f7d27e" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M176 100 C176 124 166 144 148 156" fill="none" stroke="#d9952c" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- feet -->
+  <g fill="#f5c35a" stroke="#2b1d3a" stroke-width="4"><ellipse cx="70" cy="181" rx="17" ry="8"/><ellipse cx="130" cy="181" rx="17" ry="8"/></g>
+  <!-- waffle body -->
+  <rect x="50" y="130" width="100" height="48" rx="12" fill="#f5c35a"/>
+  <g clip-path="url(#waffle-wolf-body)"><rect x="50" y="130" width="100" height="48" fill="url(#waffle-wolf-grid)"/><rect x="134" y="130" width="20" height="48" fill="#2b1d3a" opacity="0.12"/></g>
+  <rect x="50" y="130" width="100" height="48" rx="12" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- pointed waffle ears -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#f5c35a"><path d="M44 72 L52 12 L92 52 Z"/><path d="M156 72 L148 12 L108 52 Z"/></g>
+  <path d="M56 58 L58 30 L78 50 Z M144 58 L142 30 L122 50 Z" fill="#ff9db8"/>
+  <path d="M50 58 L54 26" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- waffle head -->
+  <rect x="38" y="48" width="124" height="104" rx="16" fill="#f5c35a"/>
+  <g clip-path="url(#waffle-wolf-head)"><rect x="38" y="48" width="124" height="104" fill="url(#waffle-wolf-grid)"/><rect x="144" y="48" width="20" height="104" fill="#2b1d3a" opacity="0.12"/></g>
+  <rect x="38" y="48" width="124" height="104" rx="16" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- syrup over the top -->
+  <path d="M38 66 L38 62 Q38 48 54 48 L146 48 Q162 48 162 62 L162 68 Q158 82 152 70 Q148 90 140 72 Q134 78 128 68 L82 68 Q74 86 66 70 Q58 78 52 68 Q46 82 38 66 Z" fill="#d4761e" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M48 58 Q52 54 60 54 M146 74 l0 6" fill="none" stroke="#f7b25a" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- butter pat -->
+  <g transform="rotate(-6 100 42)">
+    <path d="M84 34 L116 34 Q120 34 120 38 L120 50 Q120 54 116 54 L108 54 Q106 64 102 54 L84 54 Q80 54 80 50 L80 38 Q80 34 84 34 Z" fill="#ffe680" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M86 40 L96 40" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+  <!-- eyes -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="78" cy="92" r="14" fill="#ffffff"/><circle cx="122" cy="92" r="14" fill="#ffffff"/></g>
+  <circle cx="81" cy="95" r="8" fill="#2b1d3a"/><circle cx="119" cy="95" r="8" fill="#2b1d3a"/>
+  <circle cx="84" cy="91" r="3" fill="#ffffff"/><circle cx="122" cy="91" r="3" fill="#ffffff"/>
+  <path d="M60 74 L90 82 M140 74 L110 82" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="56" cy="118" rx="6" ry="3.5" fill="#ff9db8"/><ellipse cx="144" cy="118" rx="6" ry="3.5" fill="#ff9db8"/>
+  <!-- muzzle + snarl -->
+  <ellipse cx="100" cy="128" rx="34" ry="20" fill="#ffe2a6" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M91 113 Q100 108 109 113 Q105 121 100 121 Q95 121 91 113 Z" fill="#2b1d3a"/>
+  <path d="M76 128 Q100 152 124 128 Q100 137 76 128 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M81 130 l4 10 4 -8z M119 130 l-4 10 -4 -8z M94 134 l3 5 3 -5z M106 134 l-3 5 -3 -5z" fill="#ffffff"/>
+  <!-- sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M22 26 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+    <path d="M178 22 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M22 150 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Lo Mein Leviathan, a sea serpent of thick wavy lo mein noodles rising in loops out of an open takeout box, dotted with carrot and green pepper bits, slurping a noodle">
+  <defs>
+    <clipPath id="lo-mein-leviathan-head"><path d="M84 54 Q82 18 122 16 Q164 16 166 50 Q168 82 126 84 Q86 84 84 54 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="66" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- inside of the open box -->
+  <path d="M52 136 L70 124 L130 124 L148 136 Z" fill="#d9cfc0" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <!-- noodle tail flicking out -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M118 134 Q152 132 158 112 Q162 98 150 96" stroke="#2b1d3a" stroke-width="18"/>
+    <path d="M118 134 Q152 132 158 112 Q162 98 150 96" stroke="#f2cf6b" stroke-width="11"/>
+    <!-- the noodle body, rising in loops: a bundle of three thick noodles -->
+    <path d="M96 150 C70 122 24 126 32 90 C40 58 90 62 86 92 C84 116 130 120 140 90 C146 72 140 64 132 60" stroke="#2b1d3a" stroke-width="32"/>
+    <path d="M96 150 C70 122 24 126 32 90 C40 58 90 62 86 92 C84 116 130 120 140 90 C146 72 140 64 132 60" stroke="#d9a640" stroke-width="24"/>
+    <path d="M96 150 C70 122 24 126 32 90 C40 58 90 62 86 92 C84 116 130 120 140 90 C146 72 140 64 132 60" stroke="#2b1d3a" stroke-width="2.5" transform="translate(-4 -4)"/>
+    <path d="M96 150 C70 122 24 126 32 90 C40 58 90 62 86 92 C84 116 130 120 140 90 C146 72 140 64 132 60" stroke="#2b1d3a" stroke-width="2.5" transform="translate(4 4)"/>
+    <path d="M96 150 C70 122 24 126 32 90 C40 58 90 62 86 92 C84 116 130 120 140 90 C146 72 140 64 132 60" stroke="#f2cf6b" stroke-width="5.5" transform="translate(-8 -7)"/>
+    <path d="M96 150 C70 122 24 126 32 90 C40 58 90 62 86 92 C84 116 130 120 140 90 C146 72 140 64 132 60" stroke="#f2cf6b" stroke-width="5.5"/>
+    <path d="M96 150 C70 122 24 126 32 90 C40 58 90 62 86 92 C84 116 130 120 140 90 C146 72 140 64 132 60" stroke="#f2cf6b" stroke-width="5.5" transform="translate(8 7)"/>
+    <path d="M96 150 C70 122 24 126 32 90 C40 58 90 62 86 92 C84 116 130 120 140 90 C146 72 140 64 132 60" stroke="#fff1b8" stroke-width="2" transform="translate(-9 -8)"/>
+  </g>
+  <!-- carrot and green pepper bits -->
+  <g stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
+    <rect x="40" y="114" width="12" height="6" rx="2" fill="#ff8a2a" transform="rotate(-30 46 117)"/>
+    <rect x="102" y="106" width="12" height="6" rx="2" fill="#ff8a2a" transform="rotate(20 108 109)"/>
+    <rect x="58" y="70" width="11" height="6" rx="2" fill="#ff8a2a" transform="rotate(15 63 73)"/>
+    <path d="M26 92 q4 -10 12 -10 q-6 4 -8 12z" fill="#4caf50"/>
+    <path d="M80 98 q8 -4 14 2 q-8 -2 -12 4z" fill="#4caf50"/>
+    <path d="M144 120 q8 -6 14 0 q-8 -2 -12 4z" fill="#4caf50"/>
+  </g>
+  <!-- noodle head -->
+  <!-- green pepper fin -->
+  <path d="M98 26 L104 8 L116 18 L126 4 L136 18 L150 8 L154 26 Z" fill="#4caf50" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M110 20 L114 14 M130 18 L132 12" stroke="#8fd46a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- side fins -->
+  <g fill="#4caf50" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"><path d="M88 60 L72 52 L76 68 Z"/><path d="M164 58 L182 50 L178 68 Z"/></g>
+  <path d="M84 54 Q82 18 122 16 Q164 16 166 50 Q168 82 126 84 Q86 84 84 54 Z" fill="#f2cf6b" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#lo-mein-leviathan-head)">
+    <path d="M148 16 Q176 50 150 88 L172 88 L172 10 Z" fill="#d9a640"/>
+    <g fill="none" stroke="#e0b44a" stroke-width="3" stroke-linecap="round"><path d="M92 70 Q110 80 128 76"/><path d="M134 22 Q150 26 156 38"/></g>
+  </g>
+  <path d="M94 40 Q100 26 116 24" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- slurping face -->
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="110" cy="48" r="11.5" fill="#ffffff"/><circle cx="142" cy="48" r="11.5" fill="#ffffff"/></g>
+  <circle cx="113" cy="50" r="6.5" fill="#2b1d3a"/><circle cx="139" cy="50" r="6.5" fill="#2b1d3a"/>
+  <circle cx="115" cy="47" r="2.4" fill="#ffffff"/><circle cx="141" cy="47" r="2.4" fill="#ffffff"/>
+  <path d="M94 32 L118 39 M158 32 L134 39" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="126" cy="70" rx="11" ry="7.5" fill="#2b1d3a"/>
+  <path d="M118 65 l3 5 3 -5z M128 64 l3 5 3 -5z" fill="#ffffff"/>
+  <g fill="none" stroke-linecap="round">
+    <path d="M126 72 Q136 82 128 92 Q120 102 132 108" stroke="#2b1d3a" stroke-width="9"/>
+    <path d="M126 72 Q136 82 128 92 Q120 102 132 108" stroke="#f2cf6b" stroke-width="4.5"/>
+  </g>
+  <ellipse cx="96" cy="64" rx="5" ry="3" fill="#ff9db8"/><ellipse cx="156" cy="64" rx="5" ry="3" fill="#ff9db8"/>
+  <!-- the takeout box front -->
+  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M52 136 L32 114 L72 124 Z"/>
+    <path d="M148 136 L168 114 L128 124 Z"/>
+    <path d="M52 136 L148 136 L134 184 L66 184 Z"/>
+  </g>
+  <path d="M124 138 L145 138 L132 182 L116 182 Z" fill="#e6e2ee"/>
+  <path d="M52 136 L148 136 L134 184 L66 184 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M57 148 L143 148 M60 156 L140 156" stroke="#e2384d" stroke-width="3"/>
+  <ellipse cx="100" cy="170" rx="8" ry="7.5" fill="#e2384d"/>
+  <path d="M100 163 Q95 170 100 177 M100 163 Q105 170 100 177" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+  <rect x="95" y="161" width="10" height="3" rx="1" fill="#ffc93c"/><rect x="95" y="176" width="10" height="3" rx="1" fill="#ffc93c"/>
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M24 26 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M180 140 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M22 156 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

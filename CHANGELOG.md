@@ -4,6 +4,19 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+## [1.10.0] — 2026-11-22
+### Added
+- 2026-11-22: **Calorie Crusher is complete: 120 levels in 12 worlds.** Four more worlds after Concession Canyon:
+  world 9 **Brunch Boulevard** (boss Lady Short Stack), world 10 **Takeout Temple** (boss The Takeout Dragon), world 11
+  **Deep-Fry Volcano** (boss The Fry Lord) and world 12 **Calorie Cosmos**, ending with the final boss **The
+  Snackularity** at level 120. Forty more monsters, each with its own drawing, new ability and Monster Book line; HP
+  climbs from 1,300 to 2,450 and deadlines are 9 to 10 days (a boss one more). The map, the world pages, the battle
+  arenas and the Monster Book have them all.
+- 2026-11-22: A run that finished at level 80 carries on at level 81, as one that finished at 60 did.
+- 2026-11-22: A splurge whose heal an ability holds back for the next morning says so in the live panel ("tomorrow").
+### Changed
+- 2026-11-22: Count Concession is now world 8's boss. No database change: version 7 already allows level 120.
+
 ## [1.9.0] — 2026-11-22
 ### Added
 - 2026-11-22: **Calorie Crusher has 80 levels: two new worlds after Feast Fortress.** World 7 **Freezer Tundra**

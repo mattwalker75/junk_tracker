@@ -242,7 +242,7 @@ export function attackPanel(input: FightInput, a: { id?: string; what: string; d
   const dmg = line && line.kind === "hit" ? line.amount : 0;
   const hpBefore = hpLeft(before), hpAfter = hpLeft(after);
   const max = monsterHp(input.level, input.hpMult);
-  const base = { name, max, bonusMax: bonusMaxOf(max), hpBefore, hpAfter, raw, dmg, short: Math.max(0, hpAfter), over: 0, note: "" };
+  const base = { name, max, bonusMax: bonusMaxOf(max, input.level), hpBefore, hpAfter, raw, dmg, short: Math.max(0, hpAfter), over: 0, note: "" };
   const formula = raw ? `${minutes} min + ${fmt(cal)} cal ÷ 10 = ${raw} damage` : "Damage = minutes + cal ÷ 10, no cap";
   if (before.ko) return { ...base, state: "down", formula, line: `${name} is already down. Logging still earns +5 points.` };
   if (!raw) return { ...base, state: "idle", formula, line: `${name} has ${hpBefore} HP left${before.bonus ? `, ${before.bonus} of it bonus HP` : ""}. Every 10 min or 100 cal is 10 damage.` };
@@ -261,7 +261,7 @@ export function attackPanel(input: FightInput, a: { id?: string; what: string; d
 
 export interface HealPanel {
   /** "full": full HP and a full bonus bar, so it heals nothing */
-  state: "none" | "heal" | "blocked" | "full" | "down" | "outside";
+  state: "none" | "heal" | "blocked" | "full" | "down" | "outside" | "later";
   name: string;
   max: number;
   /** its bonus HP cap (20% of max HP) */
@@ -283,7 +283,7 @@ export function healPanel(input: FightInput, s: { id?: string; what: string; day
   const lv = levelInfo(input.level);
   const name = lv.name;
   const max = monsterHp(input.level, input.hpMult);
-  const base = { name, max, bonusMax: bonusMaxOf(max) };
+  const base = { name, max, bonusMax: bonusMaxOf(max, input.level) };
   if (!s.size) {
     const hp = hpLeft(preview(input, {}).before);
     return { ...base, state: "none", hpBefore: hp, hpAfter: hp, heal: 0, bonus: 0, formula: "Snack +10 · Meal +25 · Feast +60, or the monster's own numbers", line: `Pick Snack, Meal or Feast to see how much ${name} heals.` };
@@ -291,7 +291,7 @@ export function healPanel(input: FightInput, s: { id?: string; what: string; day
   const id = s.id ?? NEW_ID;
   const ev: SplurgeEv = { id, what: s.what.trim() || SIZE_LABEL[s.size], day: s.day, time: s.time, size: s.size, planned: s.planned, createdAt: s.createdAt };
   const { before, after } = preview(input, { splurge: ev });
-  const line = after.lines.find((l) => l.sourceId === id && (l.kind === "heal" || l.kind === "blocked"));
+  const line = after.lines.find((l) => l.sourceId === id && (l.kind === "heal" || l.kind === "blocked" || l.kind === "note"));
   const heal = line && line.kind === "heal" ? line.amount : 0;
   const bonus = line && line.kind === "heal" ? line.bonus ?? 0 : 0;
   const plain = { snack: 10, meal: 25, feast: 60 }[s.size];
@@ -305,6 +305,7 @@ export function healPanel(input: FightInput, s: { id?: string; what: string; day
   if (before.ko) return { ...view, state: "down", line: `${name} is already down. Logging still earns +5 points.` };
   if (!line) return { ...view, state: "outside", line: `That day is outside ${name}'s fight, so it doesn't heal it. It still earns +5 points.` };
   if (line.kind === "blocked") return { ...view, state: "blocked", line: "BLOCKED! Your Veggie Shield stops this heal." };
+  if (line.kind === "note") return { ...view, state: "later", line: `${line.text.replace(/\.$/, "")}: it lands in full tomorrow morning.` };
   if (!heal) return { ...view, state: "full", line: `${name} is at full HP with a full bonus bar, so this heals nothing.` };
   const extra = !bonus ? "" : bonus === heal ? ` It's at full HP, so it all goes on as bonus HP.` : ` The extra ${bonus} goes on as bonus HP.`;
   return { ...view, state: "heal", line: `${name} heals +${heal}${s.planned ? ", planned treat, half heal" : ability ? ` (${ability})` : ""}.${extra}` };
@@ -315,7 +316,7 @@ export function sizeHeals(input: FightInput, s: { id?: string; what: string; day
   const out = { snack: "", meal: "", feast: "" } as Record<Size, string>;
   for (const size of ["snack", "meal", "feast"] as Size[]) {
     const p = healPanel(input, { ...s, size });
-    out[size] = p.state === "heal" ? (p.bonus === p.heal ? `+${p.heal} bonus` : `+${p.heal} heal`) : p.state === "full" ? "maxed out" : p.state === "blocked" ? "blocked" : "";
+    out[size] = p.state === "heal" ? (p.bonus === p.heal ? `+${p.heal} bonus` : `+${p.heal} heal`) : p.state === "full" ? "maxed out" : p.state === "blocked" ? "blocked" : p.state === "later" ? "tomorrow" : "";
   }
   return out;
 }

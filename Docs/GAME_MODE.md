@@ -63,7 +63,7 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 - Mockups: canvas rounds 6 and 7. Round 7 has the 60-level map, World 2 up close, Start a run,
   Knocked back, the game-styled sheets, the bottom buttons and five New monsters pages.
 
-## Growing to 120 levels (Nov 21 2026) — worlds 7 and 8 built (Nov 22 2026), 9–12 to come
+## Growing to 120 levels (Nov 21 2026) — all built (Nov 22 2026)
 Matt: "double the size of the monsters and the map … an additional 60 monsters and 6 additional worlds …
 a total of 120 monsters to fight". Decided with Matt:
 - **Worlds 7–12 come after world 6** (levels 61–120). Today's 60 levels stay exactly as they are; The
@@ -96,6 +96,12 @@ a total of 120 monsters to fight". Decided with Matt:
   - Engine additions for the new abilities: `Cx.fightDay` (day 1 = the start day; the bonus part-day after a KO
     is day 0), `revive(cx, times)` (asked each time, so Three Crowns can come back twice), `later(heal, note,
     inDays)` (Lingering Sour) and `holdText` (what a monster that can't be finished yet says).
+- **Built, Nov 22 2026 (1.10.0): all 120.** Matt: "please build it all out" — worlds 9 **Brunch Boulevard**,
+  10 **Takeout Temple**, 11 **Deep-Fry Volcano** and 12 **Calorie Cosmos** went in straight from the Round 9 ideas
+  (canvas rounds 12–15 show them; Matt can still ask for changes). **The Snackularity** at 120 is the final boss.
+  Deadlines 9 days (worlds 9–10) and 10 (11–12), a boss +1; HP 1,300 → 1,870 and the final boss 2,450. More engine
+  hooks: `Cx.bonus` (Puffed Up) and `bonusShare` (Big Appetite, Event Horizon). A run that finished at 80 carries on
+  at 81 like one that finished at 60.
 - **The phone apps must stay in step** (Matt, Nov 21 2026): the build includes the phone tests, the new
   database upgrade run on the phone, and both apps rebuilt (`APP_PORTS/*/BUILD_APP.sh`).
 

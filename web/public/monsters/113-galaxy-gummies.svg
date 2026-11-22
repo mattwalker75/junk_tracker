@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Galaxy Gummies, five translucent purple, blue and pink gummy stars joined by dotted constellation lines, the big middle one scowling">
+  <defs>
+    <clipPath id="galaxy-gummies-big"><path d="M100 44 L117.6 79.7 L157.1 85.5 L128.5 113.3 L135.3 152.5 L100 134 L64.7 152.5 L71.5 113.3 L42.9 85.5 L82.4 79.7 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="56" ry="6" fill="#2b1d3a" opacity="0.12"/>
+  <!-- constellation lines -->
+  <g fill="none" stroke="#fff3c4" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.5 7">
+    <path d="M55 42 L100 44 L145 42"/><path d="M55 42 L43 86"/><path d="M145 42 L157 86"/>
+    <path d="M165 125 L135 152"/><path d="M35 125 L65 152"/><path d="M65 152 L100 176 L135 152"/>
+  </g>
+  <g fill="#fff3c4"><circle cx="100" cy="176" r="3.5"/></g>
+  <!-- the big gummy star: outline pass, fill pass -->
+  <path d="M100 44 L117.6 79.7 L157.1 85.5 L128.5 113.3 L135.3 152.5 L100 134 L64.7 152.5 L71.5 113.3 L42.9 85.5 L82.4 79.7 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="13" stroke-linejoin="round"/>
+  <path d="M100 44 L117.6 79.7 L157.1 85.5 L128.5 113.3 L135.3 152.5 L100 134 L64.7 152.5 L71.5 113.3 L42.9 85.5 L82.4 79.7 Z" fill="#b07cff" stroke="#b07cff" stroke-width="5" stroke-linejoin="round"/>
+  <g clip-path="url(#galaxy-gummies-big)">
+    <path d="M118 70 L170 82 L140 160 L112 130 Z" fill="#8e5ae6"/>
+    <path d="M100 60 L111 84 L136 88 L118 106 L122 132 L100 120 L78 132 L82 106 L64 88 L89 84 Z" fill="#cfa8ff" opacity="0.55"/>
+  </g>
+  <path d="M95 58 L87 74 M60 88 L52 89" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <g fill="#f1e4ff"><circle cx="70" cy="140" r="2"/><circle cx="128" cy="140" r="2"/><circle cx="140" cy="94" r="1.8"/></g>
+  <!-- big face -->
+  <path d="M80 82 L96 88 M120 82 L104 88" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="89" cy="99" r="10" fill="#ffffff"/><circle cx="111" cy="99" r="10" fill="#ffffff"/></g>
+  <circle cx="91" cy="101" r="6" fill="#2b1d3a"/><circle cx="109" cy="101" r="6" fill="#2b1d3a"/>
+  <circle cx="93" cy="98" r="2.2" fill="#ffffff"/><circle cx="111" cy="98" r="2.2" fill="#ffffff"/>
+  <path d="M85 114 Q100 130 115 114 Q100 120 85 114 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M90 116 l3 5 3 -4z M98 118 l2 5 3 -5z M106 117 l3 4 2 -5z" fill="#ffffff"/>
+  <ellipse cx="77" cy="109" rx="4.5" ry="2.8" fill="#ff9db8"/><ellipse cx="123" cy="109" rx="4.5" ry="2.8" fill="#ff9db8"/>
+  <!-- four small gummy stars -->
+  <g id="galaxy-gummies-small">
+    <g transform="translate(55 42) rotate(-14)">
+      <path d="M0 -24 L7 -9.7 L22.8 -7.4 L11.4 3.7 L14.1 19.4 L0 12 L-14.1 19.4 L-11.4 3.7 L-22.8 -7.4 L-7 -9.7 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="11" stroke-linejoin="round"/>
+      <path d="M0 -24 L7 -9.7 L22.8 -7.4 L11.4 3.7 L14.1 19.4 L0 12 L-14.1 19.4 L-11.4 3.7 L-22.8 -7.4 L-7 -9.7 Z" fill="#ff8fc8" stroke="#ff8fc8" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M-4 -17 L-8 -9" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(145 42) rotate(12)">
+      <path d="M0 -24 L7 -9.7 L22.8 -7.4 L11.4 3.7 L14.1 19.4 L0 12 L-14.1 19.4 L-11.4 3.7 L-22.8 -7.4 L-7 -9.7 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="11" stroke-linejoin="round"/>
+      <path d="M0 -24 L7 -9.7 L22.8 -7.4 L11.4 3.7 L14.1 19.4 L0 12 L-14.1 19.4 L-11.4 3.7 L-22.8 -7.4 L-7 -9.7 Z" fill="#6ec6ff" stroke="#6ec6ff" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M-4 -17 L-8 -9" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(165 125) rotate(18)">
+      <path d="M0 -24 L7 -9.7 L22.8 -7.4 L11.4 3.7 L14.1 19.4 L0 12 L-14.1 19.4 L-11.4 3.7 L-22.8 -7.4 L-7 -9.7 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="11" stroke-linejoin="round"/>
+      <path d="M0 -24 L7 -9.7 L22.8 -7.4 L11.4 3.7 L14.1 19.4 L0 12 L-14.1 19.4 L-11.4 3.7 L-22.8 -7.4 L-7 -9.7 Z" fill="#ff8fc8" stroke="#ff8fc8" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M-4 -17 L-8 -9" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(35 125) rotate(-18)">
+      <path d="M0 -24 L7 -9.7 L22.8 -7.4 L11.4 3.7 L14.1 19.4 L0 12 L-14.1 19.4 L-11.4 3.7 L-22.8 -7.4 L-7 -9.7 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="11" stroke-linejoin="round"/>
+      <path d="M0 -24 L7 -9.7 L22.8 -7.4 L11.4 3.7 L14.1 19.4 L0 12 L-14.1 19.4 L-11.4 3.7 L-22.8 -7.4 L-7 -9.7 Z" fill="#6ec6ff" stroke="#6ec6ff" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M-4 -17 L-8 -9" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </g>
+  <!-- tiny faces -->
+  <g stroke="#2b1d3a" stroke-width="2"><circle cx="50" cy="42" r="4.5" fill="#ffffff"/><circle cx="60" cy="42" r="4.5" fill="#ffffff"/><circle cx="140" cy="42" r="4.5" fill="#ffffff"/><circle cx="150" cy="42" r="4.5" fill="#ffffff"/><circle cx="160" cy="125" r="4.5" fill="#ffffff"/><circle cx="170" cy="125" r="4.5" fill="#ffffff"/><circle cx="30" cy="125" r="4.5" fill="#ffffff"/><circle cx="40" cy="125" r="4.5" fill="#ffffff"/></g>
+  <g fill="#2b1d3a"><circle cx="51" cy="43" r="2.3"/><circle cx="59" cy="43" r="2.3"/><circle cx="141" cy="43" r="2.3"/><circle cx="149" cy="43" r="2.3"/><circle cx="161" cy="126" r="2.3"/><circle cx="169" cy="126" r="2.3"/><circle cx="31" cy="126" r="2.3"/><circle cx="39" cy="126" r="2.3"/></g>
+  <path d="M45 35 L53 38 M65 35 L57 38 M135 35 L143 38 M155 35 L147 38 M155 118 L163 121 M175 118 L167 121 M25 118 L33 121 M45 118 L37 121" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M51 50 Q55 54 59 50 Z M141 50 Q145 54 149 50 Z M161 133 Q165 137 169 133 Z M31 133 Q35 137 39 133 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- sparkles -->
+  <g stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M100 8 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z" fill="#ffc93c"/>
+    <path d="M178 168 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffffff"/>
+    <path d="M18 170 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffc93c"/>
+  </g>
+</svg>

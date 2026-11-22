@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Astronaut Ice Cream, a freeze-dried chocolate, vanilla and strawberry ice-cream block in a silver foil space suit and glass helmet, floating on jetpack puffs">
+  <defs>
+    <clipPath id="astronaut-ice-cream-block"><rect x="70" y="36" width="60" height="58" rx="8"/></clipPath>
+    <clipPath id="astronaut-ice-cream-suit"><path d="M58 114 Q56 104 70 104 L130 104 Q144 104 142 114 L146 158 L54 158 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="50" ry="6" fill="#2b1d3a" opacity="0.12"/>
+  <!-- jetpack puffs -->
+  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="3">
+    <circle cx="36" cy="182" r="6"/><circle cx="57" cy="183" r="5"/>
+    <circle cx="164" cy="182" r="6"/><circle cx="143" cy="183" r="5"/>
+  </g>
+  <g stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round" fill="#ff9a3c">
+    <path d="M40 166 L52 166 Q52 180 46 188 Q40 180 40 166 Z"/>
+    <path d="M148 166 L160 166 Q160 180 154 188 Q148 180 148 166 Z"/>
+  </g>
+  <path d="M43 168 L49 168 Q49 176 46 180 Q43 176 43 168 Z M151 168 L157 168 Q157 176 154 180 Q151 176 151 168 Z" fill="#ffd34d"/>
+  <!-- jetpack tanks, behind the suit -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <rect x="36" y="122" width="20" height="40" rx="9" fill="#ff6b6b"/>
+    <rect x="144" y="122" width="20" height="40" rx="9" fill="#ff6b6b"/>
+    <path d="M40 160 L52 160 L50 168 L42 168 Z M148 160 L160 160 L158 168 L150 168 Z" fill="#9aa6ba" stroke-width="3"/>
+  </g>
+  <path d="M41 130 L41 150" stroke="#ffb3b3" stroke-width="4" stroke-linecap="round"/>
+  <!-- arms: left one waving -->
+  <path d="M62 122 Q40 116 30 92" fill="none" stroke="#2b1d3a" stroke-width="24" stroke-linecap="round"/>
+  <path d="M62 122 Q40 116 30 92" fill="none" stroke="#d7dde8" stroke-width="16" stroke-linecap="round"/>
+  <path d="M138 124 Q160 130 168 112" fill="none" stroke="#2b1d3a" stroke-width="24" stroke-linecap="round"/>
+  <path d="M138 124 Q160 130 168 112" fill="none" stroke="#b9c2d2" stroke-width="16" stroke-linecap="round"/>
+  <g fill="#ffffff" stroke="#2b1d3a" stroke-width="4"><circle cx="29" cy="84" r="11"/><circle cx="170" cy="104" r="11"/></g>
+  <!-- foil pouch suit with a crimped seal -->
+  <path d="M58 114 Q56 104 70 104 L130 104 Q144 104 142 114 L146 158 l-4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 -4 7 -4 -7 L54 158 Z" fill="#d7dde8" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#astronaut-ice-cream-suit)">
+    <path d="M126 104 L148 104 L148 160 L132 160 Z" fill="#b0b9c8"/>
+    <path d="M70 120 l8 10 -6 8 M104 134 l8 -6 6 10 M84 146 l6 -6" fill="none" stroke="#f4f7fb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <path d="M64 116 L64 146" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- chest star badge -->
+  <circle cx="118" cy="134" r="10" fill="#6ec6ff" stroke="#2b1d3a" stroke-width="3"/>
+  <path d="M118 127 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffffff"/>
+  <!-- helmet collar -->
+  <rect x="62" y="100" width="76" height="12" rx="6" fill="#9aa6ba" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- the freeze-dried block -->
+  <g clip-path="url(#astronaut-ice-cream-block)">
+    <rect x="68" y="34" width="22" height="62" fill="#7a4a2a"/>
+    <rect x="90" y="34" width="20" height="62" fill="#fff3d6"/>
+    <rect x="110" y="34" width="22" height="62" fill="#ff9ec4"/>
+    <g fill="#5a3424"><circle cx="76" cy="84" r="1.8"/><circle cx="82" cy="90" r="1.4"/></g>
+    <g fill="#e8d6b0"><circle cx="96" cy="88" r="1.6"/><circle cx="104" cy="40" r="1.4"/></g>
+    <g fill="#e46a9a"><circle cx="124" cy="86" r="1.8"/><circle cx="118" cy="40" r="1.4"/></g>
+  </g>
+  <rect x="70" y="36" width="60" height="58" rx="8" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- face -->
+  <path d="M74 46 L94 52 M126 46 L106 52" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="88" cy="62" r="10" fill="#ffffff"/><circle cx="112" cy="62" r="10" fill="#ffffff"/></g>
+  <circle cx="90" cy="64" r="6" fill="#2b1d3a"/><circle cx="110" cy="64" r="6" fill="#2b1d3a"/>
+  <circle cx="92" cy="61" r="2.2" fill="#ffffff"/><circle cx="112" cy="61" r="2.2" fill="#ffffff"/>
+  <path d="M86 77 Q100 91 114 77 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M90 78 l3 5 3 -5z M110 78 l-3 5 -3 -5z" fill="#ffffff"/>
+  <ellipse cx="77" cy="76" rx="4.5" ry="2.8" fill="#ff9db8"/><ellipse cx="123" cy="76" rx="4.5" ry="2.8" fill="#ffc2d4"/>
+  <!-- glass helmet bubble -->
+  <circle cx="100" cy="64" r="44" fill="#cdefff" fill-opacity="0.25" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M68 40 Q76 28 92 24" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="63" cy="50" r="3" fill="#ffffff"/>
+  <path d="M138 78 Q136 90 128 98" fill="none" stroke="#9fd8f5" stroke-width="3" stroke-linecap="round"/>
+  <!-- star sparkles -->
+  <g stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M24 22 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#ffc93c"/>
+    <path d="M168 20 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z" fill="#ffffff"/>
+    <path d="M178 140 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffc93c"/>
+  </g>
+</svg>

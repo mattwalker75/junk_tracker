@@ -649,7 +649,7 @@ describe("Calorie Crusher (game mode, Nov 11 2026)", () => {
     const b = await firstPerson();
     const none = (await b.call("GET", `/api/game?today=${T}`)).body;
     expect(none).toMatchObject({ today: T, run: null, fight: null, needsSync: false, events: [] });
-    expect(none.map).toHaveLength(80);
+    expect(none.map).toHaveLength(120);
     expect((await b.call("GET", "/api/game?today=2026-02-30")).body.error).toBe("Which day is it?");
     expect((await b.call("GET", `/api/game?today=${T}&now=25:99`)).status).toBe(400);
     expect((await b.call("POST", "/api/game/run", { mode: "easy", today: T })).body.error).toBe("Pick Normal or Hardcore.");

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Pizza Saucer, a flying saucer made of a whole pizza with glowing pepperoni rim lights, a glass dome with a scowling cheese-yellow alien pilot, and a tractor beam below">
+  <defs>
+    <clipPath id="pizza-saucer-band"><path d="M12 122 L12 134 A88 26 0 0 0 188 134 L188 122 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="50" ry="6" fill="#2b1d3a" opacity="0.12"/>
+  <!-- tractor beam -->
+  <path d="M86 158 L50 186 Q100 196 150 186 L114 158 Z" fill="#b8f5ff" opacity="0.45"/>
+  <path d="M86 158 L50 186 M114 158 L150 186" stroke="#e8fdff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 5"/>
+  <g fill="none" stroke="#ffffff" stroke-width="2.5" opacity="0.8"><ellipse cx="100" cy="170" rx="22" ry="3"/><ellipse cx="100" cy="182" rx="36" ry="4"/></g>
+  <circle cx="100" cy="176" r="3.5" fill="#ffd34d" stroke="#2b1d3a" stroke-width="2"/>
+  <!-- the pizza's side band (crust edge) -->
+  <path d="M12 122 L12 134 A88 26 0 0 0 188 134 L188 122 Z" fill="#d18f36" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#pizza-saucer-band)"><rect x="146" y="110" width="50" height="60" fill="#2b1d3a" opacity="0.18"/></g>
+  <ellipse cx="100" cy="160" rx="14" ry="4" fill="#9aa6ba" stroke="#2b1d3a" stroke-width="3"/>
+  <!-- pepperoni rim lights -->
+  <g fill="#fff3a8" opacity="0.55"><circle cx="36" cy="146" r="10"/><circle cx="68" cy="152" r="10"/><circle cx="100" cy="154" r="10"/><circle cx="132" cy="152" r="10"/><circle cx="164" cy="146" r="10"/></g>
+  <g fill="#e2384d" stroke="#2b1d3a" stroke-width="2.5"><circle cx="36" cy="146" r="5.5"/><circle cx="68" cy="152" r="5.5"/><circle cx="100" cy="154" r="5.5"/><circle cx="132" cy="152" r="5.5"/><circle cx="164" cy="146" r="5.5"/></g>
+  <g fill="#ffb0a8"><circle cx="34.5" cy="144.5" r="2"/><circle cx="66.5" cy="150.5" r="2"/><circle cx="98.5" cy="152.5" r="2"/><circle cx="130.5" cy="150.5" r="2"/><circle cx="162.5" cy="144.5" r="2"/></g>
+  <!-- the pizza's top -->
+  <ellipse cx="100" cy="122" rx="88" ry="26" fill="#f2b866" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="100" cy="122" rx="78" ry="21" fill="#e2384d"/>
+  <ellipse cx="100" cy="121" rx="74" ry="19" fill="#ffbf47"/>
+  <path d="M30 112 Q50 100 80 98" fill="none" stroke="#ffe08a" stroke-width="4" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="2.5"><ellipse cx="34" cy="122" rx="8" ry="5" fill="#e2384d"/><ellipse cx="166" cy="122" rx="8" ry="5" fill="#e2384d"/><ellipse cx="56" cy="134" rx="7" ry="4" fill="#e2384d"/><ellipse cx="144" cy="134" rx="7" ry="4" fill="#e2384d"/></g>
+  <g fill="none" stroke="#3a7d2c" stroke-width="2.5"><ellipse cx="46" cy="112" rx="3.5" ry="2.2"/><ellipse cx="156" cy="112" rx="3.5" ry="2.2"/></g>
+  <!-- alien pilot -->
+  <ellipse cx="100" cy="128" rx="26" ry="12" fill="#fff27a" stroke="#2b1d3a" stroke-width="3.5"/>
+  <path d="M90 78 L82 66 M110 78 L118 66" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"/>
+  <g fill="#7bd36b" stroke="#2b1d3a" stroke-width="2.5"><circle cx="82" cy="66" r="4"/><circle cx="118" cy="66" r="4"/></g>
+  <circle cx="100" cy="96" r="24" fill="#fff27a" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M112 76 Q126 90 118 114 Q110 120 104 120 Q124 104 112 76 Z" fill="#f2c230"/>
+  <g fill="#f2c230"><circle cx="84" cy="116" r="2.5"/><circle cx="120" cy="124" r="3"/><circle cx="116" cy="84" r="2.2"/></g>
+  <path d="M84 80 Q88 74 96 73" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M80 83 L96 89 M120 83 L104 89" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="3"><circle cx="90" cy="97" r="8.5" fill="#ffffff"/><circle cx="110" cy="97" r="8.5" fill="#ffffff"/></g>
+  <circle cx="91.5" cy="99" r="5" fill="#2b1d3a"/><circle cx="108.5" cy="99" r="5" fill="#2b1d3a"/>
+  <circle cx="93" cy="96.5" r="1.8" fill="#ffffff"/><circle cx="110" cy="96.5" r="1.8" fill="#ffffff"/>
+  <path d="M89 108 Q100 120 111 108 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M92 109 l2.5 4 2.5 -4z M108 109 l-2.5 4 -2.5 -4z" fill="#ffffff"/>
+  <ellipse cx="80" cy="108" rx="3.8" ry="2.4" fill="#ff9db8"/><ellipse cx="120" cy="108" rx="3.8" ry="2.4" fill="#ff9db8"/>
+  <!-- glass dome -->
+  <path d="M44 122 A56 66 0 0 1 156 122 A56 15 0 0 1 44 122 Z" fill="#cdefff" fill-opacity="0.16" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M60 92 Q66 72 84 62" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="56" cy="104" r="2.6" fill="#ffffff"/>
+  <path d="M44 122 A56 15 0 0 0 156 122" fill="none" stroke="#2b1d3a" stroke-width="10" stroke-linecap="round"/>
+  <path d="M44 122 A56 15 0 0 0 156 122" fill="none" stroke="#c4cddb" stroke-width="5" stroke-linecap="round"/>
+  <!-- sparkles -->
+  <g stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M22 34 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#ffc93c"/>
+    <path d="M174 26 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z" fill="#ffffff"/>
+    <path d="M176 74 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffc93c"/>
+  </g>
+</svg>

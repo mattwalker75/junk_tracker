@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Croissadillo, an armadillo whose armour is a flaky golden croissant crescent of layered bands, its little face peeking out at the front">
+  <defs>
+    <clipPath id="croissadillo-shell"><path d="M18 164 C8 116 40 50 98 46 C150 44 182 92 168 150 C156 124 132 110 102 110 C70 110 44 130 34 166 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="82" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- tail -->
+  <path d="M30 166 Q14 172 12 186" fill="none" stroke="#2b1d3a" stroke-width="10" stroke-linecap="round"/>
+  <path d="M30 166 Q14 172 12 186" fill="none" stroke="#f6c7a2" stroke-width="4.5" stroke-linecap="round"/>
+  <!-- belly and legs under the shell -->
+  <g fill="#f6c7a2" stroke="#2b1d3a" stroke-width="3.5"><rect x="50" y="162" width="18" height="22" rx="7"/><rect x="84" y="164" width="18" height="21" rx="7"/><rect x="116" y="164" width="18" height="21" rx="7"/></g>
+  <ellipse cx="96" cy="150" rx="62" ry="26" fill="#f6c7a2" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- croissant shell -->
+  <path d="M18 164 C8 116 40 50 98 46 C150 44 182 92 168 150 C156 124 132 110 102 110 C70 110 44 130 34 166 Z" fill="#eea640"/>
+  <g clip-path="url(#croissadillo-shell)">
+    <!-- a lighter bulge in the middle of each band -->
+    <g fill="#f9cf7a">
+      <ellipse cx="30" cy="138" rx="8" ry="16" transform="rotate(-30 30 138)"/>
+      <ellipse cx="54" cy="96" rx="11" ry="22" transform="rotate(-35 54 96)"/>
+      <ellipse cx="92" cy="74" rx="14" ry="22"/>
+      <ellipse cx="132" cy="80" rx="12" ry="22" transform="rotate(30 132 80)"/>
+      <ellipse cx="158" cy="118" rx="7" ry="16" transform="rotate(20 158 118)"/>
+    </g>
+    <path d="M150 50 Q190 100 166 160 L190 160 L190 40 Z" fill="#cf8228"/>
+    <!-- band seams -->
+    <g fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round">
+      <path d="M16 118 Q36 124 44 140"/><path d="M32 72 Q58 90 64 118"/><path d="M72 48 Q82 80 80 112"/><path d="M114 46 Q110 80 118 112"/><path d="M160 72 Q140 92 140 120"/>
+    </g>
+    <!-- flaky layer lines -->
+    <g fill="none" stroke="#b8692e" stroke-width="2" stroke-linecap="round">
+      <path d="M26 150 Q30 140 28 128"/><path d="M46 112 Q52 100 50 84"/><path d="M98 100 Q102 80 98 58"/><path d="M128 102 Q134 86 140 68"/><path d="M154 136 Q160 124 160 110"/>
+    </g>
+  </g>
+  <path d="M18 164 C8 116 40 50 98 46 C150 44 182 92 168 150 C156 124 132 110 102 110 C70 110 44 130 34 166 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M40 82 Q60 58 90 54" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <!-- ears -->
+  <g fill="#f6c7a2" stroke="#2b1d3a" stroke-width="3.5"><ellipse cx="138" cy="116" rx="6" ry="11" transform="rotate(-15 138 116)"/><ellipse cx="162" cy="116" rx="6" ry="11" transform="rotate(15 162 116)"/></g>
+  <g fill="#ff9db8"><ellipse cx="138" cy="117" rx="2.5" ry="6" transform="rotate(-15 138 117)"/><ellipse cx="162" cy="117" rx="2.5" ry="6" transform="rotate(15 162 117)"/></g>
+  <!-- head peeking out, snout forward -->
+  <ellipse cx="177" cy="154" rx="12" ry="9" fill="#f6c7a2" stroke="#2b1d3a" stroke-width="4"/>
+  <ellipse cx="151" cy="146" rx="27" ry="24" fill="#f6c7a2" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M168 130 Q181 146 169 166 Q173 148 168 130 Z" fill="#e3a98a"/>
+  <ellipse cx="187" cy="152" rx="4" ry="3.5" fill="#2b1d3a"/>
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="140" cy="140" r="10" fill="#ffffff"/><circle cx="162" cy="138" r="10" fill="#ffffff"/></g>
+  <circle cx="142" cy="142" r="5.5" fill="#2b1d3a"/><circle cx="163" cy="140" r="5.5" fill="#2b1d3a"/>
+  <circle cx="144" cy="139" r="2" fill="#ffffff"/><circle cx="165" cy="137" r="2" fill="#ffffff"/>
+  <path d="M127 126 L146 132 M175 124 L156 130" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M139 156 Q157 170 177 158 Q157 162 139 156 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M144 158 l3 5 3 -4z M156 160 l2.5 5 2.5 -5z M169 159 l-3 5 -3 -5z" fill="#ffffff"/>
+  <ellipse cx="130" cy="154" rx="5" ry="3" fill="#ff9db8"/><ellipse cx="175" cy="148" rx="4" ry="2.5" fill="#ff9db8"/>
+  <!-- flaky crumbs -->
+  <g fill="#eea640" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M12 92 q6 -6 10 0 q-4 4 -10 0z"/><path d="M60 26 q6 -6 10 0 q-4 4 -10 0z"/><path d="M176 62 q6 -6 10 0 q-4 4 -10 0z"/><path d="M72 186 q5 -5 9 0 q-4 3 -9 0z"/>
+  </g>
+  <!-- sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M24 24 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+    <path d="M168 16 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M188 96 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z"/>
+  </g>
+</svg>

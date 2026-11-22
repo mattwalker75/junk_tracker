@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Syrup Serpent, a glossy amber maple-syrup snake coiled in a big sticky ring with pancake crumbs stuck on, head raised and forked tongue out">
+  <ellipse cx="100" cy="188" rx="82" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- neck rising from the back of the coil -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M138 142 C176 116 164 72 124 62" stroke="#2b1d3a" stroke-width="30"/>
+    <path d="M138 142 C176 116 164 72 124 62" stroke="#e88a22" stroke-width="22"/>
+    <path d="M146 120 C158 104 154 84 138 72" stroke="#ffbe55" stroke-width="7"/>
+    <path d="M160 118 C166 104 166 92 160 82" stroke="#c0651a" stroke-width="4"/>
+  </g>
+  <!-- the big coil: outline, syrup, glow, gloss -->
+  <g fill="none" stroke-linecap="round">
+    <ellipse cx="100" cy="152" rx="66" ry="22" stroke="#2b1d3a" stroke-width="34"/>
+    <ellipse cx="100" cy="152" rx="66" ry="22" stroke="#e88a22" stroke-width="26"/>
+    <path d="M40 160 Q60 176 100 176 Q140 176 160 162" stroke="#ffbe55" stroke-width="9"/>
+    <path d="M44 136 Q60 128 86 126" stroke="#ffbe55" stroke-width="7"/>
+    <path d="M42 150 Q46 140 60 134" stroke="#fff4cc" stroke-width="4"/>
+    <path d="M70 170 Q86 175 104 175" stroke="#fff4cc" stroke-width="4"/>
+    <path d="M150 178 Q166 170 170 158" stroke="#b85c14" stroke-width="5"/>
+  </g>
+  <!-- pointed tail tip curling out at the front -->
+  <path d="M64 168 Q40 182 12 170 Q30 168 44 162 Z" fill="#e88a22" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M50 168 Q36 172 24 170" fill="none" stroke="#ffbe55" stroke-width="3" stroke-linecap="round"/>
+  <!-- pancake crumbs stuck on -->
+  <g fill="#f5d28a" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M84 162 l7 -2 2 6 -6 3z"/><path d="M128 166 l6 -3 3 6 -7 2z"/><path d="M58 138 l6 -1 1 6 -6 1z"/><path d="M146 136 l5 -2 2 5 -5 2z"/>
+  </g>
+  <!-- head -->
+  <ellipse cx="96" cy="56" rx="42" ry="31" fill="#e88a22" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M126 32 Q146 54 128 80 Q136 54 126 32 Z" fill="#c0651a"/>
+  <path d="M64 42 Q72 32 88 29" fill="none" stroke="#fff4cc" stroke-width="5" stroke-linecap="round"/>
+  <path d="M110 84 Q113 96 109 100 Q105 96 106 84 Z" fill="#e88a22" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- forked tongue -->
+  <path d="M70 74 Q56 80 42 78 L30 70 L37 81 L30 92 L44 84 Q60 86 72 79 Z" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- eyes -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="81" cy="50" r="13" fill="#ffffff"/><circle cx="112" cy="50" r="13" fill="#ffffff"/></g>
+  <circle cx="84" cy="53" r="7" fill="#2b1d3a"/><circle cx="109" cy="53" r="7" fill="#2b1d3a"/>
+  <circle cx="87" cy="49" r="2.6" fill="#ffffff"/><circle cx="112" cy="49" r="2.6" fill="#ffffff"/>
+  <path d="M62 32 L91 40 M131 32 L102 40" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <!-- toothy grin -->
+  <path d="M70 70 Q98 92 124 70 Q98 78 70 70 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M78 73 l3 6 3 -5z M92 75 l3 6 3 -6z M104 75 l3 6 3 -6z M115 73 l2 5 3 -6z" fill="#ffffff"/>
+  <ellipse cx="64" cy="64" rx="5" ry="3" fill="#ff9db8"/><ellipse cx="130" cy="64" rx="5" ry="3" fill="#ff9db8"/>
+  <!-- sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M24 26 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+    <path d="M170 22 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M22 110 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

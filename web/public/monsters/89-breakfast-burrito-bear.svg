@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Breakfast Burrito Bear, a sleepy, grumpy brown bear wrapped in a big tortilla like a blanket, with scrambled egg, bacon and cheese peeking out around its head and a little salsa cup">
+  <defs>
+    <clipPath id="breakfast-burrito-bear-wrap"><path d="M34 92 Q100 116 166 92 L164 164 Q100 192 36 164 Z"/></clipPath>
+  </defs>
+  <ellipse cx="96" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- open end of the tortilla -->
+  <ellipse cx="100" cy="92" rx="68" ry="20" fill="#e6c07a" stroke="#2b1d3a" stroke-width="4"/>
+  <!-- filling peeking out -->
+  <path d="M36 92 Q34 76 48 74 Q52 64 64 70 Q72 62 78 74 L78 100 L40 100 Z" fill="#ffd84a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M46 82 q4 -3 8 0 M60 78 q4 -3 8 0" fill="none" stroke="#fff3a8" stroke-width="3" stroke-linecap="round"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M128 92 Q134 72 144 76 Q152 60 160 72 Q166 64 170 80" stroke="#2b1d3a" stroke-width="13"/>
+    <path d="M128 92 Q134 72 144 76 Q152 60 160 72 Q166 64 170 80" stroke="#d9534f" stroke-width="7"/>
+    <path d="M131 88 Q136 76 144 79 Q152 66 160 75" stroke="#ffb3a6" stroke-width="2.5"/>
+  </g>
+  <!-- bear head -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="70" cy="30" r="13" fill="#a8683a"/><circle cx="130" cy="30" r="13" fill="#a8683a"/></g>
+  <circle cx="70" cy="30" r="6" fill="#e8b08a"/><circle cx="130" cy="30" r="6" fill="#e8b08a"/>
+  <circle cx="100" cy="62" r="38" fill="#a8683a" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M120 32 Q148 58 128 96 Q136 62 120 32 Z" fill="#8a5230"/>
+  <path d="M72 44 Q78 32 90 28" fill="none" stroke="#d29a6c" stroke-width="5" stroke-linecap="round"/>
+  <!-- sleepy-mean eyes -->
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="84" cy="58" r="12" fill="#ffffff"/><circle cx="116" cy="58" r="12" fill="#ffffff"/></g>
+  <circle cx="86" cy="62" r="6.5" fill="#2b1d3a"/><circle cx="114" cy="62" r="6.5" fill="#2b1d3a"/>
+  <circle cx="88" cy="62" r="2" fill="#ffffff"/><circle cx="116" cy="62" r="2" fill="#ffffff"/>
+  <path d="M72 58 A12 12 0 0 1 96 58 Z M104 58 A12 12 0 0 1 128 58 Z" fill="#8a5230" stroke="#2b1d3a" stroke-width="3"/>
+  <path d="M70 42 L94 49 M130 42 L106 49" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="70" cy="76" rx="5.5" ry="3.2" fill="#ff9db8"/><ellipse cx="130" cy="76" rx="5.5" ry="3.2" fill="#ff9db8"/>
+  <!-- muzzle + gritted grin -->
+  <ellipse cx="100" cy="82" rx="19" ry="12" fill="#e8b08a" stroke="#2b1d3a" stroke-width="3.5"/>
+  <ellipse cx="100" cy="75" rx="7" ry="4.5" fill="#2b1d3a"/>
+  <path d="M88 82 Q100 94 112 82 Q100 87 88 82 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M92 84 l2 4 2 -3z M98 85 l2 4 2 -4z M104 85 l2 3 2 -4z" fill="#ffffff"/>
+  <!-- tortilla blanket -->
+  <path d="M34 92 Q100 116 166 92 L164 164 Q100 192 36 164 Z" fill="#f7dfa6" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#breakfast-burrito-bear-wrap)">
+    <path d="M148 96 Q172 130 150 182 L172 182 L172 92 Z" fill="#e8c685"/>
+    <path d="M30 124 Q90 152 170 116 L170 132 Q96 166 30 140 Z" fill="#ecd193"/>
+    <g fill="#d9a35a"><ellipse cx="58" cy="116" rx="5" ry="3"/><ellipse cx="120" cy="148" rx="6" ry="3.5"/><ellipse cx="80" cy="164" rx="4" ry="2.5"/><ellipse cx="140" cy="110" rx="4" ry="2.5"/><ellipse cx="62" cy="154" rx="3" ry="2"/></g>
+  </g>
+  <path d="M36 126 Q92 150 166 116" fill="none" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <!-- melty cheese over the lip -->
+  <path d="M74 102 Q90 108 110 106 L110 112 Q107 124 104 112 Q100 118 96 110 Q92 128 88 110 Q82 116 78 108 Z" fill="#ffb020" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- paws out over the edge -->
+  <g fill="#a8683a" stroke="#2b1d3a" stroke-width="4"><ellipse cx="52" cy="104" rx="14" ry="12"/><ellipse cx="148" cy="104" rx="14" ry="12"/></g>
+  <path d="M46 108 l0 6 M52 109 l0 7 M58 108 l0 6 M142 108 l0 6 M148 109 l0 7 M154 108 l0 6" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M44 98 Q48 94 54 94" fill="none" stroke="#d29a6c" stroke-width="3" stroke-linecap="round"/>
+  <!-- salsa cup -->
+  <path d="M152 160 L188 160 L184 184 L156 184 Z" fill="#f2f4f8" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <ellipse cx="170" cy="160" rx="18" ry="5" fill="#e2384d" stroke="#2b1d3a" stroke-width="3"/>
+  <g fill="#4caf50"><circle cx="164" cy="159" r="1.6"/><circle cx="176" cy="161" r="1.6"/></g><circle cx="170" cy="158" r="1.5" fill="#ffffff"/>
+  <path d="M158 168 L160 180" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <!-- sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M24 28 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+    <path d="M172 22 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M18 150 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z"/>
+  </g>
+</svg>

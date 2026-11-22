@@ -14,15 +14,21 @@ export const WORLD_LOOK: Record<number, { page: string; sky: [string, string, st
   6: { page: "linear-gradient(180deg, #c94a3a 0%, #e0703f 30%, #ffb877 70%, #ffe0b0 100%)", sky: ["#a8352a", "#e0703f", "#ffcf8a"], far: "#b8553a", mesa: "#7a4a2a", mesaLine: "#5e3820", ground: ["#c98a4c", "#a06a3a"], band: "#ffc93c", bandLine: "#fff1a8", prop: "#c0392b" },
   7: { page: "linear-gradient(180deg, #8fd3f4 0%, #bfe6ff 30%, #e3f5ff 70%, #f4fbff 100%)", sky: ["#5ab4e5", "#a8dcff", "#eaf8ff"], far: "#b9dff5", mesa: "#ffffff", mesaLine: "#cfe6f5", ground: ["#f4fbff", "#d6ecfa"], band: "#9fdcff", bandLine: "#ffffff", prop: "#ff9ec4" },
   8: { page: "linear-gradient(180deg, #5a1030 0%, #8e1d43 30%, #c4455f 70%, #f2b8c3 100%)", sky: ["#2a0816", "#5a1030", "#a8304e"], far: "#7a1430", mesa: "#b3203f", mesaLine: "#7a1430", ground: ["#c98a5a", "#a06a3a"], band: "#ffc93c", bandLine: "#fff1a8", prop: "#ff4d6d" },
+  9: { page: "linear-gradient(180deg, #ffd66b 0%, #ffe9a8 30%, #fff4d1 70%, #fffaf0 100%)", sky: ["#ffc93c", "#ffe08a", "#fff6d6"], far: "#f2c26b", mesa: "#e0a43a", mesaLine: "#c9862a", ground: ["#f6c26b", "#e0a43a"], band: "#a5561c", bandLine: "#e09a52", prop: "#ff6f61" },
+  10: { page: "linear-gradient(180deg, #d9342b 0%, #ff6f5c 30%, #ffb3a0 70%, #ffe3da 100%)", sky: ["#b91c1c", "#ff6f5c", "#ffd0c4"], far: "#e05a48", mesa: "#ffffff", mesaLine: "#e0c8c0", ground: ["#c98a5a", "#a06a3a"], band: "#ffc93c", bandLine: "#fff1a8", prop: "#e2384d" },
+  11: { page: "linear-gradient(180deg, #3a1a12 0%, #7a2a14 30%, #c2410c 70%, #f2a65a 100%)", sky: ["#2a120c", "#7a2a14", "#e0703f"], far: "#5a2412", mesa: "#6e3b2a", mesaLine: "#4e2618", ground: ["#e0a43a", "#c9862a"], band: "#ff7a2f", bandLine: "#ffc93c", prop: "#ffc93c" },
+  12: { page: "linear-gradient(180deg, #0b0820 0%, #241a52 30%, #3b2a7a 70%, #6b4a9b 100%)", sky: ["#0b0820", "#241a52", "#4a3480"], far: "#2b1f5c", mesa: "#4a3480", mesaLine: "#3b2a66", ground: ["#5a4a8f", "#3b2a66"], band: "#b96ad9", bandLine: "#e0b6f2", prop: "#39d0ff" },
 };
 export const worldLook = (w: number) => WORLD_LOOK[w] ?? WORLD_LOOK[2];
+/** The worlds whose page is dark at the top (night, the theater, the volcano, space): text over it is light. */
+export const darkTop = (w: number): boolean => w === 5 || w === 8 || w === 11 || w === 12;
 
 /** The arena behind the monster (mockup MonBattle), in the world's colours. */
 export function Arena({ world, className }: { world: number; className?: string }) {
   const L = worldLook(world);
   const id = useId().replace(/:/g, "");
-  // the Midnight Drive-Thru and the darkened theater of Concession Canyon
-  const night = world === 5 || world === 8;
+  // the Midnight Drive-Thru, the darkened theater of Concession Canyon, the volcano's smoke and outer space
+  const night = world === 5 || world === 8 || world === 11 || world === 12;
   return (
     <svg viewBox="0 0 360 294" preserveAspectRatio="xMidYMax slice" aria-hidden className={className}>
       <defs>
@@ -132,6 +138,10 @@ export const WORLD_MAP: Record<number, { band: string; chip: string; ink: string
   6: { band: "linear-gradient(180deg, #2e1d3a 0%, #4a3150 45%, #6e4e5e 100%)", chip: "#7a5868", ink: "#6b4a7a", short: "Fortress", banner: "linear-gradient(180deg, #c94a3a 0%, #7a4a2a 100%)" },
   7: { band: "linear-gradient(180deg, #c9ecff 0%, #8fd3f4 55%, #5ab4e5 100%)", chip: "#39a0ff", ink: "#1d6fa5", short: "Tundra", banner: "linear-gradient(180deg, #e3f5ff 0%, #8fd3f4 100%)" },
   8: { band: "linear-gradient(180deg, #5a1030 0%, #8e1d43 55%, #b3203f 100%)", chip: "#e2384d", ink: "#9d174d", short: "Canyon", banner: "linear-gradient(180deg, #c4455f 0%, #7a1430 100%)" },
+  9: { band: "linear-gradient(180deg, #fff1b8 0%, #ffd66b 55%, #f2a93b 100%)", chip: "#f2a93b", ink: "#a16207", short: "Brunch", banner: "linear-gradient(180deg, #fff1b8 0%, #ffd66b 100%)" },
+  10: { band: "linear-gradient(180deg, #ffb3a0 0%, #ff6f5c 55%, #d9342b 100%)", chip: "#d9342b", ink: "#b91c1c", short: "Takeout", banner: "linear-gradient(180deg, #ffb3a0 0%, #d9342b 100%)" },
+  11: { band: "linear-gradient(180deg, #3a1a12 0%, #7a2a14 55%, #c2410c 100%)", chip: "#c2410c", ink: "#9a3412", short: "Volcano", banner: "linear-gradient(180deg, #c2410c 0%, #3a1a12 100%)" },
+  12: { band: "linear-gradient(180deg, #0b0820 0%, #241a52 55%, #3b2a7a 100%)", chip: "#7c4dff", ink: "#4c1d95", short: "Cosmos", banner: "linear-gradient(180deg, #3b2a7a 0%, #0b0820 100%)" },
 };
 export const worldMap = (w: number) => WORLD_MAP[w] ?? WORLD_MAP[1];
 

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Egg Roll Rocket, a crispy golden egg roll shaped like a red-finned rocket blasting a flame of orange sweet-chilli sauce, with a smaller egg roll rocket flying behind it">
+  <defs>
+    <clipPath id="egg-roll-rocket-clip"><path d="M52 88 L128 88 Q170 88 174 114 Q170 140 128 140 L52 140 Q44 114 52 88 Z"/></clipPath>
+    <g id="egg-roll-rocket-ship">
+      <!-- sweet-chilli flame -->
+      <path d="M50 96 Q26 86 4 114 Q26 142 50 132 Q40 114 50 96 Z" fill="#ff7a2a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M48 104 Q32 100 20 114 Q32 128 48 124 Q42 114 48 104 Z" fill="#ffc93c"/>
+      <g fill="#ff7a2a" stroke="#2b1d3a" stroke-width="2"><circle cx="14" cy="94" r="3.5"/><circle cx="18" cy="136" r="3"/></g>
+      <!-- red fins -->
+      <g fill="#e2384d" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+        <path d="M60 90 L44 62 Q72 62 92 90 Z"/>
+        <path d="M60 138 L44 166 Q72 166 92 138 Z"/>
+      </g>
+      <path d="M54 72 Q66 70 76 80" fill="none" stroke="#ff8a9a" stroke-width="3" stroke-linecap="round"/>
+      <!-- crispy egg roll body -->
+      <path d="M52 88 L128 88 Q170 88 174 114 Q170 140 128 140 L52 140 Q44 114 52 88 Z" fill="#f0b048" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+      <g clip-path="url(#egg-roll-rocket-clip)">
+        <path d="M40 126 Q110 136 180 116 L180 150 L40 150 Z" fill="#d08a2a"/>
+      </g>
+      <path d="M86 90 Q94 114 86 138 M152 94 Q158 114 152 134" fill="none" stroke="#b8732e" stroke-width="3" stroke-linecap="round"/>
+      <g fill="#ffd98a"><circle cx="66" cy="102" r="2.5"/><circle cx="74" cy="120" r="2"/><circle cx="98" cy="96" r="2"/><circle cx="160" cy="112" r="2"/></g>
+      <g fill="#b8732e"><circle cx="64" cy="130" r="2"/><circle cx="100" cy="134" r="2"/><circle cx="142" cy="132" r="1.8"/></g>
+      <!-- the open back end with filling -->
+      <ellipse cx="52" cy="114" rx="8" ry="24" fill="#fff3d6" stroke="#2b1d3a" stroke-width="3.5"/>
+      <g fill="#6cc04a"><rect x="48" y="100" width="6" height="4" rx="2"/><rect x="50" y="118" width="6" height="4" rx="2"/></g>
+      <g fill="#ff8a2a"><rect x="49" y="109" width="6" height="3.5" rx="1.5"/><rect x="48" y="126" width="5" height="3.5" rx="1.5"/></g>
+      <path d="M62 97 Q70 93 82 93" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+      <!-- face -->
+      <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="110" cy="107" r="10" fill="#ffffff"/><circle cx="134" cy="107" r="10" fill="#ffffff"/></g>
+      <circle cx="113" cy="109" r="5.5" fill="#2b1d3a"/><circle cx="137" cy="109" r="5.5" fill="#2b1d3a"/>
+      <circle cx="115" cy="106" r="2" fill="#ffffff"/><circle cx="139" cy="106" r="2" fill="#ffffff"/>
+      <path d="M98 93 L117 99 M146 93 L128 99" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+      <path d="M108 123 Q124 138 142 122 Q124 128 108 123 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M114 125 l3 5 3 -4z M126 127 l3 5 3 -5z" fill="#ffffff"/>
+      <ellipse cx="100" cy="122" rx="4.5" ry="2.5" fill="#ff9db8"/><ellipse cx="150" cy="120" rx="4" ry="2.5" fill="#ff9db8"/>
+    </g>
+  </defs>
+  <ellipse cx="100" cy="190" rx="64" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- the wingman, flying behind -->
+  <use href="#egg-roll-rocket-ship" transform="translate(4 -27) scale(0.5) rotate(-25 100 114)"/>
+  <!-- the lead rocket -->
+  <use href="#egg-roll-rocket-ship" transform="translate(4 -6) rotate(-25 100 114)"/>
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M124 18 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M178 140 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M24 170 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

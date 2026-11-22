@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Kung Pao Kangaroo, a glossy red-brown sauce-coloured kangaroo with its fists up, a pouch full of peanuts and little red chilli peppers, and chilli-pepper sparks flying">
+  <defs>
+    <clipPath id="kung-pao-kangaroo-body"><path d="M100 80 Q140 82 144 130 Q148 176 100 178 Q52 176 56 130 Q60 82 100 80 Z"/></clipPath>
+    <g id="kung-pao-kangaroo-chilli">
+      <path d="M-9 -3 Q4 -7 10 4 Q11 10 7 11 Q4 2 -9 2 Z" fill="#e2384d" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M-9 -1 L-14 -4" stroke="#4caf50" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+  </defs>
+  <ellipse cx="104" cy="190" rx="80" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- tail -->
+  <path d="M128 148 Q172 156 190 184 Q156 186 122 174 Z" fill="#b8452a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M150 166 Q170 172 182 182" fill="none" stroke="#8f3220" stroke-width="4" stroke-linecap="round"/>
+  <!-- big feet and haunches -->
+  <g fill="#b8452a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <ellipse cx="66" cy="181" rx="26" ry="8"/><ellipse cx="132" cy="181" rx="26" ry="8"/>
+    <ellipse cx="68" cy="158" rx="20" ry="22"/><ellipse cx="132" cy="158" rx="20" ry="22"/>
+  </g>
+  <!-- body -->
+  <path d="M100 80 Q140 82 144 130 Q148 176 100 178 Q52 176 56 130 Q60 82 100 80 Z" fill="#b8452a" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#kung-pao-kangaroo-body)">
+    <path d="M126 82 Q156 130 128 180 L150 180 L150 80 Z" fill="#8f3220"/>
+    <ellipse cx="98" cy="140" rx="30" ry="36" fill="#e07a4a"/>
+  </g>
+  <path d="M100 80 Q140 82 144 130 Q148 176 100 178 Q52 176 56 130 Q60 82 100 80 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M64 120 Q66 102 78 94" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- pouch: peanuts and chillies peeking out -->
+  <g fill="#e6b878" stroke="#2b1d3a" stroke-width="2.5">
+    <ellipse cx="84" cy="134" rx="8" ry="5" transform="rotate(-20 84 134)"/>
+    <ellipse cx="112" cy="132" rx="8" ry="5" transform="rotate(25 112 132)"/>
+  </g>
+  <path d="M84 131 l0 6 M112 129 l-1 6" stroke="#c48e4e" stroke-width="2" stroke-linecap="round"/>
+  <use href="#kung-pao-kangaroo-chilli" transform="translate(98 128) rotate(-60)"/>
+  <use href="#kung-pao-kangaroo-chilli" transform="translate(124 136) rotate(-110) scale(0.8)"/>
+  <path d="M72 136 Q100 144 128 136 Q130 172 100 174 Q70 172 72 136 Z" fill="#c95a34" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M78 144 Q100 150 122 144" fill="none" stroke="#e8946a" stroke-width="3" stroke-linecap="round"/>
+  <!-- ears -->
+  <g stroke="#2b1d3a" stroke-width="4" fill="#b8452a">
+    <ellipse cx="74" cy="32" rx="10" ry="22" transform="rotate(-18 74 32)"/>
+    <ellipse cx="126" cy="32" rx="10" ry="22" transform="rotate(18 126 32)"/>
+  </g>
+  <g fill="#ff9db8"><ellipse cx="75" cy="33" rx="4.5" ry="14" transform="rotate(-18 75 33)"/><ellipse cx="125" cy="33" rx="4.5" ry="14" transform="rotate(18 125 33)"/></g>
+  <!-- head -->
+  <ellipse cx="100" cy="60" rx="35" ry="28" fill="#b8452a" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M120 36 Q142 56 126 84 Q136 62 120 36 Z" fill="#8f3220"/>
+  <path d="M74 48 Q78 38 90 34" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="100" cy="76" rx="18" ry="11" fill="#e07a4a" stroke="#2b1d3a" stroke-width="3"/>
+  <ellipse cx="100" cy="68" rx="6" ry="3.8" fill="#2b1d3a"/>
+  <path d="M88 76 Q100 88 112 76 Q100 80 88 76 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M92 77 l2.5 5 2.5 -4z M108 77 l-2.5 5 -2.5 -4z" fill="#ffffff"/>
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="84" cy="54" r="10.5" fill="#ffffff"/><circle cx="116" cy="54" r="10.5" fill="#ffffff"/></g>
+  <circle cx="87" cy="56" r="6" fill="#2b1d3a"/><circle cx="113" cy="56" r="6" fill="#2b1d3a"/>
+  <circle cx="89" cy="53" r="2.2" fill="#ffffff"/><circle cx="115" cy="53" r="2.2" fill="#ffffff"/>
+  <path d="M70 39 L93 46 M130 39 L107 46" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="72" cy="72" rx="5" ry="3" fill="#ff9db8"/><ellipse cx="128" cy="72" rx="5" ry="3" fill="#ff9db8"/>
+  <!-- boxing-ready fists -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M74 104 Q60 108 50 96 M126 104 Q140 108 150 96" stroke="#2b1d3a" stroke-width="18"/>
+    <path d="M74 104 Q60 108 50 96 M126 104 Q140 108 150 96" stroke="#b8452a" stroke-width="10"/>
+  </g>
+  <g fill="#c95a34" stroke="#2b1d3a" stroke-width="4"><circle cx="44" cy="90" r="15"/><circle cx="156" cy="90" r="15"/></g>
+  <path d="M36 84 Q40 78 48 78 M148 80 Q156 76 162 80" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M46 98 l6 -6 M40 97 l8 -8 M154 98 l-6 -6 M160 97 l-8 -8" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- chilli-pepper sparks -->
+  <path d="M22 68 L14 62 M26 60 L22 50 M178 68 L186 62 M174 60 L178 50" stroke="#2b1d3a" stroke-width="3" stroke-linecap="round"/>
+  <use href="#kung-pao-kangaroo-chilli" transform="translate(28 38) rotate(30)"/>
+  <use href="#kung-pao-kangaroo-chilli" transform="translate(172 36) rotate(150)"/>
+  <use href="#kung-pao-kangaroo-chilli" transform="translate(22 124) rotate(-20) scale(0.9)"/>
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M150 12 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M40 10 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M178 122 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

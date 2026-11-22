@@ -610,6 +610,7 @@ function Defeat({ r, view, today }: { r: Extract<Result, { kind: "defeat" }>; vi
 const FINAL_WORDS: Record<number, string> = {
   60: "The Midnight Snacker shuffles back to bed. The fridge is safe. You did it!",
   80: "Count Concession takes a bow and the curtain comes down. The snack bar is closed. You did it!",
+  120: "The Snackularity collapses into a little pile of crumbs. Every craving there is, crushed. You did it!",
 };
 
 function Finish({ r, view, today }: { r: Extract<Result, { kind: "finish" }>; view: GameView; today: string }) {

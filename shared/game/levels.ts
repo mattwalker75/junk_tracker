@@ -22,7 +22,8 @@ export interface Level {
   ability: string;
 }
 
-export const WORLDS: readonly string[] = ["Snack Swamp", "Burger Badlands", "Sugar Peaks", "Fizzy Falls", "Midnight Drive-Thru", "Feast Fortress", "Freezer Tundra", "Concession Canyon"];
+export const WORLDS: readonly string[] = ["Snack Swamp", "Burger Badlands", "Sugar Peaks", "Fizzy Falls", "Midnight Drive-Thru", "Feast Fortress", "Freezer Tundra", "Concession Canyon",
+  "Brunch Boulevard", "Takeout Temple", "Deep-Fry Volcano", "Calorie Cosmos"];
 export const LEVELS_PER_WORLD = 10;
 /** the game's planned size (Matt, Nov 21 2026): the database already allows this many */
 export const PLANNED_LEVELS = 120;
@@ -110,7 +111,51 @@ const TABLE: [number, string, number, number, boolean, string, string][] = [
   [77, "Hot Dog Usher", 1240, 8, false, "77-hot-dog-usher", "seat-check"],
   [78, "Sour Straw Scorpion", 1260, 8, false, "78-sour-straw-scorpion", "lingering-sour"],
   [79, "Bucket Bison", 1270, 8, false, "79-bucket-bison", "last-kernels"],
-  [80, "Count Concession", 1670, 9, true, "80-count-concession", "intermission"],
+  [80, "Count Concession", 1670, 9, true, "80-count-concession", "intermission"],  // Worlds 9-12 (Matt, Nov 22 2026: "please build it all out")
+  // World 9 · Brunch Boulevard
+  [81, "Waffle Wolf", 1300, 9, false, "81-waffle-wolf", "grid-lock"],
+  [82, "Eggs Benny", 1320, 9, false, "82-eggs-benny", "brunch-for-two"],
+  [83, "Syrup Serpent", 1330, 9, false, "83-syrup-serpent", "slow-drip"],
+  [84, "Pop-Up Imp", 1350, 9, false, "84-pop-up-imp", "just-popped"],
+  [85, "Biscuit Badger", 1360, 9, false, "85-biscuit-badger", "stubborn"],
+  [86, "Cinnamon Cyclone", 1380, 9, false, "86-cinnamon-cyclone", "spin-cycle"],
+  [87, "French Toast Toucan", 1390, 9, false, "87-french-toast-toucan", "soaked"],
+  [88, "Croissadillo", 1410, 9, false, "88-croissadillo", "roll-up"],
+  [89, "Breakfast Burrito Bear", 1420, 9, false, "89-breakfast-burrito-bear", "big-appetite"],
+  [90, "Lady Short Stack", 1870, 10, true, "90-lady-short-stack", "stack-up"],
+  // World 10 · Takeout Temple
+  [91, "Egg Roll Rocket", 1450, 9, false, "91-egg-roll-rocket", "double-order"],
+  [92, "Dumpling Duo", 1470, 9, false, "92-dumpling-duo", "steamed-or-fried"],
+  [93, "Rangoon Raccoon", 1480, 9, false, "93-rangoon-raccoon", "night-raid"],
+  [94, "Takeout Box Turtle", 1500, 9, false, "94-takeout-box-turtle", "box-up"],
+  [95, "Lo Mein Leviathan", 1510, 9, false, "95-lo-mein-leviathan", "endless-noodles"],
+  [96, "Bao Blowfish", 1530, 9, false, "96-bao-blowfish", "puffed-up"],
+  [97, "Kung Pao Kangaroo", 1540, 9, false, "97-kung-pao-kangaroo", "pouch"],
+  [98, "Chopstick Stick-Bug", 1560, 9, false, "98-chopstick-stick-bug", "lunch-rush"],
+  [99, "Fortune Cookie Oracle", 1570, 9, false, "99-fortune-cookie-oracle", "lucky-numbers"],
+  [100, "The Takeout Dragon", 2060, 10, true, "100-the-takeout-dragon", "order-up"],
+  // World 11 · Deep-Fry Volcano
+  [101, "Hush Puppy Pup", 1600, 10, false, "101-hush-puppy-pup", "fetch"],
+  [102, "Onion Ring Raptor", 1620, 10, false, "102-onion-ring-raptor", "ring-of-fire"],
+  [103, "Tempura Toad", 1630, 10, false, "103-tempura-toad", "light-batter"],
+  [104, "Churro Chameleon", 1650, 10, false, "104-churro-chameleon", "blend-in"],
+  [105, "Battered Brick", 1660, 10, false, "105-battered-brick", "brick-wall"],
+  [106, "Fried Okra Octopus", 1680, 10, false, "106-fried-okra-octopus", "eight-arms"],
+  [107, "Fried Pickle Phoenix", 1690, 10, false, "107-fried-pickle-phoenix", "refried"],
+  [108, "Chicken-Fried Stegosaurus", 1710, 10, false, "108-chicken-fried-stegosaurus", "crispy-plates"],
+  [109, "Fish Fry Shark", 1720, 10, false, "109-fish-fry-shark", "feeding-frenzy"],
+  [110, "The Fry Lord", 2260, 11, true, "110-the-fry-lord", "bubbling-oil"],
+  // World 12 · Calorie Cosmos
+  [111, "Astronaut Ice Cream", 1750, 10, false, "111-astronaut-ice-cream", "freeze-dried"],
+  [112, "Mooncake Moth", 1770, 10, false, "112-mooncake-moth", "night-light"],
+  [113, "Galaxy Gummies", 1780, 10, false, "113-galaxy-gummies", "constellation"],
+  [114, "Rocket Pop", 1800, 10, false, "114-rocket-pop", "liftoff"],
+  [115, "Pizza Saucer", 1810, 10, false, "115-pizza-saucer", "tractor-beam"],
+  [116, "Saturn Sundae", 1830, 10, false, "116-saturn-sundae", "ring-shield"],
+  [117, "Gelatin Glorp", 1840, 10, false, "117-gelatin-glorp", "jiggle"],
+  [118, "Comet Cupcake", 1860, 10, false, "118-comet-cupcake", "shooting-star"],
+  [119, "Black Hole Bagel", 1870, 10, false, "119-black-hole-bagel", "event-horizon"],
+  [120, "The Snackularity", 2450, 11, true, "120-the-snackularity", "every-craving"],
 ];
 
 /** How many levels the game has now (a world of 10 at a time, up to PLANNED_LEVELS). */

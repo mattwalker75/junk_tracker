@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Saturn Sundae, a round chocolate-scoop planet with a tilted waffle-cone ring studded with sprinkles, whipped cream and a cherry on top">
+  <defs>
+    <pattern id="saturn-sundae-waffle" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="9" height="9" fill="#e8b062"/><path d="M0 0 H9 M0 0 V9" stroke="#b8732e" stroke-width="2"/></pattern>
+    <clipPath id="saturn-sundae-front"><rect x="0" y="116" width="200" height="60"/></clipPath>
+    <clipPath id="saturn-sundae-scoop"><circle cx="100" cy="116" r="52"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="54" ry="6" fill="#2b1d3a" opacity="0.12"/>
+  <!-- orbiting sprinkles -->
+  <g stroke="#2b1d3a" stroke-width="2">
+    <rect x="20" y="56" width="11" height="5" rx="2.5" fill="#ff8fc8" transform="rotate(30 25 58)"/>
+    <rect x="26" y="168" width="11" height="5" rx="2.5" fill="#6ec6ff" transform="rotate(-20 31 170)"/>
+    <rect x="172" y="56" width="11" height="5" rx="2.5" fill="#ffe066" transform="rotate(-35 177 58)"/>
+    <rect x="152" y="178" width="11" height="5" rx="2.5" fill="#7fe07a" transform="rotate(15 157 180)"/>
+  </g>
+  <!-- the waffle-cone ring, back half -->
+  <g transform="rotate(-16 100 116)">
+    <path d="M6 116 A94 26 0 1 0 194 116 A94 26 0 1 0 6 116 Z M32 116 A68 14 0 1 0 168 116 A68 14 0 1 0 32 116 Z" fill="url(#saturn-sundae-waffle)" fill-rule="evenodd" stroke="#2b1d3a" stroke-width="4"/>
+  </g>
+  <!-- the chocolate scoop planet -->
+  <circle cx="100" cy="116" r="52" fill="#7a4a2a" stroke="#2b1d3a" stroke-width="4"/>
+  <g clip-path="url(#saturn-sundae-scoop)">
+    <path d="M130 70 C160 96 160 140 122 168 L156 168 L156 64 Z" fill="#5e3820"/>
+    <ellipse cx="72" cy="142" rx="8" ry="5" fill="#8f5a36"/><ellipse cx="136" cy="96" rx="5" ry="3.5" fill="#6b3f26"/><ellipse cx="60" cy="122" rx="4" ry="3" fill="#8f5a36"/>
+  </g>
+  <circle cx="100" cy="116" r="52" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M56 104 Q60 88 70 80" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <!-- whipped cream and cherry -->
+  <path d="M62 76 Q52 64 70 60 Q72 46 88 48 Q96 36 110 44 Q126 42 128 56 Q146 60 138 76 Q100 86 62 76 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M122 60 Q138 62 134 74 Q124 78 114 78 Q130 70 122 60 Z" fill="#e6e0f0"/>
+  <path d="M76 66 Q90 70 100 62 M94 54 Q104 58 114 52" fill="none" stroke="#c9c0dc" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M102 26 Q106 14 118 10" fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="100" cy="36" r="11" fill="#e2384d" stroke="#2b1d3a" stroke-width="4"/>
+  <circle cx="96" cy="32" r="3" fill="#ffffff"/>
+  <!-- face -->
+  <path d="M70 84 L92 91 M130 84 L108 91" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="87" cy="100" r="11" fill="#ffffff"/><circle cx="113" cy="100" r="11" fill="#ffffff"/></g>
+  <circle cx="89" cy="102" r="6.5" fill="#2b1d3a"/><circle cx="111" cy="102" r="6.5" fill="#2b1d3a"/>
+  <circle cx="91" cy="99" r="2.4" fill="#ffffff"/><circle cx="113" cy="99" r="2.4" fill="#ffffff"/>
+  <path d="M84 113 Q100 128 116 113 Q100 118 84 113 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M89 115 l3 5 3 -4z M98 117 l2 5 3 -5z M106 116 l3 4 2 -5z" fill="#ffffff"/>
+  <ellipse cx="70" cy="111" rx="5" ry="3" fill="#ff9db8"/><ellipse cx="130" cy="111" rx="5" ry="3" fill="#ff9db8"/>
+  <!-- the ring, front half, with sprinkles -->
+  <g transform="rotate(-16 100 116)">
+    <path d="M6 116 A94 26 0 1 0 194 116 A94 26 0 1 0 6 116 Z M32 116 A68 14 0 1 0 168 116 A68 14 0 1 0 32 116 Z" fill="url(#saturn-sundae-waffle)" fill-rule="evenodd" stroke="#2b1d3a" stroke-width="4" clip-path="url(#saturn-sundae-front)"/>
+    <g stroke="#2b1d3a" stroke-width="1.5">
+      <rect x="96" y="134" width="8" height="3.5" rx="1.7" fill="#ff8fc8"/>
+      <rect x="66" y="131" width="8" height="3.5" rx="1.7" fill="#ffffff" transform="rotate(20 70 133)"/>
+      <rect x="126" y="131" width="8" height="3.5" rx="1.7" fill="#6ec6ff" transform="rotate(-20 130 133)"/>
+      <rect x="40" y="128" width="8" height="3.5" rx="1.7" fill="#ffe066" transform="rotate(35 44 130)"/>
+      <rect x="152" y="128" width="8" height="3.5" rx="1.7" fill="#7fe07a" transform="rotate(-35 156 130)"/>
+      <rect x="16" y="121" width="8" height="3.5" rx="1.7" fill="#ff8fc8" transform="rotate(60 20 123)"/>
+      <rect x="176" y="121" width="8" height="3.5" rx="1.7" fill="#6ec6ff" transform="rotate(-60 180 123)"/>
+    </g>
+  </g>
+  <!-- sparkles -->
+  <g stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M26 20 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#ffc93c"/>
+    <path d="M168 18 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z" fill="#ffffff"/>
+    <path d="M180 146 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffc93c"/>
+  </g>
+</svg>

@@ -1,4 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="390" height="3512" viewBox="0 0 390 3512">
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="5216" viewBox="0 0 390 5216">
+  <!-- World 12 · Calorie Cosmos (band y 0-530): a ringed planet, a moon and a shooting star, top right; stars everywhere -->
+  <g fill="#ffffff" opacity="0.8"><circle cx="20" cy="30" r="2"/><circle cx="70" cy="60" r="1.6"/><circle cx="130" cy="20" r="2.2"/><circle cx="190" cy="70" r="1.6"/><circle cx="250" cy="30" r="2"/><circle cx="330" cy="40" r="1.6"/><circle cx="370" cy="90" r="2"/><circle cx="40" cy="240" r="1.8"/><circle cx="150" cy="300" r="1.6"/><circle cx="240" cy="250" r="2"/><circle cx="360" cy="330" r="1.8"/><circle cx="30" cy="420" r="2"/><circle cx="200" cy="470" r="1.6"/><circle cx="300" cy="480" r="2"/><circle cx="120" cy="520" r="1.4"/><circle cx="370" cy="240" r="1.6"/><circle cx="90" cy="160" r="1.6"/></g>
+  <circle cx="306" cy="168" r="32" fill="#b96ad9" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M286 150 Q300 142 316 146" fill="none" stroke="#e0b6f2" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="306" cy="170" rx="56" ry="12" fill="none" stroke="#2b1d3a" stroke-width="7" transform="rotate(-14 306 170)"/>
+  <ellipse cx="306" cy="170" rx="56" ry="12" fill="none" stroke="#ffc93c" stroke-width="3" transform="rotate(-14 306 170)"/>
+  <circle cx="210" cy="136" r="13" fill="#ffe08a" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/><circle cx="205" cy="132" r="3" fill="#e0b84a"/><circle cx="215" cy="141" r="2.4" fill="#e0b84a"/>
+  <path d="M180 112 L220 98" stroke="#fff7d6" stroke-width="3" stroke-linecap="round" opacity="0.8"/><g transform="translate(-10 -88)"><path d="M232 179 l1.8 4.2 4.2 1.8 -4.2 1.8 -1.8 4.2 -1.8 -4.2 -4.2 -1.8 4.2 -1.8z" fill="#ffffff" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/></g>
+  <path d="M126 295 l1.5 3.5 3.5 1.5 -3.5 1.5 -1.5 3.5 -1.5 -3.5 -3.5 -1.5 3.5 -1.5z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/><path d="M264 387 l1.5 3.5 3.5 1.5 -3.5 1.5 -1.5 3.5 -1.5 -3.5 -3.5 -1.5 3.5 -1.5z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 376 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2z" fill="#ffffff" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/><path d="M372 296 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2z" fill="#ffffff" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/><path d="M140 116 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/>
+  <!-- World 11 · Deep-Fry Volcano (band y 530-956): a volcano of bubbling oil and a fry basket, top left; oil bubbles between the rows -->
+  <path d="M14 646 L76 556 L120 556 L184 646 Z" fill="#6e3b2a" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M76 556 Q98 570 120 556 L114 574 Q98 586 82 574 Z" fill="#ff7a2f" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M90 578 Q84 602 94 618 Q100 630 92 646" fill="none" stroke="#ffc93c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M90 578 Q84 602 94 618 Q100 630 92 646" fill="none" stroke="#ff7a2f" stroke-width="3" stroke-linecap="round"/>
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2"><circle cx="86" cy="544" r="6"/><circle cx="104" cy="536" r="5"/><circle cx="120" cy="546" r="4"/></g>
+  <path d="M60 600 L72 600 M128 610 L140 610" stroke="#4e2618" stroke-width="3" stroke-linecap="round"/>
+  <g transform="translate(-6 -42)"><rect x="196" y="610" width="40" height="30" rx="4" fill="#c9ced8" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/><path d="M204 610 V640 M214 610 V640 M224 610 V640 M196 625 H236" stroke="#8a90a0" stroke-width="2"/>
+  <path d="M236 618 L256 606" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#f2bb4f" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"><rect x="200" y="596" width="6" height="20" rx="2" transform="rotate(-8 203 606)"/><rect x="210" y="592" width="6" height="22" rx="2"/><rect x="221" y="595" width="6" height="20" rx="2" transform="rotate(10 224 605)"/></g></g>
+  <g fill="#ff7a2f" stroke="#2b1d3a" stroke-width="1.8"><circle cx="126" cy="720" r="6"/><circle cx="140" cy="712" r="4"/><circle cx="264" cy="814" r="6"/><circle cx="250" cy="806" r="3.5"/><circle cx="16" cy="760" r="4"/><circle cx="376" cy="700" r="5"/></g>
+  <g fill="#ffc93c" opacity="0.7"><circle cx="40" cy="690" r="1.6"/><circle cx="300" cy="560" r="2"/><circle cx="360" cy="880" r="1.8"/><circle cx="180" cy="900" r="1.6"/><circle cx="24" cy="880" r="1.6"/></g>
+  <!-- World 10 · Takeout Temple (band y 956-1382): a temple-sized takeout box and paper lanterns, top right; fortune cookies between the rows -->
+  <path d="M168 978 Q270 960 380 978" fill="none" stroke="#2b1d3a" stroke-width="2"/>
+  <g><path d="M190 974 V982" stroke="#2b1d3a" stroke-width="2"/><ellipse cx="190" cy="996" rx="13" ry="12" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/><rect x="184" y="1006" width="12" height="5" fill="#ffc93c" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/></g>
+  <g><path d="M364 976 V984" stroke="#2b1d3a" stroke-width="2"/><ellipse cx="364" cy="998" rx="13" ry="12" fill="#ff4d6d" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/><rect x="358" y="1008" width="12" height="5" fill="#ffc93c" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/></g>
+  <path d="M232 1070 L222 1010 L338 1010 L328 1070 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M222 1010 L240 992 L320 992 L338 1010 Z" fill="#f3efe9" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M252 992 Q280 966 308 992" fill="none" stroke="#2b1d3a" stroke-width="3"/>
+  <path d="M244 1030 H316 M240 1046 H320 M262 1030 V1046 M298 1030 V1046" stroke="#e2384d" stroke-width="3"/>
+  <path d="M262 1010 Q270 1000 266 992 M290 1010 Q284 998 292 990" fill="none" stroke="#f2c27a" stroke-width="5" stroke-linecap="round"/>
+  <g transform="rotate(-20 126 1150)"><path d="M112 1154 Q126 1136 140 1154 Q126 1148 112 1154 Z" fill="#f2c27a" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/></g>
+  <g transform="rotate(16 264 1244)"><path d="M250 1248 Q264 1230 278 1248 Q264 1242 250 1248 Z" fill="#f2c27a" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/></g>
+  <path d="M268 1150 l18 -12 M272 1156 l18 -12" stroke="#c98a4c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M126 1245 l1.5 3.5 3.5 1.5 -3.5 1.5 -1.5 3.5 -1.5 -3.5 -3.5 -1.5 3.5 -1.5z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/><path d="M150 982 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/><path d="M18 1136 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2z" fill="#ffffff" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/><path d="M374 1196 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2z" fill="#ffffff" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/>
+  <g fill="#ffffff" opacity="0.6"><circle cx="30" cy="1000" r="1.6"/><circle cx="370" cy="1080" r="1.6"/><circle cx="140" cy="1340" r="1.6"/><circle cx="20" cy="1300" r="1.8"/></g>
+  <!-- World 9 · Brunch Boulevard (band y 1382-1808): a diner with a striped awning, a sun and a short stack, top left; berries and eggs between the rows -->
+  <circle cx="210" cy="1408" r="14" fill="#ffe27a" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
+  <g transform="matrix(0.9 0 0 0.9 6 145.6)"><rect x="22" y="1436" width="128" height="58" rx="4" fill="#fff4d1" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M16 1436 L156 1436 L148 1420 L24 1420 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M38 1420 L34 1436 M58 1420 L56 1436 M78 1420 L78 1436 M98 1420 L100 1436 M118 1420 L122 1436 M138 1420 L144 1436" stroke="#e2384d" stroke-width="9"/>
+  <path d="M16 1436 L156 1436 L148 1420 L24 1420 Z" fill="none" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
+  <g stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"><rect x="34" y="1448" width="30" height="22" rx="3" fill="#9fdcff"/><rect x="108" y="1448" width="30" height="22" rx="3" fill="#9fdcff"/><rect x="74" y="1452" width="24" height="42" rx="3" fill="#e2384d"/></g>
+  <circle cx="92" cy="1474" r="2" fill="#ffc93c"/>
+  <g stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"><rect x="166" y="1478" width="54" height="12" rx="6" fill="#f2b457"/><rect x="170" y="1467" width="46" height="12" rx="6" fill="#f6c26b"/><rect x="174" y="1456" width="38" height="12" rx="6" fill="#f9cf7f"/></g>
+  <rect x="186" y="1450" width="14" height="7" rx="2" fill="#fff4b8" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M206 1460 Q214 1472 208 1484" fill="none" stroke="#a5561c" stroke-width="4" stroke-linecap="round"/></g>
+  <g stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"><ellipse cx="126" cy="1666" rx="13" ry="9" fill="#ffffff"/><circle cx="128" cy="1666" r="5" fill="#ffc93c"/></g>
+  <g fill="#7c4dff" stroke="#2b1d3a" stroke-width="1.8"><circle cx="258" cy="1762" r="5"/><circle cx="268" cy="1756" r="5"/><circle cx="266" cy="1767" r="5"/></g>
+  <g fill="#e2384d" stroke="#2b1d3a" stroke-width="1.8"><circle cx="262" cy="1666" r="5"/><circle cx="130" cy="1760" r="5"/></g>
+  <path d="M16 1576 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/><path d="M374 1516 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 1716 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="1.6" stroke-linejoin="round"/>
+  <g fill="#ffffff" opacity="0.7"><circle cx="240" cy="1400" r="1.8"/><circle cx="40" cy="1600" r="1.6"/><circle cx="370" cy="1680" r="1.6"/><circle cx="160" cy="1790" r="1.6"/></g>
+  <!-- Worlds 1-8, as drawn for the 80-level map (3,512 tall), moved down below worlds 9-12 -->
+  <g transform="translate(0 1704)">
   <!-- World 8 · Concession Canyon (band y 0-530, under the HUD at the top): the theater and its marquee, top right; ticket stubs and film between the rows -->
   <rect x="204" y="132" width="168" height="86" fill="#7a1430" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
   <path d="M204 132 L214 122 L362 122 L372 132 Z" fill="#5a1030" stroke="#2b1d3a" stroke-width="2.4" stroke-linejoin="round"/>
@@ -74,4 +127,5 @@
     <g stroke="#2b1d3a" stroke-width="2"><path d="M178 186 V170" /><path d="M178 170 l12 4 -12 4z" fill="#ff4d6d"/><path d="M318 386 V370"/><path d="M318 370 l12 4 -12 4z" fill="#ffc93c"/></g>
     <g stroke="#2b1d3a" stroke-width="1.6"><path d="M370 290 v18" /><path d="M370 290 c-5 -6 0 -12 0 -14 c4 4 6 9 0 14z" fill="#ffc93c"/><path d="M14 470 v18"/><path d="M14 470 c-5 -6 0 -12 0 -14 c4 4 6 9 0 14z" fill="#ff7a2f"/></g>
   </g>
+</g>
 </svg>

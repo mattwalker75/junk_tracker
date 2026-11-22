@@ -23,6 +23,8 @@ export interface Cx {
   level: Level;
   hp: number;
   max: number;
+  /** the bonus HP it has on top of hp */
+  bonus: number;
   day: Day;
   /** the deadline's day (with any Second Wind) */
   deadlineOn: Day;
@@ -78,6 +80,8 @@ export interface Ability {
   plannedFull?: boolean;
   /** extra days on the deadline */
   extraDays?: number;
+  /** bonus HP may grow to this share of max HP (the usual is BONUS_SHARE, a fifth) */
+  bonusShare?: number;
 }
 
 const half = (n: number) => Math.ceil(n / 2);
@@ -234,6 +238,81 @@ const LIST: Ability[] = [
   { id: "last-kernels", name: "Last Kernels", text: "Below a quarter of its HP, every splurge heals double.", heal: (b, _s, cx) => (cx.hp < cx.max / 4 ? b * 2 : b) },
   { id: "intermission", name: "Intermission", text: "The fight's 3rd and 6th days are intermissions: workouts do nothing. Clean-day crits still land.",
     damage: (b, _a, cx) => (cx.fightDay === 3 || cx.fightDay === 6 ? 0 : b) },
+  // ---------------------------------------------------------------- World 9 · Brunch Boulevard
+  { id: "grid-lock", name: "Grid Lock", text: "Each workout's damage is rounded down to the nearest 10.", damage: (b) => Math.floor(b / 10) * 10 },
+  { id: "brunch-for-two", name: "Brunch for Two", text: "Each splurge heals 5 extra for every splurge before it that day.", heal: (b, _s, cx) => b + 5 * cx.index },
+  { id: "slow-drip", name: "Slow Drip", text: "At midnight it heals 15 on any day it lost less than 60 HP.",
+    dayEnd: (_d, cx) => (cx.damageToday < 60 ? [{ heal: 15, note: "Slow Drip: it lost less than 60 today, +15" }] : []) },
+  { id: "just-popped", name: "Just Popped", text: "A workout within an hour after a splurge does half damage (both need a time).",
+    damage: (b, a, cx) => (a.time && cx.splurgesToday.some((s) => s.time && s.time <= a.time && minutesOf(a.time) - minutesOf(s.time) <= 60) ? half(b) : b) },
+  { id: "stubborn", name: "Stubborn", text: "Workouts can't take more than a quarter of its HP in one day.",
+    damage: (b, _a, cx) => {
+      const key = `stub:${cx.day}`;
+      const take = Math.max(0, Math.min(b, Math.floor(cx.max / 4) - (cx.state[key] ?? 0)));
+      cx.state[key] = (cx.state[key] ?? 0) + take;
+      return take;
+    } },
+  { id: "spin-cycle", name: "Spin Cycle", text: "Every third splurge in the fight heals triple.",
+    heal: (b, _s, cx) => { const k = (cx.state.spins ?? 0) + 1; cx.state.spins = k; return k % 3 === 0 ? b * 3 : b; } },
+  { id: "soaked", name: "Soaked", text: "Planned treats heal double, not half.", plannedFull: true, heal: (b, s) => (s.planned ? b * 2 : b) },
+  { id: "roll-up", name: "Roll Up", text: "Once a fight, the first workout of 30 minutes or more does nothing: it rolls up.",
+    damage: (b, a, cx) => { if (!cx.state.rolled && (a.minutes ?? 0) >= 30) { cx.state.rolled = 1; return 0; } return b; } },
+  { id: "big-appetite", name: "Big Appetite", text: "Its bonus HP can grow to 40% of its max HP (it's usually 20%).", bonusShare: 0.4 },
+  { id: "stack-up", name: "Stack Up", text: "Every Meal adds a pancake: each Meal in the fight heals 5 more than the one before (25, 30, 35…).",
+    heal: (b, s, cx) => { if (s.size !== "meal") return b; const k = cx.state.meals ?? 0; cx.state.meals = k + 1; return b + 5 * k; } },
+  // ---------------------------------------------------------------- World 10 · Takeout Temple
+  { id: "double-order", name: "Double Order", text: "At midnight it heals 15 on any day with two or more splurges.",
+    dayEnd: (_d, cx) => (cx.splurgesToday.length >= 2 ? [{ heal: 15, note: "Double Order: two or more splurges today, +15" }] : []) },
+  { id: "steamed-or-fried", name: "Steamed or Fried", text: "Snacks and Meals both heal 20.", heal: (b, s) => (s.size === "snack" || s.size === "meal" ? 20 : b) },
+  { id: "night-raid", name: "Night Raid", text: "At midnight, +10 for each splurge after 8 PM that day (no time counts as after 8 PM).",
+    dayEnd: (_d, cx) => { const n = cx.splurgesToday.filter((s) => !s.time || s.time >= "20:00").length; return n ? [{ heal: 10 * n, note: `Night Raid: ${n} late ${n === 1 ? "splurge" : "splurges"}, +${10 * n}` }] : []; } },
+  { id: "box-up", name: "Box Up", text: "On the deadline's last day it hides in its box: workouts do half damage.", damage: (b, _a, cx) => (cx.lastDay ? half(b) : b) },
+  { id: "endless-noodles", name: "Endless Noodles", text: "A workout counts no more than 90 minutes (calories still count in full).",
+    damage: (_b, a, cx) => (Math.min(a.minutes ?? 0, 90) + Math.round((a.calories ?? 0) / 10)) * (cx.comeback ? 2 : 1) },
+  { id: "puffed-up", name: "Puffed Up", text: "While it has bonus HP, workouts do half damage.", damage: (b, _a, cx) => (cx.bonus > 0 ? half(b) : b) },
+  { id: "pouch", name: "Pouch", text: "It keeps the day's first heal in its pouch and heals it again at midnight.",
+    heal: (b, _s, cx) => { const k = `pouch:${cx.day}`; if (cx.state[k] === undefined) cx.state[k] = b; return b; },
+    dayEnd: (d, cx) => { const h = cx.state[`pouch:${d}`] ?? 0; return h > 0 ? [{ heal: h, note: `Pouch: the day's first heal again, +${h}` }] : []; } },
+  { id: "lunch-rush", name: "Lunch Rush", text: "Weekday splurges from 11 AM to 2 PM heal double (no time counts as lunch).",
+    heal: (b, s, cx) => { const wd = weekday(cx.day); return wd >= 1 && wd <= 5 && (!s.time || (s.time >= "11:00" && s.time < "14:00")) ? b * 2 : b; } },
+  { id: "lucky-numbers", name: "Lucky Numbers", text: "On the fight's 4th and 8th days, every splurge heals double.", heal: (b, _s, cx) => (cx.fightDay === 4 || cx.fightDay === 8 ? b * 2 : b) },
+  { id: "order-up", name: "Order Up", text: "At midnight after a splurge day it heals 10 for every day in a row you've splurged (10, 20, 30…).",
+    dayEnd: (_d, cx) => {
+      if (!cx.splurgesToday.length) { cx.state.streak = 0; return []; }
+      const n = (cx.state.streak ?? 0) + 1; cx.state.streak = n;
+      return [{ heal: 10 * n, note: `Order Up: ${n} ${n === 1 ? "day" : "days in a row"} of splurges, +${10 * n}` }];
+    } },
+  // ---------------------------------------------------------------- World 11 · Deep-Fry Volcano
+  { id: "fetch", name: "Fetch", text: "At midnight, +5 for every workout under 10 minutes that day.",
+    dayEnd: (_d, cx) => { const n = cx.workoutsToday.filter((a) => (a.minutes ?? 0) < 10).length; return n ? [{ heal: 5 * n, note: `Fetch: ${n} short ${n === 1 ? "workout" : "workouts"}, +${5 * n}` }] : []; } },
+  { id: "ring-of-fire", name: "Ring of Fire", text: "On a day with a Feast, workouts do half damage.", damage: (b, _a, cx) => (cx.splurgesToday.some((s) => s.size === "feast") ? half(b) : b) },
+  { id: "light-batter", name: "Light Batter", text: "Snacks heal 20, but Feasts only 40.", heal: (b, s) => (s.size === "snack" ? 20 : s.size === "feast" ? 40 : b) },
+  { id: "blend-in", name: "Blend In", text: "Workouts logged without calories do half damage.", damage: (b, a) => (!a.calories ? half(b) : b) },
+  { id: "brick-wall", name: "Brick Wall", text: "No workout does more than 100 damage.", damage: (b) => Math.min(b, 100) },
+  { id: "eight-arms", name: "Eight Arms", text: "It heals 8 at midnight, every day.", dayEnd: () => [{ heal: 8, note: "Eight Arms: +8, as every night" }] },
+  { id: "refried", name: "Refried", text: "The first time it hits 0 HP, it comes back with a third of its max HP.", revive: (cx, n) => (n === 0 ? Math.round(cx.max / 3) : null) },
+  { id: "crispy-plates", name: "Crispy Plates", text: "Clean-day crits do nothing until it drops below half HP.", crit: (b, _d, cx) => (cx.hp >= cx.max / 2 ? 0 : b) },
+  { id: "feeding-frenzy", name: "Feeding Frenzy", text: "After a Feast, every splurge for the rest of the fight heals 10 extra.",
+    heal: (b, s, cx) => { const on = !!cx.state.frenzy; if (s.size === "feast") cx.state.frenzy = 1; return on ? b + 10 : b; } },
+  { id: "bubbling-oil", name: "Bubbling Oil", text: "Every splurge heals 15 extra, and it heals 30 at midnight on a day with no workout.",
+    heal: (b) => b + 15, dayEnd: (_d, cx) => (cx.workedOutToday ? [] : [{ heal: 30, note: "Bubbling Oil: no workout today, +30" }]) },
+  // ---------------------------------------------------------------- World 12 · Calorie Cosmos
+  { id: "freeze-dried", name: "Freeze-Dried", text: "Its heals arrive late: each splurge heals nothing now, then in full the next morning.",
+    heal: (b, _s, cx) => { cx.later(b, "Freeze-Dried: yesterday's splurge lands now"); return 0; } },
+  { id: "night-light", name: "Night Light", text: "Splurges from 10 PM to 5 AM heal triple (they need a time).", heal: (b, s) => (s.time && (s.time >= "22:00" || s.time < "05:00") ? b * 3 : b) },
+  { id: "constellation", name: "Constellation", text: "Each Snack in the fight heals 3 more than the one before (10, 13, 16…).",
+    heal: (b, s, cx) => { if (s.size !== "snack") return b; const k = cx.state.stars ?? 0; cx.state.stars = k + 1; return b + 3 * k; } },
+  { id: "liftoff", name: "Liftoff", text: "On the fight's first day, every splurge heals triple.", heal: (b, _s, cx) => (cx.fightDay <= 1 ? b * 3 : b) },
+  { id: "tractor-beam", name: "Tractor Beam", text: "At midnight it beams back 10 HP for every workout that day.",
+    dayEnd: (_d, cx) => { const n = cx.workoutsToday.length; return n ? [{ heal: 10 * n, note: `Tractor Beam: ${n} ${n === 1 ? "workout" : "workouts"}, +${10 * n}` }] : []; } },
+  { id: "ring-shield", name: "Ring Shield", text: "Every third workout in the fight does nothing.",
+    damage: (b, _a, cx) => { const k = (cx.state.rings ?? 0) + 1; cx.state.rings = k; return k % 3 === 0 ? 0 : b; } },
+  { id: "jiggle", name: "Jiggle", text: "Each workout does half its damage plus 20: small ones hit harder, big ones softer.", damage: (b) => (b > 0 ? half(b) + 20 : 0) },
+  { id: "shooting-star", name: "Shooting Star", text: "Clean-day crits do 50, but every splurge heals 10 extra.", crit: () => 50, heal: (b) => b + 10 },
+  { id: "event-horizon", name: "Event Horizon", text: "Everything goes in: its bonus HP can grow as big as its max HP.", bonusShare: 1 },
+  { id: "every-craving", name: "Every Craving", text: "Every splurge heals 10 extra, it can't be finished on a day you splurge, and the first knockout leaves it at 500 HP.",
+    heal: (b) => b + 10, canFinish: (_d, cx) => cx.splurgesToday.length === 0, holdText: "it can't go down on a day you splurged",
+    revive: (_cx, n) => (n === 0 ? 500 : null) },
 ];
 
 export const ABILITIES: Readonly<Record<string, Ability>> = Object.fromEntries(LIST.map((a) => [a.id, a]));

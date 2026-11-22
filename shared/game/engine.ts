@@ -23,7 +23,8 @@ export const HEAL: Record<Size, number> = { snack: 10, meal: 25, feast: 60 };
 export const CRIT = 25;
 /** a heal past full HP goes on as bonus HP, up to this share of max HP (Matt, Nov 14 2026) */
 export const BONUS_SHARE = 0.2;
-export const bonusMaxOf = (max: number): number => Math.round(max * BONUS_SHARE);
+/** The most bonus HP a monster can hold: a fifth of its max HP, or its ability's own share (pass its level). */
+export const bonusMaxOf = (max: number, level?: number): number => Math.round(max * (level ? abilityFor(level).bonusShare ?? BONUS_SHARE : BONUS_SHARE));
 /** The sentence a heal's battle line ends with when some of it went on as bonus HP (the page strips it to find the ability's name). */
 export const bonusNote = (extra: number, gain: number, full: boolean): string =>
   `${gain ? `It fills up, and the extra ${extra} is bonus HP` : `It was at full HP, so that's +${extra} bonus HP`}${full ? " (the bonus bar is full)" : ""}.`;
@@ -109,7 +110,7 @@ export function simulateFight(inp: FightInput): FightResult {
   const ab = abilityFor(inp.level);
   const max = monsterHp(inp.level, inp.hpMult);
   const name = level.name;
-  const bonusMax = bonusMaxOf(max);
+  const bonusMax = bonusMaxOf(max, inp.level);
   let hp = max, bonus = 0, damage = 0, heals = 0, landed = 0, attacked = false, revives = 0, thresholdDone = false;
   let ko: FightResult["ko"] = null;
   let shield: ArmPoint | null = ab.noPowerUps ? null : inp.shieldFrom ?? null;
@@ -139,7 +140,7 @@ export function simulateFight(inp: FightInput): FightResult {
     let curPlanned = false, curId = "";
     const usedToday: Id[] = [];
     const cx: Cx = {
-      level, hp, max, day: d, deadlineOn: inp.deadlineOn, lastDay: d === inp.deadlineOn, damageToday: 0, healsToday: 0,
+      level, hp, max, bonus, day: d, deadlineOn: inp.deadlineOn, lastDay: d === inp.deadlineOn, damageToday: 0, healsToday: 0,
       // the start day is day 1 — or day 0, a bonus, when the fight began partway through it (after a KO)
       fightDay: daysBetween(inp.startedOn, d) + (inp.startedAfter ? 0 : 1),
       splurgesToday: spl, splurgedYesterday: !!splByDay.get(yesterday)?.length, workoutsToday: act, workedOutToday: act.length > 0,
@@ -153,7 +154,7 @@ export function simulateFight(inp: FightInput): FightResult {
         scheduled.set(next, l);
       },
     };
-    const refresh = () => { cx.hp = hp; cx.damageToday = dmgToday; cx.healsToday = healToday; };
+    const refresh = () => { cx.hp = hp; cx.bonus = bonus; cx.damageToday = dmgToday; cx.healsToday = healToday; };
 
     const heal = (amount: number, sourceId: string, where: Where, time: string, text: (gain: number) => string, blockedText: string) => {
       if (amount <= 0) return;
@@ -237,6 +238,8 @@ export function simulateFight(inp: FightInput): FightResult {
         if (plannedHalf) h = half(h);
         h = Math.max(0, Math.round(h));
         const changed = (plannedHalf ? half(base) : base) !== h;
+        // an ability that holds the heal back for later (Freeze-Dried): say so where the splurge is
+        if (h <= 0 && base > 0 && !blocked.has(s.id)) lines.push({ day: d, time: s.time, at: s.createdAt, kind: "note", amount: 0, text: `${s.what} heals ${name} nothing now (${ab.name}).`, sourceId: s.id });
         heal(h, s.id, { phase: "item", time: s.time, stamp: s.createdAt }, s.time,
           (gain) => `${s.what} heals ${name} +${gain}${s.planned ? (ab.plannedFull ? " (a planned treat, in full)" : " (a planned treat: half)") : ""}${changed ? ` (${ab.name})` : ""}.`,
           `The Veggie Shield blocks ${s.what}'s heal.`);

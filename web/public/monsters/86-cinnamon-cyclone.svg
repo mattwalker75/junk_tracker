@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Cinnamon Cyclone, a spinning tornado of cinnamon-roll dough with a brown spiral on top, white icing swirling around it and an angry face in the middle">
+  <ellipse cx="100" cy="190" rx="60" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- motion lines -->
+  <g fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round">
+    <path d="M24 70 Q6 88 22 108"/><path d="M10 84 Q4 96 12 108"/><path d="M180 112 Q196 130 178 146"/><path d="M190 100 Q198 112 192 124"/><path d="M62 140 Q50 154 60 168"/><path d="M146 160 Q154 170 142 180"/>
+  </g>
+  <!-- dough bands, bottom first -->
+  <g stroke="#2b1d3a" stroke-width="4" fill="#f0c27a">
+    <ellipse cx="104" cy="176" rx="16" ry="9"/>
+    <ellipse cx="94" cy="154" rx="30" ry="13"/>
+    <ellipse cx="112" cy="126" rx="46" ry="18"/>
+  </g>
+  <g fill="none" stroke="#9a5a2a" stroke-width="3.5" stroke-linecap="round">
+    <path d="M94 178 A12 5 0 0 0 114 178"/><path d="M72 157 A24 8 0 0 0 116 157"/><path d="M76 130 A38 11 0 0 0 148 130"/>
+  </g>
+  <g fill="#d99a52"><path d="M144 118 Q158 126 152 136 Q146 140 140 140 Q152 130 144 118 Z"/><path d="M114 148 Q124 154 118 162 Q112 164 110 164 Q120 156 114 148 Z"/></g>
+  <!-- icing ribbon swirling round the funnel -->
+  <path d="M36 112 Q64 146 112 140 Q152 134 172 108" fill="none" stroke="#2b1d3a" stroke-width="8" stroke-linecap="round"/>
+  <path d="M36 112 Q64 146 112 140 Q152 134 172 108" fill="none" stroke="#fffaf0" stroke-width="4" stroke-linecap="round"/>
+  <!-- big middle band with the face -->
+  <ellipse cx="104" cy="88" rx="68" ry="28" fill="#f0c27a" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M152 68 Q178 84 160 106 Q148 112 136 114 Q164 96 152 68 Z" fill="#d99a52"/>
+  <path d="M44 96 q-6 -10 4 -14 q8 -2 8 6" fill="none" stroke="#9a5a2a" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M164 98 q6 -10 -4 -14 q-8 -2 -8 6" fill="none" stroke="#9a5a2a" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- top band: the roll spiral -->
+  <ellipse cx="100" cy="42" rx="84" ry="24" fill="#f0c27a" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M100 40 a6 2 0 0 1 12 0 a12 4 0 0 1 -24 0 a18 6 0 0 1 36 0 a24 8 0 0 1 -48 0 a30 10 0 0 1 60 0 a36 12 0 0 1 -72 0 a42 14 0 0 1 84 0" fill="none" stroke="#9a5a2a" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M40 34 Q56 54 72 32 Q88 56 104 30 Q120 56 136 32 Q150 52 162 36" fill="none" stroke="#fffaf0" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M30 34 Q40 24 58 22" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <!-- icing drips off the top -->
+  <g fill="#fffaf0" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M30 56 Q38 60 46 61 Q46 70 40 72 Q34 70 36 62 Q32 62 30 56 Z"/>
+    <path d="M148 62 Q158 60 166 56 Q168 64 162 64 Q162 74 156 74 Q150 72 152 64 Z"/>
+  </g>
+  <!-- face -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="86" cy="84" r="12" fill="#ffffff"/><circle cx="122" cy="84" r="12" fill="#ffffff"/></g>
+  <circle cx="89" cy="87" r="6.5" fill="#2b1d3a"/><circle cx="119" cy="87" r="6.5" fill="#2b1d3a"/>
+  <circle cx="91" cy="83" r="2.5" fill="#ffffff"/><circle cx="121" cy="83" r="2.5" fill="#ffffff"/>
+  <path d="M68 70 L96 77 M140 70 L112 77" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M84 98 Q104 116 124 98 Q104 104 84 98 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M89 100 l3 6 3 -5z M101 102 l3 5 3 -5z M113 100 l3 5 3 -6z" fill="#ffffff"/>
+  <ellipse cx="70" cy="98" rx="6" ry="3.5" fill="#ff9db8"/><ellipse cx="138" cy="98" rx="6" ry="3.5" fill="#ff9db8"/>
+  <!-- dust puffs at the base -->
+  <g fill="#fff6dc" stroke="#2b1d3a" stroke-width="2.5"><circle cx="82" cy="184" r="6"/><circle cx="126" cy="184" r="6"/><circle cx="136" cy="181" r="4"/></g>
+  <!-- flying crumbs -->
+  <g fill="#f0c27a" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"><path d="M30 150 l6 -2 2 6 -6 2z"/><path d="M168 172 l6 1 -1 6 -6 -1z"/></g>
+  <!-- sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M18 168 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+    <path d="M182 4 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z"/>
+    <path d="M176 148 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z"/>
+  </g>
+</svg>

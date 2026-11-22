@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="The Takeout Dragon, a fierce coiled boss dragon whose body is a chain of white takeout boxes, with noodle whiskers, fortune-cookie horns and a gold mane, holding chopsticks and a red paper lantern">
+  <defs>
+    <clipPath id="the-takeout-dragon-skull"><path d="M62 62 Q62 26 100 26 Q138 26 138 62 Q138 76 128 82 L72 82 Q62 76 62 62 Z"/></clipPath>
+    <g id="the-takeout-dragon-box">
+      <path d="M-11 -15 L11 -15 L14 15 L-14 15 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M5 -13 L10 -13 L12 13 L7 13 Z" fill="#e6e2ee"/>
+      <path d="M-13 9 L-4 4 L4 4 L13 9" fill="none" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M-11 -6 L11 -6 M-12 -1 L12 -1" stroke="#e2384d" stroke-width="2.5"/>
+    </g>
+    <path id="the-takeout-dragon-spike" d="M-6 10 L0 22 L6 10 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+    <g id="the-takeout-dragon-horn">
+      <path d="M-16 5 Q-15 -12 0 -11 Q15 -12 16 5 Q10 9 5 5 Q2 11 0 12 Q-2 11 -5 5 Q-10 9 -16 5 Z" fill="#f6c46a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M-5 5 Q-8 -4 -12 -2 M5 5 Q8 -4 12 -2" fill="none" stroke="#b8732e" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-10 -5 Q-6 -9 0 -9" fill="none" stroke="#fff1c8" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+  </defs>
+  <ellipse cx="100" cy="190" rx="86" ry="7" fill="#2b1d3a" opacity="0.2"/>
+  <!-- the coiled body: red joints, gold spines, takeout-box segments -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M100 98 C70 96 44 98 30 120 C16 146 36 170 72 170 C104 170 140 172 160 164 C178 152 178 124 164 108" stroke="#2b1d3a" stroke-width="30"/>
+    <path d="M100 98 C70 96 44 98 30 120 C16 146 36 170 72 170 C104 170 140 172 160 164 C178 152 178 124 164 108" stroke="#e2384d" stroke-width="22"/>
+  </g>
+  <use href="#the-takeout-dragon-spike" transform="translate(30 120) rotate(123)"/>
+  <use href="#the-takeout-dragon-spike" transform="translate(28 147) rotate(67)"/>
+  <use href="#the-takeout-dragon-spike" transform="translate(49 166) rotate(21)"/>
+  <use href="#the-takeout-dragon-spike" transform="translate(163 162) rotate(-41)"/>
+  <use href="#the-takeout-dragon-spike" transform="translate(174 136) rotate(-90)"/>
+  <!-- tail flame tuft -->
+  <path d="M156 114 Q146 92 162 80 Q162 94 172 88 Q178 102 172 114 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M160 108 Q156 98 162 90" fill="none" stroke="#fff1a8" stroke-width="2.5" stroke-linecap="round"/>
+  <use href="#the-takeout-dragon-box" transform="translate(172 121) rotate(-109)"/>
+  <use href="#the-takeout-dragon-box" transform="translate(171 150) rotate(-69)"/>
+  <use href="#the-takeout-dragon-box" transform="translate(150 167) rotate(-13)"/>
+  <use href="#the-takeout-dragon-box" transform="translate(121 170) rotate(-2)"/>
+  <use href="#the-takeout-dragon-box" transform="translate(93 170) rotate(1)"/>
+  <use href="#the-takeout-dragon-box" transform="translate(63 169) rotate(7)"/>
+  <use href="#the-takeout-dragon-box" transform="translate(37 159) rotate(39)"/>
+  <use href="#the-takeout-dragon-box" transform="translate(26 134) rotate(95)"/>
+  <use href="#the-takeout-dragon-box" transform="translate(39 109) rotate(141)"/>
+  <use href="#the-takeout-dragon-box" transform="translate(66 99) rotate(171)"/>
+  <!-- gold mane -->
+  <path d="M57 87 L65 71 L50 62 L65 53 L57 37 L75 37 L75 19 L91 27 L100 12 L109 27 L125 19 L125 37 L143 37 L135 53 L150 62 L135 71 L143 87 Z" fill="#ffc93c" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M135 53 L150 62 L135 71 L143 87 L120 84 Z" fill="#e8a628"/>
+  <!-- fortune-cookie horns -->
+  <use href="#the-takeout-dragon-horn" transform="translate(72 26) rotate(-55)"/>
+  <use href="#the-takeout-dragon-horn" transform="translate(128 26) rotate(55)"/>
+  <!-- arms: lantern in the left claw, chopsticks in the right -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M78 104 Q56 100 42 74 M122 104 Q146 100 160 72" stroke="#2b1d3a" stroke-width="15"/>
+    <path d="M78 104 Q56 100 42 74 M122 104 Q146 100 160 72" stroke="#e2384d" stroke-width="8"/>
+  </g>
+  <path d="M38 66 L36 76" stroke="#2b1d3a" stroke-width="2.5"/>
+  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
+    <rect x="24" y="74" width="24" height="6" rx="2" fill="#ffc93c"/>
+    <ellipse cx="36" cy="92" rx="18" ry="14" fill="#e2384d"/>
+    <rect x="24" y="104" width="24" height="6" rx="2" fill="#ffc93c"/>
+  </g>
+  <path d="M36 78 Q24 92 36 106 M36 78 Q48 92 36 106" fill="none" stroke="#a81e30" stroke-width="2.5"/>
+  <path d="M24 86 Q26 82 30 80" fill="none" stroke="#ff8a9a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M36 110 L36 124 M32 112 L31 122 M40 112 L41 122" stroke="#ffc93c" stroke-width="2.5" stroke-linecap="round"/>
+  <g stroke-linecap="round">
+    <path d="M154 92 L178 22 M162 94 L188 28" stroke="#2b1d3a" stroke-width="8"/>
+    <path d="M154 92 L178 22 M162 94 L188 28" stroke="#d9a35a" stroke-width="3.5"/>
+    <path d="M154 92 L158 80 M162 94 L166 82" stroke="#e2384d" stroke-width="3.5"/>
+  </g>
+  <g fill="#e2384d" stroke="#2b1d3a" stroke-width="3.5"><circle cx="40" cy="70" r="8"/><circle cx="162" cy="70" r="8"/></g>
+  <path d="M34 66 l4 3 M162 63 l-2 5 M168 66 l-4 3" stroke="#2b1d3a" stroke-width="2" stroke-linecap="round"/>
+  <!-- head -->
+  <path d="M62 62 Q62 26 100 26 Q138 26 138 62 Q138 76 128 82 L72 82 Q62 76 62 62 Z" fill="#e2384d" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#the-takeout-dragon-skull)"><path d="M120 26 Q146 52 128 84 L140 84 L140 20 Z" fill="#b8243a"/></g>
+  <path d="M70 52 Q72 38 86 32" fill="none" stroke="#ff9aa6" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="100" cy="88" rx="29" ry="15" fill="#ff6b7d" stroke="#2b1d3a" stroke-width="4"/>
+  <g fill="#2b1d3a"><ellipse cx="90" cy="81" rx="3.5" ry="2.5"/><ellipse cx="110" cy="81" rx="3.5" ry="2.5"/></g>
+  <path d="M78 88 Q100 108 122 88 Q100 95 78 88 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M82 89 l3 8 3 -7z M112 90 l3 7 3 -8z M92 92 l2.5 4 2.5 -3.5z M103 92 l2.5 3.5 2.5 -4z" fill="#ffffff"/>
+  <!-- noodle whiskers -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M72 88 Q54 92 56 108 Q58 120 46 126 M128 88 Q146 92 144 108 Q142 120 154 126" stroke="#2b1d3a" stroke-width="8"/>
+    <path d="M72 88 Q54 92 56 108 Q58 120 46 126 M128 88 Q146 92 144 108 Q142 120 154 126" stroke="#ffd36b" stroke-width="3.5"/>
+  </g>
+  <!-- eyes -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="82" cy="57" r="12.5" fill="#ffffff"/><circle cx="118" cy="57" r="12.5" fill="#ffffff"/></g>
+  <circle cx="85" cy="59" r="7" fill="#2b1d3a"/><circle cx="115" cy="59" r="7" fill="#2b1d3a"/>
+  <circle cx="88" cy="56" r="2.6" fill="#ffffff"/><circle cx="118" cy="56" r="2.6" fill="#ffffff"/><circle cx="82" cy="62" r="1.3" fill="#ffffff"/><circle cx="112" cy="62" r="1.3" fill="#ffffff"/>
+  <path d="M64 40 L93 49 M136 40 L107 49" stroke="#2b1d3a" stroke-width="5.5" stroke-linecap="round"/>
+  <ellipse cx="68" cy="74" rx="5" ry="3" fill="#ff9db8"/><ellipse cx="132" cy="74" rx="5" ry="3" fill="#ff9db8"/>
+  <!-- gold sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M100 118 l3.5 8 8 3.5 -8 3.5 -3.5 8 -3.5 -8 -8 -3.5 8 -3.5z"/>
+    <path d="M18 22 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M146 10 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M70 128 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+    <path d="M132 130 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

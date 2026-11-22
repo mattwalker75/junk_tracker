@@ -129,3 +129,31 @@ The roster, drawings and Monster Book lines are in `drafts/world7/README.md` and
 - **Seat Check:** the first 2 workouts that count for the fight that day, in the day's order.
 - **Lingering Sour:** each of the three later heals can be blocked by a Veggie Shield on its own.
 - **Last Kernels:** "below a quarter" is under max HP ÷ 4 when the splurge lands.
+
+## Worlds 9 to 12 (built Nov 22 2026)
+Matt: "please build it all out" — built straight from the Round 9 ideas (canvas rounds 12–15 show them). The roster is
+in `levels.ts`, `abilities.ts` and `bios.ts`; drafts in `drafts/world9/` … `drafts/world12/`. Decisions made while building:
+- **Grid Lock:** rounded down after the comeback ×2 (a 9-minute walk does nothing).
+- **Brunch for Two:** "before it" = earlier that day among the splurges that count for the fight.
+- **Slow Drip, Lasso:** the day's damage includes the clean-day crit.
+- **Just Popped:** both need a time, and the workout has to come 0–60 minutes after the splurge.
+- **Stubborn:** a quarter of the fight's max HP (toughness included), workout damage only.
+- **Spin Cycle, Constellation, Stack Up, Ring Shield:** they count through the whole fight, a Veggie Shield's block included.
+- **Soaked:** the ability's double replaces the planned treat's half.
+- **Roll Up:** once a fight, the first workout of 30 minutes or more.
+- **Pouch:** the day's first splurge heals its full size again at midnight (before a planned treat's half).
+- **Lunch Rush:** Monday to Friday, 11:00 to 13:59.
+- **Lucky Numbers, Liftoff:** the fight's days as for Slow Thaw (Liftoff's "first day" includes the bonus part-day).
+- **Order Up:** the run of splurge days counts within the fight; a day with no splurge starts it again.
+- **Fetch:** a workout with no minutes counts as under 10.
+- **Ring of Fire:** a Feast anywhere in the day halves that day's workouts, even ones logged before it.
+- **Blend In:** no calories, or 0, is "without calories".
+- **Refried:** a third of the fight's max HP (toughness included), once.
+- **Crispy Plates:** "below half" is checked when the crit would land, at the end of the day.
+- **Feeding Frenzy:** the Feast itself gets no extra; every splurge after it does.
+- **Freeze-Dried:** the battle log says "heals nothing now"; the next morning's heal can be blocked by a Veggie Shield.
+- **Night Light:** a splurge needs a time to count (10 PM to 4:59 AM).
+- **Tractor Beam:** every workout that counts for the fight, even one with no minutes.
+- **Jiggle:** half (rounded up) plus 20, and a workout that does nothing still does nothing.
+- **Big Appetite, Event Horizon:** the bonus HP cap is 40% / 100% of max HP (`bonusShare`), in the live panels too.
+- **Every Craving:** on a day you splurged it holds at 1 HP (before any comeback); on another day its first knockout leaves it at 500 HP.

@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 import {
-  ABILITIES, abandonRun, addDays, buildView, canCarryOn, deadlineFor, dropToNormal, eventText, fightInputFor, firstLevelOfWorld, GameRuleError, LEVEL_COUNT, LEVELS, levelInfo, newRun, preview,
+  ABILITIES, abandonRun, addDays, bonusMaxOf, buildView, canCarryOn, deadlineFor, dropToNormal, eventText, fightInputFor, firstLevelOfWorld, GameRuleError, LEVEL_COUNT, LEVELS, levelInfo, newRun, preview,
   lastEndedBefore, pendingLevel, PLANNED_LEVELS, runOver, WORLDS, runScore, setBet, settle, simulateFight, startNextFight, struckPoints, usePowerUp, wonPoints,
   type ActivityEv, type FightInput, type GameClock, type GameLog, type RunState, type SplurgeEv,
 } from "../shared/game/index.js";
@@ -62,7 +62,8 @@ describe("levels", () => {
     expect(json).toHaveLength(60);
     expect(LEVELS).toHaveLength(LEVEL_COUNT);
     expect([LEVEL_COUNT % 10, WORLDS.length, LEVEL_COUNT <= PLANNED_LEVELS]).toEqual([0, LEVEL_COUNT / 10, true]);
-    expect(WORLDS.slice(6)).toEqual(["Freezer Tundra", "Concession Canyon"]);
+    expect(WORLDS.slice(6)).toEqual(["Freezer Tundra", "Concession Canyon", "Brunch Boulevard", "Takeout Temple", "Deep-Fry Volcano", "Calorie Cosmos"]);
+    expect([LEVEL_COUNT, levelInfo(120).name, levelInfo(120).hp, levelInfo(120).days]).toEqual([PLANNED_LEVELS, "The Snackularity", 2450, 11]);
     json.forEach((j, i) => {
       const l = LEVELS[i];
       expect([l.level, `${l.world} · ${l.worldName}`, l.name, l.boss, l.hp, l.days, `${l.slug}.svg`]).toEqual([j.level, j.world, j.name, j.boss, j.hp, j.days, j.svg]);
@@ -609,6 +610,205 @@ describe("abilities: one test each (at least)", () => {
     expect([on(0), on(1), on(2), on(3), on(5)]).toEqual([50, 50, 0, 50, 0]);
     covers(80);
   });
+
+  // ---------------------------------------------------------------- World 9 · Brunch Boulevard
+  it("Waffle Wolf: each workout's damage is rounded down to the nearest 10", () => {
+    expect([dmg(81, [A(37)]), dmg(81, [A(40)]), dmg(81, [A(9)])]).toEqual([30, 40, 0]);
+    covers(81);
+  });
+  it("Eggs Benny: each splurge heals 5 extra for every splurge before it that day", () => {
+    expect(heal(82, [S("snack"), S("snack"), S("snack")])).toBe(10 + 15 + 20);
+    covers(82);
+  });
+  it("Syrup Serpent: +15 at midnight on a day it lost less than 60", () => {
+    expect(fight(83, { today: day(1), activities: [A(30)] }).hp).toBe(1330 - 30 - 25 + 15);
+    expect(fight(83, { today: day(1), activities: [A(40)] }).hp).toBe(1330 - 40 - 25);
+    covers(83);
+  });
+  it("Pop-Up Imp: a workout within an hour after a splurge does half", () => {
+    const at = (splurge: string, workout: string) => fight(84, { splurges: [S("snack", { time: splurge })], activities: [A(40, { time: workout })] }).damage;
+    expect([at("12:30", "13:00"), at("11:00", "13:00"), at("14:00", "13:00")]).toEqual([20, 40, 40]);
+    covers(84);
+  });
+  it("Biscuit Badger: workouts take no more than a quarter of its HP a day", () => {
+    expect(dmg(85, [A(300), A(100, { time: "09:00" })])).toBe(340);
+    expect(fight(85, { today: day(1), activities: [A(400), A(100, { day: day(1) })] }).damage).toBe(340 + 25 + 100);
+    covers(85);
+  });
+  it("Cinnamon Cyclone: every third splurge in the fight heals triple", () => {
+    expect(heal(86, [S("snack"), S("snack"), S("snack")])).toBe(10 + 10 + 30);
+    covers(86);
+  });
+  it("French Toast Toucan: planned treats heal double", () => {
+    expect([heal(87, [S("snack", { planned: true })]), heal(87, [S("snack")])]).toEqual([20, 10]);
+    covers(87);
+  });
+  it("Croissadillo: the first workout of 30+ minutes does nothing, once", () => {
+    expect(dmg(88, [A(30), A(30, { time: "09:00" })])).toBe(30);
+    expect(dmg(88, [A(20), A(40, { time: "09:00" }), A(40, { time: "10:00" })])).toBe(60);
+    covers(88);
+  });
+  it("Breakfast Burrito Bear: bonus HP up to 40% of its max", () => {
+    expect([bonusMaxOf(1420, 89), bonusMaxOf(1420)]).toEqual([568, 284]);
+    const r = fight(89, { splurges: Array.from({ length: 10 }, () => S("feast")) });
+    expect([r.bonus, r.bonusMax]).toEqual([568, 568]);
+    covers(89);
+  });
+  it("Lady Short Stack: each Meal in the fight heals 5 more than the one before", () => {
+    expect(heal(90, [S("meal"), S("meal"), S("meal")])).toBe(25 + 30 + 35);
+    expect(heal(90, [S("snack")])).toBe(10);
+    covers(90);
+  });
+
+  // ---------------------------------------------------------------- World 10 · Takeout Temple
+  it("Egg Roll Rocket: +15 at midnight on a day with two or more splurges", () => {
+    const hp = (spl: SplurgeEv[]) => fight(91, { today: day(1), activities: [A(100)], splurges: spl }).hp;
+    expect(hp([S("snack", { time: "10:00" }), S("snack", { time: "11:00" })])).toBe(1450 - 100 + 20 + 15);
+    expect(hp([S("snack", { time: "10:00" })])).toBe(1450 - 100 + 10);
+    covers(91);
+  });
+  it("Dumpling Duo: Snacks and Meals both heal 20", () => {
+    expect([heal(92, [S("snack")]), heal(92, [S("meal")]), heal(92, [S("feast")])]).toEqual([20, 20, 60]);
+    covers(92);
+  });
+  it("Rangoon Raccoon: +10 at midnight for each splurge after 8 PM (no time counts)", () => {
+    expect(fight(93, { today: day(1), activities: [A(200)], splurges: [S("snack", { time: "21:00" }), S("snack")] }).hp).toBe(1480 - 200 + 20 + 20);
+    expect(fight(93, { today: day(1), activities: [A(200)], splurges: [S("snack", { time: "19:00" })] }).hp).toBe(1480 - 200 + 10);
+    covers(93);
+  });
+  it("Takeout Box Turtle: on the deadline's last day, workouts do half", () => {
+    expect([fight(94, { deadlineOn: D, activities: [A(40)] }).damage, dmg(94, [A(40)])]).toEqual([20, 40]);
+    covers(94);
+  });
+  it("Lo Mein Leviathan: a workout counts no more than 90 minutes (calories in full)", () => {
+    expect([dmg(95, [A(120, { calories: 300 })]), dmg(95, [A(60)])]).toEqual([120, 60]);
+    covers(95);
+  });
+  it("Bao Blowfish: while it has bonus HP, workouts do half", () => {
+    expect(fight(96, { splurges: [S("snack", { time: "07:30" })], activities: [A(40)] }).damage).toBe(20);
+    expect(dmg(96, [A(40)])).toBe(40);
+    covers(96);
+  });
+  it("Kung Pao Kangaroo: the day's first heal heals again at midnight", () => {
+    expect(fight(97, { today: day(1), activities: [A(300)], splurges: [S("meal", { time: "10:00" }), S("snack", { time: "11:00" })] }).hp).toBe(1540 - 300 + 25 + 10 + 25);
+    covers(97);
+  });
+  it("Chopstick Stick-Bug: weekday splurges from 11 AM to 2 PM heal double", () => {
+    expect([heal(98, [S("snack", { time: "12:00" })]), heal(98, [S("snack", { time: "15:00" })]), heal(98, [S("snack")])]).toEqual([20, 10, 20]);
+    expect(heal(98, [S("snack", { time: "12:00", day: day(4) })], { startedOn: day(4) })).toBe(10); // a Saturday
+    covers(98);
+  });
+  it("Fortune Cookie Oracle: on the fight's 4th and 8th days, splurges heal double", () => {
+    const day4 = (spl: SplurgeEv[]) => fight(99, { today: day(3), activities: [A(300)], splurges: spl }).hp;
+    expect(day4([S("snack", { day: day(3) })]) - day4([])).toBe(20);
+    expect(heal(99, [S("snack")])).toBe(10);
+    covers(99);
+  });
+  it("The Takeout Dragon: +10 at midnight for every day in a row of splurges", () => {
+    const orders = (days: number[]) => fight(100, { today: day(4), activities: [A(500)], splurges: days.map((n) => S("snack", { day: day(n) })) }).lines.filter((l) => l.text.startsWith("Order Up")).map((l) => l.amount);
+    expect(orders([0, 1, 2])).toEqual([10, 20, 30]);
+    expect(orders([0, 2])).toEqual([10, 10]);
+    covers(100);
+  });
+
+  // ---------------------------------------------------------------- World 11 · Deep-Fry Volcano
+  it("Hush Puppy Pup: +5 at midnight for every workout under 10 minutes", () => {
+    expect(fight(101, { today: day(1), activities: [A(300), A(5, { time: "09:00" }), A(null, { time: "10:00" })] }).hp).toBe(1600 - 305 - 25 + 10);
+    covers(101);
+  });
+  it("Onion Ring Raptor: on a day with a Feast, workouts do half", () => {
+    const with_ = (size: SplurgeEv["size"]) => fight(102, { splurges: [S(size, { time: "12:00" })], activities: [A(40, { time: "13:00" })] }).damage;
+    expect([with_("feast"), with_("snack")]).toEqual([20, 40]);
+    covers(102);
+  });
+  it("Tempura Toad: Snacks heal 20, Feasts only 40", () => {
+    expect([heal(103, [S("snack")]), heal(103, [S("meal")]), heal(103, [S("feast")])]).toEqual([20, 25, 40]);
+    covers(103);
+  });
+  it("Churro Chameleon: workouts without calories do half", () => {
+    expect([dmg(104, [A(40)]), dmg(104, [A(40, { calories: 100 })])]).toEqual([20, 50]);
+    covers(104);
+  });
+  it("Battered Brick: no workout does more than 100", () => {
+    expect([dmg(105, [A(150)]), dmg(105, [A(80)])]).toEqual([100, 80]);
+    covers(105);
+  });
+  it("Fried Okra Octopus: +8 every midnight", () => {
+    expect(fight(106, { today: day(1), activities: [A(100)] }).hp).toBe(1680 - 100 - 25 + 8);
+    covers(106);
+  });
+  it("Fried Pickle Phoenix: the first time it hits 0 it comes back with a third of its max", () => {
+    expect(fight(107, { activities: [A(2000)] })).toMatchObject({ hp: 563, ko: null });
+    expect(fight(107, { activities: [A(2000), A(600, { time: "09:00" })] }).ko).not.toBeNull();
+    covers(107);
+  });
+  it("Chicken-Fried Stegosaurus: no clean-day crit until it is below half HP", () => {
+    expect(fight(108, { today: day(1) }).damage).toBe(0);
+    expect(fight(108, { today: day(1), activities: [A(900)] }).damage).toBe(925);
+    covers(108);
+  });
+  it("Fish Fry Shark: after a Feast, every splurge heals 10 extra", () => {
+    expect(heal(109, [S("feast", { time: "12:00" }), S("snack", { time: "13:00" })])).toBe(60 + 20);
+    expect(heal(109, [S("snack", { time: "11:00" }), S("feast", { time: "12:00" })])).toBe(10 + 60);
+    covers(109);
+  });
+  it("The Fry Lord: every splurge heals 15 extra, and +30 at midnight with no workout", () => {
+    expect(heal(110, [S("snack")])).toBe(25);
+    expect(fight(110, { today: day(2), activities: [A(500)] }).hp).toBe(2260 - 500 - 25 - 25 + 30);
+    covers(110);
+  });
+
+  // ---------------------------------------------------------------- World 12 · Calorie Cosmos
+  it("Astronaut Ice Cream: a splurge heals nothing now, then in full the next morning", () => {
+    const now = fight(111, { activities: [A(500)], splurges: [S("snack", { time: "12:00" })] });
+    expect(now.hp).toBe(1250);
+    expect(now.lines.some((l) => l.kind === "note" && l.text === "Treat heals Astronaut Ice Cream nothing now (Freeze-Dried).")).toBe(true);
+    expect(fight(111, { today: day(1), activities: [A(500)], splurges: [S("snack", { time: "12:00" })] }).hp).toBe(1260);
+    covers(111);
+  });
+  it("Mooncake Moth: splurges from 10 PM to 5 AM heal triple", () => {
+    expect(["23:00", "03:00", "21:00", ""].map((time) => heal(112, [S("snack", { time })]))).toEqual([30, 30, 10, 10]);
+    covers(112);
+  });
+  it("Galaxy Gummies: each Snack in the fight heals 3 more than the one before", () => {
+    expect(heal(113, [S("snack"), S("snack"), S("snack")])).toBe(10 + 13 + 16);
+    covers(113);
+  });
+  it("Rocket Pop: on the fight's first day, every splurge heals triple", () => {
+    expect(heal(114, [S("snack")])).toBe(30);
+    const later = (spl: SplurgeEv[]) => fight(114, { today: day(1), activities: [A(500)], splurges: spl }).hp;
+    expect(later([S("snack", { day: day(1) })]) - later([])).toBe(10);
+    covers(114);
+  });
+  it("Pizza Saucer: +10 at midnight for every workout that day", () => {
+    expect(fight(115, { today: day(1), activities: [A(50), A(50, { time: "09:00" })] }).hp).toBe(1810 - 100 - 25 + 20);
+    covers(115);
+  });
+  it("Saturn Sundae: every third workout in the fight does nothing", () => {
+    expect(dmg(116, [A(10), A(10, { time: "09:00" }), A(10, { time: "10:00" }), A(10, { time: "11:00" })])).toBe(30);
+    covers(116);
+  });
+  it("Gelatin Glorp: half the damage plus 20 (nothing stays nothing)", () => {
+    expect([dmg(117, [A(10)]), dmg(117, [A(100)]), dmg(117, [A(null)])]).toEqual([25, 70, 0]);
+    covers(117);
+  });
+  it("Comet Cupcake: crits do 50, but every splurge heals 10 extra", () => {
+    expect([fight(118, { today: day(1) }).damage, heal(118, [S("snack")])]).toEqual([50, 20]);
+    covers(118);
+  });
+  it("Black Hole Bagel: its bonus HP can grow as big as its max HP", () => {
+    expect(bonusMaxOf(1870, 119)).toBe(1870);
+    expect(fight(119, { splurges: Array.from({ length: 40 }, () => S("feast")) }).bonus).toBe(1870);
+    covers(119);
+  });
+  it("The Snackularity: +10 on every splurge, back once with 500 HP, never down on a splurge day", () => {
+    expect(heal(120, [S("snack")])).toBe(20);
+    expect(fight(120, { activities: [A(2500)] })).toMatchObject({ hp: 500, ko: null });
+    expect(fight(120, { activities: [A(2500), A(600, { time: "09:00" })] }).ko).not.toBeNull();
+    const held = fight(120, { activities: [A(2500), A(600, { time: "09:00" })], splurges: [S("snack", { time: "07:30" })] });
+    expect([held.hp, held.ko]).toEqual([1, null]);
+    covers(120);
+  });
 });
 
 describe("a run that finished before the game grew (Matt, Nov 21 2026)", () => {
@@ -834,7 +1034,8 @@ describe("a run: settling, hearts, power-ups", () => {
     // The Midnight Snacker is world 6's boss now: the run goes on to level 61
     const sixty = settle(run(D, { level: 60, hearts: 2 }), logOf([], [A(1300)]), clock(D));
     expect([pendingLevel(sixty.state), sixty.state.run.endReason, kinds(sixty).includes("finish")]).toEqual([61, null, false]);
-    const last = settle(run(D, { level: LEVEL_COUNT, hearts: 5 }), logOf([], [A(levelInfo(LEVEL_COUNT).hp + 100)]), clock(D));
+    // The Snackularity comes back once with 500 HP: two hits finish it
+    const last = settle(run(D, { level: LEVEL_COUNT, hearts: 5 }), logOf([], [A(levelInfo(LEVEL_COUNT).hp), A(600, { time: "09:00" })]), clock(D));
     expect(pendingLevel(last.state)).toBeNull();
     expect(last.state.run).toMatchObject({ endReason: "finished", endedOn: D, hearts: 5 });
     expect(last.added.find((e) => e.kind === "heart")?.data.gained).toBe(false);

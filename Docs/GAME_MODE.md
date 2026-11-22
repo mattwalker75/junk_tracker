@@ -80,9 +80,11 @@ a total of 120 monsters to fight". Decided with Matt:
 - **The six worlds, in order** (Matt, Nov 21 2026): 7 **Freezer Tundra**, 8 **Concession Canyon**,
   9 **Brunch Boulevard**, 10 **Takeout Temple**, 11 **Deep-Fry Volcano**, 12 **Calorie Cosmos** (final boss
   The Snackularity at 120). Deadlines: 8 days (worlds 7–8), 9 (9–10), 10 (11–12); a boss +1.
-- World 7's ten monsters are drafted (canvas **Round 10**; drawings and roster in `Docs/game/drafts/world7/`),
-  waiting for Matt's yes. Three of their abilities need small engine additions when built: the fight's day
-  number (Slow Thaw, Frozen Solid) and a revive that can happen more than once (Three Crowns).
+- World 7's ten monsters (canvas **Round 10**; drawings and roster in `Docs/game/drafts/world7/`) — **approved by
+  Matt** (Nov 22 2026: "I love what you mocked up so far"). World 8's (canvas **Round 11**,
+  `Docs/game/drafts/world8/`) are drafted. Engine additions these need when built: the fight's day number
+  (Slow Thaw, Frozen Solid, Intermission), a revive that can happen more than once (Three Crowns) and a heal
+  spread over several days (Lingering Sour).
 - **The phone apps must stay in step** (Matt, Nov 21 2026): the build includes the phone tests, the new
   database upgrade run on the phone, and both apps rebuilt (`APP_PORTS/*/BUILD_APP.sh`).
 

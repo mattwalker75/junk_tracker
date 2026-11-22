@@ -96,6 +96,28 @@ describe("phone backend", () => {
     }
   });
 
+  it("upgrades a phone log from version 6 (60 levels) without losing a game row, and a run that beat 60 carries on at 61", async () => {
+    const { MIGRATIONS } = await import("../../../server/src/migrations");
+    const old = new Database(SQL);
+    for (let v = 0; v < 6; v++) old.exec(MIGRATIONS[v]);
+    old.pragma("user_version = 6");
+    old.exec(`INSERT INTO users (id, name, password_hash, created_at) VALUES ('u1', 'Me', '', 'x');
+      INSERT INTO game_runs (id, user_id, number, mode, started_at, started_on, ended_on, end_reason, hearts) VALUES ('r1', 'u1', 1, 'normal', '2030-03-01T08:00:00.000Z', '2030-03-01', '2030-03-12', 'finished', 4);
+      INSERT INTO game_fights (id, run_id, user_id, level, attempt, started_on, deadline_on, status, ended_on, seq) VALUES ('f1', 'r1', 'u1', 60, 1, '2030-03-05', '2030-03-12', 'won', '2030-03-12', 0);
+      INSERT INTO game_events (id, run_id, fight_id, day, at, kind, data_json, seq) VALUES ('e1', 'r1', 'f1', '2030-03-12', 'x', 'ko', '{}', 0), ('e2', 'r1', 'f1', '2030-03-12', 'x', 'finish', '{}', 1);`);
+    const b = fresh(old.file());
+    expect([b.db.pragma("user_version", { simple: true }), b.upgradedFrom, fresh().upgradedFrom]).toEqual([7, 6, null]);
+    expect(b.db.prepare("SELECT id FROM game_events ORDER BY seq").all()).toEqual([{ id: "e1" }, { id: "e2" }]);
+    expect(b.db.pragma("foreign_key_check")).toEqual([]);
+    const synced = ok(b, "POST", "/api/game/sync", { today: TODAY, now: NOW });
+    expect(synced.happened.map((e: { kind: string }) => e.kind)).toEqual(["run_continues"]);
+    expect(synced.view.next).toMatchObject({ level: 61, name: "Pint Yeti" });
+    const go = ok(b, "POST", "/api/game/next", { today: TODAY, now: NOW });
+    expect(go.view.fight).toMatchObject({ level: 61, world: 7 });
+    // and it was saved that way: a fresh open of the file sees fight 61
+    expect(fresh(b.db.file()).db.prepare("SELECT level FROM game_fights ORDER BY seq DESC LIMIT 1").get()).toEqual({ level: 61 });
+  });
+
   it("refuses a log saved by a newer app", () => {
     const b = fresh();
     b.db.pragma("user_version = 999");

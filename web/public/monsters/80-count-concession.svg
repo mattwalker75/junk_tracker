@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Count Concession, a vampire boss in a red velvet theater-curtain cape with gold tassels, holding a tray of nachos and a jumbo soda, a ticket-stub bow tie and fangs">
+  <ellipse cx="100" cy="192" rx="86" ry="6" fill="#2b1d3a" opacity="0.2"/>
+  <!-- the curtain cape, high collar -->
+  <path d="M22 186 L40 70 L100 60 L160 70 L178 186 Q100 194 22 186 Z" fill="#b3203f" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g fill="none" stroke="#7a1430" stroke-width="4" stroke-linecap="round"><path d="M44 90 Q40 140 34 182 M60 92 Q58 140 56 186 M140 92 Q142 140 144 186 M156 90 Q160 140 166 182"/></g>
+  <path d="M40 70 L24 22 L84 62 Z M160 70 L176 22 L116 62 Z" fill="#7a1430" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <!-- gold tassel rope -->
+  <path d="M42 96 Q100 124 158 96" fill="none" stroke="#2b1d3a" stroke-width="8" stroke-linecap="round"/>
+  <path d="M42 96 Q100 124 158 96" fill="none" stroke="#ffc93c" stroke-width="4" stroke-linecap="round"/>
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"><path d="M36 96 L48 96 L46 116 L38 116 Z"/><path d="M152 96 L164 96 L162 116 L154 116 Z"/></g>
+  <!-- tuxedo -->
+  <path d="M70 100 L130 100 L136 180 L64 180 Z" fill="#2b1d3a"/>
+  <path d="M88 100 L112 100 L106 176 L94 176 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <g fill="#2b1d3a"><circle cx="100" cy="128" r="2.5"/><circle cx="100" cy="142" r="2.5"/><circle cx="100" cy="156" r="2.5"/></g>
+  <!-- ticket stub bow tie -->
+  <g stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
+    <path d="M78 102 L98 108 L78 116 Z" fill="#ffc93c"/><path d="M122 102 L102 108 L122 116 Z" fill="#ffc93c"/>
+    <rect x="95" y="104" width="10" height="9" rx="2" fill="#e2384d"/>
+  </g>
+  <path d="M84 106 L84 112 M116 106 L116 112" stroke="#2b1d3a" stroke-width="1.5" stroke-dasharray="2 2"/>
+  <!-- head -->
+  <path d="M64 62 Q64 22 100 22 Q136 22 136 62 Q136 98 100 100 Q64 98 64 62 Z" fill="#d6cfe6" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M120 30 Q138 50 132 80 Q126 94 112 98 Q130 70 118 32 Z" fill="#bdb3d4"/>
+  <!-- slick hair, widow's peak -->
+  <path d="M62 56 Q60 18 100 16 Q140 18 138 56 Q130 40 118 38 L100 52 L82 38 Q70 40 62 56 Z" fill="#2b1d3a"/>
+  <path d="M76 26 Q88 20 100 20" fill="none" stroke="#5a4a6a" stroke-width="3" stroke-linecap="round"/>
+  <!-- eyes -->
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="86" cy="62" r="10" fill="#ffffff"/><circle cx="114" cy="62" r="10" fill="#ffffff"/></g>
+  <circle cx="87" cy="64" r="5.5" fill="#e2384d"/><circle cx="113" cy="64" r="5.5" fill="#e2384d"/>
+  <circle cx="87" cy="64" r="2.6" fill="#2b1d3a"/><circle cx="113" cy="64" r="2.6" fill="#2b1d3a"/>
+  <circle cx="89" cy="61" r="1.6" fill="#ffffff"/><circle cx="115" cy="61" r="1.6" fill="#ffffff"/>
+  <path d="M72 50 L96 56 M128 50 L104 56" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <!-- grin with fangs -->
+  <path d="M84 80 Q100 92 116 80 Q100 86 84 80 Z" fill="#2b1d3a" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M89 82 l3 8 3 -7z M111 82 l-3 8 -3 -7z" fill="#ffffff" stroke="#2b1d3a" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- the nachos tray (left) -->
+  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M6 132 L54 132 L50 146 L10 146 Z" fill="#ffffff"/>
+    <path d="M12 132 L20 114 L28 132 Z M24 132 L34 110 L42 132 Z M36 132 L46 116 L52 132 Z" fill="#f2bb4f"/>
+  </g>
+  <path d="M16 126 Q30 118 48 126 L46 134 Q30 128 16 134 Z" fill="#ffc93c"/>
+  <circle cx="48" cy="150" r="9" fill="#d6cfe6" stroke="#2b1d3a" stroke-width="3.5"/>
+  <!-- the jumbo soda (right) -->
+  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M150 112 L190 112 L184 176 L156 176 Z" fill="#ffffff"/>
+    <path d="M152 132 L188 132 L186 148 L154 148 Z" fill="#e2384d"/>
+    <ellipse cx="170" cy="112" rx="21" ry="6" fill="#9fdcff"/>
+    <path d="M174 112 L182 84" fill="none" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <path d="M174 112 L182 84" stroke="#ffc93c" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="152" cy="156" r="9" fill="#d6cfe6" stroke="#2b1d3a" stroke-width="3.5"/>
+  <!-- gold sparkles -->
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M14 50 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+    <path d="M184 46 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+  </g>
+</svg>

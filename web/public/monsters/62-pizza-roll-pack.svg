@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200" role="img" aria-label="Pizza Roll Pack, a huddle of tiny golden pizza-roll penguins with frosty caps and sauce leaking from their bellies">
+  <defs>
+    <g id="pizza-roll-pack-one">
+      <ellipse cx="-11" cy="30" rx="8" ry="3.5" fill="#ff9a3c" stroke="#2b1d3a" stroke-width="2.5"/>
+      <ellipse cx="11" cy="30" rx="8" ry="3.5" fill="#ff9a3c" stroke="#2b1d3a" stroke-width="2.5"/>
+      <path d="M-26 -2 Q-38 10 -32 22 Q-24 16 -25 6 Z" fill="#e0973a" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M26 -2 Q38 10 32 22 Q24 16 25 6 Z" fill="#e0973a" stroke="#2b1d3a" stroke-width="2.5" stroke-linejoin="round"/>
+      <rect x="-26" y="-28" width="52" height="58" rx="17" fill="#f2b457" stroke="#2b1d3a" stroke-width="3.5"/>
+      <path d="M-24 -10 Q-26 -26 -10 -26 L10 -26 Q26 -26 24 -10 Q17 -4 10 -10 Q0 -2 -10 -10 Q-17 -4 -24 -10 Z" fill="#e8f7ff"/>
+      <path d="M-14 -22 Q-8 -25 -2 -24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M-20 22 l3 4 M-8 25 l2 4 M8 25 l-2 4 M20 22 l-3 4" stroke="#c47a2c" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="0" cy="12" rx="14" ry="11" fill="#fff3d6" stroke="#2b1d3a" stroke-width="2.5"/>
+      <path d="M10 16 q6 2 5 9 q-4 3 -5 -3 z" fill="#e2452b" stroke="#2b1d3a" stroke-width="2"/>
+      <circle cx="-9" cy="-5" r="5.5" fill="#ffffff" stroke="#2b1d3a" stroke-width="2.5"/>
+      <circle cx="9" cy="-5" r="5.5" fill="#ffffff" stroke="#2b1d3a" stroke-width="2.5"/>
+      <circle cx="-8" cy="-4" r="3" fill="#2b1d3a"/><circle cx="8" cy="-4" r="3" fill="#2b1d3a"/>
+      <circle cx="-7" cy="-6" r="1.1" fill="#ffffff"/><circle cx="9" cy="-6" r="1.1" fill="#ffffff"/>
+      <path d="M-5 2 L5 2 L0 8 Z" fill="#ff9a3c" stroke="#2b1d3a" stroke-width="2.2" stroke-linejoin="round"/>
+    </g>
+  </defs>
+  <ellipse cx="100" cy="190" rx="88" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- the back row (there are more of them back there) -->
+  <use xlink:href="#pizza-roll-pack-one" href="#pizza-roll-pack-one" transform="translate(48 84) scale(0.8)"/>
+  <use xlink:href="#pizza-roll-pack-one" href="#pizza-roll-pack-one" transform="translate(100 74) scale(0.8)"/>
+  <use xlink:href="#pizza-roll-pack-one" href="#pizza-roll-pack-one" transform="translate(152 84) scale(0.8)"/>
+  <!-- the front row -->
+  <use xlink:href="#pizza-roll-pack-one" href="#pizza-roll-pack-one" transform="translate(38 144) scale(1.05)"/>
+  <use xlink:href="#pizza-roll-pack-one" href="#pizza-roll-pack-one" transform="translate(162 144) scale(1.05)"/>
+  <use xlink:href="#pizza-roll-pack-one" href="#pizza-roll-pack-one" transform="translate(100 140) scale(1.2)"/>
+  <!-- the leader's angry brows and frozen-solid ice cube -->
+  <path d="M84 126 L96 131 M116 126 L104 131" stroke="#2b1d3a" stroke-width="4" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round">
+    <rect x="152" y="26" width="26" height="24" rx="5" fill="#bfe6ff" transform="rotate(12 165 38)"/>
+  </g>
+  <path d="M158 32 l8 2" stroke="#ffffff" stroke-width="3" stroke-linecap="round" transform="rotate(12 165 38)"/>
+  <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M26 26 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M128 24 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

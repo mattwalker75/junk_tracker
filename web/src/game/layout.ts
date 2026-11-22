@@ -3,17 +3,19 @@
  * node positions, the winding path through them (a Catmull-Rom curve, as the mockups draw it), the
  * coloured world bands and where a node's card opens. Pure (tested in test/game3.test.ts).
  */
-import { LEVEL_COUNT, LEVELS_PER_WORLD, type MapLevel } from "../../../shared/game";
+import { LEVEL_COUNT, LEVELS_PER_WORLD, WORLDS, type MapLevel } from "../../../shared/game";
 
 export interface Pt { x: number; y: number }
 
-// ---------------------------------------------------------------- the 60-level map
+// ---------------------------------------------------------------- the adventure map
 export const MAP_W = 390;
-export const MAP_H = 2660;
-/** each world's band; World 6 at the top also runs up under the HUD */
+/** each world's band; the top world also runs up under the HUD (TOP_EXTRA more) */
 export const BAND_H = 426;
+const TOP_EXTRA = 104;
+/** the whole map: every world's band, World 1 at the bottom (2,660 tall with 6 worlds — web/public/game-map-scenery.svg is drawn to this) */
+export const MAP_H = WORLDS.length * BAND_H + TOP_EXTRA;
 /** where the path starts, below level 1 */
-export const MAP_START: Pt = { x: 34, y: 2654 };
+export const MAP_START: Pt = { x: 34, y: MAP_H - 6 };
 const COLS = [58, 195, 332];
 
 /** The top of a world's band (World 1 is at the bottom). */
@@ -70,7 +72,7 @@ export function trailEnd(map: readonly MapLevel[]): number {
   return last;
 }
 
-/** The full path and the gold trail walked so far, for the levels given (all 60, or one world's 10). */
+/** The full path and the gold trail walked so far, for the levels given (all of them, or one world's 10). */
 export function paths(levels: readonly number[], at: (l: number) => Pt, start: Pt, reached: number): { full: string; walked: string } {
   const pts = [start, ...levels.map(at)];
   const upTo = levels.filter((l) => l <= reached).length;
@@ -94,5 +96,5 @@ export function cardBox(node: Pt, o: { boss: boolean; tall: boolean; width?: num
   return { left, top, width };
 }
 
-/** The world a level is in (1 to 6). */
+/** The world a level is in (1 to WORLDS.length). */
 export const worldOf = (level: number): number => Math.ceil(level / LEVELS_PER_WORLD);

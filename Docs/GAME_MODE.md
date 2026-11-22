@@ -63,7 +63,7 @@ heard both points and chose them anyway, so keep them. The design softens the ed
 - Mockups: canvas rounds 6 and 7. Round 7 has the 60-level map, World 2 up close, Start a run,
   Knocked back, the game-styled sheets, the bottom buttons and five New monsters pages.
 
-## Growing to 120 levels (Nov 21 2026) — decided, not built yet
+## Growing to 120 levels (Nov 21 2026) — worlds 7 and 8 built (Nov 22 2026), 9–12 to come
 Matt: "double the size of the monsters and the map … an additional 60 monsters and 6 additional worlds …
 a total of 120 monsters to fight". Decided with Matt:
 - **Worlds 7–12 come after world 6** (levels 61–120). Today's 60 levels stay exactly as they are; The
@@ -81,10 +81,21 @@ a total of 120 monsters to fight". Decided with Matt:
   9 **Brunch Boulevard**, 10 **Takeout Temple**, 11 **Deep-Fry Volcano**, 12 **Calorie Cosmos** (final boss
   The Snackularity at 120). Deadlines: 8 days (worlds 7–8), 9 (9–10), 10 (11–12); a boss +1.
 - World 7's ten monsters (canvas **Round 10**; drawings and roster in `Docs/game/drafts/world7/`) — **approved by
-  Matt** (Nov 22 2026: "I love what you mocked up so far"). World 8's (canvas **Round 11**,
-  `Docs/game/drafts/world8/`) are drafted. Engine additions these need when built: the fight's day number
-  (Slow Thaw, Frozen Solid, Intermission), a revive that can happen more than once (Three Crowns) and a heal
-  spread over several days (Lingering Sour).
+  Matt** (Nov 22 2026: "I love what you mocked up so far"); world 8's (canvas **Round 11**, `Docs/game/drafts/world8/`)
+  too ("go ahead and build them").
+- **Built, Nov 22 2026 (1.9.0): the game has 80 levels.** It grows a world at a time: `LEVEL_COUNT` is the
+  levels built so far, and the last one is the final boss until the next world comes (Count Concession for now).
+  - Database version 7 lets a fight's level go to **120** (`PLANNED_LEVELS`), so worlds 9–12 need no further
+    upgrade.
+  - The map is a band taller per world (`MAP_H` in `web/src/game/layout.ts`), and `web/public/game-map-scenery.svg`
+    is drawn to that height. Adding a world means drawing its band on top and moving the rest down by 426.
+  - A run that finished at the last level there was carries on into the new world the next time the game is
+    opened (`run_continues`, a toast): same run, score, hearts, lives and power-ups; the next monster waits to be
+    started, or Keep the monsters coming starts it. It earns no weekly hearts or Veggie Shields for the days it
+    sat finished. The finish screen says more worlds are on the way while `LEVEL_COUNT` < 120.
+  - Engine additions for the new abilities: `Cx.fightDay` (day 1 = the start day; the bonus part-day after a KO
+    is day 0), `revive(cx, times)` (asked each time, so Three Crowns can come back twice), `later(heal, note,
+    inDays)` (Lingering Sour) and `holdText` (what a monster that can't be finished yet says).
 - **The phone apps must stay in step** (Matt, Nov 21 2026): the build includes the phone tests, the new
   database upgrade run on the phone, and both apps rebuilt (`APP_PORTS/*/BUILD_APP.sh`).
 

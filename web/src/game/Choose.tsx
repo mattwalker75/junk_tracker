@@ -6,7 +6,7 @@
  */
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
-import { abilityFor, levelInfo } from "../../../shared/game";
+import { abilityFor, LEVEL_COUNT, levelInfo } from "../../../shared/game";
 import type { Bet } from "../../../shared/game/types";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
@@ -108,7 +108,7 @@ export function Choose() {
       {/* the monster */}
       <section aria-label={`Next monster: ${subj.name}`} className="relative mx-4 mt-2 flex items-center gap-1 rounded-[20px] border-[3px] border-g-line pt-4 pb-2.5 pr-3 pl-1 text-[#2b1d3a] shadow-[0_4px_0_#1a1024]"
         style={{ background: "radial-gradient(90% 90% at 25% 60%, #ffe3a1 0%, #fff7e6 60%)" }}>
-        <span className="absolute -top-3 left-3 rounded-full bg-[#2b1d3a] px-2.5 py-0.5 font-game text-[13px] tracking-[0.04em] text-g-yellow">{waiting ? (waiting.rematch ? "REMATCH" : "UP NEXT") : ko ? "NEXT UP" : "THIS FIGHT"} · LEVEL {subj.level} OF 60{subj.boss ? " · BOSS" : ""}</span>
+        <span className="absolute -top-3 left-3 rounded-full bg-[#2b1d3a] px-2.5 py-0.5 font-game text-[13px] tracking-[0.04em] text-g-yellow">{waiting ? (waiting.rematch ? "REMATCH" : "UP NEXT") : ko ? "NEXT UP" : "THIS FIGHT"} · LEVEL {subj.level} OF {LEVEL_COUNT}{subj.boss ? " · BOSS" : ""}</span>
         <div className="g-anim-bob shrink-0"><img src={`/monsters/${subj.slug}.svg`} alt={subj.name} className="w-[120px]" /></div>
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <div className="flex flex-col">

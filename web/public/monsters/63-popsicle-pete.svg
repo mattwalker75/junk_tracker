@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Popsicle Pete, a melting orange and cherry twin ice pop with a bite out of the top, standing on two wooden sticks in a puddle">
+  <defs>
+    <clipPath id="popsicle-pete-body">
+      <path d="M40 150 L40 52 Q40 22 70 22 L118 22 A12 12 0 0 0 139 32 A12 12 0 0 0 158 42 Q160 46 160 52 L160 150 L156 150 Q156 172 148 172 Q140 172 140 150 L106 150 Q106 164 99 164 Q92 164 92 150 L62 150 Q62 178 53 178 Q44 178 44 150 Z"/>
+    </clipPath>
+  </defs>
+  <!-- the puddle -->
+  <ellipse cx="100" cy="186" rx="70" ry="9" fill="#ffb07a" stroke="#2b1d3a" stroke-width="3"/>
+  <ellipse cx="78" cy="184" rx="14" ry="3" fill="#ffd4b0"/>
+  <!-- sticks for legs -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#e2b071">
+    <rect x="62" y="140" width="17" height="44" rx="7"/><rect x="121" y="140" width="17" height="44" rx="7"/>
+  </g>
+  <path d="M67 160 l7 0 M126 166 l7 0" stroke="#b9854a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- the twin pop -->
+  <g clip-path="url(#popsicle-pete-body)">
+    <rect x="30" y="10" width="72" height="180" fill="#ff8a3d"/>
+    <rect x="100" y="10" width="72" height="180" fill="#ff4d6d"/>
+    <path d="M36 40 L36 150 L52 150 L52 40 Z" fill="#ffb27a" opacity="0.8"/>
+    <path d="M150 40 L150 160 L166 160 L166 40 Z" fill="#d93355" opacity="0.6"/>
+    <path d="M100 18 L100 160" stroke="#2b1d3a" stroke-width="3" opacity="0.45"/>
+  </g>
+  <path d="M40 150 L40 52 Q40 22 70 22 L118 22 A12 12 0 0 0 139 32 A12 12 0 0 0 158 42 Q160 46 160 52 L160 150 L156 150 Q156 172 148 172 Q140 172 140 150 L106 150 Q106 164 99 164 Q92 164 92 150 L62 150 Q62 178 53 178 Q44 178 44 150 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M50 34 Q56 28 66 28" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#ffffff" opacity="0.8"><circle cx="76" cy="34" r="2"/><circle cx="92" cy="30" r="1.6"/><circle cx="108" cy="34" r="1.8"/></g>
+  <!-- face: hot under the collar -->
+  <g stroke="#2b1d3a" stroke-width="4"><circle cx="78" cy="80" r="13" fill="#ffffff"/><circle cx="122" cy="80" r="13" fill="#ffffff"/></g>
+  <circle cx="80" cy="83" r="7" fill="#2b1d3a"/><circle cx="120" cy="83" r="7" fill="#2b1d3a"/>
+  <circle cx="83" cy="80" r="2.5" fill="#ffffff"/><circle cx="123" cy="80" r="2.5" fill="#ffffff"/>
+  <path d="M62 62 L90 70 M138 62 L110 70" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <rect x="80" y="104" width="40" height="16" rx="6" fill="#ffffff" stroke="#2b1d3a" stroke-width="3.5"/>
+  <path d="M90 104 L90 120 M100 104 L100 120 M110 104 L110 120" stroke="#2b1d3a" stroke-width="2.5"/>
+  <ellipse cx="62" cy="102" rx="6" ry="3.5" fill="#ffc2a1"/><ellipse cx="138" cy="102" rx="6" ry="3.5" fill="#ff9db8"/>
+  <!-- a sweat drop (it's melting) -->
+  <path d="M152 58 Q160 70 158 76 Q154 82 148 78 Q144 72 152 58 Z" fill="#9fdcff" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M30 70 Q36 80 34 86 Q30 90 26 86 Q24 80 30 70 Z" fill="#ff8a3d" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/>
+</svg>

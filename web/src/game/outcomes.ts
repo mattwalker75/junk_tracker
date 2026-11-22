@@ -16,11 +16,11 @@ export type Result =
   | { kind: "defeat"; id: string; strike: EventView; defeat: EventView };
 
 /** The kinds told as a toast (a shield going up shows on the shield itself; a potion on the HP bar). */
-const TOAST = new Set(["heart", "life", "powerup_earned", "mode_drop"]);
+const TOAST = new Set(["heart", "life", "powerup_earned", "mode_drop", "run_continues"]);
 
 /**
  * In the order they happened: a KO is a Victory (a boss's heart and Second Wind go on its screen, not
- * in toasts), and the KO of level 60 is the finish; a strike is a Strike, unless it took the last
+ * in toasts), and the KO of the last level is the finish; a strike is a Strike, unless it took the last
  * heart: then it is an Extra life (Normal, with one held), Knocked back (Normal) or Defeated
  * (Hardcore) screen instead.
  */

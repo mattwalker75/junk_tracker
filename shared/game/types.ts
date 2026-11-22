@@ -96,7 +96,7 @@ export interface FightData {
   hpMult?: number;
 }
 
-export type EventKind = "run_start" | "fight_start" | "ko" | "strike" | "knockback" | "defeat" | "finish" | "heart" | "life" | "life_used" | "powerup_earned" | "powerup_used" | "mode_drop";
+export type EventKind = "run_start" | "fight_start" | "ko" | "strike" | "knockback" | "defeat" | "finish" | "run_continues" | "heart" | "life" | "life_used" | "powerup_earned" | "powerup_used" | "mode_drop";
 export interface EventData {
   id: Id;
   fightId: Id | null;
@@ -283,7 +283,7 @@ export interface GameView {
   autoStart: boolean;
   /** the person's Monster toughness now, as an HP multiplier: what a fight started now would get */
   hpMult: number;
-  /** all 60 levels */
+  /** every level (LEVEL_COUNT of them) */
   map: MapLevel[];
   /** what happened in the run, newest first (the latest 50) */
   events: EventView[];

@@ -110,7 +110,7 @@ export function simulateFight(inp: FightInput): FightResult {
   const max = monsterHp(inp.level, inp.hpMult);
   const name = level.name;
   const bonusMax = bonusMaxOf(max);
-  let hp = max, bonus = 0, damage = 0, heals = 0, landed = 0, attacked = false, revived = false, thresholdDone = false;
+  let hp = max, bonus = 0, damage = 0, heals = 0, landed = 0, attacked = false, revives = 0, thresholdDone = false;
   let ko: FightResult["ko"] = null;
   let shield: ArmPoint | null = ab.noPowerUps ? null : inp.shieldFrom ?? null;
   let shieldBlocked: string | null = null;
@@ -140,13 +140,16 @@ export function simulateFight(inp: FightInput): FightResult {
     const usedToday: Id[] = [];
     const cx: Cx = {
       level, hp, max, day: d, deadlineOn: inp.deadlineOn, lastDay: d === inp.deadlineOn, damageToday: 0, healsToday: 0,
+      // the start day is day 1 — or day 0, a bonus, when the fight began partway through it (after a KO)
+      fightDay: daysBetween(inp.startedOn, d) + (inp.startedAfter ? 0 : 1),
       splurgesToday: spl, splurgedYesterday: !!splByDay.get(yesterday)?.length, workoutsToday: act, workedOutToday: act.length > 0,
       index: 0, restedYesterday: false, comeback: false, raw: rawDamage, base: baseOf, state,
-      later: (h, note) => {
+      later: (h, note, inDays = 1) => {
         const amount = curPlanned && !ab.plannedFull ? half(h) : h;
-        const next = addDays(d, 1);
+        const next = addDays(d, inDays);
         const l = scheduled.get(next) ?? [];
-        l.push({ amount, note, sourceId: `${curId}:later` });
+        // one id per day it lands on, so a Veggie Shield blocks just that one (tomorrow's keeps the old ":later")
+        l.push({ amount, note, sourceId: `${curId}:later${inDays === 1 ? "" : inDays}` });
         scheduled.set(next, l);
       },
     };
@@ -187,12 +190,13 @@ export function simulateFight(inp: FightInput): FightResult {
       refresh();
       if (hp <= 0) {
         cx.hp = 0;
+        const back = ab.revive ? ab.revive(cx, revives) ?? 0 : 0;
         if (ab.canFinish && !ab.canFinish(d, cx)) {
           hp = 1;
-          lines.push({ day: d, ...when, kind: "ability", amount: 0, text: `${ab.name}: ${name} hangs on at 1 HP — it can't go down on a day you splurged.` });
-        } else if (ab.revive && !revived && (ab.revive(cx) ?? 0) > 0) {
-          revived = true;
-          hp = Math.min(max, ab.revive(cx) ?? 0);
+          lines.push({ day: d, ...when, kind: "ability", amount: 0, text: `${ab.name}: ${name} hangs on at 1 HP — ${ab.holdText ?? "it can't go down yet"}.` });
+        } else if (back > 0) {
+          revives += 1;
+          hp = Math.min(max, back);
           lines.push({ day: d, ...when, kind: "revive", amount: hp, text: `${ab.name}: ${name} gets back up with ${hp} HP!` });
         } else {
           hp = 0;
@@ -311,7 +315,7 @@ function usedBeforeOf(st: RunState, f: FightData): Id[] | null {
 function shieldIn(st: RunState, f: FightData, log: GameLog, today: Day, usedBefore: Id[] | null): { blocked: string[]; shieldFrom: ArmPoint | null; voided: { block: EventData; from: ArmPoint } | null } {
   const win = { startedOn: f.startedOn, startedAfter: f.startedAfter, deadlineOn: f.deadlineOn, usedBefore };
   const stillCounts = (healId: string) => {
-    const src = healId.endsWith(":later") ? healId.slice(0, -":later".length) : healId;
+    const src = healId.replace(/:later\d*$/, "");
     if (src.includes(":")) return true; // the monster's own day-end heal
     const s = log.splurges.find((x) => x.id === src);
     return !!s && counts(s, win, today);
@@ -447,17 +451,24 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
   const st = clone(input);
   const added: EventData[] = [];
   const run = st.run;
-  if (run.endReason) return { state: st, added };
   const ev = (kind: EventKind, day: Day, fightId: Id | null, data: Record<string, unknown>, at = clock.nowIso) => {
     const e: EventData = { id: clock.newId(), fightId, day, at, kind, data };
     st.events.push(e); added.push(e);
   };
+  // the game grew since this run beat its last monster: it carries on, with its score, hearts and
+  // power-ups, and the next new monster waits to be started (Matt, Nov 21 2026)
+  if (canCarryOn(st)) {
+    const from = lastWonLevel(st) + 1;
+    run.endReason = null; run.endedOn = null;
+    ev("run_continues", clock.today, null, { level: from, name: levelInfo(from).name, world: levelInfo(from).world, worldName: levelInfo(from).worldName, levels: LEVEL_COUNT });
+  }
+  if (run.endReason) return { state: st, added };
   const hardcore = () => run.mode === "hardcore";
   const award = awarder(st, log, ev);
 
   // each pass ends a fight, moves its deadline on a day (a strike) or stops, so the days bound it
   const first = openFightOf(st);
-  const passes = first ? 61 * (Math.max(0, daysBetween(first.startedOn, clock.today)) + 2) : 0;
+  const passes = first ? (LEVEL_COUNT + 1) * (Math.max(0, daysBetween(first.startedOn, clock.today)) + 2) : 0;
   for (let guard = 0; guard < passes; guard++) {
     const f = openFightOf(st);
     if (!f) break;
@@ -512,7 +523,7 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
       }
       if (f.level === LEVEL_COUNT) {
         run.endedOn = k.day; run.endReason = "finished";
-        ev("finish", k.day, f.id, {});
+        ev("finish", k.day, f.id, { levels: LEVEL_COUNT, worlds: Math.ceil(LEVEL_COUNT / 10), name: lv.name });
         break;
       }
       // between fights: the next monster waits to be started (startNextFight), by hand or by Keep
@@ -562,6 +573,15 @@ export function settle(input: RunState, log: GameLog, clock: GameClock): { state
   return { state: st, added };
 }
 
+/** The highest level this run has beaten (0 = none yet). */
+const lastWonLevel = (st: RunState): number => st.fights.reduce((m, f) => (f.status === "won" ? Math.max(m, f.level) : m), 0);
+
+/** A run that finished (beat the last monster there was) before the game grew: it carries on at the first new level. */
+export const canCarryOn = (st: RunState): boolean => st.run.endReason === "finished" && lastWonLevel(st) < LEVEL_COUNT;
+
+/** The run is over for good: ended, and not one that carries on now the game has more levels. */
+export const runOver = (st: RunState): boolean => !!st.run.endReason && !canCarryOn(st);
+
 const scoreOf = (st: RunState) => runScore(st.fights.filter((f) => f.status !== "open").map((f) => f.points), st.run.logPoints, st.run.knockbacks);
 
 /**
@@ -577,15 +597,18 @@ function awarder(st: RunState, log: GameLog, ev: (kind: EventKind, day: Day, fig
   // so changing the week start mid-run can't pay the same days twice
   const paid = st.events.filter((e) => e.kind === "heart" && e.data.reason === "week").map((e) => String(e.data.week));
   let ws = weekStartOf(run.startedOn, log.weekStart);
+  // a run that carried on after the game grew earns nothing for the days it sat finished
+  const resumed = st.events.filter((e) => e.kind === "run_continues").map((e) => e.day).sort().pop() ?? null;
   // clean days in a row: each time they reach 3, a Veggie Shield, and the count starts again
   const lastShield = st.events.filter((e) => e.kind === "powerup_earned" && e.data.kind === "shield").map((e) => String(e.data.day)).sort().pop();
   let sd = lastShield ? addDays(lastShield, 1) : run.startedOn;
+  if (resumed && sd < resumed) sd = resumed;
   let streak = 0;
   return (upTo) => {
     if (upTo < run.startedOn) return;
     // a week (the person's own week start) with 5+ active days inside the run: +1 heart when it ends
     for (; addDays(ws, 6) <= upTo; ws = addDays(ws, 7)) {
-      if (paid.some((w) => Math.abs(daysBetween(w, ws)) < 7)) continue;
+      if (paid.some((w) => Math.abs(daysBetween(w, ws)) < 7) || (resumed && ws < resumed)) continue;
       let n = 0;
       for (let i = 0; i < 7; i++) { const d = addDays(ws, i); if (d >= run.startedOn && active.has(d)) n += 1; }
       if (n < WEEK_ACTIVE_DAYS) continue;
@@ -675,7 +698,8 @@ export function eventText(e: EventData): string {
     case "strike": return `${d.name} struck: the deadline passed with ${d.hpLeft} HP left. You lost a heart${d.extended ? ", and the fight goes on one more day" : ""}.`;
     case "knockback": return `Knocked back to level ${d.to}, the start of ${d.worldName}. −250 points, and 3 hearts again.`;
     case "defeat": return `Defeated by ${d.name}. The run is over${d.score !== undefined ? ` with ${Number(d.score).toLocaleString("en-US")} points` : ""}.`;
-    case "finish": return "All 60 monsters crushed! The run is complete.";
+    case "finish": return `All ${d.levels ?? 60} monsters crushed! The run is complete.`;
+    case "run_continues": return `More monsters! The run carries on at level ${d.level}: ${d.name}, in ${d.worldName}. Your score, hearts and power-ups come along.`;
     case "life": return `An extra life for ${d.wins} monsters beaten.${d.gained === false ? " You already hold 2." : ""}`;
     case "life_used": return `An extra life spent: 3 hearts again, and ${d.name} is up for a rematch at full HP.`;
     case "heart": return (d.reason === "boss" ? `A heart for beating ${d.name}.` : `A heart for ${d.activeDays} active days in a week.`) + keep;
@@ -720,7 +744,7 @@ export function buildView(st: RunState | null, log: GameLog | null, today: Day, 
     };
   }
   const next = active && !open ? nextView(st, today, hpMult) : null;
-  const at = run.endReason === "finished" ? LEVEL_COUNT + 1 : next?.level ?? (open ?? st.fights[st.fights.length - 1])?.level ?? 1;
+  const at = run.endReason === "finished" ? lastWonLevel(st) + 1 : next?.level ?? (open ?? st.fights[st.fights.length - 1])?.level ?? 1;
   const strikes = st.events.filter((e) => e.kind === "strike");
   const map: MapLevel[] = LEVELS.map((l) => {
     const fs = st.fights.filter((f) => f.level === l.level);

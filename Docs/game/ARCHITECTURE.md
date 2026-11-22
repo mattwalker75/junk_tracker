@@ -79,13 +79,14 @@ interface Ability {
   damage?(base: number, a: ActivityEv, cx: Cx): number; // each workout (after the comeback ×2)
   crit?(base: number, day: Day, cx: Cx): number;      // each clean day
   dayEnd?(day: Day, cx: Cx): { heal?: number; damage?: number; note: string }[]; // Slurp, Sundown Howl, delayed heals
-  revive?(cx: Cx): number | null;                     // HP to come back with when it would hit 0 (Slider Trio, Wingfire), once
+  revive?(cx: Cx, times: number): number | null;      // HP to come back with when it would hit 0, or null; asked each time (Three Crowns comes back twice)
   threshold?(cx: Cx): { heal: number; note: string } | null; // Wobble Back, Reboot, Puff Up and similar, once
-  canFinish?(day: Day, cx: Cx): boolean;              // Float Bear
+  canFinish?(day: Day, cx: Cx): boolean;              // Float Bear, Cake Igloo
+  holdText?: string;                                  // what the battle log says when canFinish holds it at 1 HP
   noPowerUps?: boolean; noComeback?: boolean;
 }
 ```
-- `Cx` gives an ability what it needs: the fight so far (hp, max, heals and damage today, splurges today and yesterday, whether there was a workout today, the deadline's last day), plus the levels table.
+- `Cx` gives an ability what it needs: the fight so far (hp, max, heals and damage today, splurges today and yesterday, whether there was a workout today, the deadline's last day, `fightDay` — day 1 is the start day, 0 the bonus part-day after a KO), plus the levels table. `later(heal, note, inDays = 1)` lands a heal at the start of a later day.
 - Each ability has at least one unit test.
 - Where an ability's wording is unclear, choose the simplest reading and record it in `MONSTERS.md`.
 

@@ -1,13 +1,14 @@
 /**
- * Calorie Crusher's 60 levels: 6 worlds of 10, each level its own monster, the boss at level 10 of
- * each world. The numbers are `Docs/game/levels60.json` (test/game.test.ts checks they match):
- * HP = 100 + 15 x (level - 1) rounded to 10, a boss x 1.3; deadline days 3, 4, 5, 5, 6, 7 by world,
- * a boss +1. Pure data, no I/O.
+ * Calorie Crusher's levels: worlds of 10, each level its own monster, the boss at level 10 of each
+ * world. Levels 1-60 are `Docs/game/levels60.json` (test/game.test.ts checks they match); worlds 7 and
+ * up came with the growth to 120 (Matt, Nov 21 2026; drafts in Docs/game/drafts/world<N>/), added a
+ * world at a time — `LEVEL_COUNT` is however many are built. HP = 100 + 15 x (level - 1) rounded to 10,
+ * a boss x 1.3; deadline days by world 3, 4, 5, 5, 6, 7, then 8, 8, 9, 9, 10, 10; a boss +1. Pure data.
  */
 
 export interface Level {
   level: number;
-  /** 1 to 6 */
+  /** 1 to WORLDS.length */
   world: number;
   worldName: string;
   name: string;
@@ -21,9 +22,10 @@ export interface Level {
   ability: string;
 }
 
-export const WORLDS: readonly string[] = ["Snack Swamp", "Burger Badlands", "Sugar Peaks", "Fizzy Falls", "Midnight Drive-Thru", "Feast Fortress"];
-export const LEVEL_COUNT = 60;
+export const WORLDS: readonly string[] = ["Snack Swamp", "Burger Badlands", "Sugar Peaks", "Fizzy Falls", "Midnight Drive-Thru", "Feast Fortress", "Freezer Tundra", "Concession Canyon"];
 export const LEVELS_PER_WORLD = 10;
+/** the game's planned size (Matt, Nov 21 2026): the database already allows this many */
+export const PLANNED_LEVELS = 120;
 
 // level, name, hp, days, boss, slug, ability
 const TABLE: [number, string, number, number, boolean, string, string][] = [
@@ -87,14 +89,39 @@ const TABLE: [number, string, number, number, boolean, string, string][] = [
   [58, "Turkey Leg Troll", 960, 7, false, "60-turkey-leg-troll", "bridge-toll"],
   [59, "Cheesecake Knight", 970, 7, false, "36-cheesecake-knight", "shield-up"],
   [60, "The Midnight Snacker", 1280, 8, true, "16-midnight-snacker", "late-night"],
+  // World 7 · Freezer Tundra (Matt approved Nov 22 2026)
+  [61, "Pint Yeti", 1000, 8, false, "61-pint-yeti", "cold-snap"],
+  [62, "Pizza Roll Pack", 1020, 8, false, "62-pizza-roll-pack", "twelve-pack"],
+  [63, "Popsicle Pete", 1030, 8, false, "63-popsicle-pete", "meltdown"],
+  [64, "Freezer Burn", 1050, 8, false, "64-freezer-burn", "holds-a-grudge"],
+  [65, "Waffle Cone Walrus", 1060, 8, false, "65-waffle-cone-walrus", "thick-blubber"],
+  [66, "Snow Cone Owl", 1080, 8, false, "66-snow-cone-owl", "sharp-eyes"],
+  [67, "Sandwich Seal", 1090, 8, false, "67-sandwich-seal", "slow-thaw"],
+  [68, "Polar Pizza Bear", 1110, 8, false, "68-polar-pizza-bear", "hibernate"],
+  [69, "Cake Igloo", 1120, 8, false, "69-cake-igloo", "frozen-solid"],
+  [70, "Emperor Neapolitan", 1480, 9, true, "70-emperor-neapolitan", "three-crowns"],
+  // World 8 · Concession Canyon (Matt, Nov 22 2026: "go ahead and build them")
+  [71, "Nacho Gremlin", 1150, 8, false, "71-nacho-gremlin", "dont-feed-it"],
+  [72, "Pretzel Python", 1170, 8, false, "72-pretzel-python", "constrictor"],
+  [73, "Candy Box Goblin", 1180, 8, false, "73-candy-box-goblin", "rattle-the-box"],
+  [74, "Jumbo Cup Jellyfish", 1200, 8, false, "74-jumbo-cup-jellyfish", "sting"],
+  [75, "Licorice Wrangler", 1210, 8, false, "75-licorice-wrangler", "lasso"],
+  [76, "Butter Banshee", 1230, 8, false, "76-butter-banshee", "extra-butter"],
+  [77, "Hot Dog Usher", 1240, 8, false, "77-hot-dog-usher", "seat-check"],
+  [78, "Sour Straw Scorpion", 1260, 8, false, "78-sour-straw-scorpion", "lingering-sour"],
+  [79, "Bucket Bison", 1270, 8, false, "79-bucket-bison", "last-kernels"],
+  [80, "Count Concession", 1670, 9, true, "80-count-concession", "intermission"],
 ];
+
+/** How many levels the game has now (a world of 10 at a time, up to PLANNED_LEVELS). */
+export const LEVEL_COUNT = TABLE.length;
 
 export const LEVELS: readonly Level[] = TABLE.map(([level, name, hp, days, boss, slug, ability]) => {
   const world = Math.ceil(level / LEVELS_PER_WORLD);
   return { level, world, worldName: WORLDS[world - 1], name, slug, hp, days, boss, ability };
 });
 
-/** One level (1 to 60). */
+/** One level (1 to LEVEL_COUNT). */
 export function levelInfo(level: number): Level {
   const l = LEVELS[level - 1];
   if (!l) throw new Error(`There is no level ${level}.`);

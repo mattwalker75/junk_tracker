@@ -13,7 +13,7 @@ import type Database from "better-sqlite3";
 import { z } from "zod";
 import { toughnessMult, type Day, type Id } from "../../shared/types.js";
 import {
-  abandonRun, addDays, badgesFor, daysBetween, BETS, buildView, dropToNormal, GameRuleError, lastEndedBefore, newRun, pendingLevel, setBet, settle, startNextFight, toEventView, usePowerUp,
+  abandonRun, addDays, badgesFor, daysBetween, BETS, buildView, runOver, dropToNormal, GameRuleError, lastEndedBefore, newRun, pendingLevel, setBet, settle, startNextFight, toEventView, usePowerUp,
   type ActivityEv, type Bet, type EventData, type FightData, type GameClock, type GameLog, type GameView, type HallRun, type HallView,
   type AutoResult, type Mode, type RunData, type RunState, type SplurgeEv, type SyncResult,
 } from "../../shared/game/index.js";
@@ -141,10 +141,10 @@ export class Game {
     try { return fn(); } catch (e) { if (e instanceof GameRuleError) throw new UserError(e.message, 409); throw e; }
   }
 
-  /** Settle the latest run (when one is going) and store it; returns it with what happened. */
+  /** Settle the latest run (when one is going, or a finished one carries on now the game is bigger) and store it; returns it with what happened. */
   private settleAndStore(owner: Id, c: GameClock): { st: RunState | null; happened: EventData[] } {
     const st = this.load(owner);
-    if (!st || st.run.endReason) return { st, happened: [] };
+    if (!st || runOver(st)) return { st, happened: [] };
     const out = settle(st, this.gameLog(owner, st.run, c.today), c);
     this.store(owner, out.state, out.added);
     return { st: out.state, happened: out.added };
@@ -164,7 +164,7 @@ export class Game {
     if (!st) return buildView(null, null, t, false, autoStart, this.hpMult(owner));
     const log = this.gameLog(owner, st.run, t);
     let n = 0;
-    const needsSync = !st.run.endReason && settle(st, log, { today: t, nowTime: "", nowIso: now(), newId: () => `dry${n++}` }).added.length > 0;
+    const needsSync = !runOver(st) && settle(st, log, { today: t, nowTime: "", nowIso: now(), newId: () => `dry${n++}` }).added.length > 0;
     return buildView(st, log, t, needsSync, autoStart);
   }
 
@@ -214,7 +214,7 @@ export class Game {
       if (!this.users.settings(owner).autoStart) return { started: false, checked: false };
       const u = this.db.prepare("UPDATE users SET game_checked_on = ? WHERE id = ? AND (game_checked_on IS NULL OR game_checked_on <> ?)").run(v.today, owner, v.today);
       const stored = this.load(owner);
-      const endedBefore = !stored || !!stored.run.endReason;
+      const endedBefore = !stored || runOver(stored);
       const { st, happened } = this.settleAndStore(owner, c);
       if (!u.changes) return { started: false, checked: true, ...this.result(owner, st, happened, v.today) };
       if (endedBefore) {

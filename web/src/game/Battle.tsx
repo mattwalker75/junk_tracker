@@ -14,7 +14,7 @@ import { nowTime } from "../lib/dates";
 import { Arena, Clock, worldLook } from "./art";
 import { Ability, HeartBroken, HeartFull, HeartPlus, IconBlock, IconCrit, IconHeal, IconHit, Potion, Shield, Skull, Star, Sword, Target, Wind } from "./icons";
 import { battleLog, countdown, hpLeft, lineRow, soClose, type LineIcon } from "./logic";
-import { levelInfo } from "../../../shared/game";
+import { LEVEL_COUNT, levelInfo } from "../../../shared/game";
 import { Burst, Confetti } from "./art";
 import { MapIcon } from "./icons";
 import { GameBg, GameHeader, GameNote, Hearts, HpBar, HpNumbers, Monster } from "./parts";
@@ -138,7 +138,7 @@ function Between({ run, next, autoStart, head }: { run: RunView; next: NextFight
   return (
     <main className="relative min-h-dvh pb-2">
       <GameBg background={worldLook(next.world).page} />
-      <GameHeader kicker={`WORLD ${next.world} · LEVEL ${next.level} OF 60`} title={next.worldName}><MapLink /></GameHeader>
+      <GameHeader kicker={`WORLD ${next.world} · LEVEL ${next.level} OF ${LEVEL_COUNT}`} title={next.worldName}><MapLink /></GameHeader>
       <RunRow run={run} crack={!!scene?.crack} />
 
       <section aria-label="Between fights" className={cx("relative mx-3 mt-2.5 h-[230px] overflow-hidden rounded-[22px] border-[3px] border-g-line shadow-[0_4px_0_var(--g-line)]", scene && "g-anim-shake")}>
@@ -245,7 +245,7 @@ function BattleBody({ run, fight, today, head }: { run: RunView; fight: FightVie
   return (
     <main className="relative min-h-dvh pb-2">
       <GameBg background={look.page} />
-      <GameHeader kicker={`WORLD ${fight.world} · LEVEL ${fight.level} OF 60`} title={fight.worldName}><MapLink /></GameHeader>
+      <GameHeader kicker={`WORLD ${fight.world} · LEVEL ${fight.level} OF ${LEVEL_COUNT}`} title={fight.worldName}><MapLink /></GameHeader>
 
       {/* hearts · run · score */}
       <RunRow run={run} crack={!!scene?.crack} />

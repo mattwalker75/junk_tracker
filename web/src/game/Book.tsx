@@ -1,12 +1,12 @@
 /**
- * The Monster Book (mockups MonBestiary1-2, MonNewA-E): all 60 monsters by world, from levels.ts
+ * The Monster Book (mockups MonBestiary1-2, MonNewA-E, World7-8): every monster by world, from levels.ts
  * and abilities.ts, each with its one-line bio (bios.ts). Beaten ones carry a "Beaten" stamp, the
  * one you are fighting shows its fight, and the ones up ahead show their art with "Up ahead ·
  * Level N" (Matt wants to see the art). Tapping a card opens its page: big art, the bio, HP, days
  * and the ability.
  */
 import { useState } from "react";
-import { abilityFor, bioFor, LEVELS, LEVELS_PER_WORLD, WORLDS, type FightView, type GameView, type Level, type MapStatus } from "../../../shared/game";
+import { abilityFor, bioFor, LEVEL_COUNT, LEVELS, LEVELS_PER_WORLD, WORLDS, type FightView, type GameView, type Level, type MapStatus } from "../../../shared/game";
 import { Sheet } from "../components/ui";
 import { worldMap } from "./art";
 import { Crown } from "./icons";
@@ -27,7 +27,7 @@ export function Book() {
       <GameHeader kicker="CALORIE CRUSHER" title="Monster Book" back={{ href: "#/game", label: "Back to the title screen" }} />
       {error ? <GameNote title="Hmm, that didn't load">{error.message}</GameNote> : null}
       <div className="g-panel mx-4 mt-2.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 rounded-2xl px-3.5 py-2 text-[14px] font-extrabold">
-        <span><b className="font-black">{beaten} of 60</b> beaten{view?.run ? <> · <b className="font-black">Run #{view.run.number}</b></> : null}</span>
+        <span><b className="font-black">{beaten} of {LEVEL_COUNT}</b> beaten{view?.run ? <> · <b className="font-black">Run #{view.run.number}</b></> : null}</span>
         <span className="text-g-mute">Tap a monster</span>
       </div>
       {WORLDS.map((name, i) => <WorldSection key={name} w={i + 1} view={view} onOpen={setOpen} />)}
@@ -90,7 +90,7 @@ function Card({ lv, status, fight, onOpen }: { lv: Level; status: MapStatus; fig
           <span className="flex flex-wrap items-center gap-x-1.5">
             <span className="text-[13px] font-black text-g-mute">Lv {lv.level}</span>
             <span className="font-game text-[21px] leading-tight">{lv.name}</span>
-            {boss ? <span className="rounded-md border-2 border-[#2b1d3a] bg-g-yellow px-1.5 font-game text-[12px] leading-[18px] text-[#2b1d3a]">{lv.level === 60 ? "FINAL BOSS" : "BOSS"}</span> : null}
+            {boss ? <span className="rounded-md border-2 border-[#2b1d3a] bg-g-yellow px-1.5 font-game text-[12px] leading-[18px] text-[#2b1d3a]">{lv.level === LEVEL_COUNT ? "FINAL BOSS" : "BOSS"}</span> : null}
             <span className="ml-auto rounded-full border-2 border-[#2b1d3a] px-2 text-[12px] leading-[20px] font-black" style={{ background: tag.bg, color: tag.fg }}>{status === "locked" ? `Up ahead · Level ${lv.level}` : tag.t}</span>
           </span>
           <span className="text-[13px] font-extrabold text-g-mute">HP <b className="text-g-text">{lv.hp}</b> · Deadline <b className="text-g-text">{lv.days} days</b></span>

@@ -4,7 +4,7 @@
  */
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { levelInfo, monsterHp, type FightView, type Mode } from "../../../shared/game";
+import { LEVEL_COUNT, levelInfo, monsterHp, type FightView, type Mode } from "../../../shared/game";
 import { toughnessOf } from "../../../shared/types";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
@@ -149,7 +149,7 @@ function Begins({ begun }: { begun: { number: number; mode: Mode; fight: FightVi
   return (
     <div role="dialog" aria-modal="true" aria-label={`Run #${begun.number} begins`} className="fixed inset-0 z-50 text-[#2b1d3a]" style={{ background: "radial-gradient(80% 50% at 50% 45%, #9be37f 0%, #4fae4a 55%, #2d6e3a 100%)" }}>
       <button ref={ref} onClick={() => go("/game/battle")} className="flex size-full cursor-pointer flex-col items-center justify-center gap-3.5 outline-none">
-        <span className="font-game text-[15px] tracking-[0.14em] text-[#1a3d1f]">WORLD {lv.world} · {lv.worldName.toUpperCase()} · LEVEL {lv.level} / 60</span>
+        <span className="font-game text-[15px] tracking-[0.14em] text-[#1a3d1f]">WORLD {lv.world} · {lv.worldName.toUpperCase()} · LEVEL {lv.level} / {LEVEL_COUNT}</span>
         <span className="g-anim-pop font-game text-[46px] leading-none text-g-yellow" style={{ WebkitTextStroke: "3px #1a1024", paintOrder: "stroke fill", textShadow: "0 5px 0 #1a1024" }}>Run #{begun.number} begins!</span>
         <span className={cx("inline-flex items-center gap-1.5 rounded-full border-[3px] border-[#1a1024] py-1 pr-3 pl-2 font-game text-base tracking-[0.04em] shadow-[0_3px_0_#1a1024]", begun.mode === "hardcore" ? "bg-[#2b1d3a] text-white" : "bg-g-blue text-[#1a1024]")}>
           {begun.mode === "hardcore" ? <Skull className="size-5" /> : <ShieldBlue className="size-5" />}{begun.mode === "hardcore" ? "HARDCORE RUN" : "NORMAL RUN"}

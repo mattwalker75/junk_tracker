@@ -22,9 +22,9 @@ type Tab = "allTime" | "thisMonth" | "mine" | "hardcore";
 const ALL_TABS: { id: Tab; label: string }[] = [{ id: "allTime", label: "All time" }, { id: "thisMonth", label: "This month" }, { id: "mine", label: "My runs" }, { id: "hardcore", label: "Hardcore" }];
 const TABS = PHONE_APP ? ALL_TABS.filter((t) => t.id !== "mine") : ALL_TABS;
 
-/** "Reached Baron Fryer", or "Crushed all 60" for a finished run. */
+/** "Reached Baron Fryer", or "Crushed all 60" for a finished run (all the levels there were when it finished). */
 export const reachedText = (h: Pick<HallRun, "level" | "endReason">): string =>
-  h.endReason === "finished" ? `Crushed all ${LEVEL_COUNT}` : `Reached ${levelInfo(Math.max(1, Math.min(LEVEL_COUNT, h.level))).name}`;
+  h.endReason === "finished" ? `Crushed all ${Math.max(1, Math.min(LEVEL_COUNT, h.level))}` : `Reached ${levelInfo(Math.max(1, Math.min(LEVEL_COUNT, h.level))).name}`;
 
 export function Hall() {
   const { today } = useGame();

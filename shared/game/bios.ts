@@ -1,5 +1,5 @@
 /**
- * One funny line for each of the 60 monsters, shown in the Monster Book. The lines are the ones in
+ * One funny line for each monster, shown in the Monster Book. The lines are the ones in
  * the approved mockups (MonBestiary1-2, MonNewA-E). Pure data; test/game3.test.ts checks every
  * level has one and the names match levels.ts.
  */
@@ -67,9 +67,31 @@ export const BIOS: readonly (readonly [number, string, string])[] = [
   [58, "Turkey Leg Troll", "Lives under the drawbridge. Charges one drumstick per crossing, no exceptions."],
   [59, "Cheesecake Knight", "Sworn guardian of the dessert cart. Its fork has never lost a duel."],
   [60, "The Midnight Snacker", "Shuffles out in slippers when the house goes dark. Just checking the fridge. Again."],
+  // World 7 · Freezer Tundra
+  [61, "Pint Yeti", "Eats ice cream straight from the tub. Brings a bigger spoon."],
+  [62, "Pizza Roll Pack", "Twelve tiny penguins, every one of them still frozen in the middle."],
+  [63, "Popsicle Pete", "Melts down at the first sign of a workout. Drips back at the first sign of dessert."],
+  [64, "Freezer Burn", "Forgotten at the back of the freezer for a year. Holds grudges."],
+  [65, "Waffle Cone Walrus", "Two waffle-cone tusks, three scoops of blubber, no interest in the treadmill."],
+  [66, "Snow Cone Owl", "Sees every snack you forget to write down. Who? You."],
+  [67, "Sandwich Seal", "Takes ages to thaw out. Claps for every cookie."],
+  [68, "Polar Pizza Bear", "Sleeps all weekend on a frozen pizza the size of a mattress."],
+  [69, "Cake Igloo", "A whole house made of ice cream cake. Someone lives inside. It's the cake."],
+  [70, "Emperor Neapolitan", "Three flavours, three crowns, no sharing."],
+  // World 8 · Concession Canyon
+  [71, "Nacho Gremlin", "Never met a cheese pump it didn't love. Whatever you do, don't feed it after a workout."],
+  [72, "Pretzel Python", "Ties itself in salty knots during the trailers."],
+  [73, "Candy Box Goblin", "Rattles every box in the theater to find the last piece."],
+  [74, "Jumbo Cup Jellyfish", "Forty-four ounces of fizz, drifting through the dark."],
+  [75, "Licorice Wrangler", "Ropes in anyone heading for the exit."],
+  [76, "Butter Banshee", "Wails until every bucket in the place is soaked through."],
+  [77, "Hot Dog Usher", "Checks your ticket, your seat and your snacks. Mostly the snacks."],
+  [78, "Sour Straw Scorpion", "Sour going in, sourer coming out."],
+  [79, "Bucket Bison", "A whole herd's worth of popcorn in one bucket that never seems to empty."],
+  [80, "Count Concession", "Sold out every showing. Shushes you while chewing."],
 ];
 
-/** The Monster Book line for a level (1 to 60). */
+/** The Monster Book line for a level (1 to LEVEL_COUNT). */
 export function bioFor(level: number): string {
   const b = BIOS[level - 1];
   if (!b || b[0] !== level || b[1] !== levelInfo(level).name) throw new Error(`There is no bio for level ${level}.`);

@@ -1,19 +1,20 @@
 /** Calorie Crusher stage 3's pure parts: bios, badges, the map's layout, the result queue and the Victory breakdown, the routes. */
 import { describe, expect, it } from "vitest";
-import { badgesFor, BIOS, bioFor, LEVELS, wonPoints, type BadgeFight, type EventView, type MapLevel } from "../shared/game/index.js";
-import { bandTop, cardBox, mapNode, MAP_START, pathThrough, paths, trailEnd, worldLevels, worldNode, ALL_LEVELS } from "../web/src/game/layout";
+import { badgesFor, BIOS, bioFor, LEVEL_COUNT, LEVELS, WORLDS, wonPoints, type BadgeFight, type EventView, type MapLevel } from "../shared/game/index.js";
+import { bandTop, cardBox, MAP_H, mapNode, MAP_START, pathThrough, paths, trailEnd, worldLevels, worldNode, ALL_LEVELS } from "../web/src/game/layout";
 import { countUp, heldHearts, planResults, victoryBreakdown, waitsForBattle } from "../web/src/game/outcomes";
 import { parse } from "../web/src/lib/route";
 
 describe("the Monster Book bios", () => {
   it("has one line for every level, named as in levels.ts", () => {
-    expect(BIOS).toHaveLength(60);
+    expect(BIOS).toHaveLength(LEVEL_COUNT);
     for (const l of LEVELS) {
       expect(BIOS[l.level - 1][1]).toBe(l.name);
       expect(bioFor(l.level).length).toBeGreaterThan(10);
     }
     expect(bioFor(11)).toBe("Three heads, one carton, and zero agreement on what to order.");
-    expect(() => bioFor(61)).toThrow();
+    expect(bioFor(70)).toBe("Three flavours, three crowns, no sharing.");
+    expect(() => bioFor(LEVEL_COUNT + 1)).toThrow();
   });
 });
 
@@ -54,25 +55,35 @@ describe("the Hall of Heroes badges", () => {
 });
 
 describe("the map's layout", () => {
-  it("puts every node where the approved mockup MonMap60 has it", () => {
+  // the mockup drew 6 worlds on a 2,660-tall map; each world added on top moves them all down by a band (426)
+  const down = MAP_H - 2660;
+  it("puts every node where the approved mockup MonMap60 has it, the new worlds stacked on top", () => {
+    expect(WORLDS).toHaveLength(LEVEL_COUNT / 10);
+    expect(MAP_H).toBe(WORLDS.length * 426 + 104);
     // from the mockup: level 1 at (58, 2562), 3 at (332, 2562), 4 at (332, 2468), Sir Soda (10) at (314, 2286),
-    // Fry Hydra (11) at (332, 2136), Baron Fryer (20) at (76, 1860), the final boss (60) at (76, 156)
-    expect(mapNode(1)).toEqual({ x: 58, y: 2562 });
-    expect(mapNode(3)).toEqual({ x: 332, y: 2562 });
-    expect(mapNode(4)).toEqual({ x: 332, y: 2468 });
-    expect(mapNode(7)).toEqual({ x: 58, y: 2374 });
-    expect(mapNode(10)).toEqual({ x: 314, y: 2286 });
-    expect(mapNode(11)).toEqual({ x: 332, y: 2136 });
-    expect(mapNode(13)).toEqual({ x: 58, y: 2136 });
-    expect(mapNode(20)).toEqual({ x: 76, y: 1860 });
-    expect(mapNode(51)).toEqual({ x: 332, y: 432 });
-    expect(mapNode(60)).toEqual({ x: 76, y: 156 });
-    expect(bandTop(1)).toBe(2234);
-    expect(bandTop(6)).toBe(104);
+    // Fry Hydra (11) at (332, 2136), Baron Fryer (20) at (76, 1860), The Midnight Snacker (60) at (76, 156)
+    expect(mapNode(1)).toEqual({ x: 58, y: 2562 + down });
+    expect(mapNode(3)).toEqual({ x: 332, y: 2562 + down });
+    expect(mapNode(4)).toEqual({ x: 332, y: 2468 + down });
+    expect(mapNode(7)).toEqual({ x: 58, y: 2374 + down });
+    expect(mapNode(10)).toEqual({ x: 314, y: 2286 + down });
+    expect(mapNode(11)).toEqual({ x: 332, y: 2136 + down });
+    expect(mapNode(13)).toEqual({ x: 58, y: 2136 + down });
+    expect(mapNode(20)).toEqual({ x: 76, y: 1860 + down });
+    expect(mapNode(51)).toEqual({ x: 332, y: 432 + down });
+    expect(mapNode(60)).toEqual({ x: 76, y: 156 + down });
+    expect(bandTop(1)).toBe(2234 + down);
+    expect(bandTop(6)).toBe(104 + down);
+    // world 7 (odd) runs like world 1, world 8 (even) like world 2; the top world's boss sits where world 6's did
+    expect(mapNode(61)).toEqual({ x: 58, y: bandTop(7) + 328 });
+    expect(mapNode(70)).toEqual({ x: 314, y: bandTop(7) + 52 });
+    expect(mapNode(LEVEL_COUNT)).toEqual({ x: 76, y: 156 });
+    expect(bandTop(WORLDS.length)).toBe(104);
   });
   it("draws the path the way the mockup does (Catmull-Rom, 1/6 tangents)", () => {
     const d = pathThrough([MAP_START, mapNode(1), mapNode(2), mapNode(3)]);
-    expect(d.startsWith("M34 2654 C38 2638.7 31.2 2577.3 58 2562 C84.8 2546.7 149.3 2562 195 2562")).toBe(true);
+    const y = (n: number) => Math.round((n + down) * 10) / 10;
+    expect(d.startsWith(`M34 ${y(2654)} C38 ${y(2638.7)} 31.2 ${y(2577.3)} 58 ${y(2562)} C84.8 ${y(2546.7)} 149.3 ${y(2562)} 195 ${y(2562)}`)).toBe(true);
     expect(pathThrough([])).toBe("");
     expect(pathThrough([{ x: 1, y: 2 }])).toBe("M1 2");
   });
@@ -83,8 +94,8 @@ describe("the map's layout", () => {
     expect(trailEnd(map(null, 0))).toBe(0);
     expect(paths(ALL_LEVELS, mapNode, MAP_START, 0).walked).toBe("");
     const p = paths(ALL_LEVELS, mapNode, MAP_START, 11);
-    expect(p.walked.endsWith("332 2136")).toBe(true);
-    expect(p.full.endsWith("76 156")).toBe(true);
+    expect(p.walked.endsWith(`332 ${2136 + down}`)).toBe(true);
+    expect(p.full.endsWith("76 156")).toBe(true); // the top world's boss
   });
   it("uses the same ten spots on every world page", () => {
     expect(worldLevels(2)).toEqual([11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);

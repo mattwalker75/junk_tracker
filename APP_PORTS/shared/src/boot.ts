@@ -13,7 +13,11 @@ declare const __CC_VERSION__: string;
 const store = phoneStore();
 const ready = (async () => {
   const SQL = await initSqlJs({ locateFile: () => wasmUrl });
-  return new Backend(SQL, await store.load(), __CC_VERSION__);
+  const backend = new Backend(SQL, await store.load(), __CC_VERSION__);
+  // a log the app just upgraded is saved at once (the phone keeps the one before as junk.db.prev), so the
+  // upgrade happens once and an older copy is kept, as the web app keeps junk.db.before-v<N>
+  if (backend.upgradedFrom) await store.save(backend.db.file());
+  return backend;
 })();
 // a failed start shows its reason on the page's own error lines, not a blank screen
 ready.catch((e) => console.error("[craving-crusher] could not open the log", e));

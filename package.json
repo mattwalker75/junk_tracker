@@ -1,6 +1,6 @@
 {
   "name": "junk-tracker",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "private": true,
   "type": "module",
   "description": "Calorie Crusher — track only your junk food (splurges) and your weight.",

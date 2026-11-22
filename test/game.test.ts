@@ -3,8 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 import {
-  ABILITIES, abandonRun, addDays, buildView, deadlineFor, dropToNormal, eventText, fightInputFor, firstLevelOfWorld, GameRuleError, LEVELS, levelInfo, newRun, preview,
-  lastEndedBefore, pendingLevel, runScore, setBet, settle, simulateFight, startNextFight, struckPoints, usePowerUp, wonPoints,
+  ABILITIES, abandonRun, addDays, buildView, canCarryOn, deadlineFor, dropToNormal, eventText, fightInputFor, firstLevelOfWorld, GameRuleError, LEVEL_COUNT, LEVELS, levelInfo, newRun, preview,
+  lastEndedBefore, pendingLevel, PLANNED_LEVELS, runOver, WORLDS, runScore, setBet, settle, simulateFight, startNextFight, struckPoints, usePowerUp, wonPoints,
   type ActivityEv, type FightInput, type GameClock, type GameLog, type RunState, type SplurgeEv,
 } from "../shared/game/index.js";
 
@@ -57,17 +57,27 @@ const tested = new Set<string>();
 const covers = (level: number) => tested.add(levelInfo(level).ability);
 
 describe("levels", () => {
-  it("are the 60 of levels60.json, 6 worlds of 10 with the boss last, each with its own ability", () => {
+  it("are the 60 of levels60.json, then the new worlds (Nov 2026): worlds of 10 with the boss last, each with its own ability", () => {
     const json = JSON.parse(fs.readFileSync(path.join(import.meta.dirname, "../Docs/game/levels60.json"), "utf8")) as { level: number; world: string; name: string; boss: boolean; hp: number; days: number; svg: string }[];
-    expect(LEVELS).toHaveLength(60);
+    expect(json).toHaveLength(60);
+    expect(LEVELS).toHaveLength(LEVEL_COUNT);
+    expect([LEVEL_COUNT % 10, WORLDS.length, LEVEL_COUNT <= PLANNED_LEVELS]).toEqual([0, LEVEL_COUNT / 10, true]);
+    expect(WORLDS.slice(6)).toEqual(["Freezer Tundra", "Concession Canyon"]);
     json.forEach((j, i) => {
       const l = LEVELS[i];
       expect([l.level, `${l.world} · ${l.worldName}`, l.name, l.boss, l.hp, l.days, `${l.slug}.svg`]).toEqual([j.level, j.world, j.name, j.boss, j.hp, j.days, j.svg]);
       expect(ABILITIES[l.ability], l.name).toBeDefined();
     });
-    expect(new Set(LEVELS.map((l) => l.ability)).size).toBe(60);
-    expect(Object.keys(ABILITIES)).toHaveLength(60);
-    expect(LEVELS.filter((l) => l.boss).map((l) => l.level)).toEqual([10, 20, 30, 40, 50, 60]);
+    // levels 61 on: the same rules (HP 100 + 15 × (level − 1) rounded to 10, a boss × 1.3; days 8, 8, 9, 9, 10, 10 by world, a boss +1)
+    const days = [3, 4, 5, 5, 6, 7, 8, 8, 9, 9, 10, 10];
+    for (const l of LEVELS.slice(60)) {
+      const raw = 100 + 15 * (l.level - 1);
+      expect([l.hp, l.days, l.boss, l.worldName], l.name).toEqual([Math.round((l.boss ? raw * 1.3 : raw) / 10) * 10, days[l.world - 1] + (l.boss ? 1 : 0), l.level % 10 === 0, WORLDS[l.world - 1]]);
+      expect(ABILITIES[l.ability], l.name).toBeDefined();
+    }
+    expect(new Set(LEVELS.map((l) => l.ability)).size).toBe(LEVEL_COUNT);
+    expect(Object.keys(ABILITIES)).toHaveLength(LEVEL_COUNT);
+    expect(LEVELS.filter((l) => l.boss).map((l) => l.level)).toEqual(Array.from({ length: LEVEL_COUNT / 10 }, (_, i) => (i + 1) * 10));
     expect([firstLevelOfWorld(1), firstLevelOfWorld(10), firstLevelOfWorld(13), firstLevelOfWorld(60)]).toEqual([1, 1, 11, 51]);
     for (const l of LEVELS) expect(fs.existsSync(path.join(import.meta.dirname, "../Docs/game/monsters", `${l.slug}.svg`)), l.slug).toBe(true);
   });
@@ -78,6 +88,8 @@ describe("levels", () => {
     expect(deadlineFor(1, D, false, 1.5)).toBe(day(1));
     expect(deadlineFor(1, D, false, 2)).toBe(D);
     expect(deadlineFor(60, D, false)).toBe(day(7)); // The Midnight Snacker: 8 days
+    expect(deadlineFor(61, D, false)).toBe(day(7)); // Pint Yeti: 8 days
+    expect(deadlineFor(70, D, false)).toBe(day(8)); // Emperor Neapolitan: 9
   });
 });
 
@@ -461,6 +473,186 @@ describe("abilities: one test each (at least)", () => {
     expect([heal(60, [S("snack", { time: "22:00" })]), heal(60, [S("snack", { time: "20:00" })]), heal(60, [S("snack")])]).toEqual([20, 10, 20]);
     covers(60);
   });
+
+  // ---------------------------------------------------------------- World 7 · Freezer Tundra
+  it("Pint Yeti: the day after a Feast, workouts do half damage", () => {
+    const next = (size: SplurgeEv["size"]) => fight(61, { today: day(1), splurges: [S(size, { time: "12:00" })], activities: [A(null), A(40, { day: day(1) })] }).damage;
+    expect([next("feast"), next("snack")]).toEqual([20, 40]);
+    expect(fight(61, { splurges: [S("feast", { time: "12:00" })], activities: [A(40, { time: "13:00" })] }).damage).toBe(40); // the same day: in full
+    covers(61);
+  });
+
+  it("Pizza Roll Pack: only 150 workout damage a day gets through; crits still land", () => {
+    expect(dmg(62, [A(100), A(100, { time: "09:00" })])).toBe(150);
+    expect(fight(62, { today: day(1), activities: [A(200), A(100, { day: day(1) })] }).damage).toBe(150 + 25 + 100);
+    covers(62);
+  });
+
+  it("Popsicle Pete: 45+ minutes do 20 extra, and every splurge heals 10 extra", () => {
+    expect([dmg(63, [A(45)]), dmg(63, [A(44)])]).toEqual([65, 44]);
+    expect([heal(63, [S("snack")]), heal(63, [S("feast")])]).toEqual([20, 70]);
+    covers(63);
+  });
+
+  it("Freezer Burn: a clean day right after a splurge day lands no crit", () => {
+    expect(fight(64, { today: day(2) }).damage).toBe(50);
+    expect(fight(64, { today: day(2), splurges: [S("snack")] }).damage).toBe(0);
+    expect(fight(64, { today: day(3), splurges: [S("snack")] }).damage).toBe(25); // a clean day after a clean day
+    expect(fight(64, { today: day(2), splurges: [S("snack")] }).lines.some((l) => l.text === "A clean day, but Holds a Grudge stops the crit.")).toBe(true);
+    covers(64);
+  });
+
+  it("Waffle Cone Walrus: calories do nothing, minutes only (the comeback still doubles)", () => {
+    expect(dmg(65, [A(30, { calories: 300 })])).toBe(30);
+    expect(dmg(65, [A(30, { calories: 300 })], { warm: false })).toBe(60);
+    covers(65);
+  });
+
+  it("Snow Cone Owl: a splurge with no time heals double", () => {
+    expect([heal(66, [S("snack")]), heal(66, [S("snack", { time: "12:00" })])]).toEqual([20, 10]);
+    covers(66);
+  });
+
+  it("Sandwich Seal: the fight's first 2 days do half (and the bonus part-day after a KO)", () => {
+    expect(dmg(67, [A(40)])).toBe(20);
+    expect(fight(67, { today: day(2), activities: [A(null, { day: day(1) }), A(40, { day: day(2) })] }).damage).toBe(25 + 25 + 40);
+    const after = `${D}T10:00:00.000Z`;
+    expect(fight(67, { startedAfter: after, activities: [A(40, { createdAt: `${D}T11:00:00.000Z` })] }).damage).toBe(20);
+    covers(67);
+  });
+
+  it("Polar Pizza Bear: on Saturdays and Sundays, workouts do half", () => {
+    expect(dmg(68, [A(40)])).toBe(40); // a Tuesday
+    expect(fight(68, { startedOn: day(4), activities: [A(40, { day: day(4) })] }).damage).toBe(20); // Saturday
+    expect(fight(68, { startedOn: day(5), activities: [A(40, { day: day(5) })] }).damage).toBe(20); // Sunday
+    covers(68);
+  });
+
+  it("Cake Igloo: can't be finished before the fight's 5th day", () => {
+    const early = fight(69, { activities: [A(2000)] });
+    expect([early.hp, early.ko]).toEqual([1, null]);
+    expect(early.lines.some((l) => l.text === "Frozen Solid: Cake Igloo hangs on at 1 HP — it can't go down before the fight's 5th day.")).toBe(true);
+    expect(fight(69, { today: day(4), activities: [A(2000), A(10, { day: day(4) })] }).ko).toMatchObject({ day: day(4) });
+    covers(69);
+  });
+
+  it("Emperor Neapolitan: three knockouts to win (back with 300 HP, then 150)", () => {
+    const one = fight(70, { activities: [A(1480)] });
+    expect([one.hp, one.ko]).toEqual([300, null]);
+    const two = fight(70, { activities: [A(1480), A(300, { time: "09:00" })] });
+    expect([two.hp, two.ko]).toEqual([150, null]);
+    expect(two.lines.filter((l) => l.kind === "revive").map((l) => l.text)).toEqual(["Three Crowns: Emperor Neapolitan gets back up with 300 HP!", "Three Crowns: Emperor Neapolitan gets back up with 150 HP!"]);
+    expect(fight(70, { activities: [A(1480), A(300, { time: "09:00" }), A(150, { time: "10:00" })] }).ko).toMatchObject({ day: D, by: "workout" });
+    covers(70);
+  });
+
+  // ---------------------------------------------------------------- World 8 · Concession Canyon
+  it("Nacho Gremlin: on a day you work out, every splurge heals 10 extra", () => {
+    expect(heal(71, [S("snack")])).toBe(20); // the hit is a workout that day
+    const quiet = (spl: SplurgeEv[]) => fight(71, { today: day(1), activities: [A(300)], splurges: spl }).hp;
+    expect(quiet([S("snack", { day: day(1) })]) - quiet([])).toBe(10);
+    covers(71);
+  });
+
+  it("Pretzel Python: +20 at midnight on a day with under 30 minutes of workouts", () => {
+    expect(fight(72, { today: day(1), activities: [A(20)] }).hp).toBe(1170 - 20 - 25 + 20);
+    expect(fight(72, { today: day(1), activities: [A(30)] }).hp).toBe(1170 - 30 - 25);
+    covers(72);
+  });
+
+  it("Candy Box Goblin: the first Snack of each day heals 25", () => {
+    expect(heal(73, [S("snack"), S("snack")])).toBe(25 + 10);
+    expect(heal(73, [S("meal")])).toBe(25);
+    covers(73);
+  });
+
+  it("Jumbo Cup Jellyfish: after an hour-long workout, the next one does half", () => {
+    expect(dmg(74, [A(60), A(40, { time: "09:00" }), A(40, { time: "10:00" })])).toBe(60 + 20 + 40);
+    expect(dmg(74, [A(59), A(40, { time: "09:00" })])).toBe(99);
+    covers(74);
+  });
+
+  it("Licorice Wrangler: at midnight it pulls back a tenth of the day's damage", () => {
+    expect(fight(75, { today: day(1), activities: [A(100)] }).hp).toBe(1210 - 100 - 25 + 13);
+    covers(75);
+  });
+
+  it("Butter Banshee: splurges after 6 PM heal 15 extra (no time counts as after)", () => {
+    expect([heal(76, [S("snack", { time: "19:00" })]), heal(76, [S("snack", { time: "12:00" })]), heal(76, [S("snack")])]).toEqual([25, 10, 25]);
+    covers(76);
+  });
+
+  it("Hot Dog Usher: only the first 2 workouts each day count", () => {
+    expect(dmg(77, [A(20), A(20, { time: "09:00" }), A(20, { time: "10:00" })])).toBe(40);
+    covers(77);
+  });
+
+  it("Sour Straw Scorpion: a Feast heals 60, then 10 more on each of the next 3 days (a Veggie Shield blocks just one)", () => {
+    expect(heal(78, [S("feast")])).toBe(60);
+    const f = S("feast", { id: "sour" });
+    const hit = A(500, { time: "06:00" });
+    const later = (o: FightOpts = {}) => fight(78, { splurges: [f], activities: [hit], today: day(4), ...o }).lines.filter((l) => l.text.startsWith("Lingering Sour"));
+    expect(later().map((l) => [l.day, l.amount])).toEqual([[day(1), 10], [day(2), 10], [day(3), 10]]);
+    const blocked = fight(78, { splurges: [f], activities: [hit], today: day(4), blocked: ["sour:later2"] }).lines.filter((l) => l.sourceId?.startsWith("sour:later"));
+    expect(blocked.map((l) => l.kind)).toEqual(["heal", "blocked", "heal"]);
+    covers(78);
+  });
+
+  it("Bucket Bison: below a quarter of its HP, every splurge heals double", () => {
+    expect(heal(79, [S("snack")])).toBe(10);
+    expect(heal(79, [S("snack")], { hit: 1000 })).toBe(20);
+    covers(79);
+  });
+
+  it("Count Concession: the fight's 3rd and 6th days are intermissions (workouts do nothing)", () => {
+    const on = (n: number) => fight(80, { today: day(n), splurges: Array.from({ length: n + 1 }, (_, i) => S("snack", { day: day(i) })), activities: [...Array.from({ length: n }, (_, i) => A(null, { day: day(i) })), A(50, { day: day(n) })] }).damage;
+    expect([on(0), on(1), on(2), on(3), on(5)]).toEqual([50, 50, 0, 50, 0]);
+    covers(80);
+  });
+});
+
+describe("a run that finished before the game grew (Matt, Nov 21 2026)", () => {
+  /** a run that beat level 60 when 60 was the last level */
+  function finishedAt60(on = D): RunState {
+    const st = run(on, { level: 60, hearts: 4 });
+    const f = open(st);
+    Object.assign(f, { status: "won", endedOn: on, points: 2000 });
+    Object.assign(st.run, { endReason: "finished", endedOn: on, score: 2000, shields: 2, potions: 1, winds: 1 });
+    st.events.push({ id: "fin", fightId: f.id, day: on, at: `${on}T20:00:00.000Z`, kind: "finish", data: {} });
+    return st;
+  }
+
+  it("carries on at level 61 with its score, hearts and power-ups; the new monster waits to be started", () => {
+    const st = finishedAt60();
+    expect([canCarryOn(st), runOver(st)]).toEqual([true, false]);
+    const out = settle(st, logOf(), clock(day(5)));
+    expect(kinds(out)).toEqual(["run_continues"]);
+    expect(out.added[0].data).toMatchObject({ level: 61, name: "Pint Yeti", worldName: "Freezer Tundra" });
+    expect(eventText(out.added[0])).toBe("More monsters! The run carries on at level 61: Pint Yeti, in Freezer Tundra. Your score, hearts and power-ups come along.");
+    expect(out.state.run).toMatchObject({ endReason: null, endedOn: null, hearts: 4, shields: 2, potions: 1, winds: 1 });
+    expect(pendingLevel(out.state)).toBe(61);
+    expect(settle(out.state, logOf(), clock(day(5))).added).toEqual([]); // once
+    const go = startNextFight(out.state, logOf(), clock(day(5)));
+    expect(open(go.state)).toMatchObject({ level: 61, attempt: 1 });
+  });
+
+  it("before it is synced the map shows 1-60 beaten and the rest locked; runs that ended any other way stay ended", () => {
+    const v = buildView(finishedAt60(), logOf(), day(1), true);
+    expect([v.map[59].status, v.map[60].status]).toEqual(["beaten", "locked"]);
+    for (const endReason of ["defeated", "abandoned"] as const) {
+      const st = finishedAt60();
+      st.run.endReason = endReason;
+      expect([canCarryOn(st), runOver(st), settle(st, logOf(), clock(day(2))).added]).toEqual([false, true, []]);
+    }
+  });
+
+  it("earns no weekly hearts or Veggie Shields for the days it sat finished", () => {
+    const sun = "2026-11-08";
+    const st = finishedAt60(sun);
+    const acts = [0, 1, 2, 3, 4].map((i) => A(null, { day: addDays(sun, 7 + i) })); // five active, clean days the week after
+    const out = settle(st, logOf([], acts), clock(addDays(sun, 21)));
+    expect(kinds(out)).toEqual(["run_continues"]);
+  });
 });
 
 describe("a run: settling, hearts, power-ups", () => {
@@ -634,16 +826,22 @@ describe("a run: settling, hearts, power-ups", () => {
     expect(settle(hard.state, busy, clock(day(9))).added).toEqual([]); // an ended run stays as it was
   });
 
-  it("a boss kill: +1 heart and a Second Wind; after level 60 the run is finished", () => {
+  it("a boss kill: +1 heart and a Second Wind; after the last level there is, the run is finished", () => {
     const boss = settle(run(D, { level: 10, hearts: 2 }), logOf([], [A(null, { day: day(-1) }), A(400)]), clock(D));
     expect(boss.state.run).toMatchObject({ hearts: 3, winds: 1 });
     expect(boss.state.fights[0].points).toBe(393 + 310 + 50 * 3 + 100 + 500); // Fizz Shield takes 7 off the first 15 minutes
     expect(pendingLevel(boss.state)).toBe(11);
-    const last = settle(run(D, { level: 60, hearts: 5 }), logOf([], [A(1300)]), clock(D));
+    // The Midnight Snacker is world 6's boss now: the run goes on to level 61
+    const sixty = settle(run(D, { level: 60, hearts: 2 }), logOf([], [A(1300)]), clock(D));
+    expect([pendingLevel(sixty.state), sixty.state.run.endReason, kinds(sixty).includes("finish")]).toEqual([61, null, false]);
+    const last = settle(run(D, { level: LEVEL_COUNT, hearts: 5 }), logOf([], [A(levelInfo(LEVEL_COUNT).hp + 100)]), clock(D));
     expect(pendingLevel(last.state)).toBeNull();
     expect(last.state.run).toMatchObject({ endReason: "finished", endedOn: D, hearts: 5 });
     expect(last.added.find((e) => e.kind === "heart")?.data.gained).toBe(false);
-    expect(kinds(last)).toContain("finish");
+    const fin = last.added.find((e) => e.kind === "finish")!;
+    expect(fin.data).toEqual({ levels: LEVEL_COUNT, worlds: LEVEL_COUNT / 10, name: levelInfo(LEVEL_COUNT).name });
+    expect(eventText(fin)).toBe(`All ${LEVEL_COUNT} monsters crushed! The run is complete.`);
+    expect(eventText({ ...fin, data: {} })).toBe("All 60 monsters crushed! The run is complete."); // one stored before the game grew
     expect(buildView(last.state, logOf(), D, false).map.every((m) => m.status === "beaten")).toBe(true);
   });
 
@@ -895,7 +1093,7 @@ describe("points", () => {
 describe("the view", () => {
   it("shows the open fight, the map and what happened, with no run: everything locked", () => {
     const none = buildView(null, null, D, false);
-    expect([none.run, none.fight, none.map.length, none.map[0].status]).toEqual([null, null, 60, "locked"]);
+    expect([none.run, none.fight, none.map.length, none.map[0].status]).toEqual([null, null, LEVEL_COUNT, "locked"]);
     const log = logOf([], [A(null, { day: day(-1) }), A(100)]);
     const won = settle(run(), log, clock(D)).state;
     expect(buildView(won, log, D, false, true)).toMatchObject({ fight: null, next: { level: 2 }, autoStart: true });

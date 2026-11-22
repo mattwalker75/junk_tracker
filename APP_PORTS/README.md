@@ -24,7 +24,9 @@ server" (`/api/…`), but in the app those requests are answered inside the page
 - **Android:** the app's `files/junk.db` (Google backs it up with the phone)
 
 The copy before the last change is kept beside it as `junk.db.prev`. The file is the same SQLite database as
-the web app's `data/junk.db` (the same tables, from `server/src/migrations.ts`).
+the web app's `data/junk.db` (the same tables, from `server/src/migrations.ts`). When a new version of the app opens an older log, it
+upgrades it (the same steps as the web app) and saves it at once, so `junk.db.prev` is then the log as the
+older version left it.
 
 | File | What it does |
 |---|---|

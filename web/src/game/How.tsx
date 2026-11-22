@@ -6,7 +6,7 @@
  */
 import { useState, type ReactNode } from "react";
 import {
-  abilityFor, betDays, BONUS_SHARE, bonusMaxOf, CRIT, HEAL, LEVELS, levelInfo, MAX_HEARTS, MAX_POWER_UPS, POINTS, POTION_DAMAGE, POTION_MINUTES, rawDamage,
+  abilityFor, betDays, BONUS_SHARE, bonusMaxOf, CRIT, HEAL, LEVEL_COUNT, LEVELS, levelInfo, PLANNED_LEVELS, WORLDS, MAX_HEARTS, MAX_POWER_UPS, POINTS, POTION_DAMAGE, POTION_MINUTES, rawDamage,
   SHIELD_STREAK, START_HEARTS, WEEK_ACTIVE_DAYS, wonPoints, type Bet, LIFE_EVERY, MAX_LIVES,
 } from "../../../shared/game";
 import { cx } from "../components/ui";
@@ -141,8 +141,8 @@ function Fight({ example }: { example: number }) {
       <Card title="Monster toughness" note="Settings → You">
         <p className="mt-1 text-[14px] leading-snug font-bold">Want a harder game? Pick <b>Tough</b> (HP ×1.5) or <b>Brutal</b> (HP ×2) in Settings → You. Deadlines stay the same, so it takes more activity each day, and since a kill is worth the monster's max HP, tougher monsters score more. A change counts from the next monster you start. The HP numbers on this page and in the Monster Book are the Standard ones.</p>
       </Card>
-      <Card title="The road" note={`${LEVELS.length} levels · 6 worlds`}>
-        <p className="mt-1 text-[14px] leading-snug font-bold">Every level is its own monster: nine, then a boss at level 10 of each world. HP grows from {LEVELS[0].hp} to {LEVELS[LEVELS.length - 1].hp}; deadlines from {LEVELS[0].days} to {LEVELS[LEVELS.length - 1].days} days. Beat level 60 and the run is complete.</p>
+      <Card title="The road" note={`${LEVELS.length} levels · ${WORLDS.length} worlds`}>
+        <p className="mt-1 text-[14px] leading-snug font-bold">Every level is its own monster: nine, then a boss at level 10 of each world. HP grows from {LEVELS[0].hp} to {LEVELS[LEVELS.length - 1].hp}; deadlines from {LEVELS[0].days} to {LEVELS[LEVELS.length - 1].days} days. Beat level {LEVEL_COUNT} and the run is complete.{LEVEL_COUNT < PLANNED_LEVELS ? " More worlds are on the way; when they come, a finished run carries on into them." : ""}</p>
       </Card>
     </>
   );

@@ -135,6 +135,43 @@ export const MIGRATIONS: readonly string[] = [
   ALTER TABLE game_runs ADD COLUMN lives INTEGER NOT NULL DEFAULT 0;
   ALTER TABLE game_fights ADD COLUMN hp_mult REAL NOT NULL DEFAULT 1;
   `,
+  // 7 — Calorie Crusher grows to 120 levels (Nov 22 2026): a fight's level may now be 1 to 120 (it was
+  // 1 to 60). SQLite can't change a CHECK, so game_fights is built again. Each step runs in a
+  // transaction with foreign keys on (they can't be switched off there), and dropping the old table
+  // deletes the events that point at it — so the events are copied aside first and put back after;
+  // game_events' "REFERENCES game_fights" then points at the new table, which takes the old name.
+  `
+  CREATE TEMP TABLE game_events_keep AS SELECT id, run_id, fight_id, day, at, kind, data_json, seq FROM game_events;
+  CREATE TABLE game_fights_v7 (
+    id            TEXT PRIMARY KEY,
+    run_id        TEXT NOT NULL REFERENCES game_runs(id) ON DELETE CASCADE,
+    user_id       TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    level         INTEGER NOT NULL CHECK (level BETWEEN 1 AND 120),
+    attempt       INTEGER NOT NULL,
+    started_on    TEXT NOT NULL,
+    started_after TEXT,
+    deadline_on   TEXT NOT NULL,
+    bet           REAL NOT NULL DEFAULT 1 CHECK (bet IN (1, 1.5, 2)),
+    status        TEXT NOT NULL CHECK (status IN ('open', 'won', 'struck')),
+    ended_on      TEXT,
+    damage        INTEGER NOT NULL DEFAULT 0,
+    heals         INTEGER NOT NULL DEFAULT 0,
+    points        INTEGER NOT NULL DEFAULT 0,
+    flawless      INTEGER NOT NULL DEFAULT 0,
+    bet_locked    INTEGER NOT NULL DEFAULT 0,
+    seq           INTEGER NOT NULL,
+    hp_mult       REAL NOT NULL DEFAULT 1
+  );
+  INSERT INTO game_fights_v7 (id, run_id, user_id, level, attempt, started_on, started_after, deadline_on, bet, status, ended_on, damage, heals, points, flawless, bet_locked, seq, hp_mult)
+    SELECT id, run_id, user_id, level, attempt, started_on, started_after, deadline_on, bet, status, ended_on, damage, heals, points, flawless, bet_locked, seq, hp_mult FROM game_fights;
+  DROP TABLE game_fights;
+  ALTER TABLE game_fights_v7 RENAME TO game_fights;
+  CREATE INDEX game_fights_run ON game_fights (run_id, seq);
+  DELETE FROM game_events;
+  INSERT INTO game_events (id, run_id, fight_id, day, at, kind, data_json, seq)
+    SELECT id, run_id, fight_id, day, at, kind, data_json, seq FROM game_events_keep;
+  DROP TABLE game_events_keep;
+  `,
 ];
 
 export const SCHEMA_VERSION = MIGRATIONS.length;

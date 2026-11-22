@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Waffle Cone Walrus, a pink strawberry-scoop walrus with vanilla cheeks, sprinkle whiskers, waffle-cone tusks and a cherry on top">
+  <defs>
+    <clipPath id="waffle-cone-walrus-tuskL"><path d="M76 116 L96 116 L86 168 Z"/></clipPath>
+    <clipPath id="waffle-cone-walrus-tuskR"><path d="M104 116 L124 116 L114 168 Z"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="190" rx="78" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- flippers -->
+  <g stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round" fill="#ff8fb0">
+    <path d="M40 160 Q14 166 10 184 Q34 188 58 176 Z"/>
+    <path d="M160 160 Q186 166 190 184 Q166 188 142 176 Z"/>
+  </g>
+  <!-- body: one big scoop with a drippy edge -->
+  <path d="M26 140 Q26 92 100 88 Q174 92 174 140 Q174 160 166 172 Q160 182 152 172 Q144 184 132 176 Q120 188 106 180 Q94 188 82 178 Q70 186 60 176 Q48 182 40 172 Q26 160 26 140 Z" fill="#ffb3c7" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M150 104 Q170 120 166 160 Q160 170 152 166 Q160 130 140 104 Z" fill="#ff98b4"/>
+  <!-- strawberry bits -->
+  <g fill="#e2384d"><ellipse cx="50" cy="150" rx="4" ry="3"/><ellipse cx="144" cy="150" rx="3.5" ry="2.5"/><ellipse cx="62" cy="128" rx="3" ry="2.2"/><ellipse cx="136" cy="130" rx="3.5" ry="2.5"/></g>
+  <!-- head scoop -->
+  <circle cx="100" cy="78" r="44" fill="#ffb3c7" stroke="#2b1d3a" stroke-width="4"/>
+  <path d="M68 52 Q76 40 90 38" fill="none" stroke="#ffe0ea" stroke-width="5" stroke-linecap="round"/>
+  <!-- cherry on top -->
+  <path d="M102 36 Q106 22 118 16" fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="100" cy="36" r="10" fill="#e2384d" stroke="#2b1d3a" stroke-width="3.5"/>
+  <circle cx="97" cy="33" r="3" fill="#ff8fa0"/>
+  <!-- eyes -->
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="80" cy="70" r="10" fill="#ffffff"/><circle cx="120" cy="70" r="10" fill="#ffffff"/></g>
+  <circle cx="82" cy="72" r="6" fill="#2b1d3a"/><circle cx="118" cy="72" r="6" fill="#2b1d3a"/>
+  <circle cx="84" cy="69" r="2" fill="#ffffff"/><circle cx="120" cy="69" r="2" fill="#ffffff"/>
+  <path d="M66 56 L90 62 M134 56 L110 62" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <!-- waffle-cone tusks -->
+  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
+    <path d="M76 116 L96 116 L86 168 Z" fill="#e2a95a"/>
+    <path d="M104 116 L124 116 L114 168 Z" fill="#e2a95a"/>
+  </g>
+  <g stroke="#b8732e" stroke-width="2.2" clip-path="url(#waffle-cone-walrus-tuskL)"><path d="M70 120 L100 150 M70 136 L100 166 M70 104 L100 134 M100 120 L70 150 M100 136 L70 166 M100 104 L70 134"/></g>
+  <g stroke="#b8732e" stroke-width="2.2" clip-path="url(#waffle-cone-walrus-tuskR)"><path d="M100 120 L130 150 M100 136 L130 166 M100 104 L130 134 M130 120 L100 150 M130 136 L100 166 M130 104 L100 134"/></g>
+  <g fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"><path d="M76 116 L96 116 L86 168 Z"/><path d="M104 116 L124 116 L114 168 Z"/></g>
+  <!-- vanilla cheeks with sprinkle whiskers -->
+  <g fill="#fff4dc" stroke="#2b1d3a" stroke-width="3.5"><circle cx="86" cy="104" r="16"/><circle cx="114" cy="104" r="16"/></g>
+  <g stroke-width="3" stroke-linecap="round">
+    <path d="M78 100 l-6 -3" stroke="#39a0ff"/><path d="M80 108 l-7 1" stroke="#ffc93c"/><path d="M88 112 l-4 5" stroke="#7bd36b"/>
+    <path d="M122 100 l6 -3" stroke="#ff4d6d"/><path d="M120 108 l7 1" stroke="#b96ad9"/><path d="M112 112 l4 5" stroke="#39a0ff"/>
+  </g>
+  <ellipse cx="100" cy="92" rx="9" ry="6" fill="#7a3a4a" stroke="#2b1d3a" stroke-width="3"/>
+  <ellipse cx="97" cy="90" rx="3" ry="1.6" fill="#ffffff" opacity="0.7"/>
+  <ellipse cx="62" cy="88" rx="6" ry="3.5" fill="#ff7fa2"/><ellipse cx="138" cy="88" rx="6" ry="3.5" fill="#ff7fa2"/>
+  <g fill="#6ec6ff" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M28 40 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M168 34 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

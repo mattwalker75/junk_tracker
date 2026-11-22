@@ -4,6 +4,25 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+## [1.9.0] — 2026-11-22
+### Added
+- 2026-11-22: **Calorie Crusher has 80 levels: two new worlds after Feast Fortress.** World 7 **Freezer Tundra**
+  (Pint Yeti, Pizza Roll Pack, Popsicle Pete, Freezer Burn, Waffle Cone Walrus, Snow Cone Owl, Sandwich Seal,
+  Polar Pizza Bear, Cake Igloo; boss Emperor Neapolitan) and world 8 **Concession Canyon** (Nacho Gremlin, Pretzel
+  Python, Candy Box Goblin, Jumbo Cup Jellyfish, Licorice Wrangler, Butter Banshee, Hot Dog Usher, Sour Straw
+  Scorpion, Bucket Bison; final boss for now Count Concession). Each monster has its own drawing, new ability and
+  Monster Book line; HP keeps climbing (1,000 to 1,670) and deadlines are 8 days (a boss 9). The adventure map,
+  the world pages (two rows of world chips), the battle arena and the Monster Book have the new worlds. Worlds 9 to
+  12 come next, mocked up first (the game is planned to reach 120).
+- 2026-11-22: **A run that had beaten all 60 carries on at level 61** the next time the game is opened, with its
+  score, hearts, lives and power-ups (a "More monsters!" note). Pint Yeti waits to be started, or Keep the monsters
+  coming starts it. Runs that ended any other way stay ended.
+### Changed
+- 2026-11-22: Database version 7 (saved first as `junk.db.before-v7`): a fight's level may go up to 120. The phone
+  apps upgrade their log the same way, and save it at once (the version before stays beside it as `junk.db.prev`).
+- 2026-11-22: The Midnight Snacker is now world 6's boss; "FINAL BOSS", "Level N of …" and the finish screen follow
+  the number of levels there are.
+
 ## [1.8.1] — 2026-11-22
 ### Changed
 - 2026-11-22: **The iPhone and Android apps are for one person, with no sign-in of any kind** (Matt: they run only

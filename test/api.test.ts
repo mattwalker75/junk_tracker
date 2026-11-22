@@ -558,7 +558,7 @@ describe("planned treat (Nov 11 2026)", () => {
     const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
     const Database = (await import("better-sqlite3")).default;
     const { MIGRATIONS, openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
-    expect(SCHEMA_VERSION).toBe(6);
+    expect(SCHEMA_VERSION).toBe(7);
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-up4-"));
     const file = path.join(dir, "junk.db");
     try {
@@ -585,12 +585,71 @@ describe("Calorie Crusher (game mode, Nov 11 2026)", () => {
   /** every row the game keeps, to check a read wrote nothing */
   const snapshot = () => JSON.stringify(["game_runs", "game_fights", "game_events"].map((t) => s.handle.db.prepare(`SELECT * FROM ${t} ORDER BY rowid`).all()));
 
+  it("a run that beat level 60 before the game grew carries on at 61 (sync, and Keep the monsters coming starts Pint Yeti, not a new run)", async () => {
+    s = await scratch({}, GAME);
+    const b = await firstPerson();
+    await b.call("POST", "/api/game/run", { mode: "normal", today: T });
+    // make it a run that had finished at 60, as an older Craving Crusher left it
+    const db = s.handle.db;
+    const run = db.prepare("SELECT id FROM game_runs").get() as { id: string };
+    db.prepare("UPDATE game_fights SET level = 60, status = 'won', ended_on = ?, points = 2000").run(T);
+    db.prepare("UPDATE game_runs SET end_reason = 'finished', ended_on = ?, score = 2000, hearts = 4").run(T);
+    db.prepare("INSERT INTO game_events (id, run_id, fight_id, day, at, kind, data_json, seq) VALUES ('fin', ?, NULL, ?, 'x', 'finish', '{}', 99)").run(run.id, T);
+    const before = snapshot();
+    const g = (await b.call("GET", "/api/game?today=2026-11-11")).body;
+    expect([g.needsSync, g.run.active, g.map[59].status, g.map[60].status]).toEqual([true, false, "beaten", "locked"]);
+    expect(snapshot()).toBe(before); // a read still writes nothing
+    expect((await b.call("PUT", "/api/me/settings", { autoStart: true })).body.autoStart).toBe(true);
+    const a = (await b.call("POST", "/api/game/auto", { today: "2026-11-11", now: "08:00" })).body;
+    expect(a.started).toBe("fight");
+    expect(a.happened.map((e: { kind: string }) => e.kind)).toEqual(["run_continues", "fight_start"]);
+    expect(a.view.run).toMatchObject({ number: 1, active: true, hearts: 4, endReason: null });
+    expect(a.view.fight).toMatchObject({ level: 61, name: "Pint Yeti", world: 7, worldName: "Freezer Tundra", max: 1000, ability: { name: "Cold Snap" } });
+    expect((db.prepare("SELECT COUNT(*) AS n FROM game_runs").get() as { n: number }).n).toBe(1);
+  });
+
+  it("upgrading a version 6 database lets a fight's level go to 120 and keeps every game row (events too)", async () => {
+    const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
+    const Database = (await import("better-sqlite3")).default;
+    const { MIGRATIONS, openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-up7-"));
+    const file = path.join(dir, "junk.db");
+    try {
+      const old = new Database(file);
+      old.pragma("foreign_keys = ON");
+      for (let v = 0; v < 6; v++) old.exec(MIGRATIONS[v]);
+      old.pragma("user_version = 6");
+      old.exec(`INSERT INTO users (id, name, password_hash, created_at) VALUES ('u1', 'Matt', '', 'x');
+        INSERT INTO game_runs (id, user_id, number, mode, started_at, started_on, end_reason, lives) VALUES ('r1', 'u1', 1, 'normal', 'x', '2026-11-01', 'finished', 1);
+        INSERT INTO game_fights (id, run_id, user_id, level, attempt, started_on, deadline_on, status, seq, hp_mult) VALUES ('f1', 'r1', 'u1', 60, 1, '2026-11-01', '2026-11-08', 'won', 0, 1.5);
+        INSERT INTO game_events (id, run_id, fight_id, day, at, kind, data_json, seq) VALUES ('e1', 'r1', 'f1', '2026-11-02', 'x', 'ko', '{"points":9}', 0), ('e2', 'r1', NULL, '2026-11-03', 'x', 'heart', '{}', 1);`);
+      const rows = (d: InstanceType<typeof Database>) => ["game_runs", "game_fights", "game_events"].map((t) => d.prepare(`SELECT * FROM ${t} ORDER BY rowid`).all());
+      const was = JSON.stringify(rows(old));
+      expect(() => old.prepare("INSERT INTO game_fights (id, run_id, user_id, level, attempt, started_on, deadline_on, status, seq) VALUES ('f2', 'r1', 'u1', 61, 1, 'a', 'b', 'open', 1)").run()).toThrow(/CHECK/);
+      old.close();
+      const db = openDatabase(file);
+      expect(db.pragma("user_version", { simple: true })).toBe(SCHEMA_VERSION);
+      expect(JSON.stringify(rows(db))).toBe(was);
+      expect(db.pragma("foreign_key_check")).toEqual([]);
+      expect(db.pragma("integrity_check", { simple: true })).toBe("ok");
+      db.prepare("INSERT INTO game_fights (id, run_id, user_id, level, attempt, started_on, deadline_on, status, seq) VALUES ('f2', 'r1', 'u1', 120, 1, 'a', 'b', 'open', 1)").run();
+      expect(() => db.prepare("INSERT INTO game_fights (id, run_id, user_id, level, attempt, started_on, deadline_on, status, seq) VALUES ('f3', 'r1', 'u1', 121, 1, 'a', 'b', 'open', 2)").run()).toThrow(/CHECK/);
+      // events still belong to their fight: removing the fight removes its events, as before
+      db.prepare("DELETE FROM game_fights WHERE id = 'f1'").run();
+      expect(db.prepare("SELECT id FROM game_events ORDER BY id").all()).toEqual([{ id: "e2" }]);
+      db.close();
+      const copy = new Database(`${file}.before-v${SCHEMA_VERSION}`, { readonly: true });
+      expect([copy.pragma("user_version", { simple: true }), (copy.prepare("SELECT COUNT(*) AS n FROM game_events").get() as { n: number }).n]).toEqual([6, 2]);
+      copy.close();
+    } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+  });
+
   it("with no run: nothing on the map yet; the day must be real; starting a run opens Crumbs", async () => {
     s = await scratch({}, GAME);
     const b = await firstPerson();
     const none = (await b.call("GET", `/api/game?today=${T}`)).body;
     expect(none).toMatchObject({ today: T, run: null, fight: null, needsSync: false, events: [] });
-    expect(none.map).toHaveLength(60);
+    expect(none.map).toHaveLength(80);
     expect((await b.call("GET", "/api/game?today=2026-02-30")).body.error).toBe("Which day is it?");
     expect((await b.call("GET", `/api/game?today=${T}&now=25:99`)).status).toBe(400);
     expect((await b.call("POST", "/api/game/run", { mode: "easy", today: T })).body.error).toBe("Pick Normal or Hardcore.");

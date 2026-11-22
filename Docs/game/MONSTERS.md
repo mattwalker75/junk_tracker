@@ -1,6 +1,6 @@
 # Calorie Crusher — the 44 newer monsters' abilities
 
-The first 16 monsters' abilities are in `../GAME_MODE.md`. Levels, HP and deadlines for all 60 are
+The first 16 monsters' abilities are in `../GAME_MODE.md`. Levels, HP and deadlines for the first 60 are
 in `LEVELS_60.md` and `levels60.json`. The art is in `monsters/*.svg`: viewBox 0 0 200 200,
 cartoon style, outlines #2b1d3a. The numbers in the file names are species ids, not levels.
 
@@ -108,3 +108,24 @@ simplest reading below. Each has a test in `test/game.test.ts`.
 - **Long Frank:** "one extra day" is +1 on his table deadline (4 → 5 days).
 - **Bacon Bandit:** a shield that was already up does nothing in his fight. It stays up for the next fight.
 - The three monsters that cancel the comeback (Sour Worm, Gravy Golem, Garlic Bread Gargoyle) are left as written.
+
+## Worlds 7 and 8 (built Nov 22 2026)
+The roster, drawings and Monster Book lines are in `drafts/world7/README.md` and `drafts/world8/README.md`
+(the drawings were copied to `monsters/` and `web/public/monsters/`). Decisions made while building:
+- **The fight's day** (Slow Thaw, Frozen Solid, Intermission): day 1 is the start day; a fight that began
+  partway through a day after a KO gets that part-day as day 0, and its days count from the next one. So Slow
+  Thaw halves the part-day too, and Intermission's 3rd and 6th days are counted from day 1.
+- **Cold Snap:** the Feast has to count for this fight; a Feast and a workout on the same day are not halved.
+- **Twelve-Pack:** the 150 is workout damage only (a Water Potion and the clean-day crit still land in full).
+- **Meltdown:** "45 min or more" is the workout's minutes; its 20 extra is added after the comeback ×2.
+- **Thick Blubber:** the comeback still doubles the minutes.
+- **Sharp Eyes:** "no time" is a splurge saved without a time.
+- **Hibernate:** Saturday and Sunday are the phone's days, whatever the person's week start.
+- **Frozen Solid:** a hit that would finish it earlier leaves it at 1 HP; heals still land on top.
+- **Three Crowns:** it comes back with 300, then 150, whatever the Monster toughness (like Brother Act and Rise Again).
+- **Constrictor:** the day's minutes add up every workout that counts for the fight; calories don't count.
+- **Sting:** an hour is 60 minutes; the next workout may be on a later day.
+- **Lasso:** a tenth of the day's damage, the clean-day crit included, rounded.
+- **Seat Check:** the first 2 workouts that count for the fight that day, in the day's order.
+- **Lingering Sour:** each of the three later heals can be blocked by a Veggie Shield on its own.
+- **Last Kernels:** "below a quarter" is under max HP ÷ 4 when the splurge lands.

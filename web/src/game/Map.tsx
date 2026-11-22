@@ -1,10 +1,10 @@
 /**
- * The adventure map (mockup MonMap60): all 6 worlds as tinted bands with their scenery, a winding
- * path through the 60 levels, each a node with its monster's portrait — beaten (a check), the
+ * The adventure map (mockup MonMap60): every world as a tinted band with its scenery, a winding
+ * path through all the levels, each a node with its monster's portrait — beaten (a check), the
  * current fight (a pulse, your hero and a flag with its HP and days left) or locked (dimmed, a
- * padlock); bosses are castles. A sticky HUD (hearts, score, Level N / 60, the run's mode), "Jump
+ * padlock); bosses are castles. A sticky HUD (hearts, score, Level N / LEVEL_COUNT, the run's mode), "Jump
  * to me", and a card for the node you tap. And one world up close (mockup MonWorld2): its ten
- * levels as big nodes, with chips for the six worlds.
+ * levels as big nodes, with chips for every world.
  *
  * Kept light for a phone: one <img> per portrait (the browser caches the files), one scenery
  * picture, and the path as three SVG strokes.
@@ -26,6 +26,11 @@ const fmt = (n: number) => n.toLocaleString("en-US");
 const portrait = (slug: string) => `/monsters/${slug}.svg`;
 const NODE_BG: Record<MapStatus, string> = { beaten: "#d7f5c8", current: "#ffd2b0", locked: "#d8d2de" };
 const DIM = { filter: "grayscale(1) contrast(.85) brightness(1.08)", opacity: 0.55 };
+/** 1, 2, … one per world; TOP is the last, at the top of the map */
+const WORLD_NUMBERS = WORLDS.map((_, i) => i + 1);
+const TOP = WORLDS.length;
+/** the scenery picture, drawn for this many worlds: its address changes with them, so a phone never keeps an older (shorter) one from its cache */
+const SCENERY = `/game-map-scenery.svg?worlds=${WORLDS.length}`;
 
 // ================================================================ the HUD (map and world)
 
@@ -127,7 +132,7 @@ function LevelBar({ map }: { map: MapLevel[] }) {
   const beaten = map.filter((m) => m.status === "beaten").length;
   const cur = map.find((m) => m.status === "current");
   return (
-    <div aria-label={cur ? `Level ${cur.level} of 60` : `${beaten} of 60 beaten`} className="flex min-w-0 flex-1 flex-col gap-0.5">
+    <div aria-label={cur ? `Level ${cur.level} of ${LEVEL_COUNT}` : `${beaten} of ${LEVEL_COUNT} beaten`} className="flex min-w-0 flex-1 flex-col gap-0.5">
       <span className="flex justify-between gap-1.5 text-[11px] font-black whitespace-nowrap text-white"><span>{cur ? `Level ${cur.level} / ${LEVEL_COUNT}` : `${beaten} / ${LEVEL_COUNT}`}</span><span className="truncate text-[#c8b6e6]">{beaten} beaten</span></span>
       <span className="block h-[9px] overflow-hidden rounded-full border-2 border-[#1a1024] bg-[#1a1024]">
         <span className="block h-full rounded-full" style={{ width: `${Math.max(3, (beaten / LEVEL_COUNT) * 100)}%`, background: "linear-gradient(90deg, #7bd36b, #ffc93c)" }} />
@@ -290,7 +295,7 @@ function NowFlag({ fight, at, big }: { fight: FightView; at: Pt; big: boolean })
   );
 }
 
-// ================================================================ the 60-level map
+// ================================================================ the whole map
 
 export function MapPage() {
   const { today, view, error } = useGame();
@@ -319,17 +324,20 @@ export function MapPage() {
 
   return (
     <main className="relative flex flex-col overflow-x-clip bg-[#2b1d3a]" style={{ height: MAP_H * k }}>
-      {/* the six bands, full width; the map itself is 390 wide in the middle (scaled down on a narrower phone) */}
-      {[6, 5, 4, 3, 2, 1].map((w) => (
-        <div key={w} aria-hidden className="absolute inset-x-0" style={{ top: (w === 6 ? 0 : bandTop(w)) * k, height: (w === 6 ? bandTop(6) + BAND_H : BAND_H) * k, background: worldMap(w).band }} />
+      {/* the worlds' bands, full width; the map itself is 390 wide in the middle (scaled down on a narrower phone) */}
+      {WORLD_NUMBERS.map((w) => (
+        <div key={w} aria-hidden className="absolute inset-x-0" style={{ top: (w === TOP ? 0 : bandTop(w)) * k, height: (w === TOP ? bandTop(TOP) + BAND_H : BAND_H) * k, background: worldMap(w).band }} />
       ))}
       <div className="absolute top-0 left-1/2 -translate-x-1/2" style={{ width: MAP_W, height: MAP_H, transform: k < 1 ? `scale(${k})` : undefined, transformOrigin: "top center" }} onClick={(e) => { if (e.target === e.currentTarget) setSel(null); }}>
-        <img src="/game-map-scenery.svg" alt="" aria-hidden decoding="async" className="g-art pointer-events-none absolute inset-0" style={{ width: MAP_W, height: MAP_H }} />
-        <span aria-hidden className="absolute top-[637px] left-[104px] w-16 text-center font-game text-[11px] leading-none text-[#ffd0f4]">OPEN 24/7</span>
-        <span aria-hidden className="absolute top-[607px] left-[14px] w-11 text-center font-game text-[10px] leading-none text-[#cffaff]">DRIVE</span>
+        <img src={SCENERY} alt="" aria-hidden decoding="async" className="g-art pointer-events-none absolute inset-0" style={{ width: MAP_W, height: MAP_H }} />
+        {/* the words on the Midnight Drive-Thru's neon signs (the scenery draws the signs) */}
+        <span aria-hidden className="absolute left-[104px] w-16 text-center font-game text-[11px] leading-none text-[#ffd0f4]" style={{ top: bandTop(5) + 107 }}>OPEN 24/7</span>
+        <span aria-hidden className="absolute left-[14px] w-11 text-center font-game text-[10px] leading-none text-[#cffaff]" style={{ top: bandTop(5) + 77 }}>DRIVE</span>
+        {/* Concession Canyon's theater marquee */}
+        {TOP >= 8 ? <span aria-hidden className="absolute left-[204px] w-[168px] text-center font-game text-[11px] leading-none tracking-[0.12em] text-[#9d174d]" style={{ top: bandTop(8) + 41 }}>NOW SHOWING</span> : null}
         <PathSvg w={MAP_W} h={MAP_H} full={full} walked={walked} width={{ out: 20, road: 12 }} />
         {/* the worlds' signs */}
-        {[1, 2, 3, 4, 5, 6].map((w) => <WorldSign key={w} w={w} map={map} />)}
+        {WORLD_NUMBERS.map((w) => <WorldSign key={w} w={w} map={map} />)}
         {map.map((m) => {
           const at = mapNode(m.level);
           return (
@@ -449,7 +457,7 @@ export function WorldPage({ world }: { world?: number }) {
     <main className="relative flex flex-col overflow-clip" style={{ height: WORLD_H * k, background: look.band }}>
       <div className="absolute top-0 left-1/2 -translate-x-1/2" style={{ width: MAP_W, height: WORLD_H, transform: k < 1 ? `scale(${k})` : undefined, transformOrigin: "top center" }} onClick={(e) => { if (e.target === e.currentTarget) setSel(null); }}>
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden opacity-90">
-          <img src="/game-map-scenery.svg" alt="" decoding="async" className="g-art absolute max-w-none"
+          <img src={SCENERY} alt="" decoding="async" className="g-art absolute max-w-none"
             style={{ width: MAP_W * scale, height: MAP_H * scale, left: -(MAP_W * scale - MAP_W) / 2, top: -bandTop(w) * scale }} />
         </div>
         <PathSvg w={MAP_W} h={WORLD_H} full={full} walked={walked} width={{ out: 26, road: 17 }} />
@@ -489,11 +497,12 @@ function WorldChips({ w, map }: { w: number; map: MapLevel[] }) {
   };
   const me = info(w);
   const boss = levelInfo(w * LEVELS_PER_WORLD);
-  const note = me.cleared ? `cleared 10/10 · ${boss.name} beaten` : me.cur ? `you are here · level ${me.cur.level - (w - 1) * 10} of 10` : me.locked ? (w === 6 ? "locked · the final boss waits" : "locked") : `${me.beaten} of 10 beaten`;
+  const note = me.cleared ? `cleared 10/10 · ${boss.name} beaten` : me.cur ? `you are here · level ${me.cur.level - (w - 1) * 10} of 10` : me.locked ? (w === TOP ? "locked · the final boss waits" : "locked") : `${me.beaten} of 10 beaten`;
   return (
     <nav aria-label="Worlds" className="relative z-20 mx-2.5 mt-2.5 rounded-[18px] border-[3px] border-[#2b1d3a] bg-[#fff7e6] px-2 pt-2 pb-2.5 text-[#2b1d3a] shadow-[0_4px_0_#1a1024]">
-      <div className="grid grid-cols-6 gap-1">
-        {[1, 2, 3, 4, 5, 6].map((n) => {
+      {/* six to a row: one row up to 6 worlds, two after that */}
+      <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${WORLD_NUMBERS.length <= 6 ? WORLD_NUMBERS.length : Math.ceil(WORLD_NUMBERS.length / 2)}, minmax(0, 1fr))` }}>
+        {WORLD_NUMBERS.map((n) => {
           const i = info(n), on = n === w;
           return (
             <a key={n} href={`#/game/world/${n}`} aria-current={on ? "page" : undefined} aria-label={`World ${n}, ${WORLDS[n - 1]}${i.cleared ? ", cleared" : i.locked ? ", locked" : ""}`}
@@ -510,7 +519,7 @@ function WorldChips({ w, map }: { w: number; map: MapLevel[] }) {
       </div>
       <div className="mt-1.5 flex items-end justify-between gap-2 px-1">
         <span className="text-[13px] leading-snug font-extrabold text-[#5b4a6b]">World {w} · {WORLDS[w - 1]} · {note}</span>
-        <a href="#/game/map" className="shrink-0 text-[13px] font-black text-[#5b3fd0] underline decoration-2 underline-offset-2">All 60 levels</a>
+        <a href="#/game/map" className="shrink-0 text-[13px] font-black text-[#5b3fd0] underline decoration-2 underline-offset-2">All {LEVEL_COUNT} levels</a>
       </div>
     </nav>
   );

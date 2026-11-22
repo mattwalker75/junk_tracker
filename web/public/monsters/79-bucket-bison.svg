@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Bucket Bison, a bison whose body is a red-and-white striped popcorn bucket, popcorn heaped on its hump, with curved horns and a shaggy brown face">
+  <defs>
+    <clipPath id="bucket-bison-bucket"><path d="M64 96 L184 96 L176 168 L72 168 Z"/></clipPath>
+  </defs>
+  <ellipse cx="110" cy="190" rx="84" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- legs -->
+  <g fill="#5a3424" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <rect x="80" y="160" width="20" height="26" rx="6"/><rect x="150" y="160" width="20" height="26" rx="6"/>
+  </g>
+  <g fill="#2b1d3a"><rect x="80" y="180" width="20" height="8" rx="3"/><rect x="150" y="180" width="20" height="8" rx="3"/></g>
+  <!-- tail -->
+  <path d="M182 120 Q196 130 190 146" fill="none" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="190" cy="148" r="5" fill="#5a3424" stroke="#2b1d3a" stroke-width="3"/>
+  <!-- popcorn hump -->
+  <g fill="#2b1d3a"><circle cx="90" cy="92" r="20"/><circle cx="116" cy="80" r="22"/><circle cx="144" cy="84" r="20"/><circle cx="170" cy="94" r="16"/></g>
+  <g fill="#fffaf0"><circle cx="90" cy="92" r="16"/><circle cx="116" cy="80" r="18"/><circle cx="144" cy="84" r="16"/><circle cx="170" cy="94" r="12"/></g>
+  <g fill="none" stroke="#e8d6b0" stroke-width="2.5" stroke-linecap="round"><path d="M84 88 q6 -4 10 2 M110 74 q6 -4 12 2 M140 80 q4 -4 10 2"/></g>
+  <g fill="#ffd84a"><circle cx="98" cy="98" r="3"/><circle cx="124" cy="88" r="3"/><circle cx="152" cy="90" r="2.6"/><circle cx="108" cy="70" r="2.4"/></g>
+  <!-- the bucket body -->
+  <path d="M64 96 L184 96 L176 168 L72 168 Z" fill="#ffffff" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <g clip-path="url(#bucket-bison-bucket)" fill="#e2384d">
+    <rect x="70" y="90" width="16" height="90"/><rect x="102" y="90" width="16" height="90"/><rect x="134" y="90" width="16" height="90"/><rect x="166" y="90" width="16" height="90"/>
+  </g>
+  <path d="M64 96 L184 96 L176 168 L72 168 Z" fill="none" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round"/>
+  <rect x="60" y="92" width="128" height="10" rx="4" fill="#ffc93c" stroke="#2b1d3a" stroke-width="3.5"/>
+  <!-- shaggy head -->
+  <g fill="#2b1d3a"><circle cx="56" cy="110" r="40"/><circle cx="40" cy="84" r="20"/><circle cx="72" cy="80" r="20"/></g>
+  <g fill="#7a4a2a"><circle cx="56" cy="110" r="36"/><circle cx="40" cy="84" r="16"/><circle cx="72" cy="80" r="16"/></g>
+  <!-- horns -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M28 86 Q10 80 14 58" stroke="#2b1d3a" stroke-width="13"/><path d="M84 84 Q102 78 98 56" stroke="#2b1d3a" stroke-width="13"/>
+    <path d="M28 86 Q10 80 14 58" stroke="#fff3d6" stroke-width="6"/><path d="M84 84 Q102 78 98 56" stroke="#fff3d6" stroke-width="6"/>
+  </g>
+  <!-- face -->
+  <ellipse cx="56" cy="128" rx="24" ry="16" fill="#5a3424" stroke="#2b1d3a" stroke-width="3.5"/>
+  <ellipse cx="48" cy="126" rx="4" ry="5" fill="#2b1d3a"/><ellipse cx="64" cy="126" rx="4" ry="5" fill="#2b1d3a"/>
+  <path d="M44 138 Q56 146 68 138" fill="none" stroke="#2b1d3a" stroke-width="3.5" stroke-linecap="round"/>
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="42" cy="104" r="10" fill="#ffffff"/><circle cx="70" cy="104" r="10" fill="#ffffff"/></g>
+  <circle cx="44" cy="106" r="5.5" fill="#2b1d3a"/><circle cx="68" cy="106" r="5.5" fill="#2b1d3a"/>
+  <circle cx="45.5" cy="103.5" r="2" fill="#ffffff"/><circle cx="69.5" cy="103.5" r="2" fill="#ffffff"/>
+  <path d="M28 90 L50 98 M84 90 L62 98" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <!-- kernels flying -->
+  <g stroke="#2b1d3a" stroke-width="2.2" fill="#fffaf0">
+    <path d="M130 36 q-3 -6 3 -8 q3 -5 8 0 q6 2 3 8 q-2 5 -8 3 q-6 2 -6 -3z"/>
+    <path d="M176 52 q-3 -6 3 -8 q3 -5 8 0 q6 2 3 8 q-2 5 -8 3 q-6 2 -6 -3z"/>
+  </g>
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round"><path d="M100 24 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/></g>
+</svg>

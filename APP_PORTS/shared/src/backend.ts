@@ -34,6 +34,8 @@ interface Appearance { theme: string; customThemes: CustomTheme[] }
 
 export class Backend {
   readonly db: Database;
+  /** the database version an existing log was upgraded from as it opened (null: new, or already current) */
+  readonly upgradedFrom: number | null;
   private readonly users: Users;
   private readonly log: Log;
   private readonly goals: Goals;
@@ -46,6 +48,7 @@ export class Backend {
     this.db = new Database(SQL, bytes);
     const at = Number(this.db.pragma("user_version", { simple: true }) ?? 0);
     if (at > SCHEMA_VERSION) throw new Error(`This log was saved by a newer Craving Crusher (database version ${at}; this app knows ${SCHEMA_VERSION}). Update the app.`);
+    this.upgradedFrom = at > 0 && at < SCHEMA_VERSION ? at : null;
     for (let v = at; v < SCHEMA_VERSION; v++) {
       this.db.transaction(() => { this.db.exec(MIGRATIONS[v]); this.db.pragma(`user_version = ${v + 1}`); })();
     }

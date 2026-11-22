@@ -12,6 +12,8 @@ export const WORLD_LOOK: Record<number, { page: string; sky: [string, string, st
   4: { page: "linear-gradient(180deg, #4fb4f5 0%, #6ec6ff 30%, #bfe8ff 70%, #e6f7ff 100%)", sky: ["#3a9be0", "#7ccbff", "#d6f1ff"], far: "#5ab0e8", mesa: "#2f7fbf", mesaLine: "#24689f", ground: ["#9fe0c8", "#5fbf9f"], band: "#3fa0d8", bandLine: "#bfe8ff", prop: "#7bd36b" },
   5: { page: "linear-gradient(180deg, #2b1d5a 0%, #4a3480 30%, #7a5aa8 70%, #a888c8 100%)", sky: ["#1c1240", "#3a2a6a", "#6b4a9b"], far: "#4a3478", mesa: "#2b1d4a", mesaLine: "#20153a", ground: ["#4a3a5e", "#352848"], band: "#ffc93c", bandLine: "#fff1a8", prop: "#ff4d6d" },
   6: { page: "linear-gradient(180deg, #c94a3a 0%, #e0703f 30%, #ffb877 70%, #ffe0b0 100%)", sky: ["#a8352a", "#e0703f", "#ffcf8a"], far: "#b8553a", mesa: "#7a4a2a", mesaLine: "#5e3820", ground: ["#c98a4c", "#a06a3a"], band: "#ffc93c", bandLine: "#fff1a8", prop: "#c0392b" },
+  7: { page: "linear-gradient(180deg, #8fd3f4 0%, #bfe6ff 30%, #e3f5ff 70%, #f4fbff 100%)", sky: ["#5ab4e5", "#a8dcff", "#eaf8ff"], far: "#b9dff5", mesa: "#ffffff", mesaLine: "#cfe6f5", ground: ["#f4fbff", "#d6ecfa"], band: "#9fdcff", bandLine: "#ffffff", prop: "#ff9ec4" },
+  8: { page: "linear-gradient(180deg, #5a1030 0%, #8e1d43 30%, #c4455f 70%, #f2b8c3 100%)", sky: ["#2a0816", "#5a1030", "#a8304e"], far: "#7a1430", mesa: "#b3203f", mesaLine: "#7a1430", ground: ["#c98a5a", "#a06a3a"], band: "#ffc93c", bandLine: "#fff1a8", prop: "#ff4d6d" },
 };
 export const worldLook = (w: number) => WORLD_LOOK[w] ?? WORLD_LOOK[2];
 
@@ -19,7 +21,8 @@ export const worldLook = (w: number) => WORLD_LOOK[w] ?? WORLD_LOOK[2];
 export function Arena({ world, className }: { world: number; className?: string }) {
   const L = worldLook(world);
   const id = useId().replace(/:/g, "");
-  const night = world === 5;
+  // the Midnight Drive-Thru and the darkened theater of Concession Canyon
+  const night = world === 5 || world === 8;
   return (
     <svg viewBox="0 0 360 294" preserveAspectRatio="xMidYMax slice" aria-hidden className={className}>
       <defs>
@@ -127,6 +130,8 @@ export const WORLD_MAP: Record<number, { band: string; chip: string; ink: string
   4: { band: "linear-gradient(180deg, #8ee8dc 0%, #43c4b8 55%, #1d9a95 100%)", chip: "#22b8aa", ink: "#0f766e", short: "Fizzy", banner: "linear-gradient(180deg, #8ee8dc 0%, #3fa0d8 100%)" },
   5: { band: "linear-gradient(180deg, #170e2e 0%, #2a1850 55%, #3b2266 100%)", chip: "#8b5cf6", ink: "#6d28d9", short: "Midnight", banner: "linear-gradient(180deg, #4a3480 0%, #2a1850 100%)" },
   6: { band: "linear-gradient(180deg, #2e1d3a 0%, #4a3150 45%, #6e4e5e 100%)", chip: "#7a5868", ink: "#6b4a7a", short: "Fortress", banner: "linear-gradient(180deg, #c94a3a 0%, #7a4a2a 100%)" },
+  7: { band: "linear-gradient(180deg, #c9ecff 0%, #8fd3f4 55%, #5ab4e5 100%)", chip: "#39a0ff", ink: "#1d6fa5", short: "Tundra", banner: "linear-gradient(180deg, #e3f5ff 0%, #8fd3f4 100%)" },
+  8: { band: "linear-gradient(180deg, #5a1030 0%, #8e1d43 55%, #b3203f 100%)", chip: "#e2384d", ink: "#9d174d", short: "Canyon", banner: "linear-gradient(180deg, #c4455f 0%, #7a1430 100%)" },
 };
 export const worldMap = (w: number) => WORLD_MAP[w] ?? WORLD_MAP[1];
 

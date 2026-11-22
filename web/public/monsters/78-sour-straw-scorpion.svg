@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Sour Straw Scorpion, a scorpion made of sugar-dusted rainbow sour candy straws, two pink pincers out and a sour candy stinger on its tail curled over its back">
+  <defs>
+    <clipPath id="sour-straw-scorpion-body"><rect x="50" y="104" width="100" height="62" rx="28"/></clipPath>
+  </defs>
+  <ellipse cx="100" cy="188" rx="80" ry="7" fill="#2b1d3a" opacity="0.18"/>
+  <!-- legs -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#2b1d3a" stroke-width="10"><path d="M62 150 L34 166 L28 184 M70 160 L50 178 L48 190 M138 150 L166 166 L172 184 M130 160 L150 178 L152 190"/></g>
+    <g stroke="#7bd36b" stroke-width="5"><path d="M62 150 L34 166 L28 184 M70 160 L50 178 L48 190 M138 150 L166 166 L172 184 M130 160 L150 178 L152 190"/></g>
+  </g>
+  <!-- tail: candy-straw segments arching over its back -->
+  <g stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round">
+    <rect x="87" y="88" width="26" height="20" rx="8" fill="#39a0ff" transform="rotate(-90 100 98)"/>
+    <rect x="87" y="66" width="26" height="20" rx="8" fill="#7bd36b" transform="rotate(-80 100 76)"/>
+    <rect x="93" y="44" width="26" height="20" rx="8" fill="#ffc93c" transform="rotate(-60 106 54)"/>
+    <rect x="107" y="28" width="26" height="20" rx="8" fill="#ff4d6d" transform="rotate(-25 120 38)"/>
+  </g>
+  <path d="M132 30 Q152 28 148 50 Q144 62 134 48 Z" fill="#ff9ec4" stroke="#2b1d3a" stroke-width="3.5" stroke-linejoin="round"/>
+  <g fill="#ffffff"><circle cx="140" cy="36" r="1.5"/><circle cx="142" cy="44" r="1.5"/><circle cx="104" cy="96" r="1.5"/><circle cx="96" cy="74" r="1.5"/><circle cx="110" cy="52" r="1.5"/></g>
+  <!-- arms and pincers -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M58 128 Q32 128 26 106" stroke="#2b1d3a" stroke-width="12"/><path d="M142 128 Q168 128 174 106" stroke="#2b1d3a" stroke-width="12"/>
+    <path d="M58 128 Q32 128 26 106" stroke="#ff9ec4" stroke-width="6"/><path d="M142 128 Q168 128 174 106" stroke="#ff9ec4" stroke-width="6"/>
+  </g>
+  <g fill="#ff9ec4" stroke="#2b1d3a" stroke-width="4" stroke-linejoin="round">
+    <path d="M20 108 Q2 88 14 70 Q22 84 30 84 Q28 70 40 64 Q46 90 28 112 Z"/>
+    <path d="M180 108 Q198 88 186 70 Q178 84 170 84 Q172 70 160 64 Q154 90 172 112 Z"/>
+  </g>
+  <!-- the body: striped sour straw -->
+  <g clip-path="url(#sour-straw-scorpion-body)">
+    <rect x="40" y="100" width="120" height="16" fill="#ff4d6d"/><rect x="40" y="116" width="120" height="14" fill="#ffc93c"/>
+    <rect x="40" y="130" width="120" height="14" fill="#7bd36b"/><rect x="40" y="144" width="120" height="26" fill="#39a0ff"/>
+  </g>
+  <rect x="50" y="104" width="100" height="62" rx="28" fill="none" stroke="#2b1d3a" stroke-width="4"/>
+  <g fill="#ffffff"><circle cx="62" cy="140" r="1.6"/><circle cx="74" cy="156" r="1.6"/><circle cx="136" cy="150" r="1.6"/><circle cx="128" cy="112" r="1.6"/><circle cx="70" cy="112" r="1.6"/><circle cx="140" cy="128" r="1.6"/></g>
+  <!-- face -->
+  <g stroke="#2b1d3a" stroke-width="3.5"><circle cx="84" cy="128" r="10" fill="#ffffff"/><circle cx="116" cy="128" r="10" fill="#ffffff"/></g>
+  <circle cx="86" cy="130" r="5.5" fill="#2b1d3a"/><circle cx="114" cy="130" r="5.5" fill="#2b1d3a"/>
+  <circle cx="87.5" cy="127.5" r="2" fill="#ffffff"/><circle cx="115.5" cy="127.5" r="2" fill="#ffffff"/>
+  <path d="M72 114 L94 120 M128 114 L106 120" stroke="#2b1d3a" stroke-width="5" stroke-linecap="round"/>
+  <!-- sour pucker -->
+  <circle cx="100" cy="150" r="5" fill="#2b1d3a"/>
+  <path d="M90 146 l-4 -2 M110 146 l4 -2" stroke="#2b1d3a" stroke-width="2.5" stroke-linecap="round"/>
+  <g fill="#ffc93c" stroke="#2b1d3a" stroke-width="2" stroke-linejoin="round">
+    <path d="M40 30 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+    <path d="M178 26 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+  </g>
+</svg>

@@ -1,6 +1,6 @@
 /**
  * What just happened, full screen (mockups MonVictory, MonStrike, MonKnockback, MonDefeat, and the
- * finish after level 60), one after another when several came at once; and the small news (a
+ * finish after the last level), one after another when several came at once; and the small news (a
  * heart, a power-up earned, Hardcore → Normal) as toasts at the top. Driven by the events a sync or
  * any game change returned (state.ts). On the battle screen the KO burst or the strike plays first
  * (Battle.tsx), then the screen comes up. With reduced motion nothing moves and the score is shown
@@ -8,7 +8,7 @@
  */
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { abilityFor, LEVEL_COUNT, levelInfo, MAX_HEARTS, MAX_LIVES, monsterHp, POTION_DAMAGE, POTION_MINUTES, START_HEARTS, WEEK_ACTIVE_DAYS, WORLDS, type EventView, type GameView, type HallRun } from "../../../shared/game";
+import { abilityFor, LEVEL_COUNT, levelInfo, PLANNED_LEVELS, MAX_HEARTS, MAX_LIVES, monsterHp, POTION_DAMAGE, POTION_MINUTES, START_HEARTS, WEEK_ACTIVE_DAYS, WORLDS, type EventView, type GameView, type HallRun } from "../../../shared/game";
 import { cx } from "../components/ui";
 import { api } from "../lib/api";
 import type { GameScreen } from "../lib/route";
@@ -102,7 +102,7 @@ function Overlay({ r, view, today, waiting }: { r: Result; view: GameView; today
     : r.kind === "knockback" ? "linear-gradient(180deg, #f08a48 0%, #e0703f 30%, #3a2240 62%, #2b1d3a 100%)"
     : r.kind === "defeat" ? "radial-gradient(120% 60% at 50% 10%, #5a3a8a 0%, #2b1d3a 70%)"
     : "radial-gradient(130% 45% at 50% 18%, #9a4aa8 0%, #3a2654 60%, #2b1d3a 100%)";
-  const label = r.kind === "victory" ? "Victory" : r.kind === "strike" ? "The monster struck" : r.kind === "life" ? "Extra life" : r.kind === "knockback" ? "Knocked back" : r.kind === "defeat" ? "Defeated" : "All 60 crushed";
+  const label = r.kind === "victory" ? "Victory" : r.kind === "strike" ? "The monster struck" : r.kind === "life" ? "Extra life" : r.kind === "knockback" ? "Knocked back" : r.kind === "defeat" ? "Defeated" : "All the monsters crushed";
   return (
     <div ref={ref} tabIndex={-1} role="dialog" aria-modal="true" aria-label={label} className="game fixed inset-0 z-[60] overflow-y-auto outline-none" style={{ background: bg }}>
       <div className="mx-auto w-full max-w-xl pb-8">
@@ -245,7 +245,7 @@ function Victory({ r, view }: { r: Extract<Result, { kind: "victory" }>; view: G
   const daysLeft = Number(d.daysLeft ?? 0);
   return (
     <>
-      <Top kicker={`CALORIE CRUSHER · RUN #${view.run?.number ?? ""}`} sub={`World ${lv.world} · ${lv.worldName} · Level ${lv.level} of 60`} />
+      <Top kicker={`CALORIE CRUSHER · RUN #${view.run?.number ?? ""}`} sub={`World ${lv.world} · ${lv.worldName} · Level ${lv.level} of ${LEVEL_COUNT}`} />
       <KoScene level={lv.level} title={`${lv.name} defeated!`} replayKey={0}
         caption={`${fmt(Number(d.damage ?? 0))} damage in all${daysLeft ? `, with ${daysLeft} ${daysLeft === 1 ? "day" : "days"} to spare` : ", right on the deadline"}. Down it goes!`} />
       <Breakdown ko={r.ko} score={view.run?.liveScore ?? 0} />
@@ -259,7 +259,7 @@ function Victory({ r, view }: { r: Extract<Result, { kind: "victory" }>; view: G
         <div className="min-w-0 flex-1">
           <span className="rounded-full border-2 border-[#2b1d3a] bg-[#7bd36b] px-2 py-px text-[11px] font-black tracking-[0.04em]">LOOT · TROPHY CARD</span>
           <h3 className="mt-1 font-game text-[20px] leading-tight font-normal">{lv.name} trophy card</h3>
-          <p className="text-[13px] leading-snug font-bold text-[#6b5a7a]">In your Monster Book now. {beaten} of 60 beaten this run.</p>
+          <p className="text-[13px] leading-snug font-bold text-[#6b5a7a]">In your Monster Book now. {beaten} of {LEVEL_COUNT} beaten this run.</p>
           <a href="#/game/book" onClick={nextResult} className="text-[13px] font-black text-[#5b3fd0] underline underline-offset-2">Open the Monster Book</a>
         </div>
       </Panel>
@@ -606,20 +606,29 @@ function Defeat({ r, view, today }: { r: Extract<Result, { kind: "defeat" }>; vi
   );
 }
 
+/** What the finish screen says when the last monster there is goes down. */
+const FINAL_WORDS: Record<number, string> = {
+  60: "The Midnight Snacker shuffles back to bed. The fridge is safe. You did it!",
+  80: "Count Concession takes a bow and the curtain comes down. The snack bar is closed. You did it!",
+};
+
 function Finish({ r, view, today }: { r: Extract<Result, { kind: "finish" }>; view: GameView; today: string }) {
   const run = view.run;
   const { all, at } = useHallSpot(today, run?.number);
   const ko = r.ko.kind === "ko" ? r.ko : null;
+  // the levels there were when it finished: the KO's level, or what the finish event says (older ones: 60)
+  const n = Math.max(1, Math.min(LEVEL_COUNT, Number(ko ? ko.data.level : r.ko.data.levels ?? 60) || LEVEL_COUNT));
+  const last = levelInfo(n);
   return (
     <>
-      <Top kicker={`CALORIE CRUSHER · RUN #${run?.number ?? ""} · COMPLETE`} sub="All 60 levels, all 6 worlds" right={<Trophy className="h-8 w-9" />} />
-      {ko ? <KoScene level={LEVEL_COUNT} title="ALL 60 CRUSHED!" replayKey={0} caption="The Midnight Snacker shuffles back to bed. The fridge is safe. You did it!" /> : (
-        <h2 className="mt-4 text-center font-game text-[44px] leading-none text-[#ffc93c]" style={{ WebkitTextStroke: "6px #2b1d3a", paintOrder: "stroke fill" }}>ALL 60 CRUSHED!</h2>
+      <Top kicker={`CALORIE CRUSHER · RUN #${run?.number ?? ""} · COMPLETE`} sub={`All ${n} levels, all ${last.world} worlds`} right={<Trophy className="h-8 w-9" />} />
+      {ko ? <KoScene level={n} title={`ALL ${n} CRUSHED!`} replayKey={0} caption={FINAL_WORDS[n] ?? `${last.name} goes down, the last monster of all. You did it!`} /> : (
+        <h2 className="mt-4 text-center font-game text-[44px] leading-none text-[#ffc93c]" style={{ WebkitTextStroke: "6px #2b1d3a", paintOrder: "stroke fill" }}>ALL {n} CRUSHED!</h2>
       )}
       <Panel className="text-center">
         <span className="text-[12px] font-black tracking-[0.08em] text-[#c2410c]">FINAL SCORE</span>
         <div className="font-game text-[52px] leading-none text-[#ffc93c]" style={{ WebkitTextStroke: "3px #2b1d3a", paintOrder: "stroke fill" }}>{fmt(run?.score ?? 0)}</div>
-        <p className="mt-1 text-[14px] leading-snug font-bold text-[#6b5a7a]">Every monster in the Monster Book, beaten. Take a bow — then maybe a walk.</p>
+        <p className="mt-1 text-[14px] leading-snug font-bold text-[#6b5a7a]">Every monster in the Monster Book, beaten. Take a bow — then maybe a walk.{n < PLANNED_LEVELS ? " More worlds are on the way: when they come, this run carries on into them with its score, hearts and power-ups." : ""}</p>
         {run ? <RunFacts view={view} endedOn={r.ko.day} /> : null}
       </Panel>
       {ko ? <Breakdown ko={ko} score={run?.score ?? 0} /> : null}

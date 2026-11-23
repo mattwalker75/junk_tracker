@@ -105,6 +105,10 @@ xcode() {
       -derivedDataPath "$BUILD/DerivedData" MARKETING_VERSION="$(version)" CURRENT_PROJECT_VERSION="$(buildnum)" \
       PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" "$@" build >"$BUILD/xcodebuild.log" 2>&1; then
     grep -E "error:|BUILD FAILED" "$BUILD/xcodebuild.log" | head -n 15 >&2 || tail -n 25 "$BUILD/xcodebuild.log" >&2
+    if grep -q "has no devices" "$BUILD/xcodebuild.log"; then
+      bad "Apple needs your iPhone registered with your team first."
+      note "Plug it in, unlock it, tap Trust, turn on Developer Mode, then run ./BUILD_APP.sh --device again (it registers it)."
+    fi
     if grep -qiE "healthkit" "$BUILD/xcodebuild.log"; then
       bad "Apple would not sign the app with Apple Health for this team (a free Apple ID may not get HealthKit)."
       note "Build it without Apple Health: ./BUILD_APP.sh --health off, then this again (Settings → You says so in the app)."
@@ -242,21 +246,29 @@ case "$cmd" in
     [[ -n "$(team)" ]] || die "A real iPhone needs your Apple developer team. Save it once: ./BUILD_APP.sh --team <team id>
       (Xcode → Settings → Accounts → your Apple ID → the team's id)."
     bold "Building Craving Crusher for iPhone $(version) (a real iPhone, team $(team))"
+    # the iPhone plugged in, found first: Xcode builds for it and registers it with your team (a team with no
+    # registered iPhone gets no provisioning profile: "Your team has no devices…")
+    device="${CC_DEVICE:-}" udid=""
+    list="$(mktemp -t cc-devices)"
+    if xcrun devicectl list devices --json-output "$list" >/dev/null 2>&1; then
+      read -r found_id found_udid < <(CC_DEVICE="$device" node -e '
+        const d = (JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).result?.devices || [])
+          .filter((x) => x.hardwareProperties?.platform === "iOS" && x.hardwareProperties?.reality === "physical"
+            && x.connectionProperties?.tunnelState !== "unavailable");
+        const want = process.env.CC_DEVICE;
+        const pick = want ? d.find((x) => x.identifier === want || x.hardwareProperties?.udid === want) : d.length === 1 ? d[0] : null;
+        if (pick) console.log(pick.identifier, pick.hardwareProperties?.udid || "");' "$list") || true
+      device="${found_id:-$device}" udid="${found_udid:-}"
+    fi
+    rm -f "$list"
     page --test
-    xcode iphoneos DEVELOPMENT_TEAM="$(team)" CODE_SIGN_STYLE=Automatic -allowProvisioningUpdates
+    if [[ -n "$udid" ]]; then
+      xcode iphoneos DEVELOPMENT_TEAM="$(team)" CODE_SIGN_STYLE=Automatic -destination "id=$udid" -allowProvisioningUpdates -allowProvisioningDeviceRegistration
+    else
+      xcode iphoneos DEVELOPMENT_TEAM="$(team)" CODE_SIGN_STYLE=Automatic -allowProvisioningUpdates -allowProvisioningDeviceRegistration
+    fi
     copy_app iphoneos iPhone
     ok "Built: $BUILD/iPhone/CravingCrusher.app"
-    device="${CC_DEVICE:-}"
-    if [[ -z "$device" ]]; then
-      list="$(mktemp -t cc-devices)"
-      if xcrun devicectl list devices --json-output "$list" >/dev/null 2>&1; then
-        device="$(node -e '
-          const d = (JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).result?.devices || [])
-            .filter((x) => x.hardwareProperties?.platform === "iOS" && x.connectionProperties?.tunnelState !== "unavailable");
-          if (d.length === 1) console.log(d[0].identifier);' "$list")"
-      fi
-      rm -f "$list"
-    fi
     if [[ -n "$device" ]]; then
       info "Putting it on the iPhone…"
       xcrun devicectl device install app --device "$device" "$BUILD/iPhone/CravingCrusher.app" >/dev/null \

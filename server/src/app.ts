@@ -17,6 +17,7 @@ import { Goals } from "./goals.js";
 import { Log } from "./log.js";
 import { hostGuard, networkUrls, sameOriginWrites } from "./security.js";
 import { settingsSchema, userSettingsSchema } from "./settingsSchemas.js";
+import { StartOver } from "./startOver.js";
 import { Users } from "./users.js";
 import { parse, UserError, writeAtomic } from "./util.js";
 
@@ -41,11 +42,25 @@ function sessionKey(config: Config): string {
 export interface AppHandle { app: express.Express; db: Database.Database; users: Users; log: Log; goals: Goals; game: Game; config: Config }
 
 export function createApp(config = new Config(), opts: { rateLimit?: boolean; webDir?: string; serverDay?: () => string } = {}): AppHandle {
-  const db = openDatabase(config.resolve(config.get().database.path));
+  const dbFile = config.resolve(config.get().database.path);
+  const db = openDatabase(dbFile);
   const users = new Users(db, config);
   const goals = new Goals(db);
   const log = new Log(db, users, goals);
   const game = new Game(db, users, opts.serverDay);
+  const startOver = new StartOver(db, users);
+  /** the whole database, copied beside it under a temporary name first (as before an upgrade, db.ts); a copy that can't be made stops the change */
+  const keepCopy = (file: string) => {
+    const tmp = `${file}.tmp`;
+    try {
+      fs.rmSync(tmp, { force: true });
+      db.exec(`VACUUM INTO '${tmp.replaceAll("'", "''")}'`);
+      fs.chmodSync(tmp, 0o600);
+      fs.renameSync(tmp, file);
+    } catch (e) {
+      throw new UserError(`A copy of the log could not be kept first (${(e as Error).message}), so nothing was changed.`, 500);
+    }
+  };
   const owner = (req: Request) => users.owner(req);
   const app = express();
   app.disable("x-powered-by");
@@ -130,6 +145,14 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   // workouts from the phone's health app (the phone apps send them; the web app has no health app)
   app.post("/api/health/import", h((req) => log.importWorkouts(owner(req), req.body)));
   app.get("/api/health/summary", h((req) => log.healthSummary(owner(req), req.query.today)));
+  // Start over (Nov 22 2026): your log set aside (Undo brings it back), with a copy of the database file kept first
+  app.get("/api/start-over", h((req) => startOver.status(owner(req))));
+  app.post("/api/start-over", h((req) => {
+    const today = req.body?.today;
+    if (typeof today === "string" && /^\d{4}-\d{2}-\d{2}$/.test(today)) keepCopy(`${dbFile}.before-start-over-${today}`);
+    return startOver.startOver(owner(req), req.body);
+  }));
+  app.post("/api/start-over/undo", h((req) => startOver.undo(owner(req), req.body)));
   app.get("/api/me/settings", h((req) => users.settings(owner(req))));
   app.put("/api/me/settings", h((req) => users.saveSettings(owner(req), parse(userSettingsSchema, req.body))));
 

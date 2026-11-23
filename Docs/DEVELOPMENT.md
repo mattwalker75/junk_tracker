@@ -87,7 +87,7 @@ everyone out. Delete it to sign everyone out.
 
 ## Data
 SQLite with WAL; the schema version is `PRAGMA user_version` (see `SCHEMA_VERSION` in
-`server/src/migrations.ts`; 8 as of 1.13). A newer database than the app knows is refused. Add a migration to
+`server/src/migrations.ts`; 9 as of 1.14). A newer database than the app knows is refused. Add a migration to
 `MIGRATIONS` in `migrations.ts` for any change (the phone apps run the same list). Before upgrading a database
 that already has data, the app saves a copy beside it as `junk.db.before-v<new version>` (written to a temporary
 name first; an older copy of the same name is kept, renamed with its date; delete them when you no longer need
@@ -112,6 +112,9 @@ before-upgrade copy the same way (`junk.db.before-v8` on the way to 8; `APP_PORT
 - `health_imports(user_id, source, source_id, seen_at, activity_id, skipped)` (v8, Nov 22 2026) — every
   workout the phone's health app has handed over, brought in (`activity_id`) or skipped as one logged by
   hand (`skipped`), so it is taken only once: an edited one stays as edited, a deleted one never comes back.
+- `set_aside(user_id PK, made_on, made_at, counts_json, data_json)` (v9, Nov 22 2026) — Start over: a person's
+  log moved out of the way (their splurges, activities, weigh-ins, goals and game runs/fights/events as JSON rows),
+  one held per person, so Undo can put it back (`server/src/startOver.ts`).
 - `game_runs`, `game_fights`, `game_events` (v4; `lives` and `hp_mult` v6; a fight's level 1–120 v7) —
   Calorie Crusher's runs, its fights and what happened in them: `Docs/game/ARCHITECTURE.md`.
 - `weigh_ins(user_id, day, pounds, …)` — primary key `(user_id, day)`: one a day. Always pounds.
@@ -144,7 +147,10 @@ All JSON. Writes must come from the app's own page (same origin) and a known Hos
 | `GET /api/weigh-ins`, `PUT/DELETE /api/weigh-ins/:day` | PUT `{weight, unit}` replaces the day's |
 | `GET /api/reminders?today=&tz=` | `{due: [...]}` — the reminders due now (`tz` = the phone's time-zone offset in minutes); reads only |
 | `POST /api/health/import` `{source, today, workouts}` | workouts from the phone's health app (`source`: `apple-health` \| `health-connect`, at most 1000); each is taken once; replies `{added, skipped}` |
-| `GET /api/health/summary?today=` | `{lastAt, lastAdded, thisWeek}` for the Settings card |
+| `GET /api/health/summary?today=` | `{lastAt, lastAdded, thisWeek, everSeen}` for the Settings card |
+| `GET /api/start-over` | `{held}` — the start over set aside (its day and counts), or null; reads only |
+| `POST /api/start-over` `{today}` | Start over: your log set aside, settings kept; a copy of the database file is kept first (`junk.db.before-start-over-<day>`) |
+| `POST /api/start-over/undo` `{today}` | Undo: everything set aside comes back, what was logged since stays; the game goes back to where it was |
 | `GET /api/game…`, `POST /api/game/…` | Calorie Crusher: `Docs/game/ARCHITECTURE.md` ("API") |
 | `GET/PUT /api/me/settings` | the person on screen's settings |
 | `GET/POST /api/users` (POST needs sign-in on), `PUT /api/users/:id/name`, `PUT /api/users/:id/password`, `POST /api/users/:id/switch`, `POST /api/users/switch-back`, `DELETE /api/users/:id` `{confirm: "DELETE"}` | |

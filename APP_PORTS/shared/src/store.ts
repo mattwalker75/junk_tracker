@@ -24,12 +24,12 @@ export interface PhoneStore {
   save(bytes: Uint8Array): Promise<void>;
   /** move a damaged junk.db out of the way (to junk.db.damaged), so saving doesn't turn it into junk.db.prev */
   setAside(): Promise<void>;
-  /** keep a named copy for good: junk.db.before-v<N> */
+  /** keep a named copy for good: junk.db.before-v<N>, junk.db.before-start-over-<day> */
   keepCopy(name: string, bytes: Uint8Array): Promise<void>;
 }
 
 /** the only names keepCopy takes */
-export const COPY_NAME = /^junk\.db\.before-v\d{1,3}$/;
+export const COPY_NAME = /^junk\.db\.before-(v\d{1,3}|start-over-\d{4}-\d{2}-\d{2})$/;
 
 export function toBase64(bytes: Uint8Array): string {
   let s = "";

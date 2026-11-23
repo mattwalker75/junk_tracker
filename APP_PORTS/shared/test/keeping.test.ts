@@ -125,10 +125,37 @@ describe("an upgrade", () => {
     old.pragma("user_version = 6");
     const p = phone({ "junk.db": old.file() });
     const k = await openLog(SQL, p.store, "9.9.9", () => TODAY);
-    expect(versionOf(p.files["junk.db"])).toBe(8);
+    const { SCHEMA_VERSION } = await import("../../../server/src/migrations");
+    expect(versionOf(p.files["junk.db"])).toBe(SCHEMA_VERSION);
     await k.answer("POST", "/api/splurges", splurge("Donut"));
     await k.answer("POST", "/api/splurges", splurge("Pizza"));
-    expect(versionOf(p.files["junk.db.before-v8"])).toBe(6);
-    expect(versionOf(p.files["junk.db.prev"])).toBe(8);
+    expect(versionOf(p.files[`junk.db.before-v${SCHEMA_VERSION}`])).toBe(6);
+    expect(versionOf(p.files["junk.db.prev"])).toBe(SCHEMA_VERSION);
+  });
+});
+
+describe("start over on the phone", () => {
+  it("keeps a copy of the log file first, sets the log aside, and Undo brings it back", async () => {
+    const p = phone(await logWith(["Cookie", "Donut"]));
+    const k = await openLog(SQL, p.store, "9.9.9", () => TODAY);
+    const st = await k.answer("POST", "/api/start-over", { today: TODAY });
+    expect(st.status).toBe(200);
+    expect((st.body as { held: { counts: { splurges: number } } }).held.counts.splurges).toBe(2);
+    expect(count(p.files[`junk.db.before-start-over-${TODAY}`], "Cookie")).toBe(1);
+    expect(count(p.files["junk.db"], "Cookie")).toBe(0);
+    await k.answer("POST", "/api/splurges", splurge("Pizza"));
+    expect((await k.answer("POST", "/api/start-over/undo", { today: TODAY })).status).toBe(200);
+    for (const w of ["Cookie", "Donut", "Pizza"]) expect(count(p.files["junk.db"], w)).toBe(1);
+  });
+
+  it("changes nothing when the copy can't be kept", async () => {
+    const files = await logWith(["Cookie"]);
+    const p = phone(files);
+    p.store.keepCopy = async () => { throw new Error("No space left on device"); };
+    const k = await openLog(SQL, p.store, "9.9.9", () => TODAY);
+    const r = await k.answer("POST", "/api/start-over", { today: TODAY });
+    expect(r.status).toBe(500);
+    expect((r.body as { error: string }).error).toMatch(/could not be kept first .*so nothing was changed/);
+    expect(count(p.files["junk.db"], "Cookie")).toBe(1);
   });
 });

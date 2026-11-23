@@ -558,7 +558,7 @@ describe("planned treat (Nov 11 2026)", () => {
     const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
     const Database = (await import("better-sqlite3")).default;
     const { MIGRATIONS, openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
-    expect(SCHEMA_VERSION).toBe(8);
+    expect(SCHEMA_VERSION).toBeGreaterThanOrEqual(8);
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-up4-"));
     const file = path.join(dir, "junk.db");
     try {

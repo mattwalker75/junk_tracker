@@ -5,6 +5,19 @@ the change was made).
 
 ## [Unreleased]
 
+## [1.14.0] — 2026-11-22
+### Added
+- 2026-11-22: **Start over** — the last card in Settings → You, on the web app, iPhone and Android. Back after a
+  break? Clear your log (splurges, activities, weigh-ins, goals and Calorie Crusher runs) and begin again with your
+  settings as they were; on the web app only your own log. A window says what goes and what stays before you
+  confirm. Nothing is lost: your log is set aside, and **Undo** brings it all back — from the message straight
+  after, or from the card later — keeping anything you logged in between. A copy of the database file is kept first
+  (`junk.db.before-start-over-<date>`). Reminders count from the day you start over, and workouts from Apple Health
+  or Health Connect start again from that day.
+### Changed
+- 2026-11-22: The database is version 9 (`set_aside`, for Start over); the web app keeps `junk.db.before-v9` and the
+  phone apps the same name when they upgrade.
+
 ## [1.13.1] — 2026-11-22
 ### Fixed (a focused review of 1.12–1.13: all 13 findings)
 - 2026-11-22: **Health Connect turns on with Android 14 and newer** (it failed when the permission screen should

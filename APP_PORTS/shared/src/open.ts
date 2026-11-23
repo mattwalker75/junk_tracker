@@ -84,6 +84,12 @@ export class Keeper {
 
   async answer(method: string, url: string, body?: unknown): Promise<{ status: number; body: unknown }> {
     const db = this.backend.db;
+    // Start over: a copy of the whole log file is kept first (Undo is the way back; this is the last resort)
+    const today = (body as { today?: unknown } | undefined)?.today;
+    if (method === "POST" && url.split("?")[0] === "/api/start-over" && typeof today === "string" && /^\d{4}-\d{2}-\d{2}$/.test(today)) {
+      try { await this.store.keepCopy(`junk.db.before-start-over-${today}`, this.lastGood); }
+      catch (e) { return { status: 500, body: { error: `A copy of the log could not be kept first on ${this.store.where} (${(e as Error).message}), so nothing was changed.` } }; }
+    }
     const before = db.totalChanges();
     const a = this.backend.handle(method, url, body);
     if (db.totalChanges() === before) return a;

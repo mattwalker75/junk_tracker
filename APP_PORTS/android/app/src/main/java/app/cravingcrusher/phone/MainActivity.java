@@ -172,10 +172,10 @@ public class MainActivity extends Activity {
             }
         }
 
-        /** a copy kept for good, only as junk.db.before-v<N> (the log from before an upgrade) */
+        /** a copy kept for good, only as junk.db.before-v<N> (before an upgrade) or junk.db.before-start-over-<day> */
         @JavascriptInterface
         public synchronized String keepCopy(String name, String b64) {
-            if (name == null || !name.matches("junk\\.db\\.before-v\\d{1,3}")) return "Not a copy name";
+            if (name == null || !name.matches("junk\\.db\\.before-(v\\d{1,3}|start-over-\\d{4}-\\d{2}-\\d{2})")) return "Not a copy name";
             byte[] data;
             try { data = Base64.decode(b64, Base64.DEFAULT); } catch (IllegalArgumentException e) { return "The app was sent something it could not read"; }
             File tmp = new File(getFilesDir(), name + ".tmp");

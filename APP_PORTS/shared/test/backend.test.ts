@@ -106,7 +106,7 @@ describe("phone backend", () => {
       INSERT INTO game_fights (id, run_id, user_id, level, attempt, started_on, deadline_on, status, ended_on, seq) VALUES ('f1', 'r1', 'u1', 60, 1, '2030-03-05', '2030-03-12', 'won', '2030-03-12', 0);
       INSERT INTO game_events (id, run_id, fight_id, day, at, kind, data_json, seq) VALUES ('e1', 'r1', 'f1', '2030-03-12', 'x', 'ko', '{}', 0), ('e2', 'r1', 'f1', '2030-03-12', 'x', 'finish', '{}', 1);`);
     const b = fresh(old.file());
-    expect([b.db.pragma("user_version", { simple: true }), b.upgradedFrom, fresh().upgradedFrom]).toEqual([8, 6, null]);
+    expect([b.db.pragma("user_version", { simple: true }), b.upgradedFrom, fresh().upgradedFrom]).toEqual([(await import("../../../server/src/migrations")).SCHEMA_VERSION, 6, null]);
     expect(b.db.prepare("SELECT id FROM game_events ORDER BY seq").all()).toEqual([{ id: "e1" }, { id: "e2" }]);
     expect(b.db.pragma("foreign_key_check")).toEqual([]);
     const synced = ok(b, "POST", "/api/game/sync", { today: TODAY, now: NOW });

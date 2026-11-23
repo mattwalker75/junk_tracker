@@ -102,12 +102,12 @@ describe("database version 8", () => {
   it("upgrades a version 7 log, keeping every activity as one logged by hand", async () => {
     const Database = (await import("better-sqlite3")).default;
     const { MIGRATIONS, openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
-    expect(SCHEMA_VERSION).toBe(8);
+    expect(SCHEMA_VERSION).toBeGreaterThanOrEqual(8);
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-v8-"));
     const file = path.join(dir, "junk.db");
     try {
       const old = new Database(file);
-      for (let v = 0; v < 7; v++) old.exec(MIGRATIONS[v]);
+      for (let v = 0; v < 7; v++) old.exec(MIGRATIONS[v]); // version 7, before workouts had a source
       old.pragma("user_version = 7");
       old.exec("INSERT INTO users (id, name, password_hash, created_at) VALUES ('u1', 'Matt', '', 'x')");
       old.exec("INSERT INTO activities (id, user_id, what, minutes, calories, day, time, notes, created_at, updated_at) VALUES ('a1', 'u1', 'Walk', 30, NULL, '2026-11-20', '08:00', '', 'x', 'x')");
@@ -116,7 +116,7 @@ describe("database version 8", () => {
       expect(db.prepare("SELECT what, source, source_id FROM activities").all()).toEqual([{ what: "Walk", source: "", source_id: null }]);
       expect(db.prepare("SELECT COUNT(*) AS n FROM health_imports").get()).toEqual({ n: 0 });
       db.close();
-      expect(fs.existsSync(`${file}.before-v8`)).toBe(true);
+      expect(fs.existsSync(`${file}.before-v${SCHEMA_VERSION}`)).toBe(true);
     } finally { fs.rmSync(dir, { recursive: true, force: true }); }
   });
 });

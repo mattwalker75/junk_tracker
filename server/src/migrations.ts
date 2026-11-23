@@ -188,6 +188,17 @@ export const MIGRATIONS: readonly string[] = [
     PRIMARY KEY (user_id, source, source_id)
   );
   `,
+  // 9 — Start over (Nov 22 2026): a person's log moved out of the way (one held per person), so Undo can bring it
+  // back. data_json holds the rows of their splurges, activities, weigh-ins, goals and game runs/fights/events.
+  `
+  CREATE TABLE set_aside (
+    user_id     TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    made_on     TEXT NOT NULL,
+    made_at     TEXT NOT NULL,
+    counts_json TEXT NOT NULL,
+    data_json   TEXT NOT NULL
+  );
+  `,
 ];
 
 export const SCHEMA_VERSION = MIGRATIONS.length;

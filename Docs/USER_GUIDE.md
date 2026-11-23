@@ -287,6 +287,13 @@ changes the address (after a restart).
 
 **About** — the version, and where the settings file and the database are.
 
+**Start over** (the last card in Settings → You, on the web app and the phone apps) — for when you come back after
+a break and want a clean slate. Every splurge, activity, weigh-in, goal and Calorie Crusher run of *yours* is cleared;
+your settings stay, and nobody else's log is touched. You confirm in a window that lists what goes and what stays.
+Nothing is lost: your old log is set aside, and **Undo** brings it back — straight away from the message that
+appears, or later from the same card (until you start over again). Undo keeps anything you logged in between too.
+A copy of the database file is also kept first, next to it: `junk.db.before-start-over-<date>`.
+
 ## On your phone's home screen
 Open the app in the phone's browser, then:
 - **iPhone / iPad (Safari):** the Share button → **Add to Home Screen** → **Add**.

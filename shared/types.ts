@@ -135,6 +135,12 @@ export interface UserSettings {
   healthLastAt: string | null;
   healthLastAdded: number;
 }
+/**
+ * Start over (Matt, Nov 22 2026; server/src/startOver.ts): the log set aside — what it holds, and since when.
+ * Only the latest start over is held; Undo brings it back.
+ */
+export interface StartOverCounts { splurges: number; activities: number; weighIns: number; goals: number; runs: number; run: { number: number; level: number } | null }
+export interface StartOverStatus { held: { on: Day; at: string; counts: StartOverCounts } | null }
 /** Reminder days: the defaults Matt chose (weigh in 7, activity 3) and the range a person may pick. */
 export const REMINDER_DEFAULT_DAYS = { weighIn: 7, activity: 3 } as const;
 export const REMINDER_DAYS_MIN = 1;

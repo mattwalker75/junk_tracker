@@ -199,6 +199,15 @@ The person using it is not a developer — every message the page shows is a pla
     without it if Apple won't give the team HealthKit) and `APP_PORTS/android/…/HealthBridge.kt` (Health Connect; the
     builds you install only READ — write permissions only in the `CC_HEALTH_TEST=1` test build). Nothing reaches the
     network (Android still has no INTERNET permission).
+16. **Start over** (Matt, Nov 22 2026; canvas round 18): the last card in Settings → You, on every platform. Your
+    log (splurges, activities, weigh-ins, goals, game runs and the Hall) is MOVED OUT OF THE WAY into `set_aside`
+    (database v9, `server/src/startOver.ts`), never destroyed; settings stay; on the web app only your own log.
+    Confirmation is a window listing what goes and what stays with a red Start over button — no word to type (Matt:
+    "they will be able to restore it"). **Undo** (the message right after, or the card later; only the latest start
+    over is held) brings it all back and keeps what was logged since (a same-day weigh-in: the newer stays; old goals
+    after new ones); the game goes back to where it was. A copy of the database file is kept first
+    (`junk.db.before-start-over-<day>`: app.ts on the server, the Keeper in `open.ts` on a phone); a copy that can't be
+    made stops it. Reminders count from the start-over day; Health starts again from it (old workouts stay remembered).
 
 ## Working rules
 - Commit locally per feature with a dated CHANGELOG entry; `git add` explicit paths.

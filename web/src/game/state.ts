@@ -235,3 +235,16 @@ export function useGame(enabled = true): { today: Day; view: GameView | undefine
   }, [enabled, q.data, qc, today]);
   return { today, view: enabled ? q.data : undefined, error: enabled ? q.error : null, loading: enabled && q.isPending };
 }
+
+/**
+ * After Start over (or its Undo) the person's runs are different ones: everything this page remembered about
+ * them — results waiting, toasts, what was seen, today's daily check — is forgotten, and the game starts afresh
+ * from the next view (nothing old is replayed: with nothing kept, startFrom notes history as seen).
+ */
+export function forgetGame(): void {
+  if (person) { try { window.localStorage.removeItem(seenKey(person)); } catch {} }
+  queue = []; toasts = []; seen = new Set(); runId = null; newest = null; ready = false; beforeStart = [];
+  autoSyncedFor = null;
+  checked.clear();
+  emit();
+}

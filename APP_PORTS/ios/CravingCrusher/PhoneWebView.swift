@@ -134,8 +134,8 @@ final class LogStore: NSObject, WKScriptMessageHandlerWithReply {
                 replyHandler("ok", nil)
             } catch { replyHandler(nil, "The iPhone could not move the damaged log aside (\(error.localizedDescription))") }
         case "keepCopy":
-            // a copy kept for good, only as junk.db.before-v<N> (the log from before an upgrade)
-            guard let name = body["name"] as? String, name.range(of: #"^junk\.db\.before-v\d{1,3}$"#, options: .regularExpression) != nil,
+            // a copy kept for good, only as junk.db.before-v<N> (before an upgrade) or junk.db.before-start-over-<day>
+            guard let name = body["name"] as? String, name.range(of: #"^junk\.db\.before-(v\d{1,3}|start-over-\d{4}-\d{2}-\d{2})$"#, options: .regularExpression) != nil,
                   let b64 = body["data"] as? String, let data = Data(base64Encoded: b64), !data.isEmpty else {
                 replyHandler(nil, "That copy was not understood.")
                 return

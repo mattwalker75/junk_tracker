@@ -7,6 +7,8 @@ import { DEFAULT_EXAMPLES, DEFAULT_QUICK_PICKS, QUICK_PICK_MAX, REMINDER_DAYS_MA
 import { Card, cx, Input, Segmented, SIZE_DOT, Toggle } from "../components/ui";
 import { api } from "../lib/api";
 import { HealthCard } from "./HealthCard";
+import { StartOverCard } from "./StartOverCard";
+import { PHONE_APP } from "../lib/phone";
 
 export function YouSettings() {
   const qc = useQueryClient();
@@ -28,6 +30,8 @@ export function YouSettings() {
     } catch (e) { toast.error((e as Error).message); }
   };
   const s: UserSettings | undefined = q.data;
+  // on the web app, the others whose logs Start over doesn't touch (the phone apps have one person)
+  const people = useQuery({ queryKey: ["users"], queryFn: api.users, enabled: !PHONE_APP, retry: false });
 
   return (
     <>
@@ -113,6 +117,8 @@ export function YouSettings() {
           </>
         ) : <div className="h-28 animate-pulse rounded-xl bg-surface-2" />}
       </Card>
+
+      <StartOverCard others={people.data?.filter((u) => !u.isYou).map((u) => u.name)} />
     </>
   );
 }

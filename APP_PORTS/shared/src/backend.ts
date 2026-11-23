@@ -17,6 +17,7 @@ import type { SqlJsStatic } from "sql.js";
 import type { CustomTheme } from "../../../shared/types";
 import type { Config } from "../../../server/src/config";
 import { Game } from "../../../server/src/game";
+import { StartOver } from "../../../server/src/startOver";
 import { Goals } from "../../../server/src/goals";
 import { Log } from "../../../server/src/log";
 import { MIGRATIONS, SCHEMA_VERSION } from "../../../server/src/migrations";
@@ -44,6 +45,7 @@ export class Backend {
   private readonly log: Log;
   private readonly goals: Goals;
   private readonly game: Game;
+  private readonly startOver: StartOver;
   // the one person on the phone: Users works out who that is from an empty session, as with sign-in off
   private readonly req = { session: {} } as unknown as Request;
   private readonly routes: [string, RegExp, string[], (c: Ctx) => unknown][] = [];
@@ -64,6 +66,7 @@ export class Backend {
     this.goals = new Goals(db);
     this.log = new Log(db, this.users, this.goals);
     this.game = new Game(db, this.users, serverDay ?? localDay);
+    this.startOver = new StartOver(db as unknown as ConstructorParameters<typeof StartOver>[0], this.users);
     this.table();
   }
 
@@ -113,6 +116,10 @@ export class Backend {
     this.on("POST", "/api/auth/disable", () => this.users.state(this.req));
 
     this.on("GET", "/api/overview", (c) => this.log.overview(o(), c.query.today));
+    // Start over (the copy of the file kept first is the Keeper's, open.ts)
+    this.on("GET", "/api/start-over", () => this.startOver.status(o()));
+    this.on("POST", "/api/start-over", (c) => this.startOver.startOver(o(), c.body));
+    this.on("POST", "/api/start-over/undo", (c) => this.startOver.undo(o(), c.body));
     this.on("POST", "/api/health/import", (c) => this.log.importWorkouts(o(), c.body));
     this.on("GET", "/api/health/summary", (c) => this.log.healthSummary(o(), c.query.today));
     this.on("GET", "/api/reminders", (c) => this.log.reminders(o(), c.query.today, c.query.tz));

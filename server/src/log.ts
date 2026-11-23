@@ -217,7 +217,10 @@ export class Log {
     // never logged: count from the day the person was added (never later than today)
     const offset = Number(tz);
     const added = this.users.addedOn(owner, Number.isInteger(offset) && Math.abs(offset) <= 14 * 60 ? offset : 0) ?? today;
-    const since = added < today ? added : today;
+    // after a start over, the reminders count from that day too (as from the day a person was added)
+    const fresh = (this.db.prepare("SELECT made_on FROM set_aside WHERE user_id = ?").get(owner) as { made_on: Day } | undefined)?.made_on;
+    const from = fresh && fresh > added ? fresh : added;
+    const since = from < today ? from : today;
     return { due: remindersDue(settings, today, { weighIn: weigh?.day ?? null, activity: act?.day ?? null, activityWhat: act?.what }, since) };
   }
 

@@ -6,6 +6,7 @@ import { Minus, Plus } from "lucide-react";
 import { DEFAULT_EXAMPLES, DEFAULT_QUICK_PICKS, QUICK_PICK_MAX, REMINDER_DAYS_MAX, REMINDER_DAYS_MIN, SIZE_LABEL, SIZES, TOUGHNESS, type Size, type Toughness, type UserSettings } from "../../../shared/types";
 import { Card, cx, Input, Segmented, SIZE_DOT, Toggle } from "../components/ui";
 import { api } from "../lib/api";
+import { HealthCard } from "./HealthCard";
 
 export function YouSettings() {
   const qc = useQueryClient();
@@ -65,6 +66,7 @@ export function YouSettings() {
       <ReminderCard title="Activity reminder" what="activity" s={s}
         on={s?.activityReminder} days={s?.activityReminderDays}
         onToggle={(v) => void save({ activityReminder: v })} onDays={(n) => void save({ activityReminderDays: n }, true)} />
+      <HealthCard s={s} save={save} />
 
       <Card className="space-y-3 p-4">
         <h2 className="text-[15px] font-extrabold">When the app opens</h2>

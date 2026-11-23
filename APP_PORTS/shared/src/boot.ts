@@ -5,12 +5,15 @@
  */
 import initSqlJs from "sql.js";
 import wasmUrl from "sql.js/dist/sql-wasm-browser.wasm?url";
+import { phoneHealth } from "./health";
 import { openLog } from "./open";
 import { phoneStore } from "./store";
 
 declare const __CC_VERSION__: string;
 
 const store = phoneStore();
+// the phone's health app for the page (web/src/lib/phone.ts reads window.ccHealth)
+(window as unknown as { ccHealth: unknown }).ccHealth = phoneHealth();
 const ready = (async () => {
   const SQL = await initSqlJs({ locateFile: () => wasmUrl });
   return openLog(SQL, store, __CC_VERSION__);

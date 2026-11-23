@@ -113,6 +113,8 @@ export class Backend {
     this.on("POST", "/api/auth/disable", () => this.users.state(this.req));
 
     this.on("GET", "/api/overview", (c) => this.log.overview(o(), c.query.today));
+    this.on("POST", "/api/health/import", (c) => this.log.importWorkouts(o(), c.body));
+    this.on("GET", "/api/health/summary", (c) => this.log.healthSummary(o(), c.query.today));
     this.on("GET", "/api/reminders", (c) => this.log.reminders(o(), c.query.today, c.query.tz));
     this.on("GET", "/api/splurges", (c) => this.log.splurgesBetween(o(), c.query.from ?? "", c.query.to ?? ""));
     this.on("POST", "/api/splurges", (c) => this.log.addSplurge(o(), c.body));

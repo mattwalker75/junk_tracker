@@ -48,6 +48,7 @@ the web app's `data/junk.db` (the same tables, from `server/src/migrations.ts`).
 | `shared/src/backend.ts` | the same routes as `server/src/app.ts`, on the server's own code |
 | `shared/src/sqlite.ts` | the parts of better-sqlite3 the server's code uses, on sql.js |
 | `shared/src/store.ts` | where the file is kept: the iPhone app, the Android app, or (in a desktop browser) IndexedDB |
+| `shared/src/health.ts` | the phone's health app for the page (Apple Health / Health Connect), read only |
 | `shared/src/open.ts` | opening the log (backup, damaged file, upgrade copy) and undoing a change the phone failed to save |
 | `shared/vite.config.ts`, `shared/build_page.sh` | build the page for the apps (the BUILD scripts run them) |
 | `shared/test/` | the phone code's tests (`npx vitest run --config APP_PORTS/shared/vitest.config.ts`; the BUILD scripts run them) |
@@ -78,3 +79,22 @@ there is never a sign-in screen or a *Switched to* strip, the Hall of Heroes lis
 - **The stores:** the App Store needs a paid Apple Developer account (99 USD a year) and Play needs a Google
   Play developer account (25 USD once). The scripts make the builds the stores take (`ios`: Xcode's Archive;
   `android`: `--release`).
+
+## Workouts from Apple Health / Health Connect (Nov 22 2026)
+
+Settings → You → **Apple Health** (iPhone) or **Health Connect** (Android) brings recorded workouts in as activities, by
+themselves each time the app opens (CLAUDE.md rule 15). Read only: workouts and their active calories.
+
+- **iPhone:** `ios/CravingCrusher/Health.swift` (HealthKit), the entitlement in `CravingCrusher.entitlements`, the
+  permission text in the project's `INFOPLIST_KEY_NSHealthShareUsageDescription`. If Apple won't sign the app with
+  HealthKit for your Apple ID's team, `ios/BUILD_APP.sh` says so: `./BUILD_APP.sh --health off` builds without it (the
+  app's Settings card then says it was built without Apple Health); `--health on` puts it back.
+- **Android:** `android/app/src/main/kotlin/…/HealthBridge.kt` (the Health Connect client, with coroutines), the read
+  permissions and the privacy screen Health Connect asks for (`PrivacyActivity`) in the manifest. Android 14 and newer
+  have Health Connect built in; older phones get it from the Play Store (the card says so and links to it). The app now
+  uses AndroidX and Kotlin libraries, so the .apk is about 6 MB.
+- **Trying it on the emulator:** `CC_HEALTH_TEST=1 ./BUILD_APP.sh` makes a test build that may also write a test workout
+  (`CCAndroid.health("insertTest", …)` from the page's inspector); grant its permissions with
+  `adb shell pm grant app.cravingcrusher.phone android.permission.health.READ_EXERCISE` (and the other three). Build
+  again without it before installing on a real phone.
+

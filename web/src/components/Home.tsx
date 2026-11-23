@@ -10,7 +10,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight } from "lucide-react";
 import { useState, type KeyboardEvent, type ReactNode } from "react";
-import { SIZE_LABEL, type Activity, type Day, type Overview, type WeighIn } from "../../../shared/types";
+import { HEALTH_SOURCES, SIZE_LABEL, type Activity, type Day, type Overview, type WeighIn } from "../../../shared/types";
 import { useActions } from "../lib/actions";
 import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
@@ -190,7 +190,7 @@ function ActiveCard({ o, today }: { o: Overview; today: string }) {
 function LastActivity({ a, today, onOpen }: { a: Activity; today: string; onOpen: () => void }) {
   return (
     <button onClick={(e) => { e.stopPropagation(); onOpen(); }} className="mt-0.5 block max-w-full truncate text-left text-xs text-mute hover:underline">
-      Last: {activityLabel(a)} · {ago(a.day, today)}
+      Last: {activityLabel(a)} · {ago(a.day, today)}{a.source ? ` · ${HEALTH_SOURCES[a.source]}` : ""}
     </button>
   );
 }

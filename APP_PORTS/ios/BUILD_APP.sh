@@ -4,6 +4,7 @@
 #   ./BUILD_APP.sh            build for the iPhone Simulator on this Mac      → BUILD/Simulator/CravingCrusher.app
 #   ./BUILD_APP.sh --run      build it, then open it in the iPhone Simulator
 #   ./BUILD_APP.sh --team ABCDE12345   save your Apple developer team once (in CravingCrusher/Local.xcconfig, which git ignores)
+#   ./BUILD_APP.sh --health off|on     build without Apple Health (if Apple won't give your team HealthKit), or with it again
 #   ./BUILD_APP.sh --device   build for a real iPhone (needs your team)      → BUILD/iPhone/CravingCrusher.app
 #                             and put it on the iPhone plugged into this Mac, if there is one
 #   ./BUILD_APP.sh --open     build the page, then open the project in Xcode (Run it on your iPhone from there)
@@ -78,6 +79,15 @@ page() { "$REPO/APP_PORTS/shared/build_page.sh" "$PAGE" "${1:-}"; versions; }
 # your team: CC_TEAM_ID for this run, else the one saved with --team (Local.xcconfig, untracked — never the project file)
 LOCAL_XC="$HERE/CravingCrusher/Local.xcconfig"
 team() { if [[ -n "${CC_TEAM_ID:-}" ]]; then echo "$CC_TEAM_ID"; elif [[ -f "$LOCAL_XC" ]]; then sed -nE 's/^DEVELOPMENT_TEAM *= *([A-Z0-9]+).*/\1/p' "$LOCAL_XC" | head -n 1; fi; }
+saved_team() { [[ -f "$LOCAL_XC" ]] && sed -nE 's/^DEVELOPMENT_TEAM *= *([A-Z0-9]+).*/\1/p' "$LOCAL_XC" | head -n 1 || true; }
+health_off() { [[ -f "$LOCAL_XC" ]] && grep -q '^CC_HEALTH_FLAG *= *CC_NO_HEALTH' "$LOCAL_XC"; }
+# Local.xcconfig holds your team and whether Apple Health is left out — both yours, never in git
+write_local() { # <team> <off|on>
+  { echo "// yours, written by ./BUILD_APP.sh (--team, --health) — not in git"
+    [[ -n "$1" ]] && echo "DEVELOPMENT_TEAM = $1"
+    if [[ "$2" == off ]]; then echo "CODE_SIGN_ENTITLEMENTS ="; echo "CC_HEALTH_FLAG = CC_NO_HEALTH"; fi
+  } >"$LOCAL_XC"
+}
 # the version for Xcode's own builds too (▶ in Xcode), in the untracked Version.xcconfig
 versions() { printf '// written by BUILD_APP.sh — not in git\nMARKETING_VERSION = %s\nCURRENT_PROJECT_VERSION = %s\n' "$(version)" "$(buildnum)" >"$HERE/CravingCrusher/Version.xcconfig"; }
 
@@ -95,6 +105,10 @@ xcode() {
       -derivedDataPath "$BUILD/DerivedData" MARKETING_VERSION="$(version)" CURRENT_PROJECT_VERSION="$(buildnum)" \
       PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" "$@" build >"$BUILD/xcodebuild.log" 2>&1; then
     grep -E "error:|BUILD FAILED" "$BUILD/xcodebuild.log" | head -n 15 >&2 || tail -n 25 "$BUILD/xcodebuild.log" >&2
+    if grep -qiE "healthkit" "$BUILD/xcodebuild.log"; then
+      bad "Apple would not sign the app with Apple Health for this team (a free Apple ID may not get HealthKit)."
+      note "Build it without Apple Health: ./BUILD_APP.sh --health off, then this again (Settings → You says so in the app)."
+    fi
     die "Xcode could not build the app (above; all of it is in $BUILD/xcodebuild.log)."
   fi
 }
@@ -173,10 +187,18 @@ case "$cmd" in
     else ok "Opened the project in Xcode. For an iPhone, save your team first: ./BUILD_APP.sh --team <id>, then ▶ in Xcode."; fi
     exit 0 ;;
 
+  --health)
+    case "${2:-}" in
+      off) write_local "$(saved_team)" off; ok "Apple Health is left out of the next builds (CravingCrusher/Local.xcconfig). ./BUILD_APP.sh --health on puts it back." ;;
+      on)  write_local "$(saved_team)" on;  ok "Apple Health is back in the next builds." ;;
+      *)   die "Say --health off (build without Apple Health) or --health on." ;;
+    esac
+    exit 0 ;;
+
   --team)
     id="${2:-}"
     [[ "$id" =~ ^[A-Z0-9]{10}$ ]] || die "Give your 10-character team id: ./BUILD_APP.sh --team ABCDE12345 (Xcode → Settings → Accounts → your Apple ID)."
-    printf '// your Apple developer team — saved by ./BUILD_APP.sh --team; not in git\nDEVELOPMENT_TEAM = %s\n' "$id" >"$LOCAL_XC"
+    write_local "$id" "$(health_off && echo off || echo on)"
     ok "Saved team $id in CravingCrusher/Local.xcconfig (git ignores it). ./BUILD_APP.sh --device or --open uses it."
     exit 0 ;;
 

@@ -9,7 +9,7 @@
 import type Database from "better-sqlite3";
 import { z } from "zod";
 import { remindersDue, type Reminder } from "../../shared/reminders.js";
-import { KG, SIZES, type Activity, type ActivityInput, type Day, type Id, type Overview, type Splurge, type SplurgeInput, type WeighIn } from "../../shared/types.js";
+import { HEALTH_SAME_MINUTES, KG, SIZES, type Activity, type ActivityInput, type Day, type HealthImportResult, type HealthSource, type HealthSummary, type HealthWorkout, type Id, type Overview, type Splurge, type SplurgeInput, type WeighIn } from "../../shared/types.js";
 import type { Goals } from "./goals.js";
 import type { Users } from "./users.js";
 import { newId, now, parse, realDay, UserError } from "./util.js";
@@ -18,9 +18,9 @@ interface SplurgeRow { id: Id; user_id: Id; what: string; size: Splurge["size"];
 
 const toSplurge = (r: SplurgeRow): Splurge => ({ id: r.id, what: r.what, size: r.size, where: r.place, calories: r.calories, day: r.day, time: r.time, notes: r.notes, planned: !!r.planned, createdAt: r.created_at, updatedAt: r.updated_at });
 
-interface ActivityRow { id: Id; user_id: Id; what: string; minutes: number | null; calories: number | null; day: Day; time: string; notes: string; created_at: string; updated_at: string }
+interface ActivityRow { id: Id; user_id: Id; what: string; minutes: number | null; calories: number | null; day: Day; time: string; notes: string; source?: string; source_id?: string | null; created_at: string; updated_at: string }
 
-const toActivity = (r: ActivityRow): Activity => ({ id: r.id, what: r.what, minutes: r.minutes, calories: r.calories, day: r.day, time: r.time, notes: r.notes, createdAt: r.created_at, updatedAt: r.updated_at });
+const toActivity = (r: ActivityRow): Activity => ({ id: r.id, what: r.what, minutes: r.minutes, calories: r.calories, day: r.day, time: r.time, notes: r.notes, source: (r.source || "") as Activity["source"], createdAt: r.created_at, updatedAt: r.updated_at });
 
 const day = z.string().refine(realDay, "That is not a real date.");
 const splurgeSchema = z.object({
@@ -43,6 +43,21 @@ const activitySchema = z.object({
   time: splurgeSchema.shape.time,
   notes: splurgeSchema.shape.notes,
 });
+
+const workoutSchema = z.object({
+  id: z.string().min(1).max(200),
+  what: z.string().trim().min(1).max(120),
+  day,
+  time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "The time looks wrong."),
+  minutes: z.number().int().min(1).max(1440).nullable(),
+  calories: z.number().int().min(0).max(20000).nullable(),
+});
+const importSchema = z.object({
+  source: z.enum(["apple-health", "health-connect"], { error: "Workouts come from Apple Health or Health Connect." }),
+  today: day,
+  workouts: z.array(workoutSchema).max(1000, "That is too many workouts at once."),
+});
+const minutesOf = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
 
 const shift = (d: Day, days: number): Day => {
   const [y, m, dd] = d.split("-").map(Number);
@@ -99,6 +114,52 @@ export class Log {
 
   deleteActivity(owner: Id, id: Id): void {
     if (!this.db.prepare("DELETE FROM activities WHERE id = ? AND user_id = ?").run(id, owner).changes) throw new UserError("That activity no longer exists.", 404);
+  }
+
+  // ---------------------------------------------------------------- workouts from the phone's health app (Nov 22 2026)
+  /**
+   * Bring in workouts the phone's health app recorded. Each is seen once (health_imports): one brought in can be
+   * edited (it stays as edited) or deleted (it never comes back); one that starts within 30 minutes of an
+   * activity logged by hand the same day — or, when that one has no time, has the same name — is the same
+   * workout and is skipped. One request is all or nothing.
+   */
+  importWorkouts(owner: Id, body: unknown): HealthImportResult {
+    const v = parse(importSchema, body) as { source: HealthSource; today: Day; workouts: HealthWorkout[] };
+    const seen = this.db.prepare("SELECT 1 FROM health_imports WHERE user_id = ? AND source = ? AND source_id = ?");
+    const byHand = this.db.prepare("SELECT what, time FROM activities WHERE user_id = ? AND day = ? AND source = ''");
+    const remember = this.db.prepare("INSERT INTO health_imports (user_id, source, source_id, seen_at, activity_id, skipped) VALUES (?, ?, ?, ?, ?, ?)");
+    const insert = this.db.prepare(`INSERT INTO activities (id, user_id, what, minutes, calories, day, time, notes, source, source_id, created_at, updated_at)
+      VALUES (@id, @user_id, @what, @minutes, @calories, @day, @time, @notes, @source, @source_id, @created_at, @updated_at)`);
+    const added: Activity[] = [];
+    let skipped = 0;
+    const order = [...v.workouts].sort((a, b) => (a.day + a.time).localeCompare(b.day + b.time));
+    this.db.transaction(() => {
+      for (const w of order) {
+        if (w.day > v.today || seen.get(owner, v.source, w.id)) continue;
+        const t = now();
+        const same = (byHand.all(owner, w.day) as { what: string; time: string }[]).some((a) => a.time
+          ? Math.abs(minutesOf(a.time) - minutesOf(w.time)) <= HEALTH_SAME_MINUTES
+          : a.what.trim().toLowerCase() === w.what.trim().toLowerCase());
+        if (same) { remember.run(owner, v.source, w.id, t, null, "logged by hand"); skipped++; continue; }
+        const row: ActivityRow = { id: newId(), user_id: owner, what: w.what, minutes: w.minutes, calories: w.calories, day: w.day, time: w.time, notes: "", source: v.source, source_id: w.id, created_at: t, updated_at: t };
+        insert.run(row);
+        remember.run(owner, v.source, w.id, t, row.id, "");
+        added.push(toActivity(row));
+      }
+      this.users.recordHealthImport(owner, now(), added.length);
+    })();
+    return { added, skipped };
+  }
+
+  /** When workouts last came in, and how many this week (Settings → You). Reads only. */
+  healthSummary(owner: Id, today: unknown): HealthSummary {
+    if (!realDay(today)) throw new UserError("Which day is it?");
+    const s = this.users.settings(owner);
+    const [y, m, d] = today.split("-").map(Number);
+    const back = (new Date(Date.UTC(y, m - 1, d)).getUTCDay() - s.weekStart + 7) % 7;
+    const from = shift(today, -back);
+    const n = (this.db.prepare("SELECT COUNT(*) AS n FROM activities WHERE user_id = ? AND source <> '' AND day BETWEEN ? AND ?").get(owner, from, today) as { n: number }).n;
+    return { lastAt: s.healthLastAt, lastAdded: s.healthLastAdded, thisWeek: n };
   }
 
   activitiesBetween(owner: Id, from: Day, to: Day): Activity[] {

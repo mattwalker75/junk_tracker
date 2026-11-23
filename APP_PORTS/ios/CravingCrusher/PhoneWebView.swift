@@ -1,6 +1,7 @@
 // The web view that shows Craving Crusher's page, and the two things the page asks of the app:
 //  - its files, served from the app's `web` folder at cc-app://local/… (LocalFiles)
 //  - keeping its log: one SQLite file in Application Support (LogStore), which iCloud backs up with the phone
+//  - reading workouts from Apple Health, read only (HealthBridge, Health.swift)
 import UIKit
 import UniformTypeIdentifiers
 import WebKit
@@ -19,6 +20,7 @@ final class PageViewController: UIViewController, WKNavigationDelegate {
         let config = WKWebViewConfiguration()
         config.setURLSchemeHandler(LocalFiles(), forURLScheme: LocalFiles.scheme)
         config.userContentController.addScriptMessageHandler(LogStore(), contentWorld: .page, name: "ccStore")
+        config.userContentController.addScriptMessageHandler(HealthBridge(), contentWorld: .page, name: "ccHealth")
         web = WKWebView(frame: .zero, configuration: config)
         web.isOpaque = false
         web.backgroundColor = .clear

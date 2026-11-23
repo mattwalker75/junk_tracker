@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CC1000000000000000000021 /* CravingCrusherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1000000000000000000011 /* CravingCrusherApp.swift */; };
 		CC1000000000000000000022 /* PhoneWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1000000000000000000012 /* PhoneWebView.swift */; };
+		CC1000000000000000000026 /* Health.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1000000000000000000016 /* Health.swift */; };
 		CC1000000000000000000023 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC1000000000000000000013 /* Assets.xcassets */; };
 		CC1000000000000000000024 /* web in Resources */ = {isa = PBXBuildFile; fileRef = CC1000000000000000000014 /* web */; };
 /* End PBXBuildFile section */
@@ -20,6 +21,8 @@
 		CC1000000000000000000013 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC1000000000000000000014 /* web */ = {isa = PBXFileReference; lastKnownFileType = folder; path = web; sourceTree = "<group>"; };
 		CC1000000000000000000015 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
+		CC1000000000000000000016 /* Health.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Health.swift; sourceTree = "<group>"; };
+		CC1000000000000000000017 /* CravingCrusher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CravingCrusher.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +60,8 @@
 				CC1000000000000000000013 /* Assets.xcassets */,
 				CC1000000000000000000014 /* web */,
 				CC1000000000000000000015 /* Base.xcconfig */,
+				CC1000000000000000000016 /* Health.swift */,
+				CC1000000000000000000017 /* CravingCrusher.entitlements */,
 			);
 			path = CravingCrusher;
 			sourceTree = "<group>";
@@ -156,6 +161,7 @@
 			files = (
 				CC1000000000000000000021 /* CravingCrusherApp.swift in Sources */,
 				CC1000000000000000000022 /* PhoneWebView.swift in Sources */,
+				CC1000000000000000000026 /* Health.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,6 +218,7 @@
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Craving Crusher";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Craving Crusher reads your workouts and the calories they burned, to add them to your activity log. It writes nothing to Health, and nothing leaves your phone.";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -242,6 +249,7 @@
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Craving Crusher";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Craving Crusher reads your workouts and the calories they burned, to add them to your activity log. It writes nothing to Health, and nothing leaves your phone.";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

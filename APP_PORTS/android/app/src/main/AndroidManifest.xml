@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Craving Crusher: one screen showing the page; the log is kept in the app's own files (and in the phone's backup). -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Health Connect (Matt, Nov 22 2026): READ ONLY — recorded workouts and the active calories they burned -->
+    <uses-permission android:name="android.permission.health.READ_EXERCISE" />
+    <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED" />
+    <!-- on Android 13 and older, Health Connect is an app of its own -->
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,5 +26,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- what the app does with Health Connect: shown from Health Connect's permission screen (Android 13 and older) -->
+        <activity android:name=".PrivacyActivity" android:exported="true" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+        </activity>
+        <!-- … and on Android 14 and newer -->
+        <activity-alias
+            android:name="ViewPermissionUsageActivity"
+            android:exported="true"
+            android:targetActivity=".PrivacyActivity"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity-alias>
     </application>
 </manifest>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- TEST BUILDS ONLY (CC_HEALTH_TEST=1 ./BUILD_APP.sh): may write a test workout to Health Connect, to try the import on the emulator. The builds you install only read. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.health.WRITE_EXERCISE" />
+    <uses-permission android:name="android.permission.health.WRITE_ACTIVE_CALORIES_BURNED" />
+</manifest>

@@ -42,10 +42,43 @@ export interface Activity {
   day: Day;
   time: string;
   notes: string;
+  /** where it came from: "" logged by hand, or a workout brought in from Apple Health / Health Connect (phone apps) */
+  source: HealthSource | "";
   createdAt: string;
   updatedAt: string;
 }
 export type ActivityInput = Pick<Activity, "what" | "minutes" | "calories" | "day" | "time" | "notes">;
+
+/**
+ * Workouts from the phone's health app (Matt, Nov 22 2026; canvas round 17): the iPhone app reads Apple Health,
+ * the Android app Health Connect. Workouts only (never steps), brought in by themselves each time the app opens;
+ * the first time, the last 7 days. Each is remembered by its id, so an edit stays and a delete never comes back,
+ * and one that starts within 30 minutes of an activity logged by hand the same day is skipped as the same one.
+ */
+export type HealthSource = "apple-health" | "health-connect";
+export const HEALTH_SOURCES: Record<HealthSource, string> = { "apple-health": "Apple Health", "health-connect": "Health Connect" };
+/** the first time it is turned on, workouts from this many days (today included) come in */
+export const HEALTH_FIRST_DAYS = 7;
+/** a workout this close (minutes) to an activity logged by hand that day is the same one */
+export const HEALTH_SAME_MINUTES = 30;
+/** a workout brought in: what the phone's health app recorded, as the phone's own day and time */
+export interface HealthWorkout {
+  /** the health app's own id for it */
+  id: string;
+  what: string;
+  day: Day;
+  time: string;
+  minutes: number | null;
+  calories: number | null;
+}
+export interface HealthImportResult { added: Activity[]; skipped: number }
+export interface HealthSummary {
+  /** when workouts were last brought in (ISO), and how many came then */
+  lastAt: string | null;
+  lastAdded: number;
+  /** activities brought in from Health this week (from the person's week start) */
+  thisWeek: number;
+}
 /** the six quick-pick buttons on Log activity when a person has not written their own */
 export const DEFAULT_QUICK_PICKS = ["Walk", "Run", "Bike", "Gym", "Swim", "Yoga"] as const;
 export const QUICK_PICK_MAX = 40;
@@ -93,6 +126,12 @@ export interface UserSettings {
   weighReminderDays: number;
   activityReminder: boolean;
   activityReminderDays: number;
+  /** workouts from the phone's health app (phone apps only): on or off, and the first day they come from */
+  healthImport: boolean;
+  healthSince: Day | null;
+  /** set by the import itself, never by the page */
+  healthLastAt: string | null;
+  healthLastAdded: number;
 }
 /** Reminder days: the defaults Matt chose (weigh in 7, activity 3) and the range a person may pick. */
 export const REMINDER_DEFAULT_DAYS = { weighIn: 7, activity: 3 } as const;
@@ -107,7 +146,7 @@ export const TOUGHNESS: readonly { id: Toughness; label: string; mult: number }[
 export const toughnessMult = (t: Toughness | undefined): number => TOUGHNESS.find((x) => x.id === t)?.mult ?? 1;
 export const toughnessOf = (mult: number | undefined): (typeof TOUGHNESS)[number] => TOUGHNESS.find((x) => x.mult === mult) ?? TOUGHNESS[0];
 
-export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false, toughness: "standard", weighReminder: true, weighReminderDays: REMINDER_DEFAULT_DAYS.weighIn, activityReminder: true, activityReminderDays: REMINDER_DEFAULT_DAYS.activity };
+export const DEFAULT_USER_SETTINGS: UserSettings = { units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false, toughness: "standard", weighReminder: true, weighReminderDays: REMINDER_DEFAULT_DAYS.weighIn, activityReminder: true, activityReminderDays: REMINDER_DEFAULT_DAYS.activity, healthImport: false, healthSince: null, healthLastAt: null, healthLastAdded: 0 };
 
 export interface UserInfo {
   id: Id;

@@ -45,6 +45,7 @@ public class MainActivity extends Activity {
     static final String START = "https://" + HOST + "/index.html";
 
     private WebView web;
+    private HealthBridge health;
     private FrameLayout root;
 
     @Override
@@ -66,6 +67,7 @@ public class MainActivity extends Activity {
         s.setAllowFileAccess(false);
         s.setAllowContentAccess(false);
         web.setBackgroundColor(Color.TRANSPARENT);
+        health = new HealthBridge(this, web);
         web.addJavascriptInterface(new Bridge(), "CCAndroid");
         web.setWebViewClient(new Client());
 
@@ -206,6 +208,12 @@ public class MainActivity extends Activity {
             }
         }
 
+        /** Health Connect (read only): the answer comes back later as window.__ccHealthDone(id, json) — HealthBridge.kt */
+        @JavascriptInterface
+        public void health(String op, String arg, String id) {
+            runOnUiThread(() -> health.call(op, arg == null ? "" : arg, id));
+        }
+
         /** the page's background colour, "#rrggbb" */
         @JavascriptInterface
         public void barColor(String hex) {
@@ -214,6 +222,13 @@ public class MainActivity extends Activity {
                 runOnUiThread(() -> MainActivity.this.barColor(color));
             } catch (IllegalArgumentException ignored) { }
         }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (health != null && health.onResult(requestCode, resultCode, data)) return;
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /** Serves the page's files from assets/web; links to anywhere else open in the browser. */

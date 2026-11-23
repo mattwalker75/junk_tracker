@@ -117,7 +117,7 @@ describe("splurges", () => {
     expect(o.last.what).toBe("Cheeseburger & fries"); // not the one dated after today
     expect(o.splurges.map((x: { day: string }) => x.day)).toEqual(["2026-10-11", "2026-10-03"]); // the 40-day window
     expect(o.recent.map((x: { what: string }) => x.what)).toEqual(["Future cake", "Cheeseburger & fries", "Pizza"]); // one "pizza", newest first
-    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false, toughness: "standard", weighReminder: true, weighReminderDays: 7, activityReminder: true, activityReminderDays: 3 });
+    expect(o.settings).toEqual({ units: "lb", trendDays: 14, weekStart: 0, examples: { snack: "", meal: "", feast: "" }, quickPicks: ["", "", "", "", "", ""], openIn: "tracker", autoStart: false, toughness: "standard", weighReminder: true, weighReminderDays: 7, activityReminder: true, activityReminderDays: 3, healthImport: false, healthSince: null, healthLastAt: null, healthLastAdded: 0 });
   });
 });
 
@@ -558,7 +558,7 @@ describe("planned treat (Nov 11 2026)", () => {
     const fs = await import("node:fs"), os = await import("node:os"), path = await import("node:path");
     const Database = (await import("better-sqlite3")).default;
     const { MIGRATIONS, openDatabase, SCHEMA_VERSION } = await import("../server/src/db.js");
-    expect(SCHEMA_VERSION).toBe(7);
+    expect(SCHEMA_VERSION).toBe(8);
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "jt-up4-"));
     const file = path.join(dir, "junk.db");
     try {

@@ -4,6 +4,21 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
 
 ## [Unreleased]
 
+## [1.13.0] — 2026-11-22
+### Added
+- 2026-11-22: **Workouts from Apple Health and Health Connect** (the iPhone and Android apps). Turn it on in Settings →
+  You and the workouts your watch or fitness app records — a 40-minute walk burning 200 calories, say — come into your
+  activity log by themselves each time the app opens, tagged with where they came from. They count in Calorie Crusher
+  like any activity. Workouts only, never steps; read only (nothing is written to Health, nothing leaves the phone).
+  The first time, the last 7 days come in. Edit one and your change stays; delete one and it never comes back; one
+  that starts within half an hour of an activity you logged by hand that day isn't brought in twice. Bring in now
+  asks straight away.
+### Changed
+- 2026-11-22: The database is version 8 (an activity says where it came from; the workouts seen are remembered). The
+  web app upgrades it too and keeps `junk.db.before-v8`; the phone apps keep `junk.db.before-v7`.
+- 2026-11-22: The Android app uses AndroidX and Kotlin for Health Connect (the .apk is about 6 MB). It still has no
+  internet access.
+
 ## [1.12.0] — 2026-11-22
 ### Fixed (the Nov 22 2026 deep review: all 27 findings)
 - 2026-11-22: **Phone apps keep the log safe.** A save the phone can't make (a full phone) is undone at once, so

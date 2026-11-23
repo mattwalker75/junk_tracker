@@ -5,5 +5,10 @@
 MARKETING_VERSION = 1.0
 CURRENT_PROJECT_VERSION = 1
 DEVELOPMENT_TEAM =
+// Apple Health (read only). ./BUILD_APP.sh --health off writes a Local.xcconfig line that builds without it
+// (if Apple won't give your Apple ID's team HealthKit); the app then says so in Settings → You.
+CODE_SIGN_ENTITLEMENTS = CravingCrusher/CravingCrusher.entitlements
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) $(CC_HEALTH_FLAG)
+CC_HEALTH_FLAG =
 #include? "Version.xcconfig"
 #include? "Local.xcconfig"

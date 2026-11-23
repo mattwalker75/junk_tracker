@@ -172,6 +172,22 @@ export const MIGRATIONS: readonly string[] = [
     SELECT id, run_id, fight_id, day, at, kind, data_json, seq FROM game_events_keep;
   DROP TABLE game_events_keep;
   `,
+  // 8 — workouts from the phone's health app (Nov 22 2026): an activity says where it came from ("" by hand,
+  // "apple-health", "health-connect") and the health app's id for it; health_imports remembers every workout
+  // the phone has seen — brought in or skipped as one logged by hand — so a deleted one never comes back.
+  `
+  ALTER TABLE activities ADD COLUMN source TEXT NOT NULL DEFAULT '';
+  ALTER TABLE activities ADD COLUMN source_id TEXT;
+  CREATE TABLE health_imports (
+    user_id     TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    source      TEXT NOT NULL,
+    source_id   TEXT NOT NULL,
+    seen_at     TEXT NOT NULL,
+    activity_id TEXT,
+    skipped     TEXT NOT NULL DEFAULT '',
+    PRIMARY KEY (user_id, source, source_id)
+  );
+  `,
 ];
 
 export const SCHEMA_VERSION = MIGRATIONS.length;

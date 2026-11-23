@@ -106,7 +106,7 @@ describe("phone backend", () => {
       INSERT INTO game_fights (id, run_id, user_id, level, attempt, started_on, deadline_on, status, ended_on, seq) VALUES ('f1', 'r1', 'u1', 60, 1, '2030-03-05', '2030-03-12', 'won', '2030-03-12', 0);
       INSERT INTO game_events (id, run_id, fight_id, day, at, kind, data_json, seq) VALUES ('e1', 'r1', 'f1', '2030-03-12', 'x', 'ko', '{}', 0), ('e2', 'r1', 'f1', '2030-03-12', 'x', 'finish', '{}', 1);`);
     const b = fresh(old.file());
-    expect([b.db.pragma("user_version", { simple: true }), b.upgradedFrom, fresh().upgradedFrom]).toEqual([7, 6, null]);
+    expect([b.db.pragma("user_version", { simple: true }), b.upgradedFrom, fresh().upgradedFrom]).toEqual([8, 6, null]);
     expect(b.db.prepare("SELECT id FROM game_events ORDER BY seq").all()).toEqual([{ id: "e1" }, { id: "e2" }]);
     expect(b.db.pragma("foreign_key_check")).toEqual([]);
     const synced = ok(b, "POST", "/api/game/sync", { today: TODAY, now: NOW });
@@ -151,5 +151,45 @@ describe("the SQLite adapter", () => {
     expect(db.prepare("SELECT COUNT(*) AS c FROM t").get()).toEqual({ c: 2 });
     expect(db.prepare("INSERT INTO t (n) VALUES (@n)").run({ n: 9 }).changes).toBe(1);
     expect(db.prepare("SELECT n FROM t WHERE n = ?").get([9])).toEqual({ n: 9 });
+  });
+});
+
+describe("workouts from the phone's health app (Nov 22 2026)", () => {
+  it("brings them in on the phone's own database, once each, skipping one logged by hand", () => {
+    const b = fresh();
+    ok(b, "POST", "/api/activities", { what: "Walk", minutes: 30, calories: null, day: TODAY, time: "07:10", notes: "" });
+    const w = (id: string, time: string) => ({ id, what: "Walk", day: TODAY, time, minutes: 40, calories: 200 });
+    const r = ok(b, "POST", "/api/health/import", { source: "health-connect", today: TODAY, workouts: [w("hc-1", "07:00"), w("hc-2", "18:00")] });
+    expect([r.added.length, r.skipped]).toEqual([1, 1]);
+    expect(r.added[0]).toMatchObject({ what: "Walk", time: "18:00", source: "health-connect" });
+    expect(ok(b, "POST", "/api/health/import", { source: "health-connect", today: TODAY, workouts: [w("hc-1", "07:00"), w("hc-2", "18:00")] }).added).toEqual([]);
+    expect(ok(b, "GET", `/api/health/summary?today=${TODAY}`)).toMatchObject({ lastAdded: 0, thisWeek: 1 });
+  });
+});
+
+describe("the Android app's Health Connect answers", () => {
+  it("come back by call id, and a refusal is an error with Health Connect's sentence", async () => {
+    const w = globalThis as unknown as { window?: unknown };
+    const had = w.window;
+    w.window = globalThis;
+    try {
+      const { androidHealth } = await import("../src/health");
+      const asked: string[] = [];
+      const h = androidHealth({
+        health(op, arg, id) {
+          asked.push(`${op} ${arg}`);
+          const done = (globalThis as unknown as { __ccHealthDone: (id: string, json: string) => void }).__ccHealthDone;
+          setTimeout(() => done(id, op === "status" ? JSON.stringify({ ok: true, value: "ok" })
+            : op === "workouts" ? JSON.stringify({ ok: true, value: [{ id: "x", what: "Walk", startMs: 1, endMs: 2, calories: null }, { bad: true }] })
+            : JSON.stringify({ ok: false, error: "Health Connect isn't sharing your workouts" })), 0);
+        },
+      });
+      expect(h.source).toBe("health-connect");
+      expect(await h.status()).toBe("ok");
+      expect(await h.workouts(5)).toEqual([{ id: "x", what: "Walk", startMs: 1, endMs: 2, calories: null }]);
+      await expect(h.authorize()).rejects.toThrow("Health Connect isn't sharing your workouts");
+      expect(asked).toEqual(["status null", 'workouts {"since":5}', "authorize null"]);
+      expect(await androidHealth({}).status()).toBe("no-build");
+    } finally { w.window = had; }
   });
 });

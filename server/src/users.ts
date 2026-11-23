@@ -300,6 +300,12 @@ export class Users {
     };
   }
 
+  /** what the last bring-in of workouts did (set only by the import, never by the page) */
+  recordHealthImport(id: Id, at: string, added: number): void {
+    const cur = this.settings(id);
+    this.db.prepare("UPDATE users SET settings_json = ? WHERE id = ?").run(JSON.stringify({ ...cur, healthLastAt: at, healthLastAdded: added }), id);
+  }
+
   saveSettings(id: Id, patch: Partial<Omit<UserSettings, "examples">> & { examples?: Partial<UserSettings["examples"]> }): UserSettings {
     const cur = this.settings(id);
     // quick picks are sent in order; a shorter list changes only the first ones

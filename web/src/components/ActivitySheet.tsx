@@ -17,14 +17,14 @@ import { Sword } from "../game/icons";
 import { AttackPreview, NoFightNote } from "../game/Panels";
 import { syncAfterLog, useGame } from "../game/state";
 import { toast } from "sonner";
-import { quickPickNames, type Activity, type Day } from "../../../shared/types";
+import { HEALTH_SOURCES, quickPickNames, type Activity, type Day } from "../../../shared/types";
 import { LOG_KEYS, refresh } from "../lib/actions";
 import { api } from "../lib/api";
 import { nowTime } from "../lib/dates";
 import { durationInput, minutesLabel, parseDuration } from "../lib/stats";
 import { useToday } from "../lib/useToday";
 import { DayPicker } from "./DayPicker";
-import { Button, cx, ErrorLine, Field, Input, Sheet, TextArea, Label, type Skin } from "./ui";
+import { Button, cx, ErrorLine, Field, HealthTag, Input, Sheet, TextArea, Label, type Skin } from "./ui";
 
 /** "45" → 45, "" → null, "4.5" or "-3" → NaN (refused) */
 const whole = (v: string) => (v.trim() === "" ? null : /^\d+$/.test(v.replace(/[, ]/g, "")) ? Number(v.replace(/[, ]/g, "")) : NaN);
@@ -118,6 +118,12 @@ export function ActivitySheet({ open, onOpenChange, day, edit, skin = "tracker" 
       lead={game ? <span aria-hidden className="grid size-11 shrink-0 -rotate-[4deg] place-items-center rounded-[14px] border-[3px] border-g-line bg-g-red shadow-[0_4px_0_var(--g-line)]"><Sword className="size-8" /></span> : undefined}
       titleNode={game ? <span className="flex items-baseline gap-2"><span className="g-stroke-thin" style={{ color: "#ff4d6d" }}>Attack!</span><span>{title}</span></span> : undefined}>
       <form onSubmit={save} className={game ? "space-y-3 pb-2" : "space-y-4 pb-2"}>
+        {edit?.source ? (
+          <p className="flex items-start gap-2 rounded-xl bg-danger-soft px-3 py-2 text-[13px] leading-snug text-danger">
+            <HealthTag source={edit.source} short />
+            <span>Brought in from {HEALTH_SOURCES[edit.source]}. Your changes stay: it isn't brought in again over them. Delete it and it won't come back.</span>
+          </p>
+        ) : null}
         {panel && fight ? <AttackPreview p={panel} slug={fight.slug} /> : game && !fight && gameView?.next ? <NoFightNote name={gameView.next.name} kind="hit" /> : null}
         {recent.length ? (
           <div>

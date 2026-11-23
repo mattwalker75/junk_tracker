@@ -39,5 +39,7 @@ export const userSettingsSchema = z.object({
   activityReminder: z.boolean({ error: "The activity reminder is on or off." }),
   weighReminderDays: z.number({ error: REMINDER_DAYS_ERROR }).int(REMINDER_DAYS_ERROR).min(REMINDER_DAYS_MIN, REMINDER_DAYS_ERROR).max(REMINDER_DAYS_MAX, REMINDER_DAYS_ERROR),
   activityReminderDays: z.number({ error: REMINDER_DAYS_ERROR }).int(REMINDER_DAYS_ERROR).min(REMINDER_DAYS_MIN, REMINDER_DAYS_ERROR).max(REMINDER_DAYS_MAX, REMINDER_DAYS_ERROR),
+  healthImport: z.boolean({ error: "Bringing in workouts is on or off." }),
+  healthSince: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "That is not a real date.").nullable(),
   quickPicks: z.array(z.string().max(QUICK_PICK_MAX, `Keep each quick pick under ${QUICK_PICK_MAX} characters.`), { error: "The quick picks are six names." }).max(6, "There are six quick picks."),
 }).partial().strict();

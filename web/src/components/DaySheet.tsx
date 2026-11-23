@@ -14,7 +14,7 @@ import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
 import { addDays, ago, clock, longDay } from "../lib/dates";
 import { caloriesTotal, inUnit, minutesLabel, worstSize } from "../lib/stats";
-import { Button, cx, Sheet, SIZE_DOT, SizeBadge } from "./ui";
+import { Button, cx, HealthTag, Sheet, SIZE_DOT, SizeBadge } from "./ui";
 
 export function DaySheet({ day, onClose }: { day: Day | null; onClose: () => void }) {
   const act = useActions();
@@ -141,6 +141,7 @@ function ActivityCard({ a, onEdit }: { a: Activity; onEdit: () => void }) {
         )}
       </div>
       <div className="mt-2 text-lg leading-snug font-extrabold [overflow-wrap:anywhere]">{a.what}</div>
+      {a.source ? <div className="mt-1"><HealthTag source={a.source} /></div> : null}
       {details.length ? (
         <div className="mt-2 flex flex-wrap gap-1.5">
           {details.map((x) => (

@@ -125,10 +125,10 @@ describe("an upgrade", () => {
     old.pragma("user_version = 6");
     const p = phone({ "junk.db": old.file() });
     const k = await openLog(SQL, p.store, "9.9.9", () => TODAY);
-    expect(versionOf(p.files["junk.db"])).toBe(7);
+    expect(versionOf(p.files["junk.db"])).toBe(8);
     await k.answer("POST", "/api/splurges", splurge("Donut"));
     await k.answer("POST", "/api/splurges", splurge("Pizza"));
     expect(versionOf(p.files["junk.db.before-v6"])).toBe(6);
-    expect(versionOf(p.files["junk.db.prev"])).toBe(7);
+    expect(versionOf(p.files["junk.db.prev"])).toBe(8);
   });
 });

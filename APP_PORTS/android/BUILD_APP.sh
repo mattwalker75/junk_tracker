@@ -124,7 +124,7 @@ gradle() {
   JAVA_HOME="$(find_java)"; ANDROID_HOME="$(find_sdk)"
   mkdir -p "$BUILD"
   info "Building the app with Gradle… (the first time it downloads Gradle and Android's build plugin; the details go to BUILD/gradle.log)"
-  if ! (cd "$HERE" && ./gradlew --no-daemon -q "$@" -PccVersion="$(version)" -PccVersionCode="$(buildnum)" -PccAppId="$APP_ID") >"$BUILD/gradle.log" 2>&1; then
+  if ! (cd "$HERE" && ./gradlew --no-daemon -q "$@" -PccVersion="$(version)" -PccVersionCode="$(buildnum)" -PccAppId="$APP_ID" ${CC_HEALTH_TEST:+-PccHealthTest=1}) >"$BUILD/gradle.log" 2>&1; then
     grep -E "error:|FAILURE|What went wrong" -A3 "$BUILD/gradle.log" | head -n 25 >&2 || tail -n 25 "$BUILD/gradle.log" >&2
     die "Gradle could not build the app (above; all of it is in $BUILD/gradle.log)."
   fi

@@ -50,7 +50,7 @@ export class Keeper {
     this.lastGood = backend.db.file();
   }
 
-  async answer(method: string, url: string, body: unknown): Promise<{ status: number; body: unknown }> {
+  async answer(method: string, url: string, body?: unknown): Promise<{ status: number; body: unknown }> {
     const db = this.backend.db;
     const before = db.totalChanges();
     const a = this.backend.handle(method, url, body);

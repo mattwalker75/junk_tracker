@@ -1,7 +1,7 @@
 /** Every call to the server. Errors come back as plain sentences (the server writes them). */
 import type { AutoResult, Bet, GameView, HallView, Mode, PowerUp, SyncResult } from "../../../shared/game/types";
 import type { Reminder } from "../../../shared/reminders";
-import type { Activity, ActivityInput, AuthState, CustomTheme, Day, Goal, GoalInput, GoalList, Id, Overview, Splurge, SplurgeInput, UserInfo, UserSettings, WeighIn } from "../../../shared/types";
+import type { Activity, ActivityInput, AuthState, CustomTheme, Day, Goal, GoalInput, GoalList, HealthImportResult, HealthSource, HealthSummary, HealthWorkout, Id, Overview, Splurge, SplurgeInput, UserInfo, UserSettings, WeighIn } from "../../../shared/types";
 
 export class ApiError extends Error {
   constructor(message: string, readonly status: number) { super(message); }
@@ -88,6 +88,9 @@ export const api = {
   switchBack: () => call<AuthState>("POST", "/api/users/switch-back"),
   removeUser: (id: Id) => call<{ ok: true }>("DELETE", `/api/users/${id}`, { confirm: "DELETE" }),
 
+  // workouts from the phone's health app (the phone apps only send them)
+  healthImport: (source: HealthSource, today: Day, workouts: HealthWorkout[]) => call<HealthImportResult>("POST", "/api/health/import", { source, today, workouts }),
+  healthSummary: (today: Day) => call<HealthSummary>("GET", `/api/health/summary?today=${today}`),
   // the phone apps only (APP_PORTS/shared/src/backend.ts); the web server has no such routes
   phoneNotice: () => call<{ notice: string | null }>("GET", "/api/phone/notice"),
   phoneNoticeSeen: () => call<{ ok: true }>("POST", "/api/phone/notice/seen"),

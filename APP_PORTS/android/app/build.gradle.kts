@@ -39,8 +39,18 @@ android {
         }
     }
 
+    // CC_HEALTH_TEST=1 ./BUILD_APP.sh: a test build that may also WRITE a test workout to Health Connect (the emulator
+    // check); every other build only reads
+    if (findProperty("ccHealthTest") == "1") sourceSets.getByName("debug").manifest.srcFile("src/healthtest/AndroidManifest.xml")
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+// Health Connect (read only, Nov 22 2026): its client is a Kotlin library — HealthBridge.kt uses it with coroutines
+dependencies {
+    implementation("androidx.health.connect:connect-client:1.1.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 }

@@ -1,8 +1,8 @@
 /** Small shared pieces. Colours only from theme tokens. */
 import * as Dialog from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { HeartPulse, X } from "lucide-react";
 import { createContext, forwardRef, useContext, useId, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
-import { SIZE_LABEL, type Size } from "../../../shared/types";
+import { HEALTH_SOURCES, SIZE_LABEL, type HealthSource, type Size } from "../../../shared/types";
 
 export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
 
@@ -257,6 +257,18 @@ function ConfirmBody({ body, confirmLabel, word, danger, onConfirm, onCancel }: 
         <Button size="lg" type="submit" variant={danger ? "danger" : "accent"}>{confirmLabel}</Button>
       </div>
     </form>
+  );
+}
+
+/** Where a workout came from, on an activity brought in from Apple Health / Health Connect (phone apps, Nov 22 2026). */
+export function HealthTag({ source, short }: { source: HealthSource | ""; short?: boolean }) {
+  if (!source) return null;
+  const name = HEALTH_SOURCES[source];
+  return (
+    <span title={`Brought in from ${name}`} aria-label={`from ${name}`}
+      className="inline-flex h-6 shrink-0 items-center gap-1 rounded-full bg-danger-soft px-2 text-[12px] font-bold whitespace-nowrap text-danger">
+      <HeartPulse className="size-3.5" aria-hidden />{short ? null : name}
+    </span>
   );
 }
 

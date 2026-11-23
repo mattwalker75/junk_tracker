@@ -127,6 +127,9 @@ export function createApp(config = new Config(), opts: { rateLimit?: boolean; we
   app.post("/api/game/bet", h((req) => game.bet(owner(req), req.body)));
   app.post("/api/game/powerup", h((req) => game.powerUp(owner(req), req.body)));
   app.post("/api/game/mode", h((req) => game.mode(owner(req), req.body)));
+  // workouts from the phone's health app (the phone apps send them; the web app has no health app)
+  app.post("/api/health/import", h((req) => log.importWorkouts(owner(req), req.body)));
+  app.get("/api/health/summary", h((req) => log.healthSummary(owner(req), req.query.today)));
   app.get("/api/me/settings", h((req) => users.settings(owner(req))));
   app.put("/api/me/settings", h((req) => users.saveSettings(owner(req), parse(userSettingsSchema, req.body))));
 

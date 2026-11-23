@@ -12,7 +12,7 @@ import { api } from "../lib/api";
 import { useToday } from "../lib/useToday";
 import { addDays, clock, shortDay, WEEKDAY_LONG, weekday } from "../lib/dates";
 import { activeWeek, minutesLabel, startOfWeek, weekDetail } from "../lib/stats";
-import { cx, Sheet } from "./ui";
+import { cx, HealthTag, Sheet } from "./ui";
 
 export function WeekSheet({ from, weekStart, onFrom, onClose }: { from: Day | null; weekStart: 0 | 1; onFrom: (d: Day) => void; onClose: () => void }) {
   const act = useActions();
@@ -87,6 +87,7 @@ export function WeekSheet({ from, weekStart, onFrom, onClose }: { from: Day | nu
                             <span key={a.id} className="flex items-baseline gap-1.5 py-px">
                               {a.time ? <span className="tabular w-[62px] shrink-0 text-xs font-semibold text-mute">{clock(a.time)}</span> : <span className="w-[62px] shrink-0" />}
                               <span className="min-w-0 flex-1 truncate text-[15px] font-bold">{a.what}</span>
+                              <HealthTag source={a.source} short />
                               <span className="tabular shrink-0 text-[13px] text-ink-2">{[a.minutes ? minutesLabel(a.minutes) : "", a.calories !== null ? `${a.calories.toLocaleString()} cal` : ""].filter(Boolean).join(" · ")}</span>
                             </span>
                           ))}

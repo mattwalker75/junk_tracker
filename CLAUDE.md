@@ -171,6 +171,17 @@ The person using it is not a developer — every message the page shows is a pla
     phone, both apps rebuilt. Build with
     `APP_PORTS/<platform>/BUILD_APP.sh` (`--check`, `--run`, …); its `BUILD/` and the built page are never
     committed, nor signing keys. Not yet: moving a log between the phone and the web app.
+15. **Workouts from the phone's health app** (Matt, Nov 22 2026; canvas round 17, boards H1–H6): the iPhone app reads
+    **Apple Health**, the Android app **Health Connect** — READ ONLY, workouts and the calories each burned, never steps.
+    Settings → You (phone apps only) turns it on; then workouts come in **by themselves** each time the app opens or
+    comes back (`web/src/lib/health.ts`), the first time from the last 7 days (`HEALTH_FIRST_DAYS`), after that up to
+    30 days back. Each workout is taken once (`health_imports`, database version 8): an edit stays, a delete never comes
+    back, and one starting within 30 minutes of an activity logged by hand that day (or, untimed, with its name) is
+    skipped as the same one (`HEALTH_SAME_MINUTES`). Imported activities carry `source` and show a tag; they count in the
+    game like any activity. The shells: `APP_PORTS/ios/CravingCrusher/Health.swift` (HealthKit; `--health off` builds
+    without it if Apple won't give the team HealthKit) and `APP_PORTS/android/…/HealthBridge.kt` (Health Connect; the
+    builds you install only READ — write permissions only in the `CC_HEALTH_TEST=1` test build). Nothing reaches the
+    network (Android still has no INTERNET permission).
 
 ## Working rules
 - Commit locally per feature with a dated CHANGELOG entry; `git add` explicit paths.

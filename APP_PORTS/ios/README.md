@@ -5,7 +5,10 @@
 ./BUILD_APP.sh            # build it for the iPhone Simulator → BUILD/Simulator/CravingCrusher.app
 ./BUILD_APP.sh --run      # build it and open it in the iPhone Simulator on this Mac
 ./BUILD_APP.sh --open     # open the project in Xcode, to Run it on your iPhone
-CC_TEAM_ID=<team> ./BUILD_APP.sh --device   # build for a real iPhone and put it on the one plugged in
+./BUILD_APP.sh --team <id>   # save your Apple developer team once (in CravingCrusher/Local.xcconfig, git ignores it)
+./BUILD_APP.sh --device   # build for a real iPhone and put it on the one plugged in (CC_TEAM_ID=<team> for one run)
+./BUILD_APP.sh --health off   # build without Apple Health, if Apple won't give your team HealthKit (--health on undoes it)
+./BUILD_APP.sh --clean    # remove what the builds made
 ```
 
 At the end the script says where the app is and how to try it. See `../README.md` for how the app works.
@@ -19,6 +22,9 @@ one works; the app then runs for 7 days at a time) and Developer Mode on the iPh
 | `CravingCrusher.xcodeproj` | the Xcode project (opens in Xcode; *Build the page* runs first in every build) |
 | `CravingCrusher/CravingCrusherApp.swift` | the app's start |
 | `CravingCrusher/PhoneWebView.swift` | the screen: the page, its files (cc-app://local/…) and the log file |
+| `CravingCrusher/Health.swift` | Apple Health, read only: workouts and the calories each burned (`../README.md`) |
+| `CravingCrusher/CravingCrusher.entitlements` | the HealthKit entitlement (left out with `--health off`) |
+| `CravingCrusher/Base.xcconfig` | build settings; includes `Version.xcconfig` (the version, written by each build) and `Local.xcconfig` (your team, `--health`), both not committed |
 | `CravingCrusher/Assets.xcassets` | the icon — `icon-1024.png` is written by `scripts/make_icons.mjs`, don't edit it |
 | `CravingCrusher/web/` | the built page (made by the build, not committed) |
 | `BUILD/` | what the builds make (not committed) |

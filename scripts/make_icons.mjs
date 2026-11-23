@@ -11,7 +11,7 @@
  *   web/public/icon-512.png          512  Android splash, Play Store size
  *   web/public/icon-maskable-512.png 512  Android icons cut to a circle / squircle: the picture inside the safe zone
  *   web/public/icon.svg                   the browser tab (rounded corners)
- *   Docs/icon/icon-1024.png         1024  the master for a future iPhone / Android app (App Store size)
+ *   Docs/icon/icon-1024.png         1024  the master for the iPhone / Android apps and their stores (App Store size)
  *   …and the same files copied into the phone apps (APP_PORTS/): the iPhone app's icon (1024) and the
  *   Android app's launcher picture (512)
  *

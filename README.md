@@ -21,11 +21,19 @@ active you were this week, and watch your weight trend. It runs on your own comp
   people, each with their own log and settings, each signing in with a password. Anyone can
   *switch to* anyone (to check in or to fill it in for them) — it keeps logs apart; it is not privacy.
 - **Calorie Crusher** (game mode, from the initials menu): a monster battle made from your own log —
-  workouts hit the monster, splurges heal it, beat 60 monsters before their deadlines. Your log is
+  workouts hit the monster, splurges heal it, beat 120 monsters in 12 worlds before their deadlines.
+  Every monster moves: it breathes, attacks when it takes a heart, falls when you beat it. Your log is
   never changed by it.
-- **Settings**: your own examples of a Snack, Meal and Feast; your six activity quick picks; pounds or kilograms; the trend
+- **Reminders**: a window when you open the app and haven't weighed in for 7 days or logged an
+  activity for 3 (your numbers, each on or off).
+- **Settings**: your own examples of a Snack, Meal and Feast; your six activity quick picks; the two
+  reminders; whether the app opens in the tracker or the game; Monster toughness and *Keep the
+  monsters coming* for the game; pounds or kilograms; the trend
   period (1 week, 2 weeks or a month); users and sign-in on or off; light, dark or a theme you
   make; other devices on your network on or off.
+- **iPhone and Android apps** (`APP_PORTS/`): the same app installed on a phone, with the log kept on
+  the phone — no computer, no sign-in. They can bring in your workouts from Apple Health or Health
+  Connect by themselves.
 
 ## Get started
 
@@ -56,8 +64,16 @@ Turn on Settings → **Users and sign-in** at the same time so nobody else on th
 
 On the phone, *Add to Home Screen* makes it open like an app.
 
+## As an iPhone or Android app
+
+`APP_PORTS/ios/BUILD_APP.sh` and `APP_PORTS/android/BUILD_APP.sh` build Craving Crusher as an app that keeps
+its log on the phone (one person, no sign-in, nothing goes over the network). `--check` says what to
+install first, `--help` lists the rest. The phone's log and this computer's log are separate. How it
+works: [APP_PORTS/README.md](APP_PORTS/README.md).
+
 ## More
 
 - [Docs/USER_GUIDE.md](Docs/USER_GUIDE.md) — every screen and setting
 - [Docs/DEVELOPMENT.md](Docs/DEVELOPMENT.md) — how it is built, the config file, the data, the API, tests
+- [APP_PORTS/README.md](APP_PORTS/README.md) — the iPhone and Android apps
 - [CHANGELOG.md](CHANGELOG.md)

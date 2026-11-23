@@ -1,4 +1,4 @@
-# World 8 · Concession Canyon (levels 71–80) — DRAFT
+# World 8 · Concession Canyon (levels 71–80) — built in 1.9.0 (Nov 22 2026)
 
 Canvas board `World8.dc.html`. Drawings: the `.svg` files here (viewBox 0 0 200 200, outlines #2b1d3a). HP = 100 + 15 × (level − 1) rounded to 10, the boss × 1.3.
 

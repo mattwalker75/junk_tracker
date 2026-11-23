@@ -1,4 +1,4 @@
-# World 9 · Brunch Boulevard (levels 81–90) — DRAFT
+# World 9 · Brunch Boulevard (levels 81–90) — built in 1.10.0 (Nov 22 2026)
 
 Canvas board `World9.dc.html`. Drawings: the `.svg` files here (viewBox 0 0 200 200, outlines #2b1d3a). HP = 100 + 15 × (level − 1) rounded to 10, the boss × 1.3.
 

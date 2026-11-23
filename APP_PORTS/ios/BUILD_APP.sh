@@ -167,7 +167,7 @@ callout_simulator() {
 # ------------------------------------------------------------------ the commands
 cmd="${1:-build}"
 case "$cmd" in
-  -h|--help|help) sed -n '2,19p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+  -h|--help|help) sed -n '2,20p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
 
   --page-for-xcode)  # the "Build the page" step inside Xcode (Run in Xcode builds the page too)
     if [[ "${CC_PAGE_BUILT:-}" == 1 ]]; then exit 0; fi

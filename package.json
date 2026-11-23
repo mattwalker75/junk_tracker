@@ -3,7 +3,7 @@
   "version": "1.13.0",
   "private": true,
   "type": "module",
-  "description": "Calorie Crusher — track only your junk food (splurges) and your weight.",
+  "description": "Craving Crusher — track only your junk food (splurges), your weight and your activity.",
   "engines": {
     "node": ">=22.12"
   },

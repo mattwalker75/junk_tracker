@@ -1,4 +1,4 @@
-# World 12 · Calorie Cosmos (levels 111–120) — DRAFT
+# World 12 · Calorie Cosmos (levels 111–120) — built in 1.10.0 (Nov 22 2026)
 
 Canvas board `World12.dc.html`. Drawings: the `.svg` files here (viewBox 0 0 200 200, outlines #2b1d3a). HP = 100 + 15 × (level − 1) rounded to 10, the boss × 1.3.
 

@@ -201,7 +201,7 @@ Fondue Fiend about splurges close together). If you leave Time empty, they assum
 
 **What happened while you were away.** When you open the game, it catches up on everything since
 you last looked: a **Victory** for each knockout, a **Strike** for each missed deadline, then
-**Knocked back** or **Defeated** if a heart ran out. They come one after another; **Next** shows the
+**Knocked back**, **Extra life** or **Defeated** last if your last heart went. They come one after another; **Next** shows the
 next one. If you close the app in the middle, they come back the next time you open the game. A
 workout logged from the tracker counts too: the next time you open the game, you see the Victory.
 
@@ -210,10 +210,16 @@ as it was, even if you later edit or delete an entry from those days. Changing a
 fight going on now changes it right away. An entry logged later on the day of a knockout counts for
 the next monster if you start it that day.
 
-**The other screens.** The **Adventure map** shows all 60 levels in six worlds (tap a monster for
+**The monsters move.** In a fight each monster breathes and moves its arms, legs, tail or hat. It
+attacks when it takes a heart, falls its own way when you beat it (it melts, topples, pops…) and
+gloats when it takes your last heart. A phone set to reduce motion keeps them still.
+
+**The other screens.** The **Adventure map** shows all 120 levels in twelve worlds (tap a monster for
 its card, or a world's sign to see it up close). The **Hall of Heroes** lists everyone's runs (All
 time, This month, My runs, Hardcore) and your badges. **How to crush** has every rule and number.
-The **Monster Book** has all 60 monsters and their tricks.
+The **Monster Book** has all 120 monsters and their tricks, each one moving, with **Idle**, **Takes a
+heart**, **Defeated** and **Beats you** buttons to watch its moves. Beat The Snackularity at level 120
+and the run is complete.
 
 **If the game says "Your phone's date looks wrong"**, the phone's date is more than two days away
 from the computer running Craving Crusher. Fix the date on the phone and try again.
@@ -294,6 +300,24 @@ It appears as **Craving Crusher** with its own icon and opens full screen, witho
   over plain `http://` on your network it is a shortcut that opens in Chrome.
 - A phone keeps the icon it got when you added it. After the icon changes, remove the home-screen copy
   and add it again.
+
+## The iPhone and Android apps
+Craving Crusher can also be installed as an app (built with `APP_PORTS/ios/BUILD_APP.sh` or
+`APP_PORTS/android/BUILD_APP.sh`; `APP_PORTS/README.md` says how). It is the same app, but **the log is
+kept on the phone**: no computer, no network, no sign-in. It is for one person, so Settings has no *Users
+and sign-in* or *Network access*, and the Hall of Heroes lists only your runs (no *My runs* tab). About
+says where the log is. The phone's log goes with the phone's own backups (iCloud or Google); removing the
+app removes the log. The phone's log and the one on your computer are separate.
+
+**Workouts from Apple Health (iPhone) or Health Connect (Android).** In Settings → You, turn it on and
+allow it when the phone asks. From then on, the workouts your watch or fitness app records come into your
+activity log by themselves each time you open the app (or come back to it): what it was, how long, and
+the calories it burned. The first time, the last 7 days come in. Only workouts, never steps; nothing is
+written to Health and nothing leaves the phone. Each one comes in once, with a tag saying where it came
+from: change it and your change stays; delete it and it doesn't come back. One that starts within half
+an hour of an activity you logged by hand that day is the same one, and isn't brought in twice. Brought-in
+workouts hit monsters in Calorie Crusher like any activity. **Bring in now** on the card asks straight
+away. On an Android phone older than Android 14, get the Health Connect app from the Play Store first.
 
 ## Running it
 | | |

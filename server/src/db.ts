@@ -1,5 +1,6 @@
 /**
- * The SQLite database: every person, their splurges, activities, weigh-ins, goals and their own settings.
+ * The SQLite database: every person, their splurges, activities, weigh-ins, goals, own settings, Calorie Crusher
+ * runs and the workouts seen from the phone's health app. The tables themselves are in migrations.ts.
  *
  * The app creates the file and its tables on first start and upgrades them itself: SQLite's
  * `user_version` says which step a file is at, and each step in MIGRATIONS runs once, in a

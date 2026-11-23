@@ -1,4 +1,4 @@
-# World 7 · Freezer Tundra (levels 61–70) — approved by Matt (Nov 22 2026), not built yet
+# World 7 · Freezer Tundra (levels 61–70) — approved by Matt (Nov 22 2026); built in 1.9.0
 
 Canvas Round 10 (`World7.dc.html`). Drawings: the `.svg` files here (viewBox 0 0 200 200, outlines #2b1d3a). HP = 100 + 15 × (level − 1) rounded to 10, the boss × 1.3; deadline 8 days, the boss 9.
 

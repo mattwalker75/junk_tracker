@@ -12,6 +12,7 @@
 # Settings (optional):  CC_APP_ID=…   the app's id (default app.cravingcrusher.phone)
 #                       CC_KEYSTORE, CC_KEYSTORE_PASSWORD, CC_KEY_ALIAS, CC_KEY_PASSWORD   your signing key, for --release
 #                       JAVA_HOME / ANDROID_HOME   where Java and the Android SDK are, if not found by themselves
+#                       CC_HEALTH_TEST=1   a test build that may also write a test workout to Health Connect (the emulator only)
 #
 # The app is the web app's page with its log kept on the phone (APP_PORTS/README.md). Nothing here touches the
 # web app or its data.
@@ -211,7 +212,7 @@ install_on() {
 }
 
 case "$cmd" in
-  -h|--help|help) sed -n '2,19p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+  -h|--help|help) sed -n '2,18p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
 
   --check) requirements && { echo; ok "Everything is ready: ./BUILD_APP.sh builds the app."; echo; } || { echo; die "Install what is marked ✗ (or run ./BUILD_APP.sh --install-tools), then run ./BUILD_APP.sh --check again."; } ;;
 

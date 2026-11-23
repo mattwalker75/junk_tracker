@@ -4,9 +4,10 @@
 #
 # Usage:  ./TRACKER.sh [options…]     options run in the order given, e.g.  ./TRACKER.sh -x -s
 #
-#   -s, --start     Start in the background and open it in your browser. Builds the
-#                   app first if it has not been built (or the code changed). Does
-#                   nothing if it is already running.
+#   -s, --start     Start in the background and open it in your browser. Installs the
+#                   app's packages again first if an update changed them (the old ones
+#                   come back if that fails), and builds the app if it has not been
+#                   built (or the code changed). Does nothing if it is already running.
 #   -x, --stop      Stop the background server.
 #   -r, --restart   Stop, then start (needed after changing a setting marked "after a
 #                   restart": network access, the port, how long a sign-in lasts).
@@ -29,7 +30,9 @@
 # Settings live in config.json next to this script (Settings in the app edits the same file).
 # Everyone's log is one SQLite file, data/junk.db by default.
 # First-time setup on a new computer:  ./INSTALL_APP.sh
-# Set JT_NO_OPEN=1 to start without opening the browser.
+# Set JT_NO_OPEN=1 to start without opening the browser, JT_CONFIG=<file> to run on another
+# config.json (a scratch one, say: its data, pid file and log stay beside it).
+# The iPhone and Android apps are built by APP_PORTS/*/BUILD_APP.sh, never by this script.
 #
 set -uo pipefail
 # a relative JT_CONFIG means "from where I typed it", so make it absolute before moving into the app folder

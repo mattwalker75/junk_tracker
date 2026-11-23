@@ -6,7 +6,9 @@ files disagree, this plan wins on *how* the game is built and they win on *what*
 
 ## Big decisions
 1. **The engine is pure and shared.** `shared/game/` holds plain TypeScript with no I/O:
-   - `levels.ts`: the 60 levels from `levels60.json` (level, world, name, slug, hp, days, boss, ability id).
+   - `levels.ts`: the levels (level, world, name, slug, hp, days, boss, ability id) — 1–60 from `levels60.json`
+     (a test checks they match), 61–120 added with worlds 7–12 (`../GAME_MODE.md`, "Growing to 120 levels").
+     `LEVEL_COUNT` (120) is how many there are; never hard-code it.
    - `abilities.ts`: one entry per monster, built from the hooks below.
    - `engine.ts`: simulates a fight from the log.
    - `score.ts`: points.
@@ -20,7 +22,7 @@ files disagree, this plan wins on *how* the game is built and they win on *what*
 4. **Days and times always come from the phone** (CLAUDE.md rule 3). The server never works out "today".
 5. **Each person has their own run.** Several users means separation, not privacy (rule 5), so the Hall of Heroes lists everyone's runs.
 
-## Data (database version 4: one migration, saved first as `junk.db.before-v4`; version 5 adds `users.game_checked_on`, below)
+## Data (database version 4: one migration, saved first as `junk.db.before-v4`; version 5 adds `users.game_checked_on`, version 6 `game_runs.lives` and `game_fights.hp_mult`, both below; version 7 lets `game_fights.level` go to 120 — it was 1–60)
 - `splurges.planned INTEGER NOT NULL DEFAULT 0`: the **Planned treat** switch, in both the dashboard and game mode. `Splurge.planned: boolean`.
 - `game_runs`:
   - `id, user_id, number` (1, 2, 3… per person)
@@ -111,7 +113,8 @@ interface Ability {
   1. Settle the fight (won, with points).
   2. A boss kill gives +1 heart (max 5) and +1 Second Wind (max 3).
   3. Until Nov 14 2026 the next level opened at once. Now the run waits **between fights**: nothing is open until `startNextFight` (by hand, or Keep the monsters coming on a later day). Started the same day, the next fight gets `started_after` = the knockout's moment, and the KO event's `used` (the day's entries the fights so far used, Stage 4) keeps each entry in one fight.
-  4. After level 60: the run is 'finished'.
+  4. After the last level (`LEVEL_COUNT`, 120; it was 60 until 1.9.0): the run is 'finished'. A run that had
+     finished at an older last level carries on into the new worlds (`run_continues`, `canCarryOn`).
 - **Strike** (today > deadline_on and HP > 0):
   1. Hearts −1. **With hearts left the fight stays open** (Matt, Nov 15 2026): `deadline_on` moves on one day, nothing else about the fight changes (same row, same attempt, HP worked out from the log as before), and the `strike` event carries `extended: true` and the new `deadlineOn`. `settle` then looks again, so several missed days are several strikes in one sync.
   2. At 0 hearts the fight is 'struck' (its damage is its points): **Normal** is a knock-back (−250, hearts back to 3, the current level goes back to the first level of its world). **Hardcore** is defeat: the run ends and its score is final.
@@ -127,7 +130,7 @@ interface Ability {
 ## API (behind the same login, Host guard and same-origin checks as everything else)
 | Route | What |
 |---|---|
-| `GET /api/game?today=&now=` | everything the game screens need: run, open fight (computed: hp, max, battle log lines, deadline, ability, so-close numbers), map statuses for all 60 levels, power-ups, hearts, score, `needsSync` |
+| `GET /api/game?today=&now=` | everything the game screens need: run, open fight (computed: hp, max, battle log lines, deadline, ability, so-close numbers), map statuses for every level, power-ups, hearts, score, `needsSync` |
 | `POST /api/game/sync` | settle KOs, strikes, weekly hearts and power-ups up to today; returns what happened (for the Victory / Strike / Knocked back / Defeated screens) |
 | `POST /api/game/run` | start a run `{mode}` |
 | `POST /api/game/auto` | Keep the monsters coming: the day's first look settles, then starts the next fight or run N+1 (`started`: false, "fight" or "run"; `checked`; plus the SyncResult once checked) |
@@ -135,7 +138,7 @@ interface Ability {
 | `POST /api/game/bet` | `{bet}` for the open fight, while it isn't locked |
 | `POST /api/game/powerup` | `{kind: 'shield'|'potion'|'wind'}`: arm or use one |
 | `POST /api/game/mode` | Hardcore → Normal |
-| `GET /api/game/hall` | all runs of all people: all time, this month, Hardcore, mine |
+| `GET /api/game/hall` | all runs of all people: all time, this month, Hardcore, mine (in the phone apps, one person's) |
 
 ## The page
 - **Routes:** `#/game` (title), `#/game/map`, `#/game/world/<n>`, `#/game/battle`, `#/game/choose`, `#/game/book`, `#/game/hall`, `#/game/how`, `#/game/start`. Results show as overlays: Victory, Strike, Knocked back, Defeated.
@@ -241,7 +244,8 @@ Where this plan left the flow open, Stage 1 took these readings. All of them are
   A strike that took the last heart becomes Knocked back or Defeated (one screen, not two). Heart,
   power-up earned and Hardcore → Normal are toasts. Run start and power-ups *used* are not shown
   (the battle screen shows those already). The queue lives in `state.ts` and keeps the order things
-  happened.
+  happened. (Since 1.10.0 the finish is the KO of the last level, `LEVEL_COUNT`; since 1.12.0, after several
+  missed days the Strikes come first and the Knocked back, Extra life or Defeated screen last.)
 - **The battle scene plays once.** On the battle screen, the first result of a batch plays for
   1.7 s first (the KO'd monster spins with K.O.! and confetti, or the striker lunges with WHAM! while
   a heart cracks). Then its screen comes up. The ones queued behind it come up at once after
@@ -267,7 +271,7 @@ Where this plan left the flow open, Stage 1 took these readings. All of them are
   `WEEK_ACTIVE_DAYS`, `POINTS`, the heart limits, `betDays`, `wonPoints`). Its examples use the
   monster you're fighting, or Crumbs before a run.
 - **Bios** for all 60 are the approved boards' lines (MonBestiary1–2, MonNewA–E), in
-  `shared/game/bios.ts`.
+  `shared/game/bios.ts`; levels 61–120's are the drafts' (`drafts/world<N>/README.md`).
 - **Monster Book:** monsters up ahead show their full drawing with "Up ahead · Level N" (Matt wants
   to see the art). Their HP, deadline and ability are shown too, rather than the old "???".
 - **Map links:** the title screen has an **Adventure map** button, and the battle screen's header has
@@ -296,7 +300,8 @@ Where this plan left the flow open, Stage 1 took these readings. All of them are
   wrong…". `Game` takes the server's day as a function, so tests pass a fixed one.
 - **Settling is linear in days.** `award` (weekly hearts, Veggie Shields) is an `awarder` made once
   per settle that carries on from where its last call stopped, instead of rescanning from the run's
-  start for every fight. The loop is bounded by 61 passes per day since the open fight began.
+  start for every fight. The loop is bounded by `LEVEL_COUNT` + 1 passes (121) per day since the open fight
+  began, plus two days' worth.
 - **Log points of an ended run** count only entries on or before its last day (`GameLog.entryDays`):
   something logged after a defeat but before the next sync is not part of the run.
 - **Weekly hearts never pay the same days twice.** A week that overlaps one already given a heart is
@@ -423,7 +428,7 @@ additional 24 hours to the current monster")
 **Extra lives and Monster toughness** (Matt, Nov 15 2026; database version 6)
 - **Lives:** `game_runs.lives` (`RunData.lives`). In `settle`, a KO in a Normal run whose count of
   won fights reaches a multiple of `LIFE_EVERY` (20) adds a `life` event (`wins`, `gained`: false
-  when 2 are held; not for level 60, which ends the run). Rematches won after a knock-back count
+  when 2 are held; not for the last level, `LEVEL_COUNT`, which ends the run). Rematches won after a knock-back count
   too. A run dropped from Hardcore earns from then on, counting all its wins.
 - **Spending one:** at the last heart in a Normal run with `lives > 0`: the fight is 'struck'
   (damage points kept), `lives − 1`, hearts back to 3 and a `life_used` event in place of

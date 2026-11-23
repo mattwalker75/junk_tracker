@@ -1,8 +1,11 @@
-# Calorie Crusher — the 44 newer monsters' abilities
+# Calorie Crusher — the abilities after the first 16
 
-The first 16 monsters' abilities are in `../GAME_MODE.md`. Levels, HP and deadlines for the first 60 are
-in `LEVELS_60.md` and `levels60.json`. The art is in `monsters/*.svg`: viewBox 0 0 200 200,
-cartoon style, outlines #2b1d3a. The numbers in the file names are species ids, not levels.
+The first 16 monsters' abilities are in `../GAME_MODE.md`; the table below is the 44 that complete the first 60,
+and the sections at the end are the decisions taken building worlds 7–12 (levels 61–120, whose abilities are in
+`drafts/world<N>/README.md` and `shared/game/abilities.ts`). Levels, HP and deadlines for the first 60 are
+in `LEVELS_60.md` and `levels60.json`; all 120 are in `shared/game/levels.ts`. The art is in `monsters/*.svg`
+(all 120, copied to `web/public/monsters/`): viewBox 0 0 200 200, cartoon style, outlines #2b1d3a. For the
+first 60 the numbers in the file names are species ids, not levels; from 61 on they are the levels.
 
 Heals are Snack +10, Meal +25 and Feast +60. Damage is minutes + calories ÷ 10. All of these are
 first drafts and will be tuned.

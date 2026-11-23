@@ -1,6 +1,7 @@
 # Changelog
 
-All notable changes to Junk Tracker (Keep a Changelog style; dates are when the change was made).
+All notable changes to Craving Crusher (called Junk Tracker until 1.3.0; Keep a Changelog style; dates are when
+the change was made).
 
 ## [Unreleased]
 
@@ -12,7 +13,12 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
   like any activity. Workouts only, never steps; read only (nothing is written to Health, nothing leaves the phone).
   The first time, the last 7 days come in. Edit one and your change stays; delete one and it never comes back; one
   that starts within half an hour of an activity you logged by hand that day isn't brought in twice. Bring in now
-  asks straight away.
+  asks straight away. The Settings card says when workouts last came in and how many this week; on Home the last
+  activity says where it came from.
+- 2026-11-22: Building it: if Apple won't sign the iPhone app with Apple Health for your team, `ios/BUILD_APP.sh`
+  says so and `./BUILD_APP.sh --health off` builds it without (`--health on` puts it back). For trying it on the
+  Android Emulator, `CC_HEALTH_TEST=1 ./BUILD_APP.sh` makes a test build that may also write a test workout; build
+  again without it before putting the app on a real phone.
 ### Changed
 - 2026-11-22: The database is version 8 (an activity says where it came from; the workouts seen are remembered). The
   web app upgrades it too and keeps `junk.db.before-v8`; the phone apps keep `junk.db.before-v7`.
@@ -26,7 +32,8 @@ All notable changes to Junk Tracker (Keep a Changelog style; dates are when the 
   the app with the reason instead of being replaced by a new empty one. A damaged log is set aside
   (`junk.db.damaged`) and the copy from before the last change is opened, with a message saying so.
 - 2026-11-22: **Phone app updates.** Installing a new build over the old one keeps the log; an older log is
-  upgraded and kept for good as `junk.db.before-v<N>` (it lasted only until the next change). Build numbers come
+  upgraded and kept for good as `junk.db.before-v<N>`, N being the version it was at (it lasted only until the
+  next change, as `junk.db.prev`). Build numbers come
   from the version (1.11.0 → 11100), so they only go up on any Mac. Android says plainly when an update is refused
   (a different signing key, or a newer version on the phone) and that uninstalling would erase the log.
 - 2026-11-22: Your Apple team id for an iPhone is saved with `ios/BUILD_APP.sh --team <id>` in a file git ignores,

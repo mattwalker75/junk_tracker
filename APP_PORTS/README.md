@@ -35,7 +35,9 @@ the web app's `data/junk.db` (the same tables, from `server/src/migrations.ts`).
   told once that the last thing they logged may be missing.
 - **Updating the app** keeps the log: installing a new build over the old one (the same app id and signing)
   never touches the app's files. When a new version opens an older log it upgrades it (the same steps as the
-  web app), keeps the older one for good as `junk.db.before-v<N>`, and saves the upgraded one at once.
+  web app), keeps the older one for good as `junk.db.before-v<N>` — N is the version the log was at (a 1.12 log,
+  version 7, is kept as `junk.db.before-v7`; the web app names its copy after the new version instead) — and
+  saves the upgraded one at once.
 - **Build numbers** come from the version (1.11.0 → 11100), so they only go up, on any Mac. Android refuses an
   update signed with another key (a release build after debug ones, or a build from another Mac): `BUILD_APP.sh`
   says so, and that uninstalling would erase the log. Build updates on the same Mac, in the same mode.
@@ -52,8 +54,10 @@ the web app's `data/junk.db` (the same tables, from `server/src/migrations.ts`).
 | `shared/src/open.ts` | opening the log (backup, damaged file, upgrade copy) and undoing a change the phone failed to save |
 | `shared/vite.config.ts`, `shared/build_page.sh` | build the page for the apps (the BUILD scripts run them) |
 | `shared/test/` | the phone code's tests (`npx vitest run --config APP_PORTS/shared/vitest.config.ts`; the BUILD scripts run them) |
-| `ios/CravingCrusher/*.swift` | the iPhone app: shows the page, serves its files, keeps the log file |
-| `android/app/src/main/java/…/MainActivity.java` | the Android app: the same |
+| `ios/CravingCrusher/*.swift` | the iPhone app: shows the page, serves its files, keeps the log file (`PhoneWebView.swift`); Apple Health (`Health.swift`) |
+| `ios/CravingCrusher/Base.xcconfig` | the build settings; it includes `Version.xcconfig` (written by every build) and `Local.xcconfig` (your team, `--health off`), both untracked |
+| `android/app/src/main/java/…/MainActivity.java` | the Android app: the same; `PrivacyActivity.java` is the privacy screen Health Connect shows |
+| `android/app/src/main/kotlin/…/HealthBridge.kt` | Health Connect, read only |
 
 **What the phone app leaves out on purpose:** it is for one person, on their own phone or tablet, with no sign-in
 of any kind (Matt, Nov 22 2026). So Settings hides *Users and sign-in* and *Network access* (`web/src/lib/phone.ts`),

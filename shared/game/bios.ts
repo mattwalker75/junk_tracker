@@ -1,6 +1,7 @@
 /**
  * One funny line for each monster, shown in the Monster Book. The lines are the ones in
- * the approved mockups (MonBestiary1-2, MonNewA-E). Pure data; test/game3.test.ts checks every
+ * the approved mockups (MonBestiary1-2, MonNewA-E) and, for levels 61-120, in
+ * Docs/game/drafts/world<N>/README.md. Pure data; test/game3.test.ts checks every
  * level has one and the names match levels.ts.
  */
 import { levelInfo } from "./levels.js";

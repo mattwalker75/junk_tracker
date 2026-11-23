@@ -2,7 +2,8 @@
  * config.json — the app-wide settings (the port, network access, the login, the database file, the
  * look). Settings in the page reads and writes this same file. Missing keys fall back to DEFAULTS,
  * unknown keys are kept, and the file is written atomically with owner-only permissions.
- * Each person's own settings (units, trend, week start, size examples) live in the database instead.
+ * Each person's own settings (units, trend, week start, size examples, quick picks, reminders, the game's)
+ * live in the database instead.
  *
  * Paths inside it are relative to the folder config.json lives in.
  */

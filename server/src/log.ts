@@ -1,5 +1,6 @@
 /**
- * The rules over a person's log: splurges, activities and weigh-ins. Every call names the owner, and every
+ * The rules over a person's log: splurges, activities and weigh-ins, plus what reads them (Home's overview, the
+ * reminders) and workouts brought in from the phone's health app. Every call names the owner, and every
  * query filters by it — one person never reads or changes another's rows (except after "Switch
  * to", which changes the owner a request works on, in users.ts).
  *

@@ -58,8 +58,8 @@ heard both points and chose them anyway, so keep them. The design softens the ed
   adds the live damage or heal panel. Build them as one form with two skins.
 - **No Weigh in in game mode.** The game's bottom buttons are **+ Activity (attack)** and
   **+ Splurge**. The dashboard keeps all three.
-- **Open:** should *Planned treat* also be a field on the dashboard's Log a splurge sheet? For now it
-  sits only in the game's heal panel.
+- **Decided (built Nov 11 2026):** *Planned treat* is a field on the dashboard's Log a splurge sheet too
+  (after Notes), the same in both skins.
 - Mockups: canvas rounds 6 and 7. Round 7 has the 60-level map, World 2 up close, Start a run,
   Knocked back, the game-styled sheets, the bottom buttons and five New monsters pages.
 
@@ -74,8 +74,8 @@ a total of 120 monsters to fight". Decided with Matt:
 - **60 new abilities** — every new monster gets its own, like today's.
 - **A run that had beaten all 60 carries on at level 61**, with its score, hearts and power-ups. Runs
   that ended any other way stay ended.
-- The database refuses levels above 60 today (`game_fights.level` CHECK): growing needs one database
-  upgrade (a copy of the file is saved first, as always).
+- The database refused levels above 60 (`game_fights.level` CHECK): growing needed one database
+  upgrade (a copy of the file is saved first, as always). Done in database version 7 (1.9.0): levels 1–120.
 - Mockups first, world by world: canvas **Round 9** has twelve world ideas (A–L) to pick six from.
 - **The six worlds, in order** (Matt, Nov 21 2026): 7 **Freezer Tundra**, 8 **Concession Canyon**,
   9 **Brunch Boulevard**, 10 **Takeout Temple**, 11 **Deep-Fry Volcano**, 12 **Calorie Cosmos** (final boss
@@ -139,7 +139,8 @@ line in `moves.ts`; `test/moves.test.ts` fails until it has both. Small pictures
 ## Where it lives
 - **Switch:** the initials menu (MW) gets a **Game mode** item, with a gamepad icon, above Goals, Settings and Sign out. In the game the same item reads **Back to tracker**. Mockup: `GameMenuSwitch`.
 - **Logging:** the game has no logging of its own. It reads the person's real log: activities, splurges, clean days.
-- **Off by default**, per person. Each person has their own run.
+- **No setting to turn it on** (as built): the menu item is always there, and nothing happens in the game until
+  the person starts a run. Each person has their own run.
 
 ## Rules
 
@@ -148,6 +149,8 @@ line in `moves.ts`; `test/moves.test.ts` fails until it has both. Small pictures
   - Calories are optional; a workout without them counts minutes only.
   - Example: a 45-min walk burning 210 cal does 45 + 21 = 66 damage.
   - 10 minutes = 100 calories = 10 damage, which is what makes the "so close" nudges easy to say.
+  - Workouts the phone apps bring in from Apple Health or Health Connect (1.13.0) are activities like any
+    other, so they attack the same way.
 - **Clean day:** a day with no splurge is a **critical hit** of 25, dealt at midnight (the phone's day).
 - **Comeback:** the first workout after a day with no activity does ×2 damage.
 
@@ -262,9 +265,8 @@ The finished drawings are inlined in the Round 6 boards (Monster Book 1 and 2). 
 
 ## Still open (ask Matt)
 - **The numbers:** monster HP, deadlines, heal sizes, starting hearts. The current values were picked for the mockups, not tuned.
-- **Content after the final boss.** Options include World 5, a "New Game+" with harder monsters, or seasonal monsters. Every game effect fades in about 4–6 weeks, so plan a second wave.
-- **High scores across people.** Today several users means separation, not privacy (CLAUDE.md rule 5), so a shared Hall of Heroes fits. Confirm that.
-- **Backdated logs** (logging yesterday's walk today): they should count for the fight they fall in, if that fight is still open.
+- **Content after the final boss.** Worlds 7–12 (levels 61–120) were that second wave (Nov 21–22 2026). After The Snackularity: a "New Game+" with harder monsters, or seasonal monsters. Every game effect fades in about 4–6 weeks.
+- *Settled since:* **high scores across people** — the web app's Hall of Heroes lists everyone's runs (separation, not privacy, CLAUDE.md rule 5); the phone apps list only your own. **Backdated logs** count for the open fight when they fall inside it; a finished fight is frozen (`game/ARCHITECTURE.md`).
 
 ## Notes for building it
 - **Derive, don't double-store.** The fight's HP can be worked out from the log: every activity and splurge between the fight's start and now, plus the clean days. Then editing or deleting an entry fixes the game too.
@@ -274,4 +276,5 @@ The finished drawings are inlined in the Round 6 boards (Monster Book 1 and 2). 
   - hearts and power-ups
 - **Days are the phone's dates**, sent by the page, the same as the rest of the app (CLAUDE.md rule 3). A clean-day crit and a deadline are both checked against them.
 - **Deadline checks happen when the page opens or after a change**, never on a server timer. The server never works out "today" itself.
-- Game mode is a per-person setting. Turning it off pauses the run and loses nothing.
+- As built there is no game-mode setting (see "Where it lives"): going back to the tracker pauses nothing — a
+  fight's deadline keeps running — and loses nothing.

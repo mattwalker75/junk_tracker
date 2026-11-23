@@ -17,9 +17,11 @@ The person using it is not a developer — every message the page shows is a pla
 - `server/src/log.ts` — splurges, activities and weigh-ins (all checks, the overview); `goals.ts` — each
   person's goal list (the top open goal is on Home); `users.ts` — people,
   passwords, sessions, Switch to, per-person settings; `app.ts` — routes and guards;
-  `config.ts` — config.json; `security.ts` — Host guard, same-origin writes; `db.ts` — tables
-  and migrations (`PRAGMA user_version`).
-- `shared/types.ts` — the data model used by both sides. `shared/game/` — Calorie Crusher's pure engine
+  `config.ts` — config.json; `settingsSchemas.ts` — what Settings may save, checked; `security.ts` — Host
+  guard, same-origin writes; `migrations.ts` — the tables, as numbered steps (`PRAGMA user_version`);
+  `db.ts` — opens the file, keeps the copy before an upgrade and runs the steps.
+- `shared/types.ts` — the data model used by both sides; `shared/reminders.ts` — when a reminder is due (pure).
+  `web/src/lib/health.ts` — bringing in workouts from the phone's health app (rule 15). `shared/game/` — Calorie Crusher's pure engine
   (levels, abilities, fights, points; tested in `test/game.test.ts`); `server/src/game.ts` stores runs.
 - `web/src/components/Home.tsx` (home), `GoalNote.tsx` (the sticky note on Home), `UserMenu.tsx`
   (the initials menu), `GoalsPage.tsx`, `GoalSheet.tsx`, `LogSheet.tsx`, `ActivitySheet.tsx` (Log activity), `WeighSheet.tsx`,
@@ -68,8 +70,10 @@ The person using it is not a developer — every message the page shows is a pla
    Day 1 is set by the changes (they carry `today`), never by a GET: reads must not write. When its time is up the note asks "did you do it?" — Yes,
    done, or Keep going (no end date). Nothing is ever checked off for the person.
 8. **Updating is stop → git pull → start** (Matt, Oct 26 2026: his real data is on another
-   computer). `--start` reinstalls packages when `package-lock.json` changed and rebuilds when the
-   code changed; a database upgrade first saves `junk.db.before-v<N>`. Keep it that way: no update
+   computer). `--start` reinstalls packages when the packages in `package-lock.json` differ from the
+   ones installed (`node_modules/.package-lock.json`; not file dates — and the old packages are put back
+   if the install fails, so it still starts with no internet) and rebuilds when the code changed; a
+   database upgrade first saves `junk.db.before-v<N>` (N = the new version). Keep it that way: no update
    step that needs anything else.
 9. **Settings marked "after a restart"** (port, network access, sign-in length, database path)
    are listed in `RESTART_REQUIRED` in `config.ts`; the page says to run `./TRACKER.sh --restart`.
@@ -145,7 +149,7 @@ The person using it is not a developer — every message the page shows is a pla
     reminder**, independent, each on/off with its own days (`weighReminder(Days)` / `activityReminder(Days)`,
     defaults ON with 7 / 3, 1–60 — `REMINDER_DEFAULT_DAYS` in `shared/types.ts`). Due = nothing logged today or
     on the N − 1 days before (`shared/reminders.ts`, pure; never logged = counted from the day the person was
-    added). `GET /api/reminders?today=` reads only. The window (`ReminderWindow.tsx`) comes up when the app
+    added — that day as the phone saw it, from `&tz=`, the phone's time-zone offset). `GET /api/reminders?today=&tz=` reads only. The window (`ReminderWindow.tsx`) comes up when the app
     opens (page load, or back after 30+ min away; not on Switch to) and closes ONLY with its Close button —
     Matt wants it acknowledged. Don't make it dismissable by a tap outside or Esc.
 13. **App icon + home screen** (Matt, Nov 21 2026): ONE drawing, `Docs/icon/icon.svg` (full square, no
@@ -171,6 +175,15 @@ The person using it is not a developer — every message the page shows is a pla
     phone, both apps rebuilt. Build with
     `APP_PORTS/<platform>/BUILD_APP.sh` (`--check`, `--run`, …); its `BUILD/` and the built page are never
     committed, nor signing keys. Not yet: moving a log between the phone and the web app.
+    **The phone's log is never lost** (review, Nov 22 2026; `APP_PORTS/shared/src/open.ts`, tested in
+    `APP_PORTS/shared/test/keeping.test.ts`): a save the phone can't make is undone in the page at once (the screen
+    shows only what was kept); a log file that can't be read stops the app with the reason and is never replaced by
+    a new empty one; a damaged one is moved to `junk.db.damaged` and `junk.db.prev` (the file before the last save)
+    is opened, with a notice; opening an older log upgrades it and keeps the older one for good as
+    `junk.db.before-v<N>` — on the phone N is the version it was at (`before-v7` for a 1.12 log), on the web app the
+    new one. **Updates install over the old app:** build numbers come from the version (1.11.0 → 11100), never a
+    commit count; the Apple team id lives in the untracked `ios/CravingCrusher/Local.xcconfig` (`--team <id>`),
+    never in `project.pbxproj`.
 15. **Workouts from the phone's health app** (Matt, Nov 22 2026; canvas round 17, boards H1–H6): the iPhone app reads
     **Apple Health**, the Android app **Health Connect** — READ ONLY, workouts and the calories each burned, never steps.
     Settings → You (phone apps only) turns it on; then workouts come in **by themselves** each time the app opens or
@@ -189,4 +202,5 @@ The person using it is not a developer — every message the page shows is a pla
 - Never touch Matt's real `config.json` or `data/` — and **never delete `data/`** in the repo (Oct 16 2026:
   a scratch-test cleanup `rm -rf data` deleted the database Matt had just started using). Try things with a scratch config:
   `JT_CONFIG=/some/scratch/config.json ./TRACKER.sh …` (and `JT_NO_OPEN=1` to skip the browser).
-- `npm test` (vitest) and `npm run typecheck` must pass before a commit.
+- `npm test` (vitest) and `npm run typecheck` must pass before a commit; so must the phone code's
+  (`npx vitest run --config APP_PORTS/shared/vitest.config.ts` and `(cd APP_PORTS/shared && npx tsc -p tsconfig.json --noEmit)`).

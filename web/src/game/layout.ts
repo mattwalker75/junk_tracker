@@ -12,7 +12,7 @@ export const MAP_W = 390;
 /** each world's band; the top world also runs up under the HUD (TOP_EXTRA more) */
 export const BAND_H = 426;
 const TOP_EXTRA = 104;
-/** the whole map: every world's band, World 1 at the bottom (2,660 tall with 6 worlds — web/public/game-map-scenery.svg is drawn to this) */
+/** the whole map: every world's band, World 1 at the bottom (5,216 tall with 12 worlds — web/public/game-map-scenery.svg is drawn to this) */
 export const MAP_H = WORLDS.length * BAND_H + TOP_EXTRA;
 /** where the path starts, below level 1 */
 export const MAP_START: Pt = { x: 34, y: MAP_H - 6 };

@@ -3,8 +3,8 @@
  * - a log the phone can't READ stops here with an error; nothing is ever saved over it;
  * - a DAMAGED log (it reads, but won't open) is set aside as junk.db.damaged and its backup, junk.db.prev
  *   (the file before the last save), is opened instead, with a notice for the person;
- * - a log from an older app is upgraded, and the older one is kept for good as junk.db.before-v<N>
- *   (as the web app keeps it), besides junk.db.prev;
+ * - a log from an older app is upgraded, and the older one is kept for good as junk.db.before-v<N>, N being
+ *   the version it was at (the web app names its copy after the new version), besides junk.db.prev;
  * - a change the phone fails to save is undone in memory (Keeper), so the page never shows what the phone
  *   didn't keep, and Try again can't log it twice.
  */

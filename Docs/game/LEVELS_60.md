@@ -1,5 +1,9 @@
 # 60 levels — 6 worlds × 10 levels (Matt, Nov 11 2026)
 
+> Since 1.10.0 (Nov 22 2026) the game has **120 levels in 12 worlds** (`../GAME_MODE.md`, "Growing to 120 levels").
+> This page is the first 60 as decided on Nov 11: The Midnight Snacker is now world 6's boss, not the final
+> boss (that is The Snackularity, level 120), and a run ends when level 120 is beaten.
+
 Matt: "lets push it to 60 levels instead of 16" … "more levels per world and increase the number of worlds".
 
 - **Every level is its own monster** (Matt: "since we are going to have 60 levels, we need to also create more monsters"): each world has 9 monsters + its BOSS at level 10 — 60 monsters in all. (The earlier Big/Armored/Royal/Mega elite idea is parked; it could come back later as a tougher second lap.)

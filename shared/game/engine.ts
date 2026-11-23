@@ -1,6 +1,7 @@
 /**
- * Calorie Crusher's engine: works out a fight from the log, settles a run (KO → next fight, strike →
- * a heart and one more day, or at the last heart a knock-back or defeat; weekly hearts, power-ups)
+ * Calorie Crusher's engine: works out a fight from the log, settles a run (KO → the next fight waits to be
+ * started, `startNextFight`; strike → a heart and one more day, or at the last heart an extra life, a knock-back
+ * or defeat; weekly hearts, power-ups)
  * and builds what the game screens show.
  * Pure: it never reads a clock or a database. The server (server/src/game.ts) loads a run, calls
  * these and stores what comes back; the page uses the same functions for its live previews.

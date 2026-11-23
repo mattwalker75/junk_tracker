@@ -176,12 +176,13 @@ The person using it is not a developer — every message the page shows is a pla
     `APP_PORTS/<platform>/BUILD_APP.sh` (`--check`, `--run`, …); its `BUILD/` and the built page are never
     committed, nor signing keys. Not yet: moving a log between the phone and the web app.
     **The phone's log is never lost** (review, Nov 22 2026; `APP_PORTS/shared/src/open.ts`, tested in
-    `APP_PORTS/shared/test/keeping.test.ts`): a save the phone can't make is undone in the page at once (the screen
-    shows only what was kept); a log file that can't be read stops the app with the reason and is never replaced by
-    a new empty one; a damaged one is moved to `junk.db.damaged` and `junk.db.prev` (the file before the last save)
-    is opened, with a notice; opening an older log upgrades it and keeps the older one for good as
-    `junk.db.before-v<N>` — on the phone N is the version it was at (`before-v7` for a 1.12 log), on the web app the
-    new one. **Updates install over the old app:** build numbers come from the version (1.11.0 → 11100), never a
+    `APP_PORTS/shared/test/keeping.test.ts` and the recovery/damage tests beside it): a save the phone can't make is
+    undone in the page at once (the screen shows only what was kept); a log file that can't be read stops the app
+    with the reason and is never replaced by a new empty one; a damaged one (it won't open, or `quick_check` finds
+    damage anywhere) is moved to `junk.db.damaged` and a whole `junk.db.prev` (the file before the last save) is
+    opened, with a notice; no `junk.db` but a whole `junk.db.prev` (a recovery cut short) opens the backup, never a
+    new log; opening an older log upgrades it and keeps the older one for good as `junk.db.before-v<N>`, N the new
+    version — the same name as the web app's copy (Matt, Nov 22 2026: "whatever best practices are used"). **Updates install over the old app:** build numbers come from the version (1.11.0 → 11100), never a
     commit count; the Apple team id lives in the untracked `ios/CravingCrusher/Local.xcconfig` (`--team <id>`),
     never in `project.pbxproj`.
 15. **Workouts from the phone's health app** (Matt, Nov 22 2026; canvas round 17, boards H1–H6): the iPhone app reads
@@ -189,8 +190,11 @@ The person using it is not a developer — every message the page shows is a pla
     Settings → You (phone apps only) turns it on; then workouts come in **by themselves** each time the app opens or
     comes back (`web/src/lib/health.ts`), the first time from the last 7 days (`HEALTH_FIRST_DAYS`), after that up to
     30 days back. Each workout is taken once (`health_imports`, database version 8): an edit stays, a delete never comes
-    back, and one starting within 30 minutes of an activity logged by hand that day (or, untimed, with its name) is
-    skipped as the same one (`HEALTH_SAME_MINUTES`). Imported activities carry `source` and show a tag; they count in the
+    back; one is skipped as the same one when an activity logged by hand that day has its time from 30 minutes before
+    the workout's start to 30 minutes after its end (Log activity's time starts at now) or, untimed, its name
+    (`HEALTH_SAME_MINUTES`), or when one brought in from another app overlaps it (`sameWorkout` in log.ts). The game
+    screen waits for a bring-in that is running before it settles (`workoutsIn`), so last night's run counts before
+    a missed deadline does. Imported activities carry `source` and show a tag; they count in the
     game like any activity. The shells: `APP_PORTS/ios/CravingCrusher/Health.swift` (HealthKit; `--health off` builds
     without it if Apple won't give the team HealthKit) and `APP_PORTS/android/…/HealthBridge.kt` (Health Connect; the
     builds you install only READ — write permissions only in the `CC_HEALTH_TEST=1` test build). Nothing reaches the

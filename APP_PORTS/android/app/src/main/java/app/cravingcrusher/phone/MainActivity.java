@@ -231,6 +231,12 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
+        if (health != null && health.onPermissions(requestCode, permissions, results)) return;
+        super.onRequestPermissionsResult(requestCode, permissions, results);
+    }
+
     /** Serves the page's files from assets/web; links to anywhere else open in the browser. */
     final class Client extends WebViewClient {
         private final Map<String, String> types = new HashMap<>();

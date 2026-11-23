@@ -65,11 +65,12 @@ class HealthBridge(private val activity: Activity, private val web: WebView) {
         }
     }
 
-    /** "ok", or "needs-app" (install or update Health Connect from the Play Store), or "unavailable" */
+    /** "ok", or "needs-app" (install or update Health Connect from the Play Store), or "unavailable" — Health Connect
+     *  runs on Android 9 and newer only, so an Android 8 phone is never sent to the Play Store for it */
     private fun status(): String = when (HealthConnectClient.getSdkStatus(activity)) {
         HealthConnectClient.SDK_AVAILABLE -> "ok"
         HealthConnectClient.SDK_UNAVAILABLE_PROVIDER_UPDATE_REQUIRED -> "needs-app"
-        else -> if (Build.VERSION.SDK_INT < 34) "needs-app" else "unavailable"
+        else -> if (Build.VERSION.SDK_INT in 28..33) "needs-app" else "unavailable"
     }
 
     private fun client() = HealthConnectClient.getOrCreate(activity)
@@ -81,14 +82,30 @@ class HealthBridge(private val activity: Activity, private val web: WebView) {
         if (have.containsAll(want)) return true
         val d = CompletableDeferred<Set<String>>()
         pending = d
-        activity.startActivityForResult(contract.createIntent(activity, want), REQUEST)
+        if (Build.VERSION.SDK_INT >= 34) {
+            // Android 14 and newer: health permissions are Android's own runtime permissions. The library's intent is
+            // one only an androidx ComponentActivity answers, so this plain Activity asks Android directly
+            // (startActivityForResult with it failed with "No Activity found" — review, Nov 22 2026)
+            activity.requestPermissions(want.toTypedArray(), REQUEST)
+        } else {
+            activity.startActivityForResult(contract.createIntent(activity, want), REQUEST)
+        }
         return d.await().contains(exercise) || client().permissionController.getGrantedPermissions().contains(exercise)
     }
 
-    /** MainActivity hands the permission screen's answer here */
+    /** MainActivity hands the permission screen's answer here (Android 13 and older: Health Connect's own screen) */
     fun onResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         if (requestCode != REQUEST) return false
         pending?.complete(contract.parseResult(resultCode, data))
+        pending = null
+        return true
+    }
+
+    /** … and Android's own permission prompt's answer (Android 14 and newer) */
+    fun onPermissions(requestCode: Int, permissions: Array<out String>, results: IntArray): Boolean {
+        if (requestCode != REQUEST) return false
+        val granted = permissions.filterIndexed { i, _ -> results.getOrNull(i) == android.content.pm.PackageManager.PERMISSION_GRANTED }.toSet()
+        pending?.complete(granted)
         pending = null
         return true
     }

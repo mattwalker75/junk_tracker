@@ -59,6 +59,13 @@ const importSchema = z.object({
   workouts: z.array(workoutSchema).max(1000, "That is too many workouts at once."),
 });
 const minutesOf = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
+/** two recordings of one workout: they start within 10 minutes of each other, or overlap by half the shorter one */
+export function sameWorkout(aFrom: number, aMinutes: number, bFrom: number, bMinutes: number): boolean {
+  if (Math.abs(aFrom - bFrom) <= 10) return true;
+  const overlap = Math.min(aFrom + aMinutes, bFrom + bMinutes) - Math.max(aFrom, bFrom);
+  const shorter = Math.min(aMinutes, bMinutes);
+  return shorter > 0 && overlap >= shorter / 2;
+}
 
 const shift = (d: Day, days: number): Day => {
   const [y, m, dd] = d.split("-").map(Number);
@@ -127,7 +134,7 @@ export class Log {
   importWorkouts(owner: Id, body: unknown): HealthImportResult {
     const v = parse(importSchema, body) as { source: HealthSource; today: Day; workouts: HealthWorkout[] };
     const seen = this.db.prepare("SELECT 1 FROM health_imports WHERE user_id = ? AND source = ? AND source_id = ?");
-    const byHand = this.db.prepare("SELECT what, time FROM activities WHERE user_id = ? AND day = ? AND source = ''");
+    const thatDay = this.db.prepare("SELECT what, time, minutes, source FROM activities WHERE user_id = ? AND day = ?");
     const remember = this.db.prepare("INSERT INTO health_imports (user_id, source, source_id, seen_at, activity_id, skipped) VALUES (?, ?, ?, ?, ?, ?)");
     const insert = this.db.prepare(`INSERT INTO activities (id, user_id, what, minutes, calories, day, time, notes, source, source_id, created_at, updated_at)
       VALUES (@id, @user_id, @what, @minutes, @calories, @day, @time, @notes, @source, @source_id, @created_at, @updated_at)`);
@@ -138,10 +145,19 @@ export class Log {
       for (const w of order) {
         if (w.day > v.today || seen.get(owner, v.source, w.id)) continue;
         const t = now();
-        const same = (byHand.all(owner, w.day) as { what: string; time: string }[]).some((a) => a.time
-          ? Math.abs(minutesOf(a.time) - minutesOf(w.time)) <= HEALTH_SAME_MINUTES
-          : a.what.trim().toLowerCase() === w.what.trim().toLowerCase());
-        if (same) { remember.run(owner, v.source, w.id, t, null, "logged by hand"); skipped++; continue; }
+        const acts = thatDay.all(owner, w.day) as { what: string; time: string; minutes: number | null; source: string }[];
+        const from = minutesOf(w.time), to = from + (w.minutes ?? 0);
+        // one logged by hand: its time within 30 minutes of the workout's start, during it, or within 30 minutes of
+        // its end (Log activity's time starts at now, so a run is often logged as it ends — review, Nov 22 2026);
+        // untimed, the same name
+        const byHand = acts.some((a) => !a.source && (a.time
+          ? minutesOf(a.time) >= from - HEALTH_SAME_MINUTES && minutesOf(a.time) <= to + HEALTH_SAME_MINUTES
+          : a.what.trim().toLowerCase() === w.what.trim().toLowerCase()));
+        if (byHand) { remember.run(owner, v.source, w.id, t, null, "logged by hand"); skipped++; continue; }
+        // the same workout recorded by two apps (a watch and Strava, say): already brought in, overlapping it
+        if (acts.some((a) => !!a.source && !!a.time && sameWorkout(minutesOf(a.time), a.minutes ?? 0, from, w.minutes ?? 0))) {
+          remember.run(owner, v.source, w.id, t, null, "the same workout from another app"); skipped++; continue;
+        }
         const row: ActivityRow = { id: newId(), user_id: owner, what: w.what, minutes: w.minutes, calories: w.calories, day: w.day, time: w.time, notes: "", source: v.source, source_id: w.id, created_at: t, updated_at: t };
         insert.run(row);
         remember.run(owner, v.source, w.id, t, row.id, "");
@@ -160,7 +176,8 @@ export class Log {
     const back = (new Date(Date.UTC(y, m - 1, d)).getUTCDay() - s.weekStart + 7) % 7;
     const from = shift(today, -back);
     const n = (this.db.prepare("SELECT COUNT(*) AS n FROM activities WHERE user_id = ? AND source <> '' AND day BETWEEN ? AND ?").get(owner, from, today) as { n: number }).n;
-    return { lastAt: s.healthLastAt, lastAdded: s.healthLastAdded, thisWeek: n };
+    const seen = (this.db.prepare("SELECT COUNT(*) AS n FROM health_imports WHERE user_id = ?").get(owner) as { n: number }).n;
+    return { lastAt: s.healthLastAt, lastAdded: s.healthLastAdded, thisWeek: n, everSeen: seen };
   }
 
   activitiesBetween(owner: Id, from: Day, to: Day): Activity[] {

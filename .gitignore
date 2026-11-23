@@ -5,3 +5,4 @@ config.json
 *.log
 .DS_Store
 node_modules.before-install/
+web/src/game/state-copy-for-test.ts

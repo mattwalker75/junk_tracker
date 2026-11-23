@@ -193,9 +193,9 @@ cmd="${1:-build}"
 # Put the app on a phone or the emulator as an UPDATE (the log stays). When Android refuses it, say why in plain
 # words: an app signed with another key (a release build, or one built on another Mac) or a newer one is already
 # there, and uninstalling it would erase its log.
-install_on() {
-  local out
-  out="$(adb_ "$1" "$2" install -r "$3" 2>&1)" && return 0
+install_on() { # <apk> <adb's device choice: -e, or -s <serial>>
+  local apk="$1" out; shift
+  out="$(adb_ "$@" install -r "$apk" 2>&1)" && return 0
   case "$out" in
     *INSTALL_FAILED_UPDATE_INCOMPATIBLE*|*signatures\ do\ not\ match*)
       bad "This phone already has Craving Crusher signed with a different key (a release build, or one built on another Mac), so Android won't update it."
@@ -234,7 +234,7 @@ case "$cmd" in
       --run)
         ensure_avd; boot_emulator
         info "Putting it on the emulator…"
-        install_on -e "$apk" || exit 1
+        install_on "$apk" -e || exit 1
         adb_ -e shell am start -n "$APP_ID/app.cravingcrusher.phone.MainActivity" >/dev/null
         ok "Craving Crusher is open in the emulator. Its icon is in the emulator's apps too." ;;
       --install)
@@ -242,7 +242,7 @@ case "$cmd" in
         [[ -n "$phones" ]] || die "No Android phone is plugged in with USB debugging on (adb devices lists none). The steps are below; or send the .apk to the phone. $(callout "$apk")"
         [[ "$(echo "$phones" | wc -l | tr -d ' ')" == 1 ]] || die "Several phones are plugged in. Unplug all but one."
         info "Putting it on the phone…"
-        install_on -s "$phones" "$apk" || exit 1
+        install_on "$apk" -s "$phones" || exit 1
         adb_ -s "$phones" shell am start -n "$APP_ID/app.cravingcrusher.phone.MainActivity" >/dev/null
         ok "Craving Crusher is on the phone and open." ;;
     esac

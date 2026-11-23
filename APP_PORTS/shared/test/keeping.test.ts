@@ -128,7 +128,7 @@ describe("an upgrade", () => {
     expect(versionOf(p.files["junk.db"])).toBe(8);
     await k.answer("POST", "/api/splurges", splurge("Donut"));
     await k.answer("POST", "/api/splurges", splurge("Pizza"));
-    expect(versionOf(p.files["junk.db.before-v6"])).toBe(6);
+    expect(versionOf(p.files["junk.db.before-v8"])).toBe(6);
     expect(versionOf(p.files["junk.db.prev"])).toBe(8);
   });
 });

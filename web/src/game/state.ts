@@ -9,6 +9,7 @@ import { useEffect, useSyncExternalStore } from "react";
 import type { EventView, GameView, SyncResult } from "../../../shared/game/types";
 import type { Day } from "../../../shared/types";
 import { api } from "../lib/api";
+import { workoutsIn } from "../lib/health";
 import { nowTime } from "../lib/dates";
 import { useToday } from "../lib/useToday";
 import { heldHearts, planResults, type Result } from "./outcomes";
@@ -65,14 +66,17 @@ export function setGamePerson(p: string): void {
  * seen and then startFrom wound "seen" back, so a Victory closed on a Keep-the-monsters-coming day came back on
  * every reload (review, Nov 22 2026).
  */
-let beforeStart: (() => void)[] = [];
-const whenStarted = (fn: () => void) => { if (ready) fn(); else beforeStart.push(fn); };
+let beforeStart: EventView[] = [];
+const whenStarted = (events: EventView[]) => { if (ready) pushHappened(events); else beforeStart = [...beforeStart, ...events]; };
 
 function startFrom(view: GameView): void {
   if (ready || !person) return;
   ready = true;
+  // what the daily check settled before this first view: never "old history" — it is today's news, even when this
+  // phone has nothing kept yet (a first open, cleared site data, a private window — review, Nov 22 2026)
   const waiting = beforeStart;
   beforeStart = [];
+  const news = new Set(waiting.map((e) => e.id));
   runId = view.run?.id ?? null;
   const events = view.events; // newest first
   const kept = readSeen(person);
@@ -90,11 +94,11 @@ function startFrom(view: GameView): void {
   // with unseen ones, "seen so far" is the event just before them: a result brought back keeps that
   // as its mark, so it comes back again after another reload (it used to be lost the second time)
   newest = events[fresh.length]?.id ?? null;
-  for (const e of events) if (!fresh.includes(e)) seen.add(e.id);
+  for (const e of events) if (!fresh.includes(e) && !news.has(e.id)) seen.add(e.id);
   if (fresh.length) pushHappened([...fresh].reverse());
   else saveSeen();
   // the daily check's news, now that "seen" is right (what this view already brought back is skipped)
-  for (const fn of waiting) fn();
+  if (waiting.length) pushHappened(waiting);
 }
 
 /** Tell about what a game change settled: big results queue up one after another, the rest are toasts. */
@@ -201,7 +205,7 @@ function dailyCheck(today: Day): Promise<void> {
       // the setting is off: ask again next time (it may be turned on later today)
       if (!r.checked) checked.delete(key);
       if (!r.checked) return;
-      if (r.started !== "run") { whenStarted(() => pushHappened(r.happened)); return; }
+      if (r.started !== "run") { whenStarted(r.happened); return; }
       // a new run starts the page's count afresh (startedRun), so nothing older can wind it back
       const rest = startedRun(r);
       const start = r.happened.find((e) => e.kind === "run_start");
@@ -217,7 +221,8 @@ function dailyCheck(today: Day): Promise<void> {
 export function useGame(enabled = true): { today: Day; view: GameView | undefined; error: Error | null; loading: boolean } {
   const qc = useQueryClient();
   const today = useToday();
-  const q = useQuery({ queryKey: gameKey(today), queryFn: async () => { await dailyCheck(today); return api.game(today, nowTime()); }, enabled });
+  // workouts still coming in from the phone's health app count first (lib/health.ts workoutsIn), then the daily check
+  const q = useQuery({ queryKey: gameKey(today), queryFn: async () => { await workoutsIn(qc); await dailyCheck(today); return api.game(today, nowTime()); }, enabled });
   // disabled (e.g. the log sheets on tracker pages) means no game at all: no cached view, no sync —
   // the tracker never shows game visuals (Matt, Nov 12 2026)
   useEffect(() => {

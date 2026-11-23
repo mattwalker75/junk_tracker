@@ -139,7 +139,7 @@ function Fight({ example }: { example: number }) {
         <p className="mt-2 text-[13px] font-bold text-g-mute">A Hardcore run can switch to Normal at any time from the map (tap its badge). That is one way: Normal can't become Hardcore.</p>
       </Card>
       <Card title="Monster toughness" note="Settings → You">
-        <p className="mt-1 text-[14px] leading-snug font-bold">Want a harder game? Pick <b>Tough</b> (HP ×1.5) or <b>Brutal</b> (HP ×2) in Settings → You. Deadlines stay the same, so it takes more activity each day, and since a kill is worth the monster's max HP, tougher monsters score more. A change counts from the next monster you start. The HP numbers on this page and in the Monster Book are the Standard ones.</p>
+        <p className="mt-1 text-[14px] leading-snug font-bold">Want a harder game? Pick <b>Tough</b> (HP ×1.5) or <b>Brutal</b> (HP ×2) in Settings → You. Deadlines stay the same, so it takes more activity each day, and since a kill is worth the monster's max HP, tougher monsters score more. A change counts from the next monster you start. The HP numbers on this page are the Standard ones; the Monster Book, the map and the battle show them as your toughness makes them.</p>
       </Card>
       <Card title="The road" note={`${LEVELS.length} levels · ${WORLDS.length} worlds`}>
         <p className="mt-1 text-[14px] leading-snug font-bold">Every level is its own monster: nine, then a boss at level 10 of each world. HP grows from {LEVELS[0].hp} to {LEVELS[LEVELS.length - 1].hp}; deadlines from {LEVELS[0].days} to {LEVELS[LEVELS.length - 1].days} days. Beat level {LEVEL_COUNT} and the run is complete.{LEVEL_COUNT < PLANNED_LEVELS ? " More worlds are on the way; when they come, a finished run carries on into them." : ""}</p>

@@ -444,6 +444,6 @@ additional 24 hours to the current monster")
   `GameView.hpMult` is the setting now (what a fight started now would get).
 - **The page:** a strike + `life_used` is one **Extra life** result (`Result.kind === "life"`,
   `LifeUsed` in Results.tsx); `life` is a toast; lives sit beside the hearts on the battle screen
-  when any are held, and on the title's Continue button. The Monster Book and How to crush show
-  Standard HP.
+  when any are held, and on the title's Continue button. How to crush shows Standard HP; the Monster Book
+  shows HP at the person's toughness (Matt, Nov 22 2026), as the map and the battle do.
 

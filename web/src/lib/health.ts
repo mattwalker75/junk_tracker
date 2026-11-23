@@ -14,6 +14,16 @@ import { phoneHealth, type RawWorkout } from "./phone";
 
 /** how far back each bring-in looks (the first one: HEALTH_FIRST_DAYS, from healthSince) */
 export const LOOK_BACK_DAYS = 30;
+/**
+ * The game waits for this before it settles (state.ts): a workout still coming in from Health must count before a
+ * missed deadline is judged — run last night, KO this morning, not a lost heart (review, Nov 22 2026). It starts the
+ * automatic bring-in when one is due, or joins the one running; off the phone apps, or turned off, it is done at once.
+ */
+export function workoutsIn(qc: QueryClient): Promise<unknown> {
+  if (!phoneHealth()) return Promise.resolve();
+  return bringInWorkouts(qc).catch(() => null);
+}
+
 /** an automatic bring-in at most this often (opening and coming back to the app) */
 const EVERY_MS = 60_000;
 
@@ -48,7 +58,8 @@ let lastRun = 0;
 export function bringInWorkouts(qc: QueryClient, opts: { now?: boolean } = {}): Promise<HealthImportResult | null> {
   const health = phoneHealth();
   if (!health) return Promise.resolve(null);
-  if (running) return running;
+  // Bring in now while an automatic one runs: wait for it, then ask again, so the person hears what came of it
+  if (running) return opts.now ? running.then(() => bringInWorkouts(qc, opts)) : running;
   if (!opts.now && Date.now() - lastRun < EVERY_MS) return Promise.resolve(null);
   lastRun = Date.now();
   running = (async () => {
@@ -67,7 +78,8 @@ export function bringInWorkouts(qc: QueryClient, opts: { now?: boolean } = {}): 
       const n = r.added.length;
       if (n) toast.success(`${n} ${n === 1 ? "workout" : "workouts"} from ${name} added`);
       else if (opts.now) toast.success(`No new workouts in ${name}.`);
-      await refresh(qc, n ? [...LOG_KEYS, ["health"], ["me-settings"]] : [["health"], ["me-settings"]]);
+      // not awaited: the game screen's own refresh waits for this bring-in (workoutsIn), so waiting for it here would wait forever
+      void refresh(qc, n ? [...LOG_KEYS, ["health"], ["me-settings"]] : [["health"], ["me-settings"]]);
       return r;
     } catch (e) {
       if (opts.now) toast.error(`Workouts could not be brought in from ${name}: ${(e as Error).message}`);

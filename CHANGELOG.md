@@ -5,6 +5,26 @@ the change was made).
 
 ## [Unreleased]
 
+## [1.13.1] — 2026-11-22
+### Fixed (a focused review of 1.12–1.13: all 13 findings)
+- 2026-11-22: **Health Connect turns on with Android 14 and newer** (it failed when the permission screen should
+  have opened). Checked on the emulator through Android's own permission screens.
+- 2026-11-22: The phone apps find damage anywhere in the log file (only damage at its very start was found), and a
+  recovery that is cut short (a full phone, the app closed) opens the backup next time instead of a new empty log.
+- 2026-11-22: Health import: a workout you logged by hand as it ended isn't brought in again; the same workout from
+  two apps (a watch and Strava, say) comes in once; the game waits for workouts still coming in before it judges a
+  deadline, so last night's run counts first; Bring in now says what it found even while an automatic one runs; the
+  "Nothing coming in?" tip shows only when nothing has ever come through; Android 8 phones aren't sent to the Play
+  Store for Health Connect (it doesn't run on them).
+- 2026-11-22: With Keep the monsters coming on, a Strike or Victory isn't lost the first time the game opens on a new
+  phone (or after clearing the browser's data).
+- 2026-11-22: A package install stopped part way puts the kept packages back on the next start; a message after saving
+  sits below the "You are in X's log" bar too; `android/BUILD_APP.sh --run` installs on the emulator again.
+### Changed
+- 2026-11-22: The Monster Book shows each monster's HP at your Monster toughness (Matt).
+- 2026-11-22: The phone apps name the copy kept before an upgrade the way the web app does: `junk.db.before-v<new
+  version>` (Matt: "whatever best practices are used").
+
 ## [1.13.0] — 2026-11-22
 ### Added
 - 2026-11-22: **Workouts from Apple Health and Health Connect** (the iPhone and Android apps). Turn it on in Settings →

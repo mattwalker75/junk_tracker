@@ -92,9 +92,8 @@ SQLite with WAL; the schema version is `PRAGMA user_version` (see `SCHEMA_VERSIO
 that already has data, the app saves a copy beside it as `junk.db.before-v<new version>` (written to a temporary
 name first; an older copy of the same name is kept, renamed with its date; delete them when you no longer need
 them). To go back to an older app, stop it and put that copy back as `junk.db`. The database and its `-wal` /
-`-shm` files are private to your account (0600). The phone apps keep the same file on the phone, but name
-their before-upgrade copy after the version the log WAS at (`junk.db.before-v7` on the way to 8;
-`APP_PORTS/README.md`).
+`-shm` files are private to your account (0600). The phone apps keep the same file on the phone and name their
+before-upgrade copy the same way (`junk.db.before-v8` on the way to 8; `APP_PORTS/README.md`).
 
 - `users(id, name UNIQUE NOCASE, password_hash, settings_json, created_at, last_used_at, game_checked_on)` —
   `settings_json` holds `UserSettings` (`shared/types.ts`, defaults in `DEFAULT_USER_SETTINGS`): `units,

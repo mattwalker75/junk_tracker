@@ -74,7 +74,7 @@ export function HealthCard({ s, save }: { s: UserSettings | undefined; save: (pa
         <>
           <p className="flex items-center gap-2 rounded-xl bg-active-soft px-3 py-2 text-sm font-bold text-active-text"><span aria-hidden>●</span>On{lastText ? ` · last brought in ${lastText}` : " · nothing brought in yet"}</p>
           <p className="text-sm text-ink-2">{week === 1 ? "1 workout" : `${week} workouts`} brought in this week. New ones come in each time you open the app.</p>
-          {iphone && !week && !summary.data?.lastAdded ? (
+          {iphone && summary.data?.everSeen === 0 ? (
             <p className="rounded-xl bg-warn-soft px-3 py-2 text-[13px] leading-snug text-warn">Nothing coming in? Apple Health may not be sharing your workouts yet: open the Health app → your picture → Apps → Craving Crusher, and turn on Workouts and Active Energy.</p>
           ) : null}
           <Button size="md" variant="soft" className="w-full" disabled={busy} onClick={() => void bringNow()}>{busy ? "Bringing them in…" : "Bring in now"}</Button>

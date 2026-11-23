@@ -106,7 +106,6 @@ needs_install() {
 # internet, say), so the tracker still starts on the packages it had
 install_packages() {
   info "The app's packages changed — installing them (a minute or so)…"
-  rm -rf node_modules.before-install
   [[ -d node_modules ]] && mv node_modules node_modules.before-install
   if npm ci --no-audit --no-fund >"$HERE/data/install.log" 2>&1; then
     rm -rf node_modules.before-install; ok "Packages installed."
@@ -120,6 +119,12 @@ install_packages() {
 }
 prereqs() {
   node_ok || { err "Node.js 22.12 or newer is needed. Run ./INSTALL_APP.sh"; return 1; }
+  # an install that was stopped part way (Ctrl-C, a closed window) left the packages it had kept aside: they are the
+  # last good ones, so they come back before anything else (they used to be deleted by the next try — review, Nov 22 2026)
+  if [[ -d node_modules.before-install ]]; then
+    info "The last package install didn't finish — putting back the packages it had kept."
+    rm -rf node_modules && mv node_modules.before-install node_modules
+  fi
   if needs_install; then install_packages || return 1; fi
   [[ -d node_modules/express && -d node_modules/better-sqlite3 ]] || { err "The app's packages are not installed. Run ./INSTALL_APP.sh"; return 1; }
   [[ -f "$CONFIG" ]] || { info "No config.json yet — creating it from config.example.json"; cp config.example.json "$CONFIG" && chmod 600 "$CONFIG"; }

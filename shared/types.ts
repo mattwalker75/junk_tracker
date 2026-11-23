@@ -78,6 +78,8 @@ export interface HealthSummary {
   lastAdded: number;
   /** activities brought in from Health this week (from the person's week start) */
   thisWeek: number;
+  /** workouts the phone's health app has ever offered (brought in or skipped): 0 = nothing has come through yet */
+  everSeen: number;
 }
 /** the six quick-pick buttons on Log activity when a person has not written their own */
 export const DEFAULT_QUICK_PICKS = ["Walk", "Run", "Bike", "Gym", "Swim", "Yoga"] as const;
